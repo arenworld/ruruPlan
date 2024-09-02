@@ -1,4 +1,5 @@
 spring:
+  # Email
   mail:
     host: smtp.gmail.com                          #Gmail의 SMTP 서버 호스트
     port: 587                                     #SMTP 서버의 포트 번호. Gmail SMTP 서버는 587번 포트를 사용
@@ -14,4 +15,10 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
-    auth-code-expiration-millis: 1800000  # 30 * 60 * 1000 == 30분
+    auth-code-expiration-millis: 1800000
+
+    # Redis
+    data:
+    redis:
+      host: localhost
+      port: 6379# 30 * 60 * 1000 == 30분

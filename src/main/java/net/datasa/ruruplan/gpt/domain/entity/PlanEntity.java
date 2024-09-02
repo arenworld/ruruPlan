@@ -31,6 +31,10 @@ public class PlanEntity {
     @Column(name = "plan_num")
     private Integer planNum;
 
+    // plan 이름 (저장 시 사용자 설정)
+    @Column(name = "plan_name", nullable=false)
+    private String planName;
+
     // 질문번호 참조
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cmd_num", referencedColumnName = "cmd_num")
@@ -48,6 +52,18 @@ public class PlanEntity {
     // 여행 끝나는 날
     @Column(name = "end_date")
     private LocalDate endDate;
+
+    // 사용자가 질문에서 선택한 테마 1
+    @Column(name = "theme1", nullable = false)
+    private String theme1;
+
+    // 사용자가 질문에서 선택한 테마 2
+    @Column(name = "theme2", nullable = false)
+    private String theme2;
+
+    // 사용자가 질문에서 선택한 테마 3
+    @Column(name = "theme3", nullable = false)
+    private String theme3;
 
     // 계획 만들어진 시간
     @CreatedDate

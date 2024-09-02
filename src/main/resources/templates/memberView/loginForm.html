@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<style>
+    body {
+        text-align: center;
+        margin: auto;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>로그임 폼</title>
+</head>
+<body>
+    <!--로그인 구역 only for 혹시 다-->
+     <div class="form-wrap">
+                <!---->
+                <div id="login-tab-content" class="active">
+                    <!---->
+                    <form class="loginForm" th:action="@{/member/login}" method="post">
+                        <input type="text" class="input" id="memberId" name="memberId" autocomplete="off" placeholder="Id">
+                        <br>
+                        <input type="password" class="input" id="memberPw" name="memberPw" autocomplete="off" placeholder="Password">
+                        <br>
+                        <input type="checkbox" class="checkbox" id="remember_id">
+                        <label for="remember_id">Remember Id</label>
+                        <br>
+                        <input type="submit" class="button" value="Login">
+                        <br>
+                    </form>
+                    <!--비밀번호 찾기/아이디 찾기 url로 이동-->
+                    <div class="help-action">
+                        <span><a id="findId" th:href="@{/findId}">IDの検索 / </a></span>
+                        <span><a id="findPw" th:href="@{/findPw}">PWの検索</a></span>
+                        <br>
+                        <span><a id="join" th:href="@{/join/joinForm}">新規加入</a></span>
+                    </div>
+                </div>
+     </div>
+</body>
+</html>

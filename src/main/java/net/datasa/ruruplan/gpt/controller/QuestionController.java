@@ -34,11 +34,11 @@ public class QuestionController {
      * @param user  로그인 정보
      * @return  질문 결과창으로 이동
      */
-    @GetMapping("saveGptCmd")
-    public String saveGptCmd(GptCmdDTO gptCmdDTO, Model model, AuthenticatedUser user) {
-        gptCmdDTO.setMemberId(user.id);     // authenticatedUser 클래스의 id값
-        Integer cmdNum = questionService.saveAndReturnId(gptCmdDTO);
-        model.addAttribute("cmdNum", cmdNum); // cmdNum를 보내놓고 result.html에서 ajax post로 다시 보낼 것임.
-        return "gptView/gptResult";
-    }
+//    @GetMapping("saveGptCmd")
+//    public String saveGptCmd(GptCmdDTO gptCmdDTO, Model model, AuthenticatedUser user) {
+//        gptCmdDTO.setMemberId(user.id);     // authenticatedUser 클래스의 id값
+//        Integer cmdNum = questionService.saveAndReturnId(gptCmdDTO);
+//        model.addAttribute("cmdNum", cmdNum); // cmdNum를 보내놓고 result.html에서 ajax post로 다시 보낼 것임.
+//        return "gptView/gptResult";
+//    }
 }

@@ -16,14 +16,15 @@
     <script>
         $(document).ready(function() {
             $('#memberId').keyup(idConfirm);
-            $('#nickname').keyup(idConfirm);
+            $('#nickname').keyup(nicknameConfirm);
+            $('#pwConfirm').keyup(pwConfirm);
         });
 
         function idConfirm(){
             let id = $(this).val();
             if (id.length < 6 || id.length > 15) {
-                $('#msg').css('color', 'red');
-                $('#msg').html('아이디를 6~15글자로 입력해 주세요');
+                $('#idmsg').css('color', 'red');
+                $('#idmsg').html('아이디를 6~15글자로 입력해 주세요');
             } else {
                 $.ajax({
                     url: 'idDuplicate',
@@ -31,11 +32,11 @@
                     data: {id: id},
                     success: function (res) {
                         if (res) {
-                            $('#msg').css('color', 'red');
-                            $('#msg').html("이미 사용중인 ID입니다");
+                            $('#idmsg').css('color', 'red');
+                            $('#idmsg').html("이미 사용중인 ID입니다");
                         } else {
-                            $('#msg').css('color', 'blue');
-                            $('#msg').html("사용가능한 ID입니다.");
+                            $('#idmsg').css('color', 'blue');
+                            $('#idmsg').html("사용가능한 ID입니다.");
                         }
                     },
                     error: function () {
@@ -43,6 +44,33 @@
                     }
                 });
             }
+        }
+
+        function nicknameConfirm(){
+            let nickname = $(this).val();
+            if (nickname.length < 1 || nickname.length > 10) {
+                $('#nicknamemsg').css('color', 'red');
+                $('#nicknamemsg').html('닉네임을 1~10글자로 입력해 주세요');
+            } else {
+                $('#nicknamemsg').css('color', 'blue');
+                $('#nicknamemsg').html('사용 가능한 닉네임입니다.');
+            }
+        }
+
+        function pwConfirm(){
+            let pwConfirm = $(this).val();
+            let pw = $('#memberPw').val();
+
+            console.log(pwConfirm, pw);
+
+            if(pwConfirm == pw){
+                $('#pwmsg').css('color', 'blue');
+                $('#pwmsg').html("비밀번호 일치");
+            } else {
+                $('#pwmsg').css('color', 'red');
+                $('#pwmsg').html("비밀번호가 일치하지 않습니다.");
+            }
+
         }
     </script>
 </head>
@@ -53,7 +81,7 @@
     </div>
     <div class="responsive-frame">
         <main>
-    <p class="main-title">Register</p>
+    <p class="main-title">会員登録</p>
 <!--    &lt;!&ndash; 개잊정보 약관 &ndash;&gt;
     <div class="terms">
      <h2>dp Terms of Service</h2>
@@ -65,7 +93,7 @@
         <!--아이디-->
       <label for="memberId"  class="input-label">ID</label>
         <input type="text" name="memberId" id="memberId" placeholder="ID">
-        <span id="msg" ></span>
+        <span id="idmsg" ></span>
         </div>
         <!-- 비밀번호 -->
         <div class="input-group">
@@ -76,11 +104,13 @@
         <div class="input-group">
         <label for="pwConfirm" class="input-label">Password Confirm</label>
         <input type="password" id="pwConfirm">
+            <span id="pwmsg"></span>
         </div>
         <!--닉네임-->
         <div class="input-group">
         <label for="nickname" class="input-label">Nickname</label>
         <input type="text" name="nickname" id="nickname" placeholder="Nickname">
+            <span id="nicknamemsg"></span>
         </div>
         <!--연령대-->
         <div class="input-group">

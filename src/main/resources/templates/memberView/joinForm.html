@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html  class="responsive-login-page" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>회원가입 폼</title>
     <link rel="stylesheet" href="/css/rurustyle.css" />
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+            crossorigin="anonymous"
+    />
     <script src="/javascript/member/joinForm.js"></script>
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script>
@@ -39,38 +46,67 @@
         }
     </script>
 </head>
-<body>
-    <h3>Register</h3>
-    <!-- 개잊정보 약관 -->
+<body class="responsive-login-page">
+    <div class="logo-title">
+        <img class="logo" src="images/화면 캡처 2024-09-01 125210.png" />
+      <p>ソウルに触る</p>
+    </div>
+    <div class="responsive-frame">
+        <main>
+    <p class="main-title">Register</p>
+<!--    &lt;!&ndash; 개잊정보 약관 &ndash;&gt;
     <div class="terms">
      <h2>dp Terms of Service</h2>
          <p class="small">개인정보 처리 약관 내용</p>
-    </div>
+    </div>-->
     <!-- 회원가입 양식 -->
-    <form class="joinForm" th:action="@{/join}" method="post">
+    <form class="login-form" th:action="@{/join}" method="post">
+        <div class="input-group">
         <!--아이디-->
-      <label for="memberId">ID</label>
+      <label for="memberId"  class="input-label">ID</label>
         <input type="text" name="memberId" id="memberId" placeholder="ID">
-        <span id="msg" ></span><br>
-        <label for="memberPw">Password</label>
+        <span id="msg" ></span>
+        </div>
+        <!-- 비밀번호 -->
+        <div class="input-group">
+        <label for="memberPw"  class="input-label">Password</label>
         <input type="password" name="memberPw" id="memberPw" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
-        <br>
-        <label for="pwConfirm">Password Confirm</label>
+        </div>
+        <!--비밀번호 확인-->
+        <div class="input-group">
+        <label for="pwConfirm" class="input-label">Password Confirm</label>
         <input type="password" id="pwConfirm">
-        <br>
-        <label for="nickname">닉네임</label>
+        </div>
+        <!--닉네임-->
+        <div class="input-group">
+        <label for="nickname" class="input-label">Nickname</label>
         <input type="text" name="nickname" id="nickname" placeholder="Nickname">
-        <br>
-        <label for="age">나이</label>
-        <input type="text" name="age" id="age" placeholder="Age">
-        <br>
-      <label for="email">Email</label>
+        </div>
+        <!--연령대-->
+        <div class="input-group">
+        <label for="age" class="input-label">Age</label>
+            <select id="age" name="age" ckass="input=select">
+                <option value="">Age</option>
+                <option value="10">10대</option>
+                <option value="20">20대</option>
+                <option value="30">30대</option>
+                <option value="40">40대</option>
+                <option value="50">50대</option>
+                <option value="60">60대</option>
+            </select>
+        </div>
+        <div class="input-group">
+      <label for="email" class="input-label">Email</label>
         <input type="email" name="email" id="email" placeholder="Email">
         <input type="button" id="emCertification" value="認証">
-        <br>
+        </div>
+        <div class="box-clause-round">
+            <div class="clause-item">
       <input type="checkbox" name="agree" id="agree">
      <label for="agree">I agree to the <i class="fa fa-arrow-left"  aria-hidden="true"></i><a class="agree" href="#">Terms of service</a></label>
-     <div id="form-controls">
+            </div>
+        </div>
+                <div id="form-controls">
          <button type="submit">Sign Up</button>
      </div>
     </form>

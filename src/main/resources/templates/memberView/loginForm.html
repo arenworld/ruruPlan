@@ -1,42 +1,82 @@
 <!DOCTYPE html>
-<html class="responsive-login-page" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
-<style>
-    body {
-        text-align: center;
-        margin: auto;
-    }
-</style>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
-    <meta charset="UTF-8">
-    <title>로그임 폼</title>
-    <link rel="stylesheet" href="/css/rurustyle.css" />
+    <meta charset="UTF-8" />
+    <title>로그인 폼</title>
+    <link rel="stylesheet" href="css/rurustyle.css" />
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+            crossorigin="anonymous"
+    />
 </head>
-<body class="responsive-login-page">
-    <!--로그인 구역 only for 혹시 다-->
-     <div class="form-wrap">
-                <!---->
-                <div id="login-tab-content" class="active">
-                    <!---->
-                    <form class="loginForm" th:action="@{/member/login}" method="post">
-                        <input type="text" class="input" id="memberId" name="memberId" autocomplete="off" placeholder="Id">
-                        <br>
-                        <input type="password" class="input" id="memberPw" name="memberPw" autocomplete="off" placeholder="Password">
-                        <br>
-                        <input type="checkbox" class="checkbox" id="remember_id">
-                        <label for="remember_id">Remember Id</label>
-                        <br>
-                        <input type="submit" class="button" value="Login">
-                        <br>
-                    </form>
-                    <!--비밀번호 찾기/아이디 찾기 url로 이동-->
-                    <div class="help-action">
-                        <span><a id="findId" th:href="@{/findId}">IDの検索 / </a></span>
-                        <span><a id="findPw" th:href="@{/findPw}">PWの検索</a></span>
-                        <br>
-                        <span><a id="join" th:href="@{/join/joinForm}">新規加入</a></span>
-                    </div>
-                </div>
-     </div>
+
+<body class="login-page">
+<div class="logo-title">
+    <img class="logo" src="images/화면 캡처 2024-09-01 125210.png" />
+    <p>ソウルに触る</p>
+</div>
+<div id="frame">
+    <main>
+        <p class="main-title">Login</p>
+        <form class="login-form" th:action="@{/member/login}" method="post">
+            <div class="subtitle mb-5">より完璧な旅行のために</div>
+
+            <div class="input-group me-5">
+                <label for="memberId" class="input-label ms-1">ID</label>
+                <input
+                        type="text"
+                        class="input"
+                        id="memberId"
+                        name="memberId"
+                        autocomplete="off"
+                        placeholder="Id"
+                />
+            </div>
+            <div class="input-group">
+                <label for="memberPw" class="input-label">PW</label>
+                <input
+                        type="password"
+                        class="input"
+                        id="memberPw"
+                        name="memberPw"
+                        autocomplete="off"
+                        placeholder="Password"
+                />
+            </div>
+            <div class="central-container mb-3">
+                <input type="checkbox" class="checkbox" id="remember_id" />
+                <label for="remember_id">Remember Id</label>
+            </div>
+            <div class="central-container mb-3">
+                <input type="submit" class="button cta-button" value="로그인" />
+            </div>
+        </form>
+    </main>
+    <footer>
+        <div class="text-group-center-row">
+            <p class="footer-item">
+                <a id="findId" th:href="@{/findId}">IDの検索</a>
+            </p>
+            <p class="footer-item">
+                <a id="findPw" th:href="@{/findPw}">PWの検索</a>
+            </p>
+            <p class="footer-item">아직 회원이 아니신가요?</p>
+            <p class="footer-item">
+                <a id="join" th:href="@{/join/joinForm}">회원가입</a>
+            </p>
+        </div>
+    </footer>
+</div>
+
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous"
+></script>
 </body>
 </html>

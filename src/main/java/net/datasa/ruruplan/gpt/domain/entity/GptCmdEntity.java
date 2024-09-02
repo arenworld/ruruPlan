@@ -22,7 +22,6 @@ import java.time.LocalTime;
 @Entity
 @Table(name="ruru_gpt_cmd")
 public class GptCmdEntity {
-
     // 기본 키, 자동 증가
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

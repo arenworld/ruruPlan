@@ -10,6 +10,9 @@ import net.datasa.ruruplan.member.repository.MemberRepository;
 import net.datasa.ruruplan.security.AuthenticatedUser;
 import org.springframework.stereotype.Service;
 
+/**
+ * 질문관련 서비스클래스
+ */
 @RequiredArgsConstructor
 @Slf4j
 @Service
@@ -19,6 +22,11 @@ public class QuestionService {
     private final MemberRepository memberRepository;
 
 
+    /**
+     * 질문내용 저장 및 cmdNum 반환
+     * @param gptCmdDTO 사용자의 답변 내용
+     * @return  cmdNum
+     */
     public Integer saveAndReturnId(GptCmdDTO gptCmdDTO) {
         GptCmdEntity entity = GptCmdEntity.builder()
                 .firstDate(gptCmdDTO.getFirstDate())

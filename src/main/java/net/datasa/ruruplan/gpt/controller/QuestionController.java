@@ -27,6 +27,13 @@ public class QuestionController {
     }
 
 
+    /**
+     * 질문 저장 및 cmdNum반환해서 html로 전송
+     * @param gptCmdDTO 질문내용 저장
+     * @param model cmdNum html로 전송
+     * @param user  로그인 정보
+     * @return  질문 결과창으로 이동
+     */
 /*    @GetMapping("saveGptCmd")
     public String saveGptCmd(GptCmdDTO gptCmdDTO, Model model, AuthenticatedUser user) {
         gptCmdDTO.setMemberId(user.id);     // authenticatedUser 클래스의 id값

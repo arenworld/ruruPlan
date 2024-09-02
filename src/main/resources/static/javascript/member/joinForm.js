@@ -1,37 +1,5 @@
 $(document).ready(function() {
-    // 아이디 중복확인
-    $(document).ready(function() {
-
-        $('#memberId').keyup(function() {
-            let id = $(this).val();
-            if (id.length < 6 || id.length > 15) {
-                $('#msg').css('color', 'red');
-                $('#msg').html('아이디를 6~15글자로 입력해 주세요');
-            }
-        });
-        $('#idCertification').click(function(){
-            let id = $('#memberId').val();
-            $.ajax({
-                url: 'idDuplicate',
-                type: 'post',
-                data: {id : id},
-                success: function(res){
-                    if(res){
-                        $('#msg').css('color', 'red');
-                        $('#msg').html("이미 사용중인 ID입니다");
-                    } else{
-                        $('#msg').css('color', 'blue');
-                        $('#msg').html("사용가능한 ID입니다.");
-                    }
-                },
-                error: function(){
-                    alert('에러');
-                }
-
-            });
-        });
-        });
-
+        // 연결 안됨...
     // 모달 열기
     $('.agree').on('click', function(event) {
         event.preventDefault();

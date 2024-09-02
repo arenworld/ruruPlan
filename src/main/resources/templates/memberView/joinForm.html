@@ -3,38 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입 폼</title>
-    <link rel="stylesheet" href="/css/member/joinForm.css">
+    <link rel="stylesheet" href="/css/rurustyle.css" />
     <script src="/javascript/member/joinForm.js"></script>
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script>
         $(document).ready(function() {
-
-            $('#memberId').keyup(function () {
-                let id = $(this).val();
-                if (id.length < 6 || id.length > 15) {
-                    $('#msg').css('color', 'red');
-                    $('#msg').html('아이디를 6~15글자로 입력해 주세요');
-                } else {
-                    $.ajax({
-                        url: 'idDuplicate',
-                        type: 'post',
-                        data: {id: id},
-                        success: function (res) {
-                            if (res) {
-                                $('#msg').css('color', 'red');
-                                $('#msg').html("이미 사용중인 ID입니다");
-                            } else {
-                                $('#msg').css('color', 'blue');
-                                $('#msg').html("사용가능한 ID입니다.");
-                            }
-                        },
-                        error: function () {
-                            alert('에러');
-                        }
-                    });
-                }
-            });
+            $('#memberId').keyup(idConfirm);
+            $('#nickname').keyup(idConfirm);
         });
+
+        function idConfirm(){
+            let id = $(this).val();
+            if (id.length < 6 || id.length > 15) {
+                $('#msg').css('color', 'red');
+                $('#msg').html('아이디를 6~15글자로 입력해 주세요');
+            } else {
+                $.ajax({
+                    url: 'idDuplicate',
+                    type: 'post',
+                    data: {id: id},
+                    success: function (res) {
+                        if (res) {
+                            $('#msg').css('color', 'red');
+                            $('#msg').html("이미 사용중인 ID입니다");
+                        } else {
+                            $('#msg').css('color', 'blue');
+                            $('#msg').html("사용가능한 ID입니다.");
+                        }
+                    },
+                    error: function () {
+                        alert('에러');
+                    }
+                });
+            }
+        }
     </script>
 </head>
 <body>

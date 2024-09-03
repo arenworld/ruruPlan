@@ -11,16 +11,35 @@
             integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
             crossorigin="anonymous"
     />
+    <link rel="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <style>
+        .fa-solid fa-eye {
+            color: #000000;
+        }
+    </style>
     <script src="/javascript/member/joinForm.js"></script>
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script>
         $(document).ready(function() {
+            //비밀번호 노출,숨기기 기능
+            $('.input-group i').on('click',function(){
+                $('memberPw').toggleClass('active');
+                if($('input').hasClass('active')){
+                    $(this).attr('class',"fa-solid fa-eye")
+                        .prev('input').attr('type',"text");
+                }else{
+                    $(this).attr('class',"fa fa-eye fa-lg")
+                        .prev('input').attr('type','password');
+                }
+            });
+
             $('#memberId').keyup(idConfirm);
             $('#nickname').keyup(nicknameConfirm);
             $('#pwConfirm').keyup(pwConfirm);
-            $('#emCertification').click(emCertification);
+            $('#emCertification').click(emConfirm);
+            $('.login-form').submit(formConfirm);
         });
-
+        // 아이디 유효성 겁사
         function idConfirm(){
             let id = $(this).val();
             if (id.length < 6 || id.length > 15) {
@@ -46,7 +65,7 @@
                 });
             }
         }
-
+        // 닉네임 유효성 검사
         function nicknameConfirm(){
             let nickname = $(this).val();
             if (nickname.length < 1 || nickname.length > 10) {
@@ -57,7 +76,7 @@
                 $('#nicknamemsg').html('사용 가능한 닉네임입니다.');
             }
         }
-
+        // 비밀번호 일치 확인
         function pwConfirm(){
             let pwConfirm = $(this).val();
             let pw = $('#memberPw').val();
@@ -65,27 +84,27 @@
             console.log(pwConfirm, pw);
 
             if(pwConfirm == pw){
-                $('#pwmsg').css('color', 'blue');
+                $('#pwmsg').css('color', 'green');
                 $('#pwmsg').html("비밀번호 일치");
             } else {
                 $('#pwmsg').css('color', 'red');
                 $('#pwmsg').html("비밀번호가 일치하지 않습니다.");
             }
         }
-
-        function emCertification(){
+        // 이메일 인증 번호 전송
+        function emConfirm(){
             let email = $('#email').val();
 
             $.ajax({
-                url: '/send-verification-email',
+                url: 'mailConfirm',
                 type: 'post',
                 data: {email: email},
-                success: function (res) {
-                    if (res) {
-                        $('#emailmsg').css('color', 'black');
+                success: function (code) {
+                    if (code) {
+                        $('#emailmsg').css('color', 'blue');
                         $('#emailmsg').html("인증 번호가 전송되었습니다.");
+                        chkEmailConfirm(code);
                     }
-                    alert("전송 성공했으나 뭔가 잘못됨")
                 },
                 error: function () {
                     $('#emailmsg').css('color', 'red');
@@ -93,12 +112,40 @@
                 }
             });
         }
+        // 이메일 인증 번호 확인
+        function chkEmailConfirm(code){
+            $('#emailconfirm').on("keyup", function(){
+                if (code != $('#emailconfirm').val()) {
+                    emconfirmchk = false;
+                    $('#emchkmsg').html("<span id='emconfirmchk'>인증번호가 잘못되었습니다</span>")
+                    $("#emconfirmchk").css({
+                        "color" : "#FA3E3E",
+                        "font-weight" : "bold",
+                        "font-size" : "10px"
+                    })
+                } else {
+                    emconfirmchk = true;
+                    $('#emchkmsg').html("<span id='emconfirmchk'>인증번호 확인 완료</span>")
+                    $("#emconfirmchk").css({
+                        "color" : "#0D6EFD",
+                        "font-weight" : "bold",
+                        "font-size" : "10px"
+                    })
+                }
+            })
+        }
+        //회원가입 폼 제출 내용 확인
+        function formConfirm(){
+            //아이디 중복.
+            //비밀번호 일치.
+            //
+        }
     </script>
 </head>
 <body class="responsive-login-page">
     <div class="logo-title">
         <img class="logo" src="images/화면 캡처 2024-09-01 125210.png" />
-      <p>ソウルに触る</p>
+      <p>ソウルに触る    <i class="fa-solid fa-eye"></i></p>
     </div>
     <div class="responsive-frame">
         <main>
@@ -113,30 +160,32 @@
         <div class="input-group">
         <!--아이디-->
       <label for="memberId"  class="input-label">ID</label>
-        <input type="text" name="memberId" id="memberId" placeholder="ID">
+        <input type="text" name="memberId" id="memberId" placeholder="ID" required>
         <span id="idmsg" ></span>
         </div>
         <!-- 비밀번호 -->
         <div class="input-group">
         <label for="memberPw"  class="input-label">Password</label>
-        <input type="password" name="memberPw" id="memberPw" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
+        <input type="password" name="memberPw" id="memberPw" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" required>
+
         </div>
         <!--비밀번호 확인-->
         <div class="input-group">
         <label for="pwConfirm" class="input-label">Password Confirm</label>
-        <input type="password" id="pwConfirm">
+        <input type="password" id="pwConfirm" required>
+
             <span id="pwmsg"></span>
         </div>
         <!--닉네임-->
         <div class="input-group">
         <label for="nickname" class="input-label">Nickname</label>
-        <input type="text" name="nickname" id="nickname" placeholder="Nickname">
+        <input type="text" name="nickname" id="nickname" placeholder="Nickname" required>
             <span id="nicknamemsg"></span>
         </div>
         <!--연령대-->
         <div class="input-group">
         <label for="age" class="input-label">Age</label>
-            <select id="age" name="age" ckass="input=select">
+            <select id="age" name="age" ckass="input=select" required>
                 <option value="">Age</option>
                 <option value="10">10대</option>
                 <option value="20">20대</option>
@@ -148,17 +197,17 @@
         </div>
         <div class="input-group">
       <label for="email" class="input-label">Email</label>
-        <input type="email" name="email" id="email" placeholder="Email">
+        <input type="email" name="email" id="email" placeholder="Email" required>
         <input type="button" id="emCertification" value="認証">
             <span id="emailmsg"></span>
         </div>
         <div class="form-group last mb-4 check_input">
-            <label for="memailconfirm" id="memailconfirmTxt">인증번호를 입력해주세요</label>
-            <input type="text" class="form-control" id="memailconfirm">
+            <input type="text" class="form-control" id="emailconfirm" placeholder="인증번호를 입력해주세요" required>
+            <span id="emchkmsg"></span>
         </div>
         <div class="box-clause-round">
             <div class="clause-item">
-      <input type="checkbox" name="agree" id="agree">
+      <input type="checkbox" id="agree" required>
      <label for="agree">I agree to the <i class="fa fa-arrow-left"  aria-hidden="true"></i><a class="agree" href="#">Terms of service</a></label>
             </div>
         </div>

@@ -13,9 +13,9 @@ public class EmailConfig {
     public JavaMailSender javaMailService() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
 
-        javaMailSender.setHost("smtp.gmail.com");	//네이버의 경우 smtp.naver.com
-        javaMailSender.setUsername("ID@메일.com");	//메일
-        javaMailSender.setPassword("password");		//패스워드
+        javaMailSender.setHost("smtp.gmail.com");
+        javaMailSender.setUsername("saemigwon25@gmail.com");	//메일
+        javaMailSender.setPassword("ebxm evqv pakh umgt");		//패스워드
 
         javaMailSender.setPort(587);
 

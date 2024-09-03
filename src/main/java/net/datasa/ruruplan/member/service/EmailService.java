@@ -20,15 +20,27 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
 
     private final MemberRepository memberRepository;
+    //인증 번호
     private String authNum;
 
 
-
+    /**
+     * 이메일 즁복 검사 서비스
+     * @param email 입력받은 메일
+     */
     private void checkDuplicatedEmail(String email){
         memberRepository.findByEmail(email).ifPresent(
                 m -> {throw new IllegalArgumentException("이 이메일은 이미 사용 중인 이메일 입니다.");
                 });
     }
+
+    /**
+     * 전송 메세지 생성 서비스
+     * @param to
+     * @return
+     * @throws MessagingException
+     * @throws UnsupportedEncodingException
+     */
     public MimeMessage createMessage(String to)throws MessagingException, UnsupportedEncodingException {
 
         MimeMessage message = javaMailSender.createMimeMessage();
@@ -56,6 +68,10 @@ public class EmailService {
         return message;
     }
 
+    /**
+     * 인증 코드 생성 서비스
+     * @return 인증 코드
+     */
     public String createCode(){
         Random random = new Random();
         StringBuffer key = new StringBuffer();
@@ -72,8 +88,12 @@ public class EmailService {
         return authNum = key.toString();
     }
 
-    //메일 발송
-    //등록해둔 javaMail 객체를 사용해서 이메일 send
+    /**
+     * 이메일 전송 서비스
+     * @param sendEmail
+     * @return 인증번호
+     * @throws Exception
+     */
     public String sendSimpleMessage(String sendEmail) throws Exception{
 
         authNum = createCode();	//랜덤 인증번호 생성

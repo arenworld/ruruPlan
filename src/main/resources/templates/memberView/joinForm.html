@@ -2,7 +2,7 @@
 <html  class="responsive-login-page" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>회원가입 폼</title>
     <link rel="stylesheet" href="/css/rurustyle.css" />
     <link
@@ -13,22 +13,26 @@
     />
     <link rel="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
     <style>
-        .fa-solid fa-eye {
-            color: #000000;
+        i{
+            position: absolute;
+            left: 90%;
+            top: 45px;
+            color: black;
         }
     </style>
+    <script src="https://kit.fontawesome.com/0efaee6f1c.js" crossorigin="anonymous"></script>
     <script src="/javascript/member/joinForm.js"></script>
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script>
         $(document).ready(function() {
             //비밀번호 노출,숨기기 기능
             $('.input-group i').on('click',function(){
-                $('memberPw').toggleClass('active');
+                $('#memberPw').toggleClass('active');
                 if($('input').hasClass('active')){
-                    $(this).attr('class',"fa-solid fa-eye")
-                        .prev('input').attr('type',"text");
+                    $(this).attr('class', "fa-solid fa-eye")
+                        .prev('input').attr('type', "text");
                 }else{
-                    $(this).attr('class',"fa fa-eye fa-lg")
+                    $(this).attr('class',"fa-solid fa-eye")
                         .prev('input').attr('type','password');
                 }
             });
@@ -54,9 +58,11 @@
                         if (res) {
                             $('#idmsg').css('color', 'red');
                             $('#idmsg').html("이미 사용중인 ID입니다");
+                            return false;
                         } else {
                             $('#idmsg').css('color', 'blue');
                             $('#idmsg').html("사용가능한 ID입니다.");
+                            return true;
                         }
                     },
                     error: function () {
@@ -136,16 +142,18 @@
         }
         //회원가입 폼 제출 내용 확인
         function formConfirm(){
-            //아이디 중복.
-            //비밀번호 일치.
-            //
+            $('#memberId').keyup(idConfirm);
+            $('#nickname').keyup(nicknameConfirm);
+            $('#pwConfirm').keyup(pwConfirm);
+            $('#emCertification').click(emConfirm);
+            $('.login-form').submit(formConfirm);
         }
     </script>
 </head>
 <body class="responsive-login-page">
     <div class="logo-title">
         <img class="logo" src="images/화면 캡처 2024-09-01 125210.png" />
-      <p>ソウルに触る    <i class="fa-solid fa-eye"></i></p>
+      <p>ソウルに触る</p>
     </div>
     <div class="responsive-frame">
         <main>
@@ -167,7 +175,7 @@
         <div class="input-group">
         <label for="memberPw"  class="input-label">Password</label>
         <input type="password" name="memberPw" id="memberPw" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" required>
-
+            <i class="fa-solid fa-eye"></i>
         </div>
         <!--비밀번호 확인-->
         <div class="input-group">

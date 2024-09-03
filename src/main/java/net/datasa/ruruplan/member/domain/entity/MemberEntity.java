@@ -34,7 +34,7 @@ public class MemberEntity {
     private String memberPw;
 
     //회원 이메일
-    @Column(name = "email", length = 100, nullable = false)
+    @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
 
     //회원 나이

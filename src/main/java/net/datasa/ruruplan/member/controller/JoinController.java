@@ -24,6 +24,7 @@ public class JoinController {
 
     /**
      * 회원가입 폼으로 이동
+     *
      * @return
      */
     @GetMapping("joinForm")
@@ -33,6 +34,7 @@ public class JoinController {
 
     /**
      * id 중복확인
+     *
      * @param id
      * @return
      */
@@ -46,39 +48,7 @@ public class JoinController {
     }
 
     // 이메일 인증 처리 서비스
-    private final EmailService emailService;
 
-    /**
-     *이메일 인증 보내기
-     * @param email
-     * @param request
-     * @return
-     */
-    @PostMapping("/send-verification-email")
-    @ResponseBody
-    public ResponseEntity<Void> sendVerificationEmail(@RequestParam String email, HttpServletRequest request) {
-        log.info("email={}", email);
 
-        emailService.sendVerificationEmail(email, request);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
 
-    /**
-     * 이메일 인증을 진행하는 API.
-     *      * 인증에 성공하면 ture를 실패하면 false를 반환.
-     * @param token
-     * @return
-     */
-    @GetMapping("/verify/{token}")
-    public String verifyEmail(@PathVariable String token) {
-
-        // 토큰 만료
-        if (emailService.isTokenExpired(token)) {
-            return "verifyError";
-        }
-
-        emailService.verifySuccess(token);
-
-        return "memberView";
-    }
 }

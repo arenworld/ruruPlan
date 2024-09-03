@@ -22,9 +22,11 @@ public class EmailService {
     private final MemberRepository memberRepository;
     private String authNum;
 
+
+
     private void checkDuplicatedEmail(String email){
         memberRepository.findByEmail(email).ifPresent(
-                m -> {throw new IllegalArgumentException(DUPLICATE_EMAIL_MSG.getMsg());
+                m -> {throw new IllegalArgumentException("이 이메일은 이미 사용 중인 이메일 입니다.");
                 });
     }
     public MimeMessage createMessage(String to)throws MessagingException, UnsupportedEncodingException {
@@ -87,6 +89,4 @@ public class EmailService {
         return authNum;
     }
 
-}
-    }
 }

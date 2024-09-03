@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#myPlanList').click(function() {
+                location.href="myPlanList";
+            });
+
+            $('#myInfo').click(function() {
+                location.href="updateInfoForm";
+            });
+        });
+    </script>
+</head>
+<body>
+    <button id="myPlanList">내 플랜</button>
+    <button id="myInfo">개인정보 수정</button>
+</body>
+</html>

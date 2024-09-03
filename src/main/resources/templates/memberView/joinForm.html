@@ -41,7 +41,7 @@
             $('#nickname').keyup(nicknameConfirm);
             $('#pwConfirm').keyup(pwConfirm);
             $('#emCertification').click(emConfirm);
-            $('.login-form').submit(formConfirm);
+/*            $('.login-form').submit(formConfirm);*/
         });
         // 아이디 유효성 겁사
         function idConfirm(){
@@ -141,13 +141,9 @@
             })
         }
         //회원가입 폼 제출 내용 확인
-        function formConfirm(){
-            $('#memberId').keyup(idConfirm);
-            $('#nickname').keyup(nicknameConfirm);
-            $('#pwConfirm').keyup(pwConfirm);
-            $('#emCertification').click(emConfirm);
-            $('.login-form').submit(formConfirm);
-        }
+/*        function formConfirm(){
+
+        }*/
     </script>
 </head>
 <body class="responsive-login-page">
@@ -164,7 +160,7 @@
          <p class="small">개인정보 처리 약관 내용</p>
     </div>-->
     <!-- 회원가입 양식 -->
-    <form class="login-form" th:action="@{/join}" method="post">
+    <form class="login-form" th:action="@{/join}" th:method="post">
         <div class="input-group">
         <!--아이디-->
       <label for="memberId"  class="input-label">ID</label>

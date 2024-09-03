@@ -60,7 +60,8 @@ public class MemberEntity {
     private LocalDateTime deactivationDate;
 
     //계정상태
-    @Column(name = "enabled", nullable = false, columnDefinition = "tinyint(1) default 1 check(enabled in (0, 1))")
+    @Column(name = "enabled", nullable = false, columnDefinition = "tinyint(1) check(enabled in (0, 1))")
+    @ColumnDefault("1")
     private Boolean enabled;
 
     //지위
@@ -73,8 +74,8 @@ public class MemberEntity {
     private String profileImageUrl;
 
     //유저 활성화 상태
-    @Column(name = "member_status", length = 50, nullable = false, columnDefinition = "check(member_Status in ('active','deactive','inactive'))")
-    @ColumnDefault("'active'")
+    @Column(name = "member_status", length = 50, nullable = false, columnDefinition = "check(member_Status in ('actived','deactived','inactived','suspended'))")
+    @ColumnDefault("'actived'")
     private String memberStatus;
     
     //최근 로그인

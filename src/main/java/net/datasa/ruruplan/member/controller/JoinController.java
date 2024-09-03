@@ -27,12 +27,25 @@ public class JoinController {
 
     /**
      * 회원가입 폼으로 이동
-     *
-     * @return
+     * @return 회원가입 html
      */
     @GetMapping("joinForm")
     public String joinForm() {
         return "memberView/joinForm";
+    }
+
+    /**
+     * 회원가입
+     * @param memberDto 전달받은 회원 정보
+     * @return 메인페이지 경로
+     */
+    @PostMapping("")
+    public String join(@ModelAttribute MemberDTO memberDto){
+
+        log.debug("memberDto: {}", memberDto);
+        joinService.join(memberDto);
+
+        return "redirect:/";
     }
 
     /**

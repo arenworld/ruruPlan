@@ -3,6 +3,8 @@ package net.datasa.ruruplan.member.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.ruruplan.member.domain.dto.MemberDTO;
+import net.datasa.ruruplan.member.domain.entity.MemberEntity;
 import net.datasa.ruruplan.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,5 +30,23 @@ public class JoinService {
         return res;
     }
 
+    /**
+     * 회원가입 진행
+     * @param member 입력받은
+     */
+    public void join(MemberDTO member) {
+        MemberEntity memberEntity = MemberEntity.builder()
+                .memberId(member.getMemberId())
+                .memberPw(member.getMemberPw())
+                .email(member.getEmail())
+                .nickname(member.getNickname())
+                .age(member.getAge())
+                .enabled(true)
+                .roleName("ROLE_USER")
+                .memberStatus("ACTIVED")
+                .build();
+
+        memberRepository.save(memberEntity);
+    }
 
 }

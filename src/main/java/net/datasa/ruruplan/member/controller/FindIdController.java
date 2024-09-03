@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Slf4j
 @Controller
-@RequestMapping("findId")
+@RequestMapping("login")
 public class FindIdController {
 
-    @GetMapping("")
+    @GetMapping("findId")
     public String findId() {
         return "memberView/findId";
     }

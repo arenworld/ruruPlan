@@ -1,4 +1,4 @@
-package net.datasa.ruruplan.gpt.domain.entity;
+package net.datasa.ruruplan.plan.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Slf4j
 @Controller
-@RequestMapping("findPw")
+@RequestMapping("login")
 public class FindPwController {
 
-    @GetMapping("")
+    @GetMapping("findPw")
     public String findPw() {
         return "memberView/findPw";
     }

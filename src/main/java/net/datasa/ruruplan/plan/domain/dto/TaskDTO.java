@@ -1,4 +1,4 @@
-package net.datasa.ruruplan.gpt.domain.dto;
+package net.datasa.ruruplan.plan.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

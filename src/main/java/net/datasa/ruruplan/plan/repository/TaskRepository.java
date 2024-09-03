@@ -1,6 +1,6 @@
-package net.datasa.ruruplan.gpt.repository;
+package net.datasa.ruruplan.plan.repository;
 
-import net.datasa.ruruplan.gpt.domain.entity.TaskEntity;
+import net.datasa.ruruplan.plan.domain.entity.TaskEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

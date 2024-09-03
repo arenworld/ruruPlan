@@ -1,5 +1,11 @@
+@font-face {
+  font-family: 'MangoDdobak-B';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405-3@1.1/MangoDdobak-B.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
 body {
-  font-family: "Inter", sans-serif;
+  font-family: 'MangoDdobak-B', serif;
   line-height: 1.5;
   background: #ffffff;
   overflow-x: hidden;
@@ -54,7 +60,8 @@ a.text-primary {
     color: #1A374D !important; }
 
 h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
-  font-family: "Source Serif Pro", serif; }
+  font-family: 'MangoDdobak-B';
+}
 
 .btn {
   padding-top: 12px;
@@ -560,7 +567,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     font-size: 60px; }
     @media (max-width: 991.98px) {
       .hero h1 {
-        font-size: 45px; } }
+        font-size: 55px; } }
     .hero h1 .typed-words {
       position: relative; }
       .hero h1 .typed-words:before {
@@ -573,7 +580,8 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
         content: ""; }
   .hero .intro-wrap {
     position: relative;
-    z-index: 1; }
+    z-index: 1;
+    }
   .hero .slides {
     background: #ffffff;
     max-width: 800px;

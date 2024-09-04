@@ -41,15 +41,18 @@
             $('#nickname').keyup(nicknameConfirm);
             $('#pwConfirm').keyup(pwConfirm);
             $('#emCertification').click(emConfirm);
-/*            $('.login-form').submit(formConfirm);*/
+            $('.login-form').submit(formConfirm);
         });
+
         // 아이디 유효성 겁사
         function idConfirm(){
             let id = $(this).val();
             if (id.length < 6 || id.length > 15) {
                 $('#idmsg').css('color', 'red');
                 $('#idmsg').html('아이디를 6~15글자로 입력해 주세요');
+                return false;
             } else {
+                let valid = false;
                 $.ajax({
                     url: 'idDuplicate',
                     type: 'post',
@@ -58,17 +61,19 @@
                         if (res) {
                             $('#idmsg').css('color', 'red');
                             $('#idmsg').html("이미 사용중인 ID입니다");
-                            return false;
+                            valid = false;
                         } else {
                             $('#idmsg').css('color', 'blue');
                             $('#idmsg').html("사용가능한 ID입니다.");
-                            return true;
+                            valid = true;
                         }
                     },
                     error: function () {
                         alert('에러');
+                        valid = false;
                     }
                 });
+                return valid;
             }
         }
         // 닉네임 유효성 검사
@@ -77,9 +82,11 @@
             if (nickname.length < 1 || nickname.length > 10) {
                 $('#nicknamemsg').css('color', 'red');
                 $('#nicknamemsg').html('닉네임을 1~10글자로 입력해 주세요');
+                return false;
             } else {
                 $('#nicknamemsg').css('color', 'blue');
                 $('#nicknamemsg').html('사용 가능한 닉네임입니다.');
+                return true;
             }
         }
         // 비밀번호 일치 확인
@@ -92,9 +99,33 @@
             if(pwConfirm == pw){
                 $('#pwmsg').css('color', 'green');
                 $('#pwmsg').html("비밀번호 일치");
+                return true;
             } else {
                 $('#pwmsg').css('color', 'red');
                 $('#pwmsg').html("비밀번호가 일치하지 않습니다.");
+                return false;
+            }
+        }
+        // 이메일 형식
+        function emailCheck(email_address){
+            email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+            if(!email_regex.test(email_address)){
+                return false;
+            }else{
+                return true;
+            }
+        }
+        //이메일 유효성 검사
+        function validateEmail() {
+            var emailInput = document.getElementById('email');
+            var resultDiv = document.getElementById('result');
+
+            var email = emailInput.value;
+
+            if (emailCheck(email)) {
+                resultDiv.innerHTML = '유효한 이메일 주소입니다.';
+            } else {
+                resultDiv.innerHTML = '유효하지 않은 이메일 주소입니다.';
             }
         }
         // 이메일 인증 번호 전송
@@ -107,14 +138,13 @@
                 data: {email: email},
                 success: function (code) {
                     if (code) {
-                        $('#emailmsg').css('color', 'blue');
-                        $('#emailmsg').html("인증 번호가 전송되었습니다.");
+                        alert("이메일이 전송되었습니다." +
+                            "인증번호 확인 후 입력해주세요.")
                         chkEmailConfirm(code);
                     }
                 },
                 error: function () {
-                    $('#emailmsg').css('color', 'red');
-                    $('#emailmsg').html("전송 실패");
+                    alert("이메일 전송에 실패하였습니다.")
                 }
             });
         }
@@ -141,9 +171,18 @@
             })
         }
         //회원가입 폼 제출 내용 확인
-/*        function formConfirm(){
+        function formConfirm(){
+            let idValid = idConfirm();
+            let nicknameValid = nicknameConfirm();
+            let pwValid = pwConfirm();
+            let emailValid = emconfirmchk;
 
-        }*/
+            if (!idValid || !nicknameValid || !pwValid || !emailValid) {
+                alert('모든 입력 값을 올바르게 입력해주세요.');
+                return false;
+            }
+            return true;
+        }
     </script>
 </head>
 <body class="responsive-login-page">

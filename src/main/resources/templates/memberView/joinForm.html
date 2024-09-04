@@ -21,7 +21,6 @@
         }
     </style>
     <script src="https://kit.fontawesome.com/0efaee6f1c.js" crossorigin="anonymous"></script>
-    <script src="/javascript/member/joinForm.js"></script>
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -36,23 +35,59 @@
                         .prev('input').attr('type','password');
                 }
             });
+            //모달창 열기
+            $('.agree').on('click', function(event) {
+                event.preventDefault();
+                $('.terms').addClass('open'); // terms 모달 창 열기
+                $('.modal-backdrop').addClass('open'); // 배경 활성화
+            });
 
+            // 모달 닫기
+            $('.modal-backdrop').on('click', function() {
+                $('.terms').removeClass('open'); // terms 모달 창 닫기
+                $('.modal-backdrop').removeClass('open'); // 배경 비활성화
+            });
+
+            // 아이디 유효성 검사
             $('#memberId').keyup(idConfirm);
+            // 닉네임
             $('#nickname').keyup(nicknameConfirm);
+            // 비밀번호 유효성 검사
+            $('#memberPw').keyup(validatePw);
+            // 비밀번호 대조,확인
             $('#pwConfirm').keyup(pwConfirm);
-            $('#emCertification').click(emConfirm);
-            $('.login-form').submit(formConfirm);
+            //이메일 형식/ 중복 검사
+            $('#email').keyup(validateEmail);
+            //이메일 인증번호
+            $('#emCodeBt').click(emConfirm);
+
+            //회원가입 폼제출시 검사
+            $('.login-form').on('submit', function(event) {
+                alert("왈왈멍ㅁ어 왜 안돼는 거야")
+                if (!formConfirm()) { //얘도 안됨...
+                    event.preventDefault();  // 폼 제출 막기
+                    alert('모든 입력 값을 올바르게 입력해주세요.');
+                    return false;
+                }
+                return false; //얘가 안됨...
+            });
+
         });
 
         // 아이디 유효성 겁사
         function idConfirm(){
+            //정규식   (문자열, 영어(필수)+숫자(선택) 6~15자, 대소문자 구분)
+            id_regex = /^(?=.*[a-zA-Z])[a-zA-Z0-9]{6,15}$/;
             let id = $(this).val();
-            if (id.length < 6 || id.length > 15) {
+
+            /*아이디 형식 확인*/
+            if (!id_regex.test(id)) {
                 $('#idmsg').css('color', 'red');
-                $('#idmsg').html('아이디를 6~15글자로 입력해 주세요');
+                $('#idmsg').html('아이디는 영문,숫자로 6~15글자 입력해 주세요');
                 return false;
             } else {
                 let valid = false;
+           /*아이디 중복확인*/
                 $.ajax({
                     url: 'idDuplicate',
                     type: 'post',
@@ -69,19 +104,23 @@
                         }
                     },
                     error: function () {
-                        alert('에러');
+                        alert('IdDuplicate error');
                         valid = false;
                     }
                 });
                 return valid;
             }
         }
+
         // 닉네임 유효성 검사
         function nicknameConfirm(){
+            //정규식 (영문/항글/숫자 2~10자, 대소문자 구분)
+            nickname_regex = /^[A-Za-z가-힣0-9]{2,10}$/;
             let nickname = $(this).val();
-            if (nickname.length < 1 || nickname.length > 10) {
+
+            if (!nickname_regex.test(nickname)) {
                 $('#nicknamemsg').css('color', 'red');
-                $('#nicknamemsg').html('닉네임을 1~10글자로 입력해 주세요');
+                $('#nicknamemsg').html('닉네임은 영문,한글,숫자로 1~10글자 입력해 주세요');
                 return false;
             } else {
                 $('#nicknamemsg').css('color', 'blue');
@@ -89,6 +128,24 @@
                 return true;
             }
         }
+
+        // 비밀번호 유효성 검사
+        function validatePw() {
+            //비밀번호 정규표현식(영문/숫자/특수문자를 1자 이상 포함 8~15자, 대소문자 구분)
+            pw_regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*_\-+=`|\\(){}[\]:;"'<>,.?/])[a-zA-Z\d~!@#$%^&*_\-+=`|\\(){}[\]:;"'<>,.?/]{8,15}$/;
+            let pw = $('#memberPw').val();
+
+            if (!pw_regex.test(pw)) {
+                $('#pwmsg1').css('color', 'red');
+                $('#pwmsg1').css('font-size', '12px');
+                $('#pwmsg1').html('영문/숫자/특수문자를 1자 이상 포함한 8~15자로 입력');
+                return false;
+            } else {
+                $('#pwmsg1').html("");
+                return true;
+            }
+            }
+
         // 비밀번호 일치 확인
         function pwConfirm(){
             let pwConfirm = $(this).val();
@@ -106,28 +163,48 @@
                 return false;
             }
         }
-        // 이메일 형식
-        function emailCheck(email_address){
-            email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
-            if(!email_regex.test(email_address)){
-                return false;
-            }else{
-                return true;
-            }
-        }
-        //이메일 유효성 검사
+
+        //이메일 유효성 검사 (형식+중복확인)
         function validateEmail() {
-            var emailInput = document.getElementById('email');
-            var resultDiv = document.getElementById('result');
+            //이메일 정규표현식
+            email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+            let email = $('#email').val();
 
-            var email = emailInput.value;
-
-            if (emailCheck(email)) {
-                resultDiv.innerHTML = '유효한 이메일 주소입니다.';
+            if (!email_regex.test(email)) {
+                $('#emailmsg').css('color', 'red');
+                $('#emailmsg').html("유효하지 않은 이메일 주소입니다.");
+                $('#emCodeBt').prop('disabled', true);
+                return false;
             } else {
-                resultDiv.innerHTML = '유효하지 않은 이메일 주소입니다.';
+                // 중복 검사
+                let valid = false;
+                $.ajax({
+                    url: 'emailDuplicate',
+                    type: 'post',
+                    data: {email: email},
+                    success: function (res) {
+                        if (res) {
+                            $('#emailmsg').css('color', 'red');
+                            $('#emailmsg').html("이미 사용중인 email입니다");
+                            $('#emCodeBt').prop('disabled', true);
+                            valid = false;
+                        } else {
+                            $('#emailmsg').css('color', 'black');
+                            $('#emailmsg').html("사용 가능");
+                            $('#emCodeBt').prop('disabled', false);
+                            valid = true;
+                        }
+                    },
+                    error: function () {
+                        alert('EmailDuplicate error');
+                        valid = false;
+                    }
+                });
+                return valid;
             }
+
         }
+
         // 이메일 인증 번호 전송
         function emConfirm(){
             let email = $('#email').val();
@@ -158,7 +235,9 @@
                         "color" : "#FA3E3E",
                         "font-weight" : "bold",
                         "font-size" : "10px"
-                    })
+                    }
+                    )
+                    return emconfirmchk;
                 } else {
                     emconfirmchk = true;
                     $('#emchkmsg').html("<span id='emconfirmchk'>인증번호 확인 완료</span>")
@@ -167,18 +246,28 @@
                         "font-weight" : "bold",
                         "font-size" : "10px"
                     })
+                    return emconfirmchk;
                 }
             })
         }
+
         //회원가입 폼 제출 내용 확인
         function formConfirm(){
+            // 아이디 유효성 검사
             let idValid = idConfirm();
+            // 비밀번호 유형성 검사
+            let pwValid = validatePw();
+            // 비밀번호 재입력 일치 확인
+            let pwConfirmValid = pwConfirm();
+            // 닉네임 유효성 검사
             let nicknameValid = nicknameConfirm();
-            let pwValid = pwConfirm();
+            //이메일 유효성 검사
+            let validateEmail = validateEmail();
+            // 이메일 인증번호 확인
             let emailValid = emconfirmchk;
 
-            if (!idValid || !nicknameValid || !pwValid || !emailValid) {
-                alert('모든 입력 값을 올바르게 입력해주세요.');
+            console.log("유효성 검사 {}, {}, {}, {}, {}, {}", idValid, pwValid, pwConfirmValid, nicknameValid,validateEmail, emailValid);
+            if (!idValid || !nicknameValid || !pwValid || !pwConfirmValid || !emailValid || !validateEmail || !emconfirmchk) {
                 return false;
             }
             return true;
@@ -211,12 +300,12 @@
         <label for="memberPw"  class="input-label">Password</label>
         <input type="password" name="memberPw" id="memberPw" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" required>
             <i class="fa-solid fa-eye"></i>
+            <span id="pwmsg1"></span>
         </div>
         <!--비밀번호 확인-->
         <div class="input-group">
         <label for="pwConfirm" class="input-label">Password Confirm</label>
         <input type="password" id="pwConfirm" required>
-
             <span id="pwmsg"></span>
         </div>
         <!--닉네임-->
@@ -241,7 +330,7 @@
         <div class="input-group">
       <label for="email" class="input-label">Email</label>
         <input type="email" name="email" id="email" placeholder="Email" required>
-        <input type="button" id="emCertification" value="認証">
+        <input type="button" id="emCodeBt" value="認証" disabled="disabled">
             <span id="emailmsg"></span>
         </div>
         <div class="form-group last mb-4 check_input">
@@ -255,8 +344,10 @@
             </div>
         </div>
                 <div id="form-controls">
-         <button type="submit">Sign Up</button>
+                    <button type="submit" id="submit">Sign Up</button>
      </div>
     </form>
+        </main>
+    </div>
 </body>
 </html>

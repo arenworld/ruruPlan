@@ -27,11 +27,10 @@ public class EmailService {
     /**
      * 이메일 즁복 검사 서비스
      * @param email 입력받은 메일
+     * @return      중복 이메일 중복 여부
      */
-    private void checkDuplicatedEmail(String email){
-        memberRepository.findByEmail(email).ifPresent(
-                m -> {throw new IllegalArgumentException("이 이메일은 이미 사용 중인 이메일 입니다.");
-                });
+    public boolean emailDuplicate(String email) {
+        return memberRepository.findByEmail(email).isPresent();
     }
 
     /**

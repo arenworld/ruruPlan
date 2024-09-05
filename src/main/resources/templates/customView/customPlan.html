@@ -22,15 +22,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Serif+Pro:wght@400;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="css/jquery.fancybox.min.css">
-    <link rel="stylesheet" href="fonts/icomoon/style.css">
-    <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
-    <link rel="stylesheet" href="css/daterangepicker.css">
-    <link rel="stylesheet" href="css/aos.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" th:href="@{css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{css/owl.theme.default.min.css}">
+    <link rel="stylesheet" th:href="@{css/jquery.fancybox.min.css}">
+    <link rel="stylesheet" th:href="@{fonts/icomoon/style.css}">
+    <link rel="stylesheet" th:href="@{fonts/flaticon/font/flaticon.css}">
+    <link rel="stylesheet" th:href="@{css/daterangepicker.css}">
+    <link rel="stylesheet" th:href="@{css/aos.css}">
+    <link rel="stylesheet" th:href="@{css/style.css}">
 
     <title>custom</title>
 
@@ -107,8 +107,9 @@
 <!--본문 내용 ( 맨아래 푸터 제외, 가운데 + our Team 소개 /전체 3분할 중 가운데-->
 <div class="untree_co-section">
 
-    <!--본문 내용 (가운데 + our Team 소개 /  가운데 정사각형으로 -->  Q왜 div를 하나 더 씌운거지?) -->
+    <!--본문 내용 (가운데 + our Team 소개 /  가운데 정사각형으로 Q왜 div를 하나 더 씌운거지?) -->
     <div class="container my-5">
+            [[${planDTO}]]
 
         <!-- 정가운데 our Team 소개 빼고 -->
         <div class="row justify-content-center">

@@ -25,10 +25,10 @@ public class TaskDTO {
     private Integer dateN;
     // 활동 시작 시간
     private LocalTime startTime;
+    // 활동 시간
+    private LocalTime duration;
     // 활동 끝나는 시간
     private LocalTime endTime;
-    // 활동 시간
-    private Integer duration;
     // 활동명(택시, 도보, 대중교통, 식사, 관광, 숙소)
     private String task;
     // 활동 비용

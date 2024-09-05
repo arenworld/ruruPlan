@@ -46,13 +46,13 @@ public class TaskEntity {
     @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
 
+    // 활동 시간
+    @Column(name = "duration", nullable = false)
+    private LocalTime duration;
+
     // 활동 끝나는 시간
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
-
-    // 활동 시간
-    @Column(name = "duration", nullable = false)
-    private Integer duration;
 
     // 활동명(택시, 도보, 대중교통, 식사, 관광, 숙소)
     @Column(name = "task", nullable = false)

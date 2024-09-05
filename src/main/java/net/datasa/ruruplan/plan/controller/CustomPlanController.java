@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.temporal.ChronoUnit;
+
 /**
  * GPT추천일정을 내 일정으로 담은 후 개별수정하는 컨트롤러
  * db에 이미 저장되어 있는 정보를 꺼내고, 다시 집어넣는 역할을 한다.
@@ -26,6 +28,8 @@ public class CustomPlanController {
     @GetMapping("")
     public String customPlan(Model model) { //@RequestParam("planNum") Integer planNum) 지금은 테스트로 직접 넣고 나중에, planNum을 파람으로 받음
         PlanDTO planDTO = customPlanService.getPlan();
+        long days = ChronoUnit.DAYS.between(planDTO.getStartDate(), planDTO.getEndDate()) + 1;
+        model.addAttribute("days", days);
         model.addAttribute("planDTO", planDTO);
         log.debug("출력할 플래너값: {}", planDTO);
         return "customView/customPlan";

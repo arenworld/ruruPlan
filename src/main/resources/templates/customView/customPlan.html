@@ -5,7 +5,7 @@
 * License: https://creativecommons.org/licenses/by/3.0/
 */ -->
 <!doctype html>
-<html lang="en">
+<html lang="jp">
 <head>
     <meta charset="UTF-8">
 
@@ -33,6 +33,54 @@
     <link rel="stylesheet" th:href="@{css/style.css}">
 
     <title>custom</title>
+
+<style>
+    .day-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-direction: row;
+    }
+    .days {
+        padding: 10px 20px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+    }
+    .plan-details {
+        display: none;
+    }
+
+</style>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#plan-all').css('display', 'block');
+            $('#plan-1day-button').click(function() {
+                $('#plan-1day').css('display', 'block');
+                $('#plan-all').css('display', 'none');
+                $('#plan-2day').css('display', 'none');
+                $('#plan-3day').css('display', 'none');
+            })
+            $('#plan-2day-button').click(function() {
+                $('#plan-2day').css('display', 'block');
+                $('#plan-all').css('display', 'none');
+                $('#plan-1day').css('display', 'none');
+                $('#plan-3day').css('display', 'none');
+            })
+            $('#plan-3day-button').click(function() {
+                $('#plan-3day').css('display', 'block');
+                $('#plan-all').css('display', 'none');
+                $('#plan-1day').css('display', 'none');
+                $('#plan-2day').css('display', 'none');
+            })
+        })
+
+    </script>
+    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ycuy92lblj&language=ja"></script>
 
 
 </head>
@@ -109,7 +157,154 @@
 
     <!--본문 내용 (가운데 + our Team 소개 /  가운데 정사각형으로 Q왜 div를 하나 더 씌운거지?) -->
     <div class="container my-5">
-            [[${planDTO}]]
+        <div id="map" style="width:100%; height:400px;"></div>
+        <script>
+            var mapOptions = {
+                center: new naver.maps.LatLng(37.3595704, 127.105399),
+                zoom: 10
+            };
+            var map = new naver.maps.Map('map', mapOptions);
+        </script>
+
+        <div class="present-planDTO">
+            <h1>플랜정보 출력하기</h1>
+            <div class="day-buttons" >
+                <div class="days" id="plan-all-button">전체</div>
+                <div class="days" id="plan-1day-button" th:if="${days} >= 1">1Day</div>
+                <div class="days" id="plan-2day-button" th:if="${days} >= 2">2Day</div>
+                <div class="days" id="plan-3day-button" th:if="${days} >= 3">3Day</div>
+                <div class="days" id="plan-4day-button" th:if="${days} >= 4">4Day</div>
+                <div class="days" id="plan-5day-button" th:if="${days} >= 5">5Day</div>
+                <div class="days" id="plan-6day-button" th:if="${days} >= 6">6Day</div>
+            </div>
+            <div class="plan-details" id="plan-all">
+                <table>
+                    <tr>
+                        <td colspan="5">첫째날</td>
+                    </tr>
+                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 1}">
+                        <td th:text="${task.taskNum}"></td>
+                        <td th:text="${task.startTime}"></td>
+                        <td th:text="${task.task}"></td>
+                        <td th:text="${task.duration}"></td>
+                        <td th:text="|${task.cost}원|"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">둘째날</td>
+                    </tr>
+                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 2}">
+                        <td th:text="${task.taskNum}"></td>
+                        <td th:text="${task.startTime}"></td>
+                        <td th:text="${task.task}"></td>
+                        <td th:text="${task.duration}"></td>
+                        <td th:text="|${task.cost}원|"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">셋째날</td>
+                    </tr>
+                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 3}">
+                        <td th:text="${task.taskNum}"></td>
+                        <td th:text="${task.startTime}"></td>
+                        <td th:text="${task.task}"></td>
+                        <td th:text="${task.duration}"></td>
+                        <td th:text="|${task.cost}원|"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="plan-details" id="plan-1day">
+                <table>
+                    <tr>
+                        <td colspan="5">첫째날</td>
+                    </tr>
+                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 1}">
+                      <td th:text="${task.taskNum}"></td>
+                      <td th:text="${task.startTime}"></td>
+                      <td th:text="${task.task}"></td>
+                      <td th:text="${task.duration}"></td>
+                      <td th:text="${task.cost}"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="plan-details" id="plan-2day">
+                <table>
+                    <tr>
+                        <td colspan="5">둘째날</td>
+                    </tr>
+                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 2}">
+                        <td th:text="${task.taskNum}"></td>
+                        <td th:text="${task.startTime}"></td>
+                        <td th:text="${task.task}"></td>
+                        <td th:text="${task.duration}"></td>
+                        <td th:text="${task.cost}"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="plan-details" id="plan-3day">
+                <table>
+                    <tr>
+                        <td colspan="5">셋째날</td>
+                    </tr>
+                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 3}">
+                        <td th:text="${task.taskNum}"></td>
+                        <td th:text="${task.startTime}"></td>
+                        <td th:text="${task.task}"></td>
+                        <td th:text="${task.duration}"></td>
+                        <td th:text="${task.cost}"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="plan-details" id="plan-4day">
+                <table>
+                    <tr>
+                        <td colspan="5">넷째날</td>
+                    </tr>
+                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 4}">
+                        <td th:text="${task.taskNum}"></td>
+                        <td th:text="${task.startTime}"></td>
+                        <td th:text="${task.task}"></td>
+                        <td th:text="${task.duration}"></td>
+                        <td th:text="${task.cost}"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="plan-details" id="plan-5day">
+                <table>
+                    <tr>
+                        <td colspan="5">다섯째날</td>
+                    </tr>
+                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 5}">
+                        <td th:text="${task.taskNum}"></td>
+                        <td th:text="${task.startTime}"></td>
+                        <td th:text="${task.task}"></td>
+                        <td th:text="${task.duration}"></td>
+                        <td th:text="${task.cost}"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="plan-details" id="plan-6day">
+                <table>
+                    <tr>
+                        <td colspan="5">여섯째날</td>
+                    </tr>
+                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 6}">
+                        <td th:text="${task.taskNum}"></td>
+                        <td th:text="${task.startTime}"></td>
+                        <td th:text="${task.task}"></td>
+                        <td th:text="${task.duration}"></td>
+                        <td th:text="${task.cost}"></td>
+                    </tr>
+                </table>
+            </div>
+
+
+
+
+        </div>
+
+
 
         <!-- 정가운데 our Team 소개 빼고 -->
         <div class="row justify-content-center">
@@ -407,7 +602,7 @@
     </div>
 </div>
 
-<script src="js/jquery-3.4.1.min.js"></script>
+
 <script src="js/popper.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/owl.carousel.min.js"></script>

@@ -66,6 +66,25 @@ public class JoinController {
     // 이메일 인증 처리 서비스
     private final EmailService emailService;
 
+    /**
+     * 이메일 중복확인
+     * @param email
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("emailDuplicate")
+    public boolean emailDuplicate(@RequestParam("email") String email) {
+
+        boolean res = emailService.emailDuplicate(email);
+        return res;
+    }
+
+    /**
+     * 인증번호 전송
+     * @param email
+     * @return
+     * @throws Exception
+     */
     @PostMapping("mailConfirm")
     @ResponseBody
     String mailConfirm(@RequestParam("email") String email) throws Exception {

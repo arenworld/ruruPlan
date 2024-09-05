@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+###
+/src/test/semi_custom_query/
+/query_back/
+

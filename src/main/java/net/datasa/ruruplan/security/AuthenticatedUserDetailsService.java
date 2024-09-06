@@ -1,15 +1,20 @@
 package net.datasa.ruruplan.security;
 
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.datasa.ruruplan.member.domain.entity.MemberEntity;
+import net.datasa.ruruplan.member.repository.MemberRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 /**
  * 사용자 인증 처리
- *//*
-@Slf4j
+ */
 @Service
-@RequiredArgsConstructor*/
-public class AuthenticatedUserDetailsService /*implements UserDetailsService*/ {
-/*
+@Slf4j
+@RequiredArgsConstructor
+public class AuthenticatedUserDetailService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
     @Override
@@ -33,5 +38,5 @@ public class AuthenticatedUserDetailsService /*implements UserDetailsService*/ {
                 .build();
 
         return user;
-    }*/
+    }
 }

@@ -1,21 +1,21 @@
 package net.datasa.ruruplan.security;
 
-/*import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;*/
+import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * 시큐리티 환경설정
  */
-/*@Configuration
-@EnableWebSecurity*/
+@Configuration
+@EnableWebSecurity
 public class WebSecurityConfig {
-   /* //로그인 없이 접근 가능 경로
+   //로그인 없이 접근 가능 경로
     private static final String[] PUBLIC_URLS = {
             "/"                     //root
             , "/images/**"          //이미지 경로
@@ -56,6 +56,6 @@ public class WebSecurityConfig {
     @Bean
     public BCryptPasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }*/
+    }
 
 }

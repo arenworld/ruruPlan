@@ -263,32 +263,32 @@ function formConfirm(){
     }
 
     if(!emconfirmchk) {
-        alert("인증번호가 일치하지 않습니다.")
+        alert("인증번호가 일치하지 않습니다.");
         return false;
     }
-    // 비동기 검증 결과 처리
+
+    // 비동기 검증 결과 처리 (Promise.all 사용)
     Promise.all(promises).then(([isIdValid, isEmailValid]) => {
-        // 아이디 유효성 검사 결과
+        // 아이디 검증 결과 확인
         if (!isIdValid) {
             alert("유효하지 않은 아이디입니다.");
-            console.log("아이디 유효성 검사 실패");
-            return false;
+            return;
         }
 
-        // 이메일 유효성 검사 결과
+        // 이메일 검증 결과 확인
         if (!isEmailValid) {
             alert("유효하지 않은 이메일입니다.");
-            console.log("이메일 유효성 검사 실패");
-            return false;
+            return;
         }
 
         console.log("마지막 검사");
-        $('#joinForm').submit();  // 폼 제출 (폼 ID를 적절히 변경하세요)
+
+        // 모든 검증 통과 시 폼 제출
+        document.getElementById('#joinForm').submit();
     }).catch(error => {
         console.error("검증 중 에러 발생:", error);
-        return false;  // 에러 발생 시 제출 중단
     });
 
-    // 비동기 검증이 끝나기 전에 기본 false 반환
-    return true;
+    // 검증이 완료될 때까지 폼 제출 방지
+    return false;
 }

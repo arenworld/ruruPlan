@@ -1,23 +1,23 @@
 package net.datasa.ruruplan.security;
 
-/*import lombok.*;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;*/
+import java.util.Collections;
 
 /**
  * 회원 인증 정보 객체
  */
 
-/*@Builder
+@Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString*/
-public class AuthenticatedUser /*implements UserDetails*/ {/*
+@ToString
+public class AuthenticatedUser implements UserDetails {
     private static final long serialVersionUID = -4224581921517576510L;
 
     private String id;
@@ -59,6 +59,6 @@ public class AuthenticatedUser /*implements UserDetails*/ {/*
     @Override
     public boolean isEnabled() {
         return enabled;
-    }*/
+    }
 }
 

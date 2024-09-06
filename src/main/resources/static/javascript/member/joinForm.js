@@ -37,7 +37,8 @@ $(document).ready(function() {
     $('#emCodeBt').click(emConfirm);
 
     //회원가입 폼제출시 검사
-   $('#joinForm').submit(formConfirm);
+    // $('#joinForm').submit(formConfirm);
+    $('#submit').click(formConfirm);
 
 });
 
@@ -281,6 +282,7 @@ function formConfirm(){
             return false;
         }
 
+        console.log("마지막 검사");
         $('#joinForm').submit();  // 폼 제출 (폼 ID를 적절히 변경하세요)
     }).catch(error => {
         console.error("검증 중 에러 발생:", error);
@@ -288,5 +290,5 @@ function formConfirm(){
     });
 
     // 비동기 검증이 끝나기 전에 기본 false 반환
-    return false;
+    return true;
 }

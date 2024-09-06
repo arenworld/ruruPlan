@@ -51,7 +51,7 @@ function idConfirm() {
     if (!id_regex.test(id)) {
         $('#idmsg').css('color', 'red');
         $('#idmsg').html('아이디는 영문,숫자로 6~15글자 입력해 주세요');
-        return false;
+        return Promise.resolve(false);  // 형식이 잘못되었으면 바로 false 반환
     }
 
     /*아이디 중복확인*/
@@ -60,37 +60,36 @@ function idConfirm() {
 }
 
 function idDuplicated() {
-    let id = $('#memberId').val();
-    let valid = true;
+    return new Promise((resolve, reject) => {
+        let id = $('#memberId').val();
 
-    $.ajax({
-        url: 'idDuplicate',
-        type: 'post',
-        data: {id: id},
-        success: function (res) {
-            if (res) {
-                $('#idmsg').css('color', 'red');
-                $('#idmsg').html("이미 사용중인 ID입니다");
-                console.log("에이젝스 flase");
-                valid = false;
-                console.log(valid);
-            } else {
-                $('#idmsg').css('color', 'blue');
-                $('#idmsg').html("사용가능한 ID입니다.");
-                console.log("에이젝스 true");
-                valid = true;
-                console.log(valid);
+        $.ajax({
+            url: 'idDuplicate',
+            type: 'post',
+            data: {id: id},
+            success: function (res) {
+                if (res) {
+                    $('#idmsg').css('color', 'red');
+                    $('#idmsg').html("이미 사용중인 ID입니다");
+                    console.log("에이젝스 flase");
+                    resolve(false);  // 중복된 ID이면 false 반환
+                } else {
+                    $('#idmsg').css('color', 'blue');
+                    $('#idmsg').html("사용가능한 ID입니다.");
+                    console.log("에이젝스 true");
+                    resolve(true);  // 사용 가능한 ID이면 true 반환
+                }
+            },
+            error: function () {
+                alert('IdDuplicate error');
+                console.log("에이젝스 error");
+                resolve(false);  // 에러 발생 시 false 반환
             }
-        },
-        error: function () {
-            alert('IdDuplicate error');
-            console.log("에이젝스 error");
-            valid = false;
-        }
+        });
     });
-
-    return valid;
 }
+
+
 
 // 닉네임 유효성 검사
 function nicknameConfirm(){
@@ -240,11 +239,16 @@ function chkEmailConfirm(code){
 function formConfirm(){
     alert("실행은 일단 됨");
     // 아이디 유효성 검사
-    if(!idConfirm()) {
-        alert("유효하지 않은 아이디입니다.");
-        console.log(idConfirm());
-        return false;
-    }
+    idConfirm().then(isValid => {
+        if (!isValid) {
+            alert("유효하지 않은 아이디입니다.");
+            console.log(isValid);
+            return false;
+        } else {
+            console.log("유효한 아이디입니다.");
+            return true;
+        }
+    });
 
     if(!validatePw()) {
         alert("유효하지 않은 비밀번호입니다.");
@@ -267,5 +271,6 @@ function formConfirm(){
     if(!chkEmailConfirm()) {
         alert("인증번호가 일치하지 않습니다.")
     }
-    return true;
+
+    return false;
 }

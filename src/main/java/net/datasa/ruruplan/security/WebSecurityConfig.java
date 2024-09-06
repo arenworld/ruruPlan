@@ -20,6 +20,7 @@ public class WebSecurityConfig {
             "/"                     //root
            ,"/join/**"
            ,"/login/**"
+           ,"/member/login"
             , "/images/**"          //이미지 경로
             , "/css/**"             //CSS파일들
             , "/js/**"              //JavaSCript 파일들
@@ -43,6 +44,7 @@ public class WebSecurityConfig {
                         .passwordParameter("memberPw")
                         .loginProcessingUrl("/member/login")
                         .defaultSuccessUrl("/", true)
+                        .failureUrl("/")
                         .permitAll()
                 )
                 .logout(logout -> logout

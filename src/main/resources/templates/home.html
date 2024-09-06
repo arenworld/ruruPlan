@@ -43,7 +43,9 @@
         <div class="container">
             <div class="site-navigation">
                 <a th:href="@{/}" class="logo m-0">ソウルに触る <span class="text-primary"></span></a>
-
+                <div sec:authorize="isAuthenticated()">
+                    <p>로그인 됨</p>
+                </div>
                 <ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right">
                     <li class="active"><a th:href="@{/}">Home</a></li>
                     <li class="has-children">

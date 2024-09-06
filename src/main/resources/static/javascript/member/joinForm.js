@@ -151,7 +151,7 @@ function validateEmail() {
         $('#emailmsg').css('color', 'red');
         $('#emailmsg').html("유효하지 않은 이메일 주소입니다.");
         $('#emCodeBt').prop('disabled', true);
-        return false;
+        return Promise.resolve(false);
     }
     // 중복 검사
     console.log("return " + emailDuplicate());
@@ -160,33 +160,33 @@ function validateEmail() {
 
 // 이메일 중복 검사
 function emailDuplicate() {
-    let email = $('#email').val();
-    let valid = true;
+    return new Promise((resolve, reject) => {
 
-    $.ajax({
-        url: 'emailDuplicate',
-        type: 'post',
-        data: {email: email},
-        success: function (res) {
-            if (res) {
-                $('#emailmsg').css('color', 'red');
-                $('#emailmsg').html("이미 사용중인 email입니다");
-                $('#emCodeBt').prop('disabled', true);
-                valid = false;
-            } else {
-                $('#emailmsg').css('color', 'black');
-                $('#emailmsg').html("사용 가능");
-                $('#emCodeBt').prop('disabled', false);
-                valid = true;
+        let email = $('#email').val();
+
+        $.ajax({
+            url: 'emailDuplicate',
+            type: 'post',
+            data: {email: email},
+            success: function (res) {
+                if (res) {
+                    $('#emailmsg').css('color', 'red');
+                    $('#emailmsg').html("이미 사용중인 email입니다");
+                    $('#emCodeBt').prop('disabled', true);
+                    resolve(false);
+                } else {
+                    $('#emailmsg').css('color', 'black');
+                    $('#emailmsg').html("사용 가능");
+                    $('#emCodeBt').prop('disabled', false);
+                    resolve(true);
+                }
+            },
+            error: function () {
+                alert('EmailDuplicate error');
+                resolve(false);
             }
-        },
-        error: function () {
-            alert('EmailDuplicate error');
-            valid = false;
-        }
+        });
     });
-
-    return valid;
 }
 
 // 이메일 인증 번호 전송
@@ -237,18 +237,15 @@ function chkEmailConfirm(code){
 
 //회원가입 폼 제출 내용 확인
 function formConfirm(){
+    event.preventDefault();
+
+    // 비동기 검증을 위한 Promise 배열 생성
+    let promises = [
+        idConfirm(),
+        validateEmail()
+    ];
+
     alert("실행은 일단 됨");
-    // 아이디 유효성 검사
-    idConfirm().then(isValid => {
-        if (!isValid) {
-            alert("유효하지 않은 아이디입니다.");
-            console.log(isValid);
-            return false;
-        } else {
-            console.log("유효한 아이디입니다.");
-            return true;
-        }
-    });
 
     if(!validatePw()) {
         alert("유효하지 않은 비밀번호입니다.");
@@ -263,14 +260,33 @@ function formConfirm(){
         alert("유효하지 않은 닉네임입니다.");
         return false;
     }
-    if (!validateEmail()) {
-        alert("유효하지 않은 이메일입니다.");
+
+    if(!emconfirmchk) {
+        alert("인증번호가 일치하지 않습니다.")
         return false;
     }
+    // 비동기 검증 결과 처리
+    Promise.all(promises).then(([isIdValid, isEmailValid]) => {
+        // 아이디 유효성 검사 결과
+        if (!isIdValid) {
+            alert("유효하지 않은 아이디입니다.");
+            console.log("아이디 유효성 검사 실패");
+            return false;
+        }
 
-    if(!chkEmailConfirm()) {
-        alert("인증번호가 일치하지 않습니다.")
-    }
+        // 이메일 유효성 검사 결과
+        if (!isEmailValid) {
+            alert("유효하지 않은 이메일입니다.");
+            console.log("이메일 유효성 검사 실패");
+            return false;
+        }
 
+        $('#joinForm').submit();  // 폼 제출 (폼 ID를 적절히 변경하세요)
+    }).catch(error => {
+        console.error("검증 중 에러 발생:", error);
+        return false;  // 에러 발생 시 제출 중단
+    });
+
+    // 비동기 검증이 끝나기 전에 기본 false 반환
     return false;
 }

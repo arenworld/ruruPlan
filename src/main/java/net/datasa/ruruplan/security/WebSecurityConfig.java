@@ -21,7 +21,9 @@ public class WebSecurityConfig {
             , "/images/**"          //이미지 경로
             , "/css/**"             //CSS파일들
             , "/js/**"              //JavaSCript 파일들
-            , "/memberView/**"    //회원가입
+            , "/fonts/**"
+            , "javascript/**"
+            , "/memberView/**"      //회원가입
 
     };
 

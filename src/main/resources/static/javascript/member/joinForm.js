@@ -236,7 +236,7 @@ function chkEmailConfirm(code){
     });
 }
 
-//회원가입 폼 제출 내용 확인
+/*//회원가입 폼 제출 내용 확인
 function formConfirm(){
     event.preventDefault();
 
@@ -291,4 +291,4 @@ function formConfirm(){
 
     // 검증이 완료될 때까지 폼 제출 방지
     return false;
-}
+}*/

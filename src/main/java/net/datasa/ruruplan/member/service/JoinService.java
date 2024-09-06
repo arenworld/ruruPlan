@@ -7,6 +7,7 @@ import net.datasa.ruruplan.member.domain.dto.MemberDTO;
 import net.datasa.ruruplan.member.domain.entity.MemberEntity;
 import net.datasa.ruruplan.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
@@ -19,6 +20,8 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class JoinService {
     private final MemberRepository memberRepository;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /**
      * 아이디 중복확인
@@ -37,7 +40,7 @@ public class JoinService {
     public void join(MemberDTO member) {
         MemberEntity memberEntity = MemberEntity.builder()
                 .memberId(member.getMemberId())
-                .memberPw(member.getMemberPw())
+                .memberPw(bCryptPasswordEncoder.encode(member.getMemberPw()))
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .age(member.getAge())

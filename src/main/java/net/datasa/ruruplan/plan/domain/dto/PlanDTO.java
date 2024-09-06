@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -38,5 +39,6 @@ public class PlanDTO {
     private LocalDateTime planUpdateDate;
     // 마이페이지에 보여질 플랜 커버 사진?
     private String coverImageUrl;
+
 
 }

@@ -52,5 +52,5 @@ public class PlanDTO {
     private String coverImageUrl;
 
     //DB에는 없으나, entity에 정의한 taskList
-    List<TaskDTO> taskList;
+    private List<TaskDTO> taskList;
 }

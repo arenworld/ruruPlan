@@ -6,10 +6,7 @@ import net.datasa.ruruplan.plan.service.CustomPlanService;
 import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -42,13 +39,22 @@ public class CustomPlanController {
         // start_date, end_date 활용해서 몇박 며칠인지 정의하는 기능 ChronoUnit은 날짜타입의 계산을 도와주는 객체
         long days = ChronoUnit.DAYS.between(planDTO.getStartDate(), planDTO.getEndDate()) + 1;
 
-        // custom.html로드될 때 뿌려줄 플랜정보불러오기
-        List<Map<String, Double>> locationsAll = customPlanService.getLocations();
-
         model.addAttribute("days", days);
         model.addAttribute("planDTO", planDTO);
-        model.addAttribute("locationsAll", locationsAll);
-        log.debug("저장한 위치값: {}", locationsAll);
+        // log.debug("저장한 위치값: {}", locationsAll);
+        // log.debug("출력할 플래너 정보: {}", planDTO);
         return "customView/customPlan";
+    };
+
+    @ResponseBody
+    @PostMapping("mapLoading")
+    public List<Map<String, Double>> mapLoading() {
+        return customPlanService.getLocationsAll();
+    };
+
+    @ResponseBody
+    @PostMapping("planMarker")
+    public List<Map<String, Double>> planMarker(@RequestParam ("planNum") Integer planNum) {
+        return customPlanService.getPlanLocations(planNum);
     }
 }

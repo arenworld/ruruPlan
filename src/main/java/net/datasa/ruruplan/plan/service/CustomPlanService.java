@@ -124,7 +124,7 @@ public class CustomPlanService {
                 .build();
     }
 
-    public List<Map<String, Double>> getLocations() {
+    public List<Map<String, Double>> getLocationsAll() {
         Sort sort = Sort.by(Sort.Direction.ASC, "placeId");
         List<PlaceInfoEntity> placeInfoEntityList = placeInfoRepository.findAll(sort);
 
@@ -135,5 +135,21 @@ public class CustomPlanService {
             locationsAll.add(Map.of("lat", Double.parseDouble(placeInfoEntity.getMapY()), "lng", Double.parseDouble(placeInfoEntity.getMapX())));
         }
         return locationsAll;
+    }
+
+    public List<Map<String, Double>> getPlanLocations(Integer planNum) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "taskNum");
+        List<TaskEntity> taskEntityList = taskRepository.findByPlanPlanNum(planNum, sort);
+
+        List<Map<String, Double>> planLocations = new ArrayList<>();
+
+        for (TaskEntity taskEntity : taskEntityList) {
+            Map<String, Double> location = new HashMap<>();
+            planLocations.add(Map.of("lat", Double.parseDouble(taskEntity.getPlace().getMapY()),
+                    "lng", Double.parseDouble(taskEntity.getPlace().getMapX()),
+                    "taskNum", Double.parseDouble(String.valueOf(taskEntity.getTaskNum())),
+                    "dateN", Double.parseDouble(String.valueOf(taskEntity.getDateN()))));
+        }
+        return planLocations;
     }
 }

@@ -21,7 +21,7 @@ public class WebSecurityConfig {
            , "/join/**"              //JoinController
            , "/login/**"             //FindId, FindPw, Login, ResetController
            , "/member/login"         //loginForm.html의 action url
-           , "/custom"               //customPlanController
+           , "/custom/**"            //customPlanController
            , "/css/**"               //css파일
            , "/fonts/**"             //fonts파일
            , "/images/**"            //이미지 파일

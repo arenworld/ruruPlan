@@ -7,6 +7,7 @@
 <!doctype html>
 <html lang="jp">
 <head>
+    <script src="js/jquery-3.4.1.min.js"></script>
     <meta charset="UTF-8">
 
     <meta charset="utf-8">
@@ -54,11 +55,20 @@
         display: none;
     }
 
+
 </style>
-    <script src="js/jquery-3.4.1.min.js"></script>
+
+    <!-- body 시작전 script -->
     <script>
         $(document).ready(function() {
             $('#plan-all').css('display', 'block');
+            $('#plan-all-button').click(function() {
+                $('#plan-all').css('display', 'block');
+                $('#plan-1day').css('display', 'none');
+                $('#plan-2day').css('display', 'none');
+                $('#plan-3day').css('display', 'none');
+            });
+
             $('#plan-1day-button').click(function() {
                 $('#plan-1day').css('display', 'block');
                 $('#plan-all').css('display', 'none');
@@ -78,10 +88,55 @@
                 $('#plan-2day').css('display', 'none');
             })
         })
-
     </script>
+
+    <!-- 네이버 MapApi 불러오기-->
     <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ycuy92lblj&language=ja"></script>
 
+    <script>
+        $(document).ready(function() {
+            // 지도 초기화 (경복궁이 시작점, 줌 인터페이스 설정)
+            let map = new naver.maps.Map('mapBox', {
+                center: new naver.maps.LatLng(37.57861, 126.97722),
+                zoom: 15,
+                scaleControl: false,
+                logoControl: false,
+                mapDataControl: false,
+                zoomControl: true,
+            });
+
+            // 로딩되자 마자 보이는 마커 : 플랜 일정에 포함되어 있는 장소만
+            planMarker(map);
+
+        });
+
+
+        function planMarker(map) {
+            let planNum = $('#planNum').val();
+
+            $.ajax({
+                url: '/custom/planMarker',
+                type: 'post',
+                data: {planNum : planNum},
+                success : function(planLocations) {
+                    $.each(planLocations, function(index, location) {
+                        let lat = location.lat; // 위도
+                        let lng = location.lng; // 경도
+                        let taskNum = location.taskNum;
+                        let dateN = location.dateN;
+                        let marker = new naver.maps.Marker({
+                            position: new naver.maps.LatLng(lat, lng),
+                            map: map
+                        });
+                    });
+                },
+                error: function(error) {
+                    console.error('에러발생:', error);
+                    alert('데이터 전송 실패');
+                }
+            });
+        }
+    </script>
 
 </head>
 
@@ -157,39 +212,25 @@
 
     <!--본문 내용 (가운데 + our Team 소개 /  가운데 정사각형으로 Q왜 div를 하나 더 씌운거지?) -->
     <div class="container my-5">
-
-
+        <!-- 플래너 정보 출력 -->
         <div class="present-planDTO">
+
             <h1>플랜정보 출력하기</h1>
+            <input type="hidden" id="planNum" th:value="${planDTO.planNum}">
 
             <div class="day-buttons" >
                 <div class="days" id="plan-all-button">전체</div>
-                <div class="days" id="plan-1day-button" th:if="${days} >= 1">1Day</div>
-                <div class="days" id="plan-2day-button" th:if="${days} >= 2">2Day</div>
-                <div class="days" id="plan-3day-button" th:if="${days} >= 3">3Day</div>
-                <div class="days" id="plan-4day-button" th:if="${days} >= 4">4Day</div>
-                <div class="days" id="plan-5day-button" th:if="${days} >= 5">5Day</div>
-                <div class="days" id="plan-6day-button" th:if="${days} >= 6">6Day</div>
+                <div class="days" id="plan-1day-button" th:if="${days} >= 1" th:data-date="1">1Day</div>
+                <div class="days" id="plan-2day-button" th:if="${days} >= 2" th:data-date="2">2Day</div>
+                <div class="days" id="plan-3day-button" th:if="${days} >= 3" th:data-date="3">3Day</div>
+                <div class="days" id="plan-4day-button" th:if="${days} >= 4" th:data-date="4">4Day</div>
+                <div class="days" id="plan-5day-button" th:if="${days} >= 5" th:data-date="5">5Day</div>
+                <div class="days" id="plan-6day-button" th:if="${days} >= 6" th:data-date="6">6Day</div>
             </div>
 
-            <div id="map" style="width:100%; height:500px; margin-bottom: 20px;"></div>
-            <script>
-                var mapOptions = {
-                    center: new naver.maps.LatLng(37.57861, 126.97722),
-                    zoom: 15
-                };
-                var map = new naver.maps.Map('map', mapOptions);
+            <div id="mapBox" style="width:100%; height:500px; margin-bottom: 20px;"></div>
 
-                var marker = new naver.maps.Marker({
-                    position: new naver.maps.LatLng(37.57861, 126.97722),
-                    map: map
-                });
-
-                var marker = new naver.maps.Marker({
-                    position: new naver.maps.LatLng(37.52146325, 127.0338117),
-                    map: map
-                });
-            </script>
+            <!-- 전체 일정 출력 -->
             <div class="plan-details" id="plan-all">
                 <table>
                     <tr>
@@ -289,19 +330,19 @@
                         <th>cost</th>
                     </tr>
                     <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 1}">
-                      <td th:text="${task.taskNum}"></td>
-                      <td th:text="${task.startTime}"></td>
+                        <td th:text="${task.taskNum}"></td>
+                        <td th:text="${task.startTime}"></td>
 
-                      <!--홀수라인일 때 -->
-                      <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
+                        <!--홀수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
 
-                      <!-- 짝수라인일 때 -->
-                      <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
+                        <!-- 짝수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
 
-                      <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}"></td>
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}"></td>
 
-                      <td th:text="${task.duration}"></td>
-                      <td th:text="|${task.cost}원|"></td>
+                        <td th:text="${task.duration}"></td>
+                        <td th:text="|${task.cost}원|"></td>
                     </tr>
                 </table>
             </div>
@@ -319,13 +360,22 @@
                         <th>duration</th>
                         <th>cost</th>
                     </tr>
-                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 2}">
+                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 2}">
                         <td th:text="${task.taskNum}"></td>
                         <td th:text="${task.startTime}"></td>
-                        <td th:text="${task.task}"></td>
+
+                        <!--홀수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
+
+                        <!-- 짝수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
+
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}"></td>
+
                         <td th:text="${task.duration}"></td>
-                        <td th:text="${task.cost}"></td>
+                        <td th:text="|${task.cost}원|"></td>
                     </tr>
+
                 </table>
             </div>
 
@@ -342,13 +392,22 @@
                         <th>duration</th>
                         <th>cost</th>
                     </tr>
-                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 3}">
+                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 3}">
                         <td th:text="${task.taskNum}"></td>
                         <td th:text="${task.startTime}"></td>
-                        <td th:text="${task.task}"></td>
+
+                        <!--홀수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
+
+                        <!-- 짝수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
+
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}"></td>
+
                         <td th:text="${task.duration}"></td>
-                        <td th:text="${task.cost}"></td>
+                        <td th:text="|${task.cost}원|"></td>
                     </tr>
+
                 </table>
             </div>
             <div class="plan-details" id="plan-4day">
@@ -364,13 +423,7 @@
                         <th>duration</th>
                         <th>cost</th>
                     </tr>
-                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 4}">
-                        <td th:text="${task.taskNum}"></td>
-                        <td th:text="${task.startTime}"></td>
-                        <td th:text="${task.task}"></td>
-                        <td th:text="${task.duration}"></td>
-                        <td th:text="${task.cost}"></td>
-                    </tr>
+
                 </table>
             </div>
             <div class="plan-details" id="plan-5day">
@@ -386,13 +439,7 @@
                         <th>duration</th>
                         <th>cost</th>
                     </tr>
-                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 5}">
-                        <td th:text="${task.taskNum}"></td>
-                        <td th:text="${task.startTime}"></td>
-                        <td th:text="${task.task}"></td>
-                        <td th:text="${task.duration}"></td>
-                        <td th:text="${task.cost}"></td>
-                    </tr>
+
                 </table>
             </div>
             <div class="plan-details" id="plan-6day">
@@ -408,13 +455,7 @@
                         <th>duration</th>
                         <th>cost</th>
                     </tr>
-                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 6}">
-                        <td th:text="${task.taskNum}"></td>
-                        <td th:text="${task.startTime}"></td>
-                        <td th:text="${task.task}"></td>
-                        <td th:text="${task.duration}"></td>
-                        <td th:text="${task.cost}"></td>
-                    </tr>
+
                 </table>
             </div>
 
@@ -423,9 +464,6 @@
 
         </div>
 
-
-
-        <!-- 정가운데 our Team 소개 빼고 -->
         <div class="row justify-content-center">
 
             <!-- 오른쪽 파트-->
@@ -499,7 +537,6 @@
 
                     <a href="https://vimeo.com/342333493" data-fancybox class="video-wrap">
                         <span class="play-wrap"><span class="icon-play"></span></span>
-                        <img src="images/bg_1.jpg" alt="Image" class="img-fluid rounded">
                     </a>
                 </div> <!-- END .custom-block -->
             </div>
@@ -574,7 +611,9 @@
             </div>
         </div>
 
-        <!-- Our Team 소개 -->
+
+
+        <!-- 정가운데 our Team 소개 빼고 -->
         <div class="row justify-content-center mt-5 section">
 
             <div class="col-lg-10">
@@ -630,6 +669,7 @@
 </div>
 
 <!-- 푸터가기 전 한 줄 소개 -->
+<!-- Our Team 소개 -->
 <div class="py-5 cta-section">
     <div class="container">
         <div class="row text-center">

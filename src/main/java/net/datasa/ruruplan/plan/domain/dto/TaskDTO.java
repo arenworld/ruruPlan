@@ -20,7 +20,7 @@ public class TaskDTO {
     private Integer planNum;
 
     // 장소 고유번호 참조
-    private String placeId;
+    private PlaceInfoDTO place;
 
     // 멤버 아이디 참조
     private String memberId;

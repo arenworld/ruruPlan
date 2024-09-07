@@ -157,17 +157,11 @@
 
     <!--본문 내용 (가운데 + our Team 소개 /  가운데 정사각형으로 Q왜 div를 하나 더 씌운거지?) -->
     <div class="container my-5">
-        <div id="map" style="width:100%; height:400px;"></div>
-        <script>
-            var mapOptions = {
-                center: new naver.maps.LatLng(37.3595704, 127.105399),
-                zoom: 10
-            };
-            var map = new naver.maps.Map('map', mapOptions);
-        </script>
+
 
         <div class="present-planDTO">
             <h1>플랜정보 출력하기</h1>
+
             <div class="day-buttons" >
                 <div class="days" id="plan-all-button">전체</div>
                 <div class="days" id="plan-1day-button" th:if="${days} >= 1">1Day</div>
@@ -177,35 +171,104 @@
                 <div class="days" id="plan-5day-button" th:if="${days} >= 5">5Day</div>
                 <div class="days" id="plan-6day-button" th:if="${days} >= 6">6Day</div>
             </div>
+
+            <div id="map" style="width:100%; height:500px; margin-bottom: 20px;"></div>
+            <script>
+                var mapOptions = {
+                    center: new naver.maps.LatLng(37.57861, 126.97722),
+                    zoom: 15
+                };
+                var map = new naver.maps.Map('map', mapOptions);
+
+                var marker = new naver.maps.Marker({
+                    position: new naver.maps.LatLng(37.57861, 126.97722),
+                    map: map
+                });
+
+                var marker = new naver.maps.Marker({
+                    position: new naver.maps.LatLng(37.52146325, 127.0338117),
+                    map: map
+                });
+            </script>
             <div class="plan-details" id="plan-all">
                 <table>
                     <tr>
                         <td colspan="5">첫째날</td>
                     </tr>
-                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 1}">
+                    <tr>
+                        <th>no</th>
+                        <th>time</th>
+                        <th>task</th>
+                        <th>place</th>
+                        <th>duration</th>
+                        <th>cost</th>
+                    </tr>
+                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 1}">
                         <td th:text="${task.taskNum}"></td>
                         <td th:text="${task.startTime}"></td>
-                        <td th:text="${task.task}"></td>
+
+                        <!--홀수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
+
+                        <!-- 짝수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
+
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}"></td>
+
                         <td th:text="${task.duration}"></td>
                         <td th:text="|${task.cost}원|"></td>
                     </tr>
+
                     <tr>
                         <td colspan="5">둘째날</td>
                     </tr>
-                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 2}">
+                    <tr>
+                        <th>no</th>
+                        <th>time</th>
+                        <th>task</th>
+                        <th>place</th>
+                        <th>duration</th>
+                        <th>cost</th>
+                    </tr>
+                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 2}">
                         <td th:text="${task.taskNum}"></td>
                         <td th:text="${task.startTime}"></td>
-                        <td th:text="${task.task}"></td>
+
+                        <!--홀수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
+
+                        <!-- 짝수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
+
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}"></td>
+
                         <td th:text="${task.duration}"></td>
                         <td th:text="|${task.cost}원|"></td>
                     </tr>
+
                     <tr>
                         <td colspan="5">셋째날</td>
                     </tr>
-                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 3}">
+                    <tr>
+                        <th>no</th>
+                        <th>time</th>
+                        <th>task</th>
+                        <th>place</th>
+                        <th>duration</th>
+                        <th>cost</th>
+                    </tr>
+                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 3}">
                         <td th:text="${task.taskNum}"></td>
                         <td th:text="${task.startTime}"></td>
-                        <td th:text="${task.task}"></td>
+
+                        <!--홀수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
+
+                        <!-- 짝수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
+
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}"></td>
+
                         <td th:text="${task.duration}"></td>
                         <td th:text="|${task.cost}원|"></td>
                     </tr>
@@ -213,16 +276,32 @@
             </div>
 
             <div class="plan-details" id="plan-1day">
-                <table>
+                <table> <!-- 이렇게 할 경우 반드시, 하루의 첫번째 일정은 관광/식사여야 함, 이동이면 안됨, 만약 숙소 정보를 넣어서 처음부터 이동을 넣는다면, 가장 처음이 이동이어야 함-->
                     <tr>
                         <td colspan="5">첫째날</td>
                     </tr>
-                    <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 1}">
+                    <tr>
+                        <th>no</th>
+                        <th>time</th>
+                        <th>task</th>
+                        <th>place</th>
+                        <th>duration</th>
+                        <th>cost</th>
+                    </tr>
+                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 1}">
                       <td th:text="${task.taskNum}"></td>
                       <td th:text="${task.startTime}"></td>
-                      <td th:text="${task.task}"></td>
+
+                      <!--홀수라인일 때 -->
+                      <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
+
+                      <!-- 짝수라인일 때 -->
+                      <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
+
+                      <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}"></td>
+
                       <td th:text="${task.duration}"></td>
-                      <td th:text="${task.cost}"></td>
+                      <td th:text="|${task.cost}원|"></td>
                     </tr>
                 </table>
             </div>
@@ -231,6 +310,14 @@
                 <table>
                     <tr>
                         <td colspan="5">둘째날</td>
+                    </tr>
+                    <tr>
+                        <th>no</th>
+                        <th>time</th>
+                        <th>task</th>
+                        <th>place</th>
+                        <th>duration</th>
+                        <th>cost</th>
                     </tr>
                     <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 2}">
                         <td th:text="${task.taskNum}"></td>
@@ -247,6 +334,14 @@
                     <tr>
                         <td colspan="5">셋째날</td>
                     </tr>
+                    <tr>
+                        <th>no</th>
+                        <th>time</th>
+                        <th>task</th>
+                        <th>place</th>
+                        <th>duration</th>
+                        <th>cost</th>
+                    </tr>
                     <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 3}">
                         <td th:text="${task.taskNum}"></td>
                         <td th:text="${task.startTime}"></td>
@@ -260,6 +355,14 @@
                 <table>
                     <tr>
                         <td colspan="5">넷째날</td>
+                    </tr>
+                    <tr>
+                        <th>no</th>
+                        <th>time</th>
+                        <th>task</th>
+                        <th>place</th>
+                        <th>duration</th>
+                        <th>cost</th>
                     </tr>
                     <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 4}">
                         <td th:text="${task.taskNum}"></td>
@@ -275,6 +378,14 @@
                     <tr>
                         <td colspan="5">다섯째날</td>
                     </tr>
+                    <tr>
+                        <th>no</th>
+                        <th>time</th>
+                        <th>task</th>
+                        <th>place</th>
+                        <th>duration</th>
+                        <th>cost</th>
+                    </tr>
                     <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 5}">
                         <td th:text="${task.taskNum}"></td>
                         <td th:text="${task.startTime}"></td>
@@ -288,6 +399,14 @@
                 <table>
                     <tr>
                         <td colspan="5">여섯째날</td>
+                    </tr>
+                    <tr>
+                        <th>no</th>
+                        <th>time</th>
+                        <th>task</th>
+                        <th>place</th>
+                        <th>duration</th>
+                        <th>cost</th>
                     </tr>
                     <tr th:each="task : ${planDTO.taskList}" th:if="${task.dateN == 6}">
                         <td th:text="${task.taskNum}"></td>

@@ -16,7 +16,7 @@ public class PlaceInfoDTO {
     private String title;
     // 관광지 주소
     private String address;
-    // x좌표
+    // x좌표, 테이블에서 varchar타입으로 만들었나보다 --> service에서 형변환 시켜줌
     private String mapX;
     // y좌표
     private String mapY;

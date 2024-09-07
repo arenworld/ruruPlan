@@ -3,17 +3,24 @@ package net.datasa.ruruplan.plan.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.ruruplan.plan.domain.dto.PlaceInfoDTO;
 import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
 import net.datasa.ruruplan.plan.domain.dto.TaskDTO;
+import net.datasa.ruruplan.plan.domain.entity.PlaceInfoEntity;
 import net.datasa.ruruplan.plan.domain.entity.PlanEntity;
 import net.datasa.ruruplan.plan.domain.entity.TaskEntity;
 import net.datasa.ruruplan.plan.repository.PlaceInfoRepository;
 import net.datasa.ruruplan.plan.repository.PlanRepository;
 import net.datasa.ruruplan.plan.repository.TaskRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static java.util.Map.*;
 
 /**
  * GPT추천일정을 내 일정으로 담기 한 후 개별수정하는 컨트롤러
@@ -50,7 +57,11 @@ public class CustomPlanService {
         return planDTO;
     }
 
-    //planEntity DTO변환 메서드
+    /**
+     * planEntity DTO변환 메서드
+     * @param planEntity
+     * @return
+     */
     private PlanDTO convertToDTO(PlanEntity planEntity) {
         return PlanDTO.builder()
                 .planNum(planEntity.getPlanNum())
@@ -66,12 +77,21 @@ public class CustomPlanService {
                 .build();
     }
 
-    //taskEntity, DTO변환 메서드
+    /**
+     *taskEntity, DTO변환 메서드, place객체를 직접 넣음 
+     * @param taskEntity
+     * @return
+     */
     private TaskDTO convertToDTO(TaskEntity taskEntity) {
+        PlaceInfoEntity placeInfoEntity = placeInfoRepository.findById(taskEntity.getPlace().getPlaceId())
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않음"));
+
+        PlaceInfoDTO placeInfoDTO = convertToDTO(placeInfoEntity);
+
         return TaskDTO.builder()
                 .taskNum(taskEntity.getTaskNum())
                 .planNum(taskEntity.getPlan().getPlanNum())
-                .placeId(taskEntity.getPlace().getPlaceId())
+                .place(placeInfoDTO)
                 .memberId(taskEntity.getMember().getMemberId())
                 .dateN(taskEntity.getDateN())
                 .startTime(taskEntity.getStartTime())
@@ -80,5 +100,40 @@ public class CustomPlanService {
                 .task(taskEntity.getTask())
                 .cost(taskEntity.getCost())
                 .build();
+    }
+
+    /**
+     * placeEntity DTO 변환 메서드
+     * @param placeInfoEntity
+     * @return
+     */
+    private PlaceInfoDTO convertToDTO(PlaceInfoEntity placeInfoEntity) {
+        return PlaceInfoDTO.builder()
+                .placeId(placeInfoEntity.getPlaceId())
+                .title(placeInfoEntity.getTitle())
+                .address(placeInfoEntity.getAddress())
+                .mapX(placeInfoEntity.getMapX())
+                .mapY(placeInfoEntity.getMapY())
+                .siGunGu(placeInfoEntity.getSiGunGu())
+                .contentsType(placeInfoEntity.getContentsType())
+                .theme1(placeInfoEntity.getTheme1())
+                .theme2(placeInfoEntity.getTheme2())
+                .theme3(placeInfoEntity.getTheme3())
+                .petFriendly(placeInfoEntity.getPetFriendly())
+                .barrierFree(placeInfoEntity.getBarrierFree())
+                .build();
+    }
+
+    public List<Map<String, Double>> getLocations() {
+        Sort sort = Sort.by(Sort.Direction.ASC, "placeId");
+        List<PlaceInfoEntity> placeInfoEntityList = placeInfoRepository.findAll(sort);
+
+        List<Map<String, Double>> locationsAll = new ArrayList<>();
+
+        for (PlaceInfoEntity placeInfoEntity : placeInfoEntityList) {
+            Map<String, Double> location = new HashMap<>();
+            locationsAll.add(Map.of("lat", Double.parseDouble(placeInfoEntity.getMapY()), "lng", Double.parseDouble(placeInfoEntity.getMapX())));
+        }
+        return locationsAll;
     }
 }

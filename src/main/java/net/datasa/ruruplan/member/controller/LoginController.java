@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("login")
 public class LoginController {
 
-    @GetMapping("loginForm")
+    @GetMapping("/loginForm")
     public String loginForm() {
         return "memberView/loginForm";
     }

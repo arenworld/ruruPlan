@@ -17,17 +17,16 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
    //로그인 없이 접근 가능 경로
     private static final String[] PUBLIC_URLS = {
-            "/"                     //root
-           ,"/join/**"
-           ,"/login/**"
-           ,"/member/login"
-            , "/images/**"          //이미지 경로
-            , "/css/**"             //CSS파일들
-            , "/js/**"              //JavaSCript 파일들
-            , "/fonts/**"
-            , "javascript/**"
-            , "/memberView/**"      //회원가입
-
+           "/"                       //root
+           , "/join/**"              //JoinController
+           , "/login/**"             //FindId, FindPw, Login, ResetController
+           , "/member/login"         //loginForm.html의 action url
+           , "/custom"               //customPlanController
+           , "/css/**"               //css파일
+           , "/fonts/**"             //fonts파일
+           , "/images/**"            //이미지 파일
+           , "/javascript.member/**" //자바스크립트 멤버 파일
+           , "/js/**"                //js 파일
     };
 
     @Bean
@@ -38,8 +37,8 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
-                .formLogin(formLogin -> formLogin
-                        .loginPage("/memberView/loginForm")
+                .formLogin(formLogin -> formLogin // 여기에는 html 이름이 아닌, 컨트롤러로 만든 url로 들어가야함
+                        .loginPage("/login/loginForm")
                         .usernameParameter("memberId")
                         .passwordParameter("memberPw")
                         .loginProcessingUrl("/member/login")

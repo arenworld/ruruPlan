@@ -24,10 +24,10 @@
     <main>
         <p class="main-title">Login</p>
         <form class="login-form" th:action="@{/member/login}" method="post">
-            <div class="subtitle mb-5">より完璧な旅行のために</div>
+            <div class="subtitle mb-5" th:text="#{message1}">より完璧な旅行のために</div>
 
             <div class="input-group me-5">
-                <label for="memberId" class="input-label ms-1">ID</label>
+                <label for="memberId" class="input-label ms-1" th:text="#{member.id}">ID</label>
                 <input
                         type="text"
                         class="input"
@@ -38,7 +38,7 @@
                 />
             </div>
             <div class="input-group">
-                <label for="memberPw" class="input-label">PW</label>
+                <label for="memberPw" class="input-label" th:text="#{member.pw}">PW</label>
                 <input
                         type="password"
                         class="input"
@@ -50,24 +50,24 @@
             </div>
             <div class="central-container mb-3">
                 <input type="checkbox" class="checkbox" id="remember_id" />
-                <label for="remember_id">Remember Id</label>
+                <label for="remember_id" th:text="#{remember.id}">Remember Id</label>
             </div>
             <div class="central-container mb-3">
-                <input type="submit" class="button cta-button" value="로그인" />
+                <input type="submit" class="button cta-button" th:value="#{login.bt}" />
             </div>
         </form>
     </main>
     <footer>
         <div class="text-group-center-row">
             <p class="footer-item">
-                <a id="findId" th:href="@{/login/findId}">IDの検索</a>
+                <a id="findId" th:href="@{/login/findId}" th:text="#{find.id}">Find ID</a>
             </p>
             <p class="footer-item">
-                <a id="findPw" th:href="@{/login/findPw}">PWの検索</a>
+                <a id="findPw" th:href="@{/login/findPw}" th:text="#{find.pw}">Find PW</a>
             </p>
-            <p class="footer-item">아직 회원이 아니신가요?</p>
+            <p class="footer-item" th:text="#{message2}">아직 회원이 아니신가요?</p>
             <p class="footer-item">
-                <a id="join" th:href="@{/join/joinForm}">회원가입</a>
+                <a id="join" th:href="@{/join/joinForm}" th:text="#{join}">Join</a>
             </p>
         </div>
     </footer>

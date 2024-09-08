@@ -194,6 +194,12 @@ function emailDuplicate() {
 function emConfirm(){
     let email = $('#email').val();
 
+    var emCodeBt = $('#emCodeBt').val();
+    var completeText = document.getElementById("clickCompleteText").value;
+
+    emCodeBt.style.backgroundColor = "blue";
+    emCodeBt.value = completeText;
+
     $.ajax({
         url: 'mailConfirm',
         type: 'post',

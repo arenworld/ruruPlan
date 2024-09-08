@@ -31,7 +31,7 @@
     </div>
     <div class="responsive-frame">
         <main>
-    <p class="main-title">会員登録</p>
+    <p class="main-title" th:text="#{join}"></p>
 <!--    &lt;!&ndash; 개잊정보 약관 &ndash;&gt;
     <div class="terms">
      <h2>dp Terms of Service</h2>
@@ -41,50 +41,51 @@
     <form class="login-form" id="joinForm" th:action="@{/join}" th:method="post">
         <div class="input-group">
         <!--아이디-->
-      <label for="memberId"  class="input-label">ID</label>
-        <input type="text" name="memberId" id="memberId" placeholder="ID" required>
+      <label for="memberId"  class="input-label" th:text="#{member.id}">ID</label>
+        <input type="text" name="memberId" id="memberId" th:placeholder="#{member.id}" required>
         <span id="idmsg" ></span>
         </div>
         <!-- 비밀번호 -->
         <div class="input-group">
-        <label for="memberPw"  class="input-label">Password</label>
+        <label for="memberPw"  class="input-label" th:text="#{member.pw}">Password</label>
         <input type="password" name="memberPw" id="memberPw" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" required>
             <i class="fa-solid fa-eye"></i>
             <span id="pwmsg1"></span>
         </div>
         <!--비밀번호 확인-->
         <div class="input-group">
-        <label for="pwConfirm" class="input-label">Password Confirm</label>
+        <label for="pwConfirm" class="input-label" th:text="#{pw.confirm}">Password Confirm</label>
         <input type="password" id="pwConfirm" required>
             <span id="pwmsg"></span>
         </div>
         <!--닉네임-->
         <div class="input-group">
-        <label for="nickname" class="input-label">Nickname</label>
-        <input type="text" name="nickname" id="nickname" placeholder="Nickname" required>
+        <label for="nickname" class="input-label" th:text="#{nickname}">Nickname</label>
+        <input type="text" name="nickname" id="nickname" th:placeholder="#{nickname}" required>
             <span id="nicknamemsg"></span>
         </div>
         <!--연령대-->
         <div class="input-group">
         <label for="age" class="input-label">Age</label>
             <select id="age" name="age" ckass="input=select" required>
-                <option value="">Age</option>
-                <option value="10">10대</option>
-                <option value="20">20대</option>
-                <option value="30">30대</option>
-                <option value="40">40대</option>
-                <option value="50">50대</option>
-                <option value="60">60대</option>
+                <option value="" th:text="#{age}">Age</option>
+                <option value="10" th:text="#{age10}">10대</option>
+                <option value="20" th:text="#{age20}">20대</option>
+                <option value="30" th:text="#{age30}">30대</option>
+                <option value="40" th:text="#{age40}">40대</option>
+                <option value="50" th:text="#{age50}">50대</option>
+                <option value="60" th:text="#{age60}">60대</option>
             </select>
         </div>
         <div class="input-group">
-      <label for="email" class="input-label">Email</label>
-        <input type="email" name="email" id="email" placeholder="Email" required>
-        <input type="button" id="emCodeBt" value="認証" disabled="disabled">
+      <label for="email" class="input-label" th:text="#{email}">Email</label>
+        <input type="email" name="email" id="email" th:placeholder="#{email}" required>
+        <input type="button" id="emCodeBt" th:value="#{em.confirm}" disabled="disabled">
+            <input type="hidden" id="clickCompleteText" th:value="#{em.clickComplete}" />
             <span id="emailmsg"></span>
         </div>
         <div class="form-group last mb-4 check_input">
-            <input type="text" class="form-control" id="emailconfirm" placeholder="인증번호를 입력해주세요" required>
+            <input type="text" class="form-control" id="emailconfirm" th:placeholder="#{em.confirm.mg}" required>
             <span id="emchkmsg"></span>
         </div>
         <div class="box-clause-round">
@@ -94,7 +95,7 @@
             </div>
         </div>
                 <div id="form-controls">
-                    <button type="submit" id="submit">Sign Up</button>
+                    <button type="submit" id="submit" th:text="#{join}">Sign Up</button>
      </div>
     </form>
         </main>

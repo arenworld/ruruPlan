@@ -53,8 +53,24 @@ public class CustomPlanController {
     };
 
     @ResponseBody
-    @PostMapping("planMarker")
-    public List<Map<String, Double>> planMarker(@RequestParam ("planNum") Integer planNum) {
+    @PostMapping("allPlanMarker")
+    public List<Map<String, Double>> allPlanMarker(@RequestParam ("planNum") Integer planNum) {
         return customPlanService.getPlanLocations(planNum);
+    }
+
+    @ResponseBody
+    @PostMapping("dayPlanMarker")
+    public List<Map<String, Double>> dayPlanMarker(@RequestParam ("planNum") Integer planNum, @RequestParam("dateNum") Integer dateNum) {
+        return customPlanService.getDayLocations(planNum, dateNum);
+    }
+
+    /**
+     * 일자별 일정 리스트 가져오기
+     * @param model
+     * @param planNum
+     */
+    @GetMapping("test")
+    public void test(Model model, @RequestParam("planNum") Integer planNum, @RequestParam("dateN") Integer dateN) {
+        customPlanService.getDayTaskList(planNum, dateN);
     }
 }

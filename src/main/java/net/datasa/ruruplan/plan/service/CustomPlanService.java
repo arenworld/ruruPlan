@@ -9,9 +9,7 @@ import net.datasa.ruruplan.plan.domain.dto.TaskDTO;
 import net.datasa.ruruplan.plan.domain.entity.PlaceInfoEntity;
 import net.datasa.ruruplan.plan.domain.entity.PlanEntity;
 import net.datasa.ruruplan.plan.domain.entity.TaskEntity;
-import net.datasa.ruruplan.plan.repository.PlaceInfoRepository;
-import net.datasa.ruruplan.plan.repository.PlanRepository;
-import net.datasa.ruruplan.plan.repository.TaskRepository;
+import net.datasa.ruruplan.plan.repository.*;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.util.Map.*;
 
 /**
  * GPT추천일정을 내 일정으로 담기 한 후 개별수정하는 컨트롤러
@@ -32,8 +28,10 @@ import static java.util.Map.*;
 public class CustomPlanService {
 
     private final PlanRepository planRepository;
+    private final TaskJpaRepository taskJpaRepository;
     private final TaskRepository taskRepository;
     private final PlaceInfoRepository placeInfoRepository;
+
 
     /**
      * plan정보 가져오기 / 전체일정
@@ -137,9 +135,14 @@ public class CustomPlanService {
         return locationsAll;
     }
 
+    /**
+     * 전체일정에 대한 마커정보
+     * @param planNum
+     * @return
+     */
     public List<Map<String, Double>> getPlanLocations(Integer planNum) {
         Sort sort = Sort.by(Sort.Direction.ASC, "taskNum");
-        List<TaskEntity> taskEntityList = taskRepository.findByPlanPlanNum(planNum, sort);
+        List<TaskEntity> taskEntityList = taskJpaRepository.findByPlanPlanNum(planNum, sort);
 
         List<Map<String, Double>> planLocations = new ArrayList<>();
 
@@ -151,5 +154,29 @@ public class CustomPlanService {
                     "dateN", Double.parseDouble(String.valueOf(taskEntity.getDateN()))));
         }
         return planLocations;
+    }
+
+    public List<TaskDTO> getDayTaskList(Integer planNum, Integer dateN) {
+        return taskRepository.getDayTaskList(planNum, dateN);
+    }
+
+    /**
+     * 일자별 일정에 대한 마커정보
+     * @param planNum
+     * @param dateNum
+     * @return
+     */
+    public List<Map<String, Double>> getDayLocations(Integer planNum, Integer dateNum) {
+        List<Map<String, Double>> dayLocations = new ArrayList<>();
+        List<TaskEntity> taskEntityList = taskRepository.getDayLocations(planNum, dateNum);
+
+        for (TaskEntity taskEntity : taskEntityList) {
+            Map<String, Double> location = new HashMap<>();
+            dayLocations.add(Map.of("lat", Double.parseDouble(taskEntity.getPlace().getMapY()),
+                    "lng", Double.parseDouble(taskEntity.getPlace().getMapX()),
+                    "taskNum", Double.parseDouble(String.valueOf(taskEntity.getTaskNum())),
+                    "dateN", Double.parseDouble(String.valueOf(taskEntity.getDateN()))));
+        }
+        return dayLocations;
     }
 }

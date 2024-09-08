@@ -64,29 +64,61 @@
             $('#plan-all').css('display', 'block');
             $('#plan-all-button').click(function() {
                 $('#plan-all').css('display', 'block');
-                $('#plan-1day').css('display', 'none');
-                $('#plan-2day').css('display', 'none');
-                $('#plan-3day').css('display', 'none');
             });
 
             $('#plan-1day-button').click(function() {
-                $('#plan-1day').css('display', 'block');
-                $('#plan-all').css('display', 'none');
-                $('#plan-2day').css('display', 'none');
-                $('#plan-3day').css('display', 'none');
-            })
+                $('.day1-tasks').css('display', 'block');
+                $('.day2-tasks').css('display', 'none');
+                $('.day3-tasks').css('display', 'none');
+                $('.day4-tasks').css('display', 'none');
+                $('.day5-tasks').css('display', 'none');
+                $('.day6-tasks').css('display', 'none');
+            });
+
             $('#plan-2day-button').click(function() {
-                $('#plan-2day').css('display', 'block');
-                $('#plan-all').css('display', 'none');
-                $('#plan-1day').css('display', 'none');
-                $('#plan-3day').css('display', 'none');
-            })
+                $('.day1-tasks').css('display', 'none');
+                $('.day2-tasks').css('display', 'block');
+                $('.day3-tasks').css('display', 'none');
+                $('.day4-tasks').css('display', 'none');
+                $('.day5-tasks').css('display', 'none');
+                $('.day6-tasks').css('display', 'none');
+            });
+
             $('#plan-3day-button').click(function() {
-                $('#plan-3day').css('display', 'block');
-                $('#plan-all').css('display', 'none');
-                $('#plan-1day').css('display', 'none');
-                $('#plan-2day').css('display', 'none');
-            })
+                $('.day1-tasks').css('display', 'none');
+                $('.day2-tasks').css('display', 'none');
+                $('.day3-tasks').css('display', 'block');
+                $('.day4-tasks').css('display', 'none');
+                $('.day5-tasks').css('display', 'none');
+                $('.day6-tasks').css('display', 'none');
+            });
+
+            $('#plan-4day-button').click(function() {
+                $('.day1-tasks').css('display', 'none');
+                $('.day2-tasks').css('display', 'none');
+                $('.day3-tasks').css('display', 'none');
+                $('.day4-tasks').css('display', 'block');
+                $('.day5-tasks').css('display', 'none');
+                $('.day6-tasks').css('display', 'none');
+            });
+
+            $('#plan-5day-button').click(function() {
+                $('.day1-tasks').css('display', 'none');
+                $('.day2-tasks').css('display', 'none');
+                $('.day3-tasks').css('display', 'none');
+                $('.day4-tasks').css('display', 'none');
+                $('.day5-tasks').css('display', 'block');
+                $('.day6-tasks').css('display', 'none');
+            });
+
+            $('#plan-6day-button').click(function() {
+                $('.day1-tasks').css('display', 'none');
+                $('.day2-tasks').css('display', 'none');
+                $('.day3-tasks').css('display', 'none');
+                $('.day4-tasks').css('display', 'none');
+                $('.day5-tasks').css('display', 'none');
+                $('.day6-tasks').css('display', 'block');
+            });
         })
     </script>
 
@@ -96,37 +128,126 @@
     <script>
         $(document).ready(function() {
             // 지도 초기화 (경복궁이 시작점, 줌 인터페이스 설정)
-            let map = new naver.maps.Map('mapBox', {
-                center: new naver.maps.LatLng(37.57861, 126.97722),
-                zoom: 15,
-                scaleControl: false,
-                logoControl: false,
-                mapDataControl: false,
-                zoomControl: true,
-            });
 
             // 로딩되자 마자 보이는 마커 : 플랜 일정에 포함되어 있는 장소만
-            planMarker(map);
+            allPlanMarker();
 
+            $('#plan-1day-button').click(dayPlanMarker);
+            $('#plan-2day-button').click(dayPlanMarker);
+            $('#plan-3day-button').click(dayPlanMarker);
+            $('#plan-4day-button').click(dayPlanMarker);
+            $('#plan-5day-button').click(dayPlanMarker);
+            $('#plan-6day-button').click(dayPlanMarker);
         });
 
-
-        function planMarker(map) {
+        //일정전체 마커 출력 함수
+        function allPlanMarker() {
             let planNum = $('#planNum').val();
 
             $.ajax({
-                url: '/custom/planMarker',
+                url: '/custom/allPlanMarker',
                 type: 'post',
                 data: {planNum : planNum},
                 success : function(planLocations) {
+                    // 첫번째 일정을 지도의 중심으로 함 --> 가장 먼저 뜨는 지도의 중심은, 첫번째 일정의 위치
+                    let centerLat = planLocations[0].lat;
+                    let centerLng = planLocations[0].lng;
+
+                    let map = new naver.maps.Map('mapBox', {
+                        center: new naver.maps.LatLng(centerLat, centerLng),
+                        zoom: 15,
+                        scaleControl: false,
+                        logoControl: false,
+                        mapDataControl: false,
+                        zoomControl: true,
+                    });
+
+                    let markers = [];
+
                     $.each(planLocations, function(index, location) {
-                        let lat = location.lat; // 위도
-                        let lng = location.lng; // 경도
                         let taskNum = location.taskNum;
                         let dateN = location.dateN;
                         let marker = new naver.maps.Marker({
-                            position: new naver.maps.LatLng(lat, lng),
+                            position: new naver.maps.LatLng(location.lat, location.lng),
                             map: map
+                        });
+                        marker.taskNum = location.taskNum; // 마커에 taskNum 속성 추가
+                        markers.push(marker); // 생성된 마커 배열에 저장
+                    }); // 반복문 끝
+
+                    // 일정 클릭 시 해당 마커 위치로 이동
+                    $('.placeTitle').each(function() {
+                        $(this).on('click', function() {
+                            let clickedTaskNum = $(this).data('tasknum'); // 클릭한 td의 data-tasknum 가져오기
+
+                            // 해당 taskNum과 일치하는 마커 찾기
+                            let targetMarker = markers.find(function(marker) {
+                                return marker.taskNum === clickedTaskNum;
+                            });
+
+                            if (targetMarker) {
+                                let position = targetMarker.getPosition(); // 마커의 위치 가져오기
+                                map.setCenter(position); // 지도의 중심을 해당 마커 위치로 이동
+                                map.setZoom(15); // 줌 레벨 조정 (필요에 따라)
+                            }
+                        });
+                    });
+
+                },
+                error: function(error) {
+                    console.error('에러발생:', error);
+                    alert('데이터 전송 실패');
+                }
+            });
+        }
+
+        // 일자별 마커 출력 함수
+        function dayPlanMarker() {
+            let planNum = $('#planNum').val();
+            let dateNum = $(this).data("date");
+
+            $.ajax({
+                url: '/custom/dayPlanMarker',
+                type: 'post',
+                data: {planNum : planNum
+                    , dateNum : dateNum},
+                success : function(planLocations) {
+                    let centerLat = planLocations[0].lat;
+                    let centerLng = planLocations[0].lng;
+
+                    let map = new naver.maps.Map('mapBox', {
+                        center: new naver.maps.LatLng(centerLat, centerLng),
+                        zoom: 15,
+                        scaleControl: false,
+                        logoControl: false,
+                        mapDataControl: false,
+                        zoomControl: true,
+                    });
+                    let markers = [];
+                    $.each(planLocations, function(index, location) {
+                        let marker = new naver.maps.Marker({
+                                position: new naver.maps.LatLng(location.lat, location.lng),
+                                map: map
+                        });
+                        marker.taskNum = location.taskNum; // 마커에 taskNum 속성 추가
+                        markers.push(marker); // 생성된 마커 배열에 저장
+                    }); // 반복문 끝
+
+                    // 일정 클릭 시 해당 마커 위치로 이동
+                    $('.placeTitle').each(function() {
+                        $(this).on('click', function() {
+                            let clickedTaskNum = $(this).data('tasknum'); // 클릭한 td의 data-tasknum 가져오기
+
+                            // 해당 taskNum과 일치하는 마커 찾기
+                            let targetMarker = markers.find(function(marker) {
+                                return marker.taskNum === clickedTaskNum;
+                            });
+
+                            if (targetMarker) {
+                                let position = targetMarker.getPosition(); // 마커의 위치 가져오기
+                                map.setCenter(position); // 지도의 중심을 해당 마커 위치로 이동
+                                map.setZoom(15); // 줌 레벨 조정 (필요에 따라)
+                            }
                         });
                     });
                 },
@@ -232,11 +353,14 @@
 
             <!-- 전체 일정 출력 -->
             <div class="plan-details" id="plan-all">
+                <h3>장소를 클릭하면 지도 상에서 해당 위치로 바로 이동합니다.</h3>
                 <table>
-                    <tr>
+
+                    <!-- 첫째날 일정 -->
+                    <tr class="day1-tasks">
                         <td colspan="5">첫째날</td>
                     </tr>
-                    <tr>
+                    <tr class="day1-tasks">
                         <th>no</th>
                         <th>time</th>
                         <th>task</th>
@@ -244,7 +368,7 @@
                         <th>duration</th>
                         <th>cost</th>
                     </tr>
-                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 1}">
+                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 1}" class="day1-tasks">
                         <td th:text="${task.taskNum}"></td>
                         <td th:text="${task.startTime}"></td>
 
@@ -254,16 +378,17 @@
                         <!-- 짝수라인일 때 -->
                         <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
 
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}"></td>
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
 
                         <td th:text="${task.duration}"></td>
                         <td th:text="|${task.cost}원|"></td>
                     </tr>
 
-                    <tr>
+                    <!-- 둘째날 일정 -->
+                    <tr class="day2-tasks">
                         <td colspan="5">둘째날</td>
                     </tr>
-                    <tr>
+                    <tr class="day2-tasks">
                         <th>no</th>
                         <th>time</th>
                         <th>task</th>
@@ -271,7 +396,7 @@
                         <th>duration</th>
                         <th>cost</th>
                     </tr>
-                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 2}">
+                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 2}" class="day2-tasks">
                         <td th:text="${task.taskNum}"></td>
                         <td th:text="${task.startTime}"></td>
 
@@ -281,16 +406,17 @@
                         <!-- 짝수라인일 때 -->
                         <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
 
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}"></td>
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
 
                         <td th:text="${task.duration}"></td>
                         <td th:text="|${task.cost}원|"></td>
                     </tr>
 
-                    <tr>
+                    <!-- 셋째날 일정 -->
+                    <tr class="day3-tasks">
                         <td colspan="5">셋째날</td>
                     </tr>
-                    <tr>
+                    <tr class="day3-tasks">
                         <th>no</th>
                         <th>time</th>
                         <th>task</th>
@@ -298,7 +424,7 @@
                         <th>duration</th>
                         <th>cost</th>
                     </tr>
-                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 3}">
+                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 3}" class="day3-tasks">
                         <td th:text="${task.taskNum}"></td>
                         <td th:text="${task.startTime}"></td>
 
@@ -308,114 +434,17 @@
                         <!-- 짝수라인일 때 -->
                         <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
 
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}"></td>
-
-                        <td th:text="${task.duration}"></td>
-                        <td th:text="|${task.cost}원|"></td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="plan-details" id="plan-1day">
-                <table> <!-- 이렇게 할 경우 반드시, 하루의 첫번째 일정은 관광/식사여야 함, 이동이면 안됨, 만약 숙소 정보를 넣어서 처음부터 이동을 넣는다면, 가장 처음이 이동이어야 함-->
-                    <tr>
-                        <td colspan="5">첫째날</td>
-                    </tr>
-                    <tr>
-                        <th>no</th>
-                        <th>time</th>
-                        <th>task</th>
-                        <th>place</th>
-                        <th>duration</th>
-                        <th>cost</th>
-                    </tr>
-                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 1}">
-                        <td th:text="${task.taskNum}"></td>
-                        <td th:text="${task.startTime}"></td>
-
-                        <!--홀수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
-
-                        <!-- 짝수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
-
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}"></td>
-
-                        <td th:text="${task.duration}"></td>
-                        <td th:text="|${task.cost}원|"></td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="plan-details" id="plan-2day">
-                <table>
-                    <tr>
-                        <td colspan="5">둘째날</td>
-                    </tr>
-                    <tr>
-                        <th>no</th>
-                        <th>time</th>
-                        <th>task</th>
-                        <th>place</th>
-                        <th>duration</th>
-                        <th>cost</th>
-                    </tr>
-                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 2}">
-                        <td th:text="${task.taskNum}"></td>
-                        <td th:text="${task.startTime}"></td>
-
-                        <!--홀수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
-
-                        <!-- 짝수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
-
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}"></td>
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
 
                         <td th:text="${task.duration}"></td>
                         <td th:text="|${task.cost}원|"></td>
                     </tr>
 
-                </table>
-            </div>
-
-            <div class="plan-details" id="plan-3day">
-                <table>
-                    <tr>
-                        <td colspan="5">셋째날</td>
-                    </tr>
-                    <tr>
-                        <th>no</th>
-                        <th>time</th>
-                        <th>task</th>
-                        <th>place</th>
-                        <th>duration</th>
-                        <th>cost</th>
-                    </tr>
-                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 3}">
-                        <td th:text="${task.taskNum}"></td>
-                        <td th:text="${task.startTime}"></td>
-
-                        <!--홀수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
-
-                        <!-- 짝수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
-
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}"></td>
-
-                        <td th:text="${task.duration}"></td>
-                        <td th:text="|${task.cost}원|"></td>
-                    </tr>
-
-                </table>
-            </div>
-            <div class="plan-details" id="plan-4day">
-                <table>
-                    <tr>
+                    <!-- 넷째날 일정 -->
+                    <tr class="day4-tasks">
                         <td colspan="5">넷째날</td>
                     </tr>
-                    <tr>
+                    <tr class="day4-tasks">
                         <th>no</th>
                         <th>time</th>
                         <th>task</th>
@@ -423,15 +452,28 @@
                         <th>duration</th>
                         <th>cost</th>
                     </tr>
+                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 4}" class="day4-tasks">
+                        <td th:text="${task.taskNum}"></td>
+                        <td th:text="${task.startTime}"></td>
 
-                </table>
-            </div>
-            <div class="plan-details" id="plan-5day">
-                <table>
-                    <tr>
+                        <!--홀수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
+
+                        <!-- 짝수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
+
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
+
+                        <td th:text="${task.duration}"></td>
+                        <td th:text="|${task.cost}원|"></td>
+                    </tr>
+
+
+                    <!-- 다섯째날 일정 -->
+                    <tr class="day5-tasks">
                         <td colspan="5">다섯째날</td>
                     </tr>
-                    <tr>
+                    <tr class="day5-tasks">
                         <th>no</th>
                         <th>time</th>
                         <th>task</th>
@@ -439,15 +481,27 @@
                         <th>duration</th>
                         <th>cost</th>
                     </tr>
+                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 5}" class="day5-tasks">
+                        <td th:text="${task.taskNum}"></td>
+                        <td th:text="${task.startTime}"></td>
 
-                </table>
-            </div>
-            <div class="plan-details" id="plan-6day">
-                <table>
-                    <tr>
+                        <!--홀수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
+
+                        <!-- 짝수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
+
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
+
+                        <td th:text="${task.duration}"></td>
+                        <td th:text="|${task.cost}원|"></td>
+                    </tr>
+
+                    <!-- 넷째날 일정 -->
+                    <tr class="day6-tasks">
                         <td colspan="5">여섯째날</td>
                     </tr>
-                    <tr>
+                    <tr class="day6-tasks">
                         <th>no</th>
                         <th>time</th>
                         <th>task</th>
@@ -455,12 +509,23 @@
                         <th>duration</th>
                         <th>cost</th>
                     </tr>
+                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 6}" class="day6-tasks">
+                        <td th:text="${task.taskNum}"></td>
+                        <td th:text="${task.startTime}"></td>
 
+                        <!--홀수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
+
+                        <!-- 짝수라인일 때 -->
+                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
+
+                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
+
+                        <td th:text="${task.duration}"></td>
+                        <td th:text="|${task.cost}원|"></td>
+                    </tr>
                 </table>
             </div>
-
-
-
 
         </div>
 

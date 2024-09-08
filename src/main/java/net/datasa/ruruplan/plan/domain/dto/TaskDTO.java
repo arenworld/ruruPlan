@@ -45,5 +45,10 @@ public class TaskDTO {
 
     // 사용자 메모
     private String memo;
+
+    public TaskDTO(Integer planNum, Integer DateN) {
+        this.planNum = planNum;
+        this.dateN = DateN;
+    }
 }
 

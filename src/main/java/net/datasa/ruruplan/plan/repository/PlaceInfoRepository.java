@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PlaceInfoRepository extends JpaRepository<PlaceInfoEntity, String> {
+    //jpa기술을 쓰기 때문에 extends를 상속받지만
+    //dsl을 쓰면 extends가 없다
 }

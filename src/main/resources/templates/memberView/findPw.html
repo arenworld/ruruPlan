@@ -1,10 +1,44 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>비밀번호 찾기</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>findId</title>
+    <!-- CSS 파일 가져오기 -->
+    <link rel="stylesheet" href="/css/rurustyle.css" />
+    <!-- JS 파일 가져오기 -->
 </head>
-<body>
-    <h1>비밀번호 찾기 창</h1>
+<style>
+    #frame {
+        padding: 100px; /* 10px의 추가 여백을 프레임 내부에 추가 */
+        box-sizing: content-box; /* 패딩이 포함된 크기를 설정하지 않음 */
+    }
+    footer {
+        margin-top: 150px;
+    }
+</style>
+<body class="login-page">
+<div class="logo-title">
+    <img class="logo" src="/images/logo.png">
+    <p>ソウルに触る</p>
+</div>
+<div id="frame">
+    <main>
+        <p class="main-title">findId2</p>
+        <div class="text-group-center-row">
+            <p class="detail-main">고객님의 정보와 일치하는 아이디입니다</p>
+        </div>
+        <!-- 아이디 출력   div 공간안에 넣으시면 됩니다-->
+        <div class="print-id"></div>
+    </main>
+
+    <footer>
+        <div class="text-group-center-row">
+            <button class="cta-button">로그인하기</button>
+            <button class="cta-button">pw찾기</button>
+        </div>
+    </footer>
+</div>
 </body>
 </html>

@@ -17,7 +17,7 @@
 
 <body class="login-page">
 <div class="logo-title">
-    <img class="logo" src="images/화면 캡처 2024-09-01 125210.png" />
+    <img class="logo" src="/images/logo.png">
     <p>ソウルに触る</p>
     <form th:action="@{locale/}" method="get">
         <select name="lang" onchange="this.form.submit()">
@@ -71,7 +71,9 @@
             <p class="footer-item">
                 <a id="findPw" th:href="@{/login/findPw}" th:text="#{find.pw}">Find PW</a>
             </p>
-            <p class="footer-item" th:text="#{message2}">message2</p>
+        </div>
+        <div class="text-group-center-row">
+        <p class="footer-item" th:text="#{message2}">message2</p>
             <p class="footer-item">
                 <a id="join" th:href="@{/join/joinForm}" th:text="#{join}">Join</a>
             </p>

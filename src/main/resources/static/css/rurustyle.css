@@ -1,161 +1,161 @@
 /* 네비게이션 바의 각 메뉴 항목 스타일 */
 .site-nav .site-navigation .site-menu > li {
-  display: inline-block; /* 메뉴 항목을 가로로 나열 */
-  margin-right: 10px; /* Service와 About 사이의 간격을 조정 */
-  position: relative; /* 하위 메뉴 위치 조정을 위해 부모 요소에 relative 설정 */
+  display: inline-block;
+  margin-right: 10px;
+  position: relative;
 }
 
 /* 드롭다운 메뉴의 기본 스타일 */
 .site-nav .site-navigation .site-menu .has-children .dropdown {
-  visibility: hidden; /* 초기 상태에서 드롭다운 메뉴 숨김 */
-  opacity: 0; /* 초기 상태에서 드롭다운 메뉴 투명하게 설정 */
-  position: absolute; /* 부모 요소에 대해 절대 위치 지정 */
-  top: 100%; /* 부모 메뉴 바로 아래에 드롭다운 메뉴가 나타나도록 설정 */
-  left: 0; /* 부모 메뉴의 왼쪽에 맞춰 드롭다운 메뉴가 나타나도록 설정 */
-  z-index: 999; /* 다른 요소들보다 위에 표시되도록 설정 */
-  text-align: left; /* 텍스트를 왼쪽 정렬 */
-  box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.1); /* 드롭다운 메뉴에 그림자 효과 추가 */
-  border-radius: 5px; /* 드롭다운 메뉴의 모서리를 둥글게 설정 */
-  padding: 10px 0; /* 드롭다운 메뉴의 상하 패딩 설정 */
-  background: #ffffff; /* 드롭다운 메뉴의 배경색 설정 */
-  transition: all 0.3s ease; /* 드롭다운 메뉴가 나타날 때 트랜지션 효과 설정 */
-  width: 200px; /* 드롭다운 메뉴의 너비 설정 */
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 999;
+  text-align: left;
+  box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 10px 0;
+  background: #ffffff;
+  transition: all 0.3s ease;
+  width: 200px;
 }
-/*
-  하위
-  메뉴가
-  부모
-  메뉴의
-  아래에
-  나타나도록
-  설정
-  */
+
+/* 하위 메뉴가 부모 메뉴의 아래에 나타나도록 설정 */
 .site-nav
-  .site-navigation
-  .site-menu
-  .has-children
-  .dropdown
-  > li.has-children
-  .dropdown {
-  top: 100%; /* 부모 메뉴의 바로 아래에 하위 메뉴가 위치 */
-  left: 0; /* 하위 메뉴가 부모 메뉴의 왼쪽에 맞춰 위치 */
+.site-navigation
+.site-menu
+.has-children
+.dropdown
+> li.has-children
+.dropdown {
+  top: 100%;
+  left: 0;
 }
+
 /* 드롭다운 메뉴가 활성화(호버 또는 포커스)될 때의 스타일 */
 .site-nav .site-navigation .site-menu .has-children:hover > .dropdown,
 .site-nav .site-navigation .site-menu .has-children:focus > .dropdown {
-  visibility: visible; /* 드롭다운 메뉴를 보이도록 설정 */
-  opacity: 1; /* 드롭다운 메뉴의 투명도를 제거 */
-  margin-top: 0; /* 드롭다운 메뉴가 부드럽게 나타나도록 설정 */
+  visibility: visible;
+  opacity: 1;
+  margin-top: 0;
 }
 
 /* 드롭다운 메뉴 내부의 링크 스타일 */
 .site-nav .site-navigation .site-menu .has-children .dropdown > li > a {
-  padding: 10px 15px; /* 드롭다운 메뉴 내부 링크의 패딩 설정 */
-  display: block; /* 드롭다운 메뉴 내부 링크를 블록 요소로 설정 */
-  color: #000; /* 드롭다운 메뉴 내부 링크의 텍스트 색상 설정 */
+  padding: 10px 15px;
+  display: block;
+  color: #000;
 }
 
 /* 공통 스타일 */
 :root {
-  --input-button-width: 100%; /* 입력 필드와 버튼의 기본 너비를 100%로 설정 */
+  --input-button-width: 100%;
 }
 
 /* 전체 body 요소의 기본 스타일 설정 */
-body {
-  font-family: Arial, sans-serif; /* 기본 폰트 설정 */
-  margin: 0; /* 기본 마진 제거 */
-  padding: 0; /* 기본 패딩 제거 */
-  background-color: #f4f3f3; /* 전체 페이지의 배경색 설정 */
-  box-sizing: border-box; /* 박스 모델 설정: 패딩과 테두리를 포함한 전체 너비와 높이 설정 */
-  overflow-x: hidden; /* 페이지의 가로 스크롤 숨김 */
+body.modal-body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background-color: #f4f3f3;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* 로그인 페이지와 응답형 로그인 페이지의 body 스타일 */
 body.login-page,
 body.responsive-login-page {
-  display: flex; /* 플렉스 박스 레이아웃 사용 */
-  justify-content: center; /* 가로 축에서 가운데 정렬 */
-  align-items: center; /* 세로 축에서 가운데 정렬 */
-  min-height: 100vh; /* 최소 높이를 화면 전체 높이로 설정 */
-  background-color: #f4f3f3; /* 로그인 페이지의 배경색 설정 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f3f3;
 }
 
 /* 응답형 로그인 페이지의 추가적인 스타일 설정 */
 body.responsive-login-page {
-  align-items: flex-start; /* 세로 축의 시작점에 정렬 */
-  overflow-y: auto; /* 세로 스크롤바 추가 */
+  align-items: flex-start;
+  overflow-y: auto;
 }
 
 /* 로그인 및 회원가입 페이지의 프레임 스타일 설정 */
 #frame,
 .responsive-frame {
-  background: #fff; /* 프레임의 배경색 설정 */
-  padding: 50px; /* 프레임의 패딩 설정 */
-  border-radius: 8px; /* 프레임의 모서리를 둥글게 설정 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 프레임에 그림자 효과 추가 */
-  width: 100%; /* 프레임의 너비를 100%로 설정 */
-  max-width: 400px; /* 프레임의 최대 너비 설정 */
-  box-sizing: border-box; /* 프레임의 전체 크기 설정 */
-  text-align: center; /* 프레임 내부의 텍스트 가운데 정렬 */
+  background: #ffffff;
+  padding: 50px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 /* 회원가입 페이지의 프레임 스타일 */
 .responsive-frame {
-  max-width: 500px; /* 최대 너비를 500px로 설정 */
-  margin: 20px; /* 외부 여백 설정 */
-  height: auto; /* 높이 자동 설정 */
+  max-width: 500px;
+  margin: 20px;
+  height: auto;
 }
 
 /* 로고와 타이틀 부분 스타일 설정 */
 .logo-title {
-  display: flex; /* 플렉스 박스 사용 */
-  align-items: center; /* 플렉스 아이템을 세로로 가운데 정렬 */
-  gap: 10px; /* 로고와 텍스트 사이의 간격 설정 */
-  position: absolute; /* 부모 요소에 대해 절대 위치 지정 */
-  top: 20px; /* 화면 상단에서 20px 아래 위치 */
-  left: 20px; /* 화면 왼쪽에서 20px 오른쪽으로 위치 */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  z-index: 10000;
 }
 
 /* 로고 이미지 스타일 */
 .logo {
-  width: 30px; /* 로고 너비 설정 */
-  height: 30px; /* 로고 높이 설정 */
+  width: 30px;
+  height: 30px;
+  z-index: 10000;
+
+
 }
 
 /* 로고 텍스트 스타일 */
 .logo-title p {
-  font-size: 17px; /* 텍스트 크기 설정 */
-  margin: 0; /* 기본 마진 제거 */
-  color: #27c5b8; /* 텍스트 색상 설정 */
+  font-size: 17px;
+  margin: 0;
+  color: #27c5b8;
+  z-index: 10000;
 }
 
 /* 메인 타이틀 스타일 설정 */
 .main-title {
-  font-size: 60px; /* 메인 타이틀 텍스트 크기 설정 */
-  margin-bottom: 20px; /* 아래쪽 마진 설정 */
-  text-align: center; /* 텍스트를 가운데 정렬 */
-  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
-  overflow: visible; /* 텍스트가 넘칠 경우 표시되도록 설정 */
+  font-size: 60px;
+  margin-bottom: 20px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: visible;
 }
 
 /* 서브 타이틀 스타일 설정 */
 .subtitle {
-  font-size: 14px; /* 서브 타이틀 텍스트 크기 설정 */
-  margin-bottom: 30px; /* 아래쪽 마진 설정 */
+  font-size: 14px;
+  margin-bottom: 30px;
 }
 
 /* 입력 그룹의 스타일 설정 */
 .input-group {
-  display: flex; /* 플렉스 박스 사용 */
-  flex-direction: column; /* 플렉스 아이템을 세로로 정렬 */
-  align-items: center; /* 플렉스 아이템을 가로로 가운데 정렬 */
-  margin-bottom: 20px; /* 아래쪽 마진 설정 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 /* 입력 필드 레이블의 스타일 설정 */
 .input-label {
-  align-self: flex-start; /* 레이블을 왼쪽 정렬 */
-  margin-bottom: 5px; /* 아래쪽 마진 설정 */
+  align-self: flex-start;
+  margin-bottom: 5px;
 }
 
 /* 텍스트 입력 필드, 패스워드 입력 필드, 셀렉트 박스, 버튼의 스타일 */
@@ -163,181 +163,181 @@ input[type="text"],
 input[type="password"],
 select,
 .cta-button {
-  width: var(--input-button-width); /* 입력 필드와 버튼의 너비를 100%로 설정 */
-  padding: 10px; /* 입력 필드와 버튼의 패딩 설정 */
-  margin-bottom: 10px; /* 아래쪽 마진 설정 */
-  border: 1px solid #ccc; /* 입력 필드와 버튼의 테두리 색상 설정 */
-  border-radius: 4px; /* 입력 필드와 버튼의 모서리를 둥글게 설정 */
-  box-sizing: border-box; /* 전체 크기를 패딩과 테두리를 포함하여 설정 */
+  width: var(--input-button-width);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
 /* 버튼 기본 스타일 설정 */
 .cta-button {
-  font-size: 16px; /* 버튼 텍스트 크기 설정 */
-  color: #fff; /* 버튼 텍스트 색상 설정 */
-  background-color: #27c5b8; /* 버튼 배경색 설정 */
-  border: none; /* 버튼 테두리 제거 */
-  cursor: pointer; /* 버튼에 마우스를 올렸을 때 포인터 커서 표시 */
+  font-size: 16px;
+  color: #fff;
+  background-color: #27c5b8;
+  border: none;
+  cursor: pointer;
 }
 
 /* 버튼에 마우스를 올렸을 때 스타일 */
 .cta-button:hover {
-  background-color: #7cb5bb; /* 버튼 배경색 변경 */
+  background-color: #7cb5bb;
 }
 
 /* 중앙 정렬 컨테이너의 스타일 설정 */
 .central-container {
-  display: flex; /* 플렉스 박스 사용 */
-  justify-content: center; /* 가로 방향으로 가운데 정렬 */
-  width: 100%; /* 컨테이너 너비를 100%로 설정 */
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 /* 텍스트 그룹을 가로로 중앙 정렬하기 위한 스타일 설정 */
 .text-group-center-row {
-  display: flex !important; /* 플렉스 박스 사용 */
-  flex-direction: row !important; /* 플렉스 아이템을 가로로 정렬 */
-  align-items: center !important; /* 플렉스 아이템을 세로로 가운데 정렬 */
-  justify-content: center !important; /* 가로 방향으로 가운데 정렬 */
-  text-align: center !important; /* 텍스트를 가운데 정렬 */
-  gap: 5px !important; /* 요소 간의 간격 설정 */
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  gap: 15px !important;
 }
 
 /* 약관 박스 스타일 설정 */
 .box-clause-round {
-  border: 2px solid black; /* 박스 테두리 색상 설정 */
-  padding: 20px; /* 박스 패딩 설정 */
-  border-radius: 10px; /* 박스 모서리를 둥글게 설정 */
-  width: 100%; /* 박스 너비를 100%로 설정 */
+  border: 2px solid black;
+  padding: 20px;
+  border-radius: 10px;
+  width: 100%;
 }
 
 /* 약관 항목의 스타일 설정 */
 .clause-item {
-  display: flex; /* 플렉스 박스 사용 */
-  align-items: center; /* 플렉스 아이템을 세로로 가운데 정렬 */
-  background-color: rgb(240, 236, 236); /* 약관 항목의 배경색 설정 */
-  margin-bottom: 10px; /* 아래쪽 마진 설정 */
-  padding: 10px; /* 약관 항목의 패딩 설정 */
-  border-radius: 5px; /* 약관 항목의 모서리를 둥글게 설정 */
+  display: flex;
+  align-items: center;
+  background-color: rgb(240, 236, 236);
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 /* 약관 항목의 화살표 스타일 설정 */
 .arrow-clause {
-  font-size: 18px; /* 화살표 텍스트 크기 설정 */
-  color: #070707; /* 화살표 색상 설정 */
-  margin-left: auto; /* 화살표를 오른쪽으로 정렬 */
+  font-size: 18px;
+  color: #070707;
+  margin-left: auto;
 }
 
 /* 푸터 항목의 스타일 설정 */
 .footer-item {
-  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  white-space: nowrap;
 }
 
 /* 이미지 배경이 있는 body의 스타일 - 특정 페이지에서만 사용 */
 .img-body {
-  position: relative; /* 부모 요소에 대해 상대 위치 지정 */
-  display: flex; /* 플렉스 박스 사용 */
-  flex-direction: column; /* 플렉스 아이템을 세로로 정렬 */
-  align-items: flex-start; /* 플렉스 아이템을 가로로 시작점에 정렬 */
-  justify-content: center; /* 플렉스 아이템을 세로로 가운데 정렬 */
-  min-height: 100vh; /* 최소 높이를 화면 전체 높이로 설정 */
-  background-image: url("/tour-1.0.0/tour-1.0.0/images/11311.png"); /* 배경 이미지 설정 */
-  background-size: cover; /* 배경 이미지를 요소 크기에 맞게 채움 */
-  background-repeat: no-repeat; /* 배경 이미지 반복 없음 */
-  background-position: center center; /* 배경 이미지를 가운데 정렬 */
-  padding-left: 10%; /* 왼쪽 패딩 설정 */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 100vh;
+  /*background-image: url("/tour-1.0.0/tour-1.0.0/images/11311.png");*/
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  padding-left: 10%;
 }
 
 /* 배경 이미지 위에 오버레이 추가 */
 .img-body::before {
-  content: ""; /* 오버레이 내용 없음 */
-  position: absolute; /* 부모 요소에 대해 절대 위치 지정 */
-  top: 0; /* 상단에서 시작 */
-  left: 0; /* 왼쪽에서 시작 */
-  width: 100%; /* 오버레이 너비를 100%로 설정 */
-  height: 100%; /* 오버레이 높이를 100%로 설정 */
-  background-color: rgba(0, 0, 0, 0.4); /* 반투명 검정 오버레이 설정 */
-  z-index: 1; /* 오버레이가 다른 요소들보다 위에 표시되도록 설정 */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1;
 }
 
 /* 메인 컨테이너 스타일 설정 */
 .main-container {
-  position: relative; /* 부모 요소에 대해 상대 위치 지정 */
-  z-index: 2; /* 오버레이 아래에 표시되도록 설정 */
-  text-align: left; /* 텍스트를 왼쪽 정렬 */
-  width: 100%; /* 메인 컨테이너의 너비를 100%로 설정 */
+  position: relative;
+  z-index: 2;
+  text-align: left;
+  width: 100%;
 }
 
 /* 로고와 네비게이션 바 스타일 설정 */
 .header-wrapper {
-  display: flex; /* 플렉스 박스 사용 */
-  align-items: center; /* 플렉스 아이템을 세로로 가운데 정렬 */
-  width: 100%; /* 네비게이션 바의 너비를 100%로 설정 */
-  padding: 20px; /* 네비게이션 바의 패딩 설정 */
-  margin-top: -120px; /* 상단 마진 설정 */
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  margin-top: -120px;
 }
 
 /* 네비게이션 바와 로고 사이의 간격 추가 */
 .logo-title {
-  margin-right: 20px; /* 오른쪽 마진 설정 */
+  margin-right: 20px;
 }
 
 /* 네비게이션 바 스타일 설정 */
 .site-nav {
-  position: absolute; /* 부모 요소에 대해 절대 위치 지정 */
-  top: 20px; /* 상단에서 20px 내려옴 */
-  right: 20px; /* 오른쪽에서 20px 왼쪽으로 위치 */
-  z-index: 2; /* 네비게이션 바가 다른 요소들보다 위에 표시되도록 설정 */
-  margin-left: auto; /* 왼쪽 마진을 자동으로 설정하여 우측 정렬 */
-  margin-bottom: 65px; /* 아래쪽 마진 설정 */
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 2;
+  margin-left: auto;
+  margin-bottom: 65px;
 }
 
 /* 네비게이션 바의 메뉴 리스트 스타일 설정 */
 .site-nav ul {
-  display: flex; /* 플렉스 박스 사용 */
-  list-style: none; /* 기본 리스트 스타일 제거 */
+  display: flex;
+  list-style: none;
 }
 
 /* 네비게이션 바의 각 메뉴 항목 스타일 설정 */
 .site-nav li {
-  margin: 0 15px; /* 좌우 마진 설정 */
+  margin: 0 15px;
 }
 
 /* 변경되는 단어 스타일 설정 */
 .changing-word {
-  font-size: 90px; /* 텍스트 크기 설정 */
-  color: white; /* 텍스트 색상 설정 */
-  margin-bottom: -50px; /* 아래쪽 마진 설정 */
-  text-align: left; /* 텍스트를 왼쪽 정렬 */
+  font-size: 90px;
+  color: white;
+  margin-bottom: -50px;
+  text-align: left;
 }
 
 /* 버튼 컨테이너 스타일 설정 */
 .button-container {
-  display: flex; /* 플렉스 박스 사용 */
-  justify-content: flex-start; /* 플렉스 아이템을 가로로 시작점에 정렬 */
-  margin-top: 100px; /* 아래쪽 마진 설정 */
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 100px;
 }
 
 /* 선택 버튼 스타일 설정 */
 .suggestbut {
-  padding: 40px 70px; /* 버튼 패딩 설정 */
-  margin: 0 10px; /* 좌우 마진 설정 */
+  padding: 40px 70px;
+  margin: 0 10px;
   margin-top: 10px;
-  background-color: #ffffff; /* 버튼 배경색 설정 */
-  color: rgb(0, 0, 0); /* 버튼 텍스트 색상 설정 */
-  border: none; /* 버튼 테두리 제거 */
-  border-radius: 5px; /* 버튼 모서리를 둥글게 설정 */
-  cursor: pointer; /* 버튼에 마우스를 올렸을 때 포인터 커서 표시 */
-  font-size: 16px; /* 버튼 텍스트 크기 설정 */
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
-/* 선택 버튼에 마우스를 올렸을 때 스타일 설정 */
+/* 선택 버튼에 마우스를 올렸을 때 스타일 */
 .suggestbut:hover {
-  background-color: #27c5b8; /* 버튼 배경색 변경 */
+  background-color: #27c5b8;
 }
 
 /* 네비게이션 바 링크의 임시 스타일 설정 */
 a {
-  color: rgb(255, 255, 255); /* 링크 텍스트 색상 설정 */
+  color: rgb(255, 255, 255);
 }
 
 /* 반응형 디자인을 위한 미디어 쿼리 */
@@ -345,89 +345,934 @@ a {
 /* 화면 너비가 1024px 이하일 때 적용되는 스타일 */
 @media (max-width: 1024px) {
   .site-nav {
-    position: relative; /* 네비게이션 바를 상대 위치로 변경 */
-    margin-bottom: 0; /* 아래쪽 마진 제거 */
+    position: relative;
+    margin-bottom: 0;
   }
 
   .site-nav ul {
-    flex-direction: column; /* 메뉴 리스트를 세로로 정렬 */
-    align-items: flex-start; /* 왼쪽 정렬 */
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .site-nav li {
-    margin: 5px 0; /* 상하 마진 설정 */
+    margin: 5px 0;
   }
 
   .changing-word {
-    font-size: 60px; /* 텍스트 크기 조정 */
+    font-size: 60px;
   }
 
   .button-container {
-    flex-direction: column; /* 버튼 컨테이너를 세로로 정렬 */
-    align-items: flex-start; /* 왼쪽 정렬 */
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .suggestbut {
-    width: 100%; /* 버튼의 너비를 100%로 설정 */
-    margin-bottom: 10px; /* 아래쪽 마진 설정 */
+    width: 100%;
+    margin-bottom: 10px;
   }
 }
 
 /* 화면 너비가 768px 이하일 때 적용되는 스타일 */
 @media (max-width: 768px) {
   .header-wrapper {
-    flex-direction: column; /* 네비게이션 바와 로고를 세로로 정렬 */
-    align-items: flex-start; /* 왼쪽 정렬 */
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .site-nav ul {
-    flex-direction: column; /* 메뉴 리스트를 세로로 정렬 */
-    align-items: flex-start; /* 왼쪽 정렬 */
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .site-nav li {
-    margin: 5px 0; /* 상하 마진 설정 */
+    margin: 5px 0;
   }
 
   .changing-word {
-    font-size: 40px; /* 텍스트 크기 축소 */
+    font-size: 40px;
   }
 
   .button-container {
-    flex-direction: column; /* 버튼 컨테이너를 세로로 정렬 */
-    align-items: flex-start; /* 왼쪽 정렬 */
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .suggestbut {
-    width: 100%; /* 버튼의 너비를 100%로 설정 */
-    margin-bottom: 10px; /* 아래쪽 마진 설정 */
+    width: 100%;
+    margin-bottom: 10px;
   }
 }
 
 /* 화면 너비가 480px 이하일 때 적용되는 스타일 */
 @media (max-width: 480px) {
   .logo-title {
-    flex-direction: column; /* 로고와 텍스트를 세로로 정렬 */
-    align-items: flex-start; /* 왼쪽 정렬 */
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .logo-title p {
-    font-size: 14px; /* 텍스트 크기 축소 */
+    font-size: 14px;
   }
 
   .main-title {
-    font-size: 40px; /* 메인 타이틀 크기 축소 */
+    font-size: 40px;
   }
 
   .site-nav ul {
-    width: 100%; /* 메뉴 리스트의 너비를 100%로 설정 */
+    width: 100%;
   }
 
   .changing-word {
-    font-size: 30px; /* 텍스트 크기 축소 */
+    font-size: 30px;
   }
 
   .button-container {
-    width: 100%; /* 버튼 컨테이너의 너비를 100%로 설정 */
+    width: 100%;
   }
+}
+
+/* 네비게이션 바 링크의 밑줄 제거 */
+.site-nav a {
+  text-decoration: none;
+}
+
+/* 네비게이션 바 링크에 마우스를 올렸을 때 밑줄 추가 (선택 사항) */
+.site-nav a:hover {
+  text-decoration: underline;
+}
+
+/* 푸터 영역의 링크 색상 설정 */
+footer a {
+  color: rgb(0, 0, 0);
+}
+
+/* 페이지 안쪽에 내용 */
+.detail-main {
+  font-size: 30px;
+  color: black;
+  white-space: nowrap;
+}
+
+/* 모달 기본 스타일 */
+.modal-question {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: #f4f3f3;
+  z-index: 900;
+  padding: 20px 0;
+}
+
+/* 모달 내용 스타일 */
+.modal-question-content {
+  background-color: white;
+  margin: auto;
+  padding: 20px;
+  border: none;
+  width: 80%;
+  height: 100%;
+  max-width: 800px;
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* 모달 헤더 스타일 */
+.modal-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  border: none;
+}
+
+/* 진행 상황 표시기의 스타일 */
+.progress-question-container {
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.progress-question-step {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #888;
+  background-color: #fff;
+}
+
+.progress-question-step.active {
+  background-color: #4caf50;
+  border: 2px solid #4caf50;
+}
+
+/* 이전버튼 */
+.button-back {
+  background-image: url("static/images/page_left.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 50px;
+  height: 50px;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* 다음 버튼 */
+.modal-submit-button,
+.button-next-page5,
+.button-next-page4,
+.button-next-page3,
+.button-next-page2,
+.button-next {
+  background-image: url("static/images/page_right.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 50px;
+  height: 50px;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* 달력 컨테이너 스타일 */
+#calendar-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 100px;
+  position: relative;
+  bottom: 50px;
+}
+
+/* 개별 달력 스타일 */
+.calendar {
+  width: 300px;
+  max-width: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 달력 헤더 스타일 */
+.calendar-header {
+  background-color: #ffffff;
+  color: #333333;
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  border-bottom: 1px solid #e0e0e0;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  position: relative;
+}
+
+/* 달력 그리드 스타일 */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  padding: 10px;
+}
+
+/* 달력 셀 스타일 */
+.calendar-cell {
+  background-color: #ffffff;
+  padding: 10px 0;
+  text-align: center;
+  color: #000000;
+  font-size: 16px;
+  position: relative;
+  border-radius: 50%;
+  height: 40px;
+}
+
+/* 셀 밑 가상선 */
+.calendar-cell::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  width: calc(100% + 2px);
+  height: 1px;
+  background-color: black;
+  transform: translateX(-50%);
+}
+
+/* 요일 셀 비활성화 */
+.calendar-cell.day-name {
+  pointer-events: none; /* 클릭, 마우스 오버 등의 이벤트를 차단 */
+  background-color: transparent; /* 배경 투명 */
+  color: #666666; /* 비활성화된 색상 */
+  cursor: default; /* 선택 불가능한 커서로 설정 */
+}
+
+/* 주말 및 공휴일의 글씨 색상 */
+.calendar-cell.red {
+  color: red;
+}
+
+/* 일본 공휴일 표시 */
+.calendar-cell.holiday::before {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-color: #ffeb3b;
+  position: absolute;
+  top: 29px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+}
+
+/* 한국 공휴일 표시 */
+.calendar-cell.korean-holiday::before {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-color: #3b5998;
+  position: absolute;
+  top: 29px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+}
+
+/* 공휴일이 겹치는 경우 보라색 원 표시 */
+.calendar-cell.purple-holiday::before {
+  background-color: #800080;
+  left: 50%;
+  top: 29px;
+  transform: translateX(-50%);
+}
+
+/* 현재 날짜 강조 */
+.calendar-cell.active {
+  background-color: #087ed7;
+  color: white;
+}
+
+/* 빈 달력 셀 스타일 */
+.calendar-cell.empty {
+  background-color: #ffffff;
+  color: #ffffff;
+}
+
+.prev-month-button,
+.next-month-button {
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  background-size: cover; /* 배경 이미지가 버튼 크기에 맞도록 설정 */
+  width: 20px; /* 버튼 너비 */
+  height: 20px; /* 버튼 높이 */
+}
+
+.prev-month-button {
+  background-image: url("static/images/calender_lefgt.png");
+}
+
+.next-month-button {
+  background-image: url("static/images/calender_right.png");
+}
+
+.calendar-navigation {
+  position: relative;
+  width: 100%;
+}
+
+.prev-month-button {
+  position: absolute;
+  left: 80px; /* 왼쪽 여백 */
+  top: 70px; /* 달력과 겹치도록 위로 올림 */
+  z-index: 100;
+}
+
+.next-month-button {
+  position: absolute;
+  right: 80px; /* 오른쪽 여백 */
+  top: 68px; /* 달력과 겹치도록 위로 올림 */
+  z-index: 100;
+}
+
+/* 질문 글씨 스타일 */
+.question-title-main h1 {
+  font-size: 40px !important;
+  color: black !important;
+  white-space: nowrap;
+  margin-bottom: 40px !important;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  top: -45%;
+  transform: translate(-50%, 1%);
+}
+/* 메인 질문 글씨 위치 */
+.question-title-sub h2 {
+  font-size: 15px !important;
+  color: black !important;
+  white-space: nowrap;
+  margin-top: 0 !important;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  top: 120%;
+  transform: translate(-50%, 10%);
+}
+/* 결과 박스 스타일 설정 */
+.box-result-round {
+  border: 2px solid rgb(0, 0, 0);
+  padding: 30px;
+  border-radius: 10px;
+  width: 80%;
+  position: absolute;
+  top: 75%;
+  text-align: center;
+}
+/* 일자 선택 */
+.dates-selected {
+  background-color: rgb(208, 0, 0);
+  color: rgb(251, 251, 251);
+}
+.start-day-style .end-day-style {
+  background-color: black;
+  color: white;
+}
+.colorinfo {
+  width: 600px;
+  height: auto;
+  position: absolute;
+  top: 15%;
+  right: 15%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 5px;
+}
+
+.holiday-info {
+  display: flex;
+  align-items: center;
+}
+
+.korean-holiday-circle,
+.japanese-holiday-circle,
+.both-holiday-circle {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.korean-holiday-circle {
+  background-color: #3b5998; /* 한국 공휴일 색상 */
+}
+
+.japanese-holiday-circle {
+  background-color: #ffeb3b; /* 일본 공휴일 색상 */
+}
+
+.both-holiday-circle {
+  background-color: #800080; /* 양국 공휴일 색상 */
+}
+/* 2~6까지 쓸 설명위치 */
+.question-real-title-sub {
+  text-align: center !important;
+  position: fixed !important;
+  top: 86px !important;
+  white-space: nowrap !important;
+  font-size: 15px !important;
+}
+/* 2~6까지 쓸 제목위치 */
+.question-real-title-main {
+  text-align: center;
+  white-space: nowrap;
+  position: fixed;
+  top: 5%;
+  font-size: 40px;
+}
+/* 예매여부 버튼 위치 */
+.reservation-navigater {
+  margin-bottom: 120px; /* 메인 타이틀에서 아래로 20px 간격 */
+  display: flex;
+  justify-content: center; /* 버튼들을 가운데 정렬 */
+  gap: 30px; /* 두 버튼 사이의 간격 */
+}
+/* 예매버튼 스타일 */
+.button-reservation,
+.button-notreservation {
+  width: 300px;
+  height: 350px;
+  background-color: #27c5b8;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 30px;
+}
+/* 예매버튼 버튼효과 */
+.button-reservation:hover,
+.button-notreservation:hover {
+  background-color: #7cb5bb; /* 마우스 오버 시 배경색 변경 */
+}
+a {
+  text-decoration: none;
+}
+/* 2~6 상태진행도 위치 */
+.progress-custom-question-container {
+  position: absolute;
+  bottom: 4.5%;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 예약안했어요 이모지 */
+.icon-airplanemode_inactive {
+  text-align: center;
+  font-size: 150px;
+  position: absolute;
+  top: 170px;
+  right: 160px;
+}
+/* 예약안했어요택스트 */
+.question-selct2-text {
+  text-align: center;
+  position: fixed;
+  top: 400px;
+  right: 520px;
+}
+/* 2~6 출력박스 */
+.box-reservation-result-round {
+  border: 2px solid rgb(0, 0, 0);
+  padding: 8px;
+  border-radius: 10px;
+  width: 80%;
+  position: absolute;
+  top: 75%;
+  text-align: center;
+}
+.date-time-wrapper {
+  display: flex; /* 수평으로 배치 */
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: center; /* 수평 중앙 정렬 */
+  margin-bottom: 10px; /* 각 필드 간 간격 */
+}
+.date-time-wrapper strong {
+  margin-right: 10px; /* 텍스트와 시간 선택 필드 간 간격 */
+}
+/* 인원수 정봍창에 대한정의 */
+.box-who-result-round {
+  border: 2px solid rgb(0, 0, 0);
+  padding: 8px;
+  border-radius: 10px;
+  width: 80%;
+  position: absolute;
+  top: 70%;
+  text-align: center;
+}
+
+/* 인원수 버튼 스타일 */
+.button-coustom-who button {
+  width: 170px;
+  height: 140px;
+  background-color: #27c5b8;
+  border-radius: 30px;
+}
+/* 인원수 버튼 1행 위치 */
+
+.button-who-row1 {
+  margin-bottom: 320px; /* 메인 타이틀에서 아래로 20px 간격 */
+  display: flex;
+  justify-content: center; /* 버튼들을 가운데 정렬 */
+  gap: 70px; /* 두 버튼 사이의 간격 */
+}
+/* 인원수 버튼 2행 위치 */
+.button-who-row2 {
+  position: fixed;
+  top: 320px;
+  right: 570px;
+  display: flex; /* flexbox 레이아웃 적용 */
+  justify-content: center; /* 버튼들을 가운데 정렬 */
+  gap: 70px; /* 두 버튼 사이의 간격 */
+}
+/* input 필드 스타일링 */
+.box-who-result-round input[type="text"] {
+  width: 50px;
+  background-color: #ffffff;
+  padding: 10px;
+  border: 2px solid #000000;
+  border-radius: 8px;
+}
+
+/* flexbox 레이아웃 적용 */
+.text-group-center-row-who {
+  display: flex; /* flexbox 사용 */
+  flex-direction: row; /* 한 줄로 정렬 */
+  align-items: center; /* 세로축 가운데 정렬 */
+  justify-content: center; /* 가로축 중앙 정렬 */
+  gap: 15px; /* 요소 사이의 간격 */
+}
+/* 인원수버튼에 마우스를 올렸을 때 스타일 */
+.button-coustom-who button:hover {
+  background-color: #7cb5bb;
+}
+
+/* 예매여부 버튼 위치 */
+.density-navigater {
+  margin-bottom: 120px; /* 메인 타이틀에서 아래로 20px 간격 */
+  display: flex;
+  justify-content: center; /* 버튼들을 가운데 정렬 */
+  gap: 30px; /* 두 버튼 사이의 간격 */
+}
+/* 예매버튼 스타일 */
+.button-density,
+.button-notdensity {
+  width: 300px;
+  height: 350px;
+  background-color: #27c5b8;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 30px;
+}
+/* 밀도버튼 버튼효과 */
+.button-density:hover,
+.button-notdensity:hover {
+  background-color: #7cb5bb; /* 마우스 오버 시 배경색 변경 */
+}
+
+/* 기본 설정: 모든 요소의 간격을 좀 더 유연하게 설정 */
+.modal-question-content1 {
+  background-color: white;
+  margin: auto;
+  padding: 20px;
+  border: none;
+  width: 80%;
+  height: 100%;
+  max-width: 800px;
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column; /* 세로로 정렬 */
+  justify-content: center;
+  align-items: center;
+  gap: 30px; /* 각 행과 행 사이 간격 */
+  position: relative;
+}
+
+/* 숙소 1행 버튼 */
+.button-move_status-row1 {
+  display: flex; /* Flexbox 설정으로 버튼 수평 배치 */
+  flex-direction: row; /* 버튼을 가로로 배치 */
+  justify-content: center; /* 가운데 정렬 */
+  gap: 30px; /* 버튼 사이 간격 */
+  position: absolute;
+  top: 100px;
+  font-size: 32px;
+}
+
+.button-move_status-row1 button {
+  width: 320px;
+  height: 90px;
+  background-color: #087ed7;
+  border-radius: 30px;
+}
+
+/*  숙소  2행 */
+.button-move_status-row2 {
+  display: flex; /* Flexbox 설정으로 버튼 수평 배치 */
+  flex-direction: row; /* 버튼을 가로로 배치 */
+  justify-content: center; /* 가운데 정렬 */
+  gap: 30px; /* 버튼 사이 간격 */
+  position: absolute;
+  top: 270px;
+  font-size: 20px;
+}
+
+.coment-price {
+  margin-bottom: 10px; /* 설명과 버튼 사이 간격 */
+  font-size: 15px;
+  justify-content: center; /* 가운데 정렬 */
+  white-space: nowrap;
+  position: absolute;
+  bottom: 120px;
+}
+
+.button-move_status-row2 button {
+  width: 120px;
+  height: 95px;
+  background-color: #087ed7;
+  border-radius: 30px;
+}
+
+/*  숙소  3행 */
+.button-move_status-row3 {
+  display: flex; /* Flexbox 설정으로 버튼 수평 배치 */
+  flex-direction: row; /* 버튼을 가로로 배치 */
+  justify-content: center; /* 가운데 정렬 */
+  gap: 30px; /* 버튼 사이 간격 */
+  position: absolute;
+  bottom: 70px;
+}
+
+.coment-night {
+  justify-content: center; /* 가운데 정렬 */
+  white-space: nowrap;
+  position: absolute;
+  bottom: 175px;
+  font-size: 15px;
+}
+
+.button-move_status-row3 div {
+  display: flex;
+  flex-direction: column; /* 세로로 정렬하여 버튼 아래에 input 배치 */
+  align-items: center; /* 가운데 정렬 */
+  gap: 10px; /* 버튼과 input 사이 간격 */
+}
+
+.button-move_status-row3 button {
+  width: 150px;
+  height: 95px;
+  background-color: #087ed7;
+  border-radius: 30px;
+  font-size: 30px;
+}
+
+.button-move_status-row3 input[type="text"] {
+  width: 50px;
+  background-color: #ffffff;
+  padding: 5px;
+  border: 2px solid #000000;
+  border-radius: 8px;
+}
+
+/* 제목과 설명 스타일 */
+.question-real-title-main1 {
+  text-align: center !important;
+  position: fixed !important;
+  top: 36px !important;
+  white-space: nowrap !important;
+  font-size: 15px !important;
+}
+
+.question-real-title-sub1 {
+  text-align: center !important;
+  position: fixed !important;
+  top: 86px !important;
+  white-space: nowrap !important;
+  font-size: 15px !important;
+}
+
+.button-move_status-row1 button:hover,
+.button-move_status-row2 button:hover,
+.button-move_status-row3 button:hover {
+  background-color: #7cb5bb;
+}
+
+/* 테마 1행  */
+.button-theme-row1 {
+  display: flex; /* Flexbox 설정으로 버튼 수평 배치 */
+  flex-direction: row; /* 버튼을 가로로 배치 */
+  justify-content: center; /* 가운데 정렬 */
+  gap: 30px; /* 버튼 사이 간격 */
+  position: absolute;
+  top: 100px;
+  font-size: 19px;
+}
+
+.button-theme-row1 button {
+  width: 90px;
+  height: 90px;
+  background-color: #087ed7;
+  border-radius: 30px;
+}
+
+/* 테마 2행  */
+.button-theme-row2 {
+  display: flex; /* Flexbox 설정으로 버튼 수평 배치 */
+  flex-direction: row; /* 버튼을 가로로 배치 */
+  justify-content: center; /* 가운데 정렬 */
+  gap: 30px; /* 버튼 사이 간격 */
+  position: absolute;
+  top: 200px;
+  font-size: 19px;
+}
+
+.button-theme-row2 button {
+  width: 90px;
+  height: 90px;
+  background-color: #087ed7;
+  border-radius: 30px;
+}
+
+/* 테마 3행  */
+.button-theme-row3 {
+  display: flex; /* Flexbox 설정으로 버튼 수평 배치 */
+  flex-direction: row; /* 버튼을 가로로 배치 */
+  justify-content: center; /* 가운데 정렬 */
+  gap: 30px; /* 버튼 사이 간격 */
+  position: absolute;
+  bottom: 265px;
+  font-size: 19px;
+}
+
+.button-theme-row3 button {
+  width: 90px;
+  height: 90px;
+  background-color: #087ed7;
+  border-radius: 30px;
+}
+
+.button-theme-row1 button:hover,
+.button-theme-row2 button:hover,
+.button-theme-row3 button:hover {
+  background-color: #7cb5bb;
+}
+
+/* 테마 4행 */
+.button-theme-row4 {
+  display: flex; /* Flexbox 설정으로 버튼 수평 배치 */
+  justify-content: center; /* 가운데 정렬 */
+  gap: 120px; /* 버튼 사이 간격 */
+  font-size: 19px;
+  position: absolute;
+  bottom: 100px;
+}
+
+/* 테마 박스 스타일 */
+.theme-box {
+  display: flex;
+  justify-content: center;
+  width: 100%; /* 전체 너비를 사용할 수 있도록 설정 */
+}
+
+/* 각 테마 아이템 스타일 */
+.theme_1-box,
+.theme_2-box,
+.theme_3-box {
+  width: 90px;
+  height: 90px;
+  border: 2px solid #000;
+  background-color: rgb(173, 226, 75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+}
+/* 테마 선택 문구 */
+.coment-ratio {
+  justify-content: center; /* 가운데 정렬 */
+  white-space: nowrap;
+  position: absolute;
+  bottom: 130px;
+  font-size: 16px;
+}
+
+/* 취소 버튼 스타일 */
+.theme-cancel3,
+.theme-cancel2,
+.theme-cancel1 {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  background-color: red;
+  position: absolute;
+}
+/* 취소1 버튼 위치 */
+.theme-cancel1 {
+  bottom: 80px;
+  left: 210px;
+}
+/* 취소2 버튼 위치 */
+.theme-cancel2 {
+  bottom: 80px;
+  left: 420px;
+}
+/* 취소3 버튼 위치 */
+.theme-cancel3 {
+  bottom: 80px;
+  left: 630px;
+}
+/* 가중치 선택창 */
+.theme-weight {
+  display: flex;
+  flex-direction: column; /* 수직 정렬 */
+  justify-content: center; /* 세로 방향 중앙 정렬 */
+  align-items: center; /* 가로 방향 중앙 정렬 */
+  height: 100%; /* 부모 높이에 맞춤 */
+  gap: 10px; /* 각 박스 간의 간격 */
+  position: absolute;
+}
+/* 각 가중치 박스의 공통 스타일 */
+.theme-weight div {
+  width: 100px; /* 박스 너비 */
+  height: 50px; /* 박스 높이 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0; /* 박스 배경색 */
+  border: 1px solid #000; /* 박스 테두리 */
+  border-radius: 5px;
+}
+/* 개별 가중치 박스 위치 조정 */
+#theme_1_weight {
+  bottom: 0px;
+  left: 245px;
+}
+
+#theme_2_weight {
+  bottom: 0px;
+  left: 460px; /* 위치 변경을 위해 값을 수정 */
+}
+
+#theme_3_weight {
+  bottom: 0px;
+  right: 30px; /* 위치 변경을 위해 값을 수정 */
+}
+
+/* 숙소선택 버튼 글자 스타일 */
+
+.sub-detail {
+  text-align: center;
+  font-size: 14px;
+}
+
+.main-detail {
+  text-align: center;
+  font-size: 40px;
 }

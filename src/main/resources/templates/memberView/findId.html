@@ -1,10 +1,42 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>아이디 찾기</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>findId</title>
+    <!-- CSS 파일 가져오기 -->
+    <link rel="stylesheet" href="/css/rurustyle.css" />
+    <!-- JS 파일 가져오기 -->
 </head>
-<body>
-    <h1>아이디 찾기 창</h1>
+<body class="login-page">
+<div class="logo-title">
+    <img class="logo"  />
+    <p>ソウルに触る</p>
+</div>
+<div id="frame">
+    <main>
+        <p class="main-title">findId</p>
+        <div class="input-group">
+            <label for="email" class="input-label">email</label>
+            <input type="text" id="email" name="email" />
+        </div>
+        <div class="central-container mb-3">
+            <button class="cta-button" type="submit">認証</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="text-group-center-row">
+            <p class="footer-item">
+                <a id="findPw" th:href="@{/findPw}">PWの検索</a>
+            </p>
+
+            <p class="footer-item">
+                <a id="join" th:href="@{/join/joinForm}">会員加入</a>
+            </p>
+        </div>
+    </footer>
+</div>
 </body>
 </html>

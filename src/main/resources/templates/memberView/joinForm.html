@@ -2,7 +2,7 @@
 <html  class="responsive-login-page" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입 폼</title>
     <link rel="stylesheet" th:href="@{/css/rurustyle.css}">
     <link
@@ -12,14 +12,6 @@
             crossorigin="anonymous"
     />
     <link rel="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-    <style>
-        i{
-            position: absolute;
-            left: 90%;
-            top: 45px;
-            color: black;
-        }
-    </style>
     <script src="https://kit.fontawesome.com/0efaee6f1c.js" crossorigin="anonymous"></script>
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/javascript/member/joinForm.js"></script>
@@ -32,11 +24,16 @@
     <div class="responsive-frame">
         <main>
     <p class="main-title" th:text="#{join}"></p>
-<!--    &lt;!&ndash; 개잊정보 약관 &ndash;&gt;
-    <div class="terms">
-     <h2>dp Terms of Service</h2>
-         <p class="small">개인정보 처리 약관 내용</p>
-    </div>-->
+
+    <!-- 개인정보 약관 -->
+    <div id="terms" class="modal">
+        <div class="modal-content">
+             <span class="close">&times;</span>
+             <h2>Terms of Service</h2>
+             <pre  th:text="#{terms1}" style="text-align: left; font-size: 12px;"></pre>
+        </div>
+    </div>
+
     <!-- 회원가입 양식 -->
     <form class="login-form" id="joinForm" th:action="@{/join}" th:method="post">
         <div class="input-group">
@@ -49,7 +46,7 @@
         <div class="input-group">
         <label for="memberPw"  class="input-label" th:text="#{member.pw}">Password</label>
         <input type="password" name="memberPw" id="memberPw" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" required>
-            <i class="fa-solid fa-eye"></i>
+            <i class="fa-solid fa-eye" id="eye"></i>
             <span id="pwmsg1"></span>
         </div>
         <!--비밀번호 확인-->
@@ -91,7 +88,9 @@
         <div class="box-clause-round">
             <div class="clause-item">
       <input type="checkbox" id="agree" required>
-     <label for="agree">I agree to the <i class="fa fa-arrow-left"  aria-hidden="true"></i><a class="agree" href="#">Terms of service</a></label>
+     <label for="agree">I agree to the
+         <i class="fa fa-arrow-left"  aria-hidden="true"></i>
+         <a class="agree" href="#" id="termsLink">Terms of service</a></label>
             </div>
         </div>
                 <div id="form-controls">

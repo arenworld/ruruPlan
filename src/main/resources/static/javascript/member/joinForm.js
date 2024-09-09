@@ -1,24 +1,45 @@
 $(document).ready(function() {
+
+    // 모달 요소
+    var termsModal = document.getElementById("terms");
+
+    $('#termsLink').on('click', function (event) {
+        event.preventDefault();
+        termsModal.style.display = "block";
+    });
+
+    // 모달 닫기
+    $('.close').on('click', function() {
+        termsModal.style.display = "none";
+    })
+
+    // 모달 외부 클릭 시 닫기
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
     //비밀번호 노출,숨기기 기능
-    $('.input-group i').on('click',function(){
+    $('.input-group i').on('click', function () {
         $('#memberPw').toggleClass('active');
-        if($('input').hasClass('active')){
+        if ($('input').hasClass('active')) {
             $(this).attr('class', "fa-solid fa-eye")
                 .prev('input').attr('type', "text");
-        }else{
-            $(this).attr('class',"fa-solid fa-eye")
-                .prev('input').attr('type','password');
+        } else {
+            $(this).attr('class', "fa-solid fa-eye")
+                .prev('input').attr('type', 'password');
         }
     });
     //모달창 열기
-    $('.agree').on('click', function(event) {
+    $('.agree').on('click', function (event) {
         event.preventDefault();
         $('.terms').addClass('open'); // terms 모달 창 열기
         $('.modal-backdrop').addClass('open'); // 배경 활성화
     });
 
     // 모달 닫기
-    $('.modal-backdrop').on('click', function() {
+    $('.modal-backdrop').on('click', function () {
         $('.terms').removeClass('open'); // terms 모달 창 닫기
         $('.modal-backdrop').removeClass('open'); // 배경 비활성화
     });
@@ -42,7 +63,7 @@ $(document).ready(function() {
 
 });
 
-    // 아이디 유효성 겁사
+// 아이디 유효성 겁사
 function idConfirm() {
     //정규식   (문자열, 영어(필수)+숫자(선택) 6~15자, 대소문자 구분)
     id_regex = /^(?=.*[a-zA-Z])[a-zA-Z0-9]{6,15}$/;
@@ -195,7 +216,7 @@ function emConfirm(){
     let email = $('#email').val();
 
     var emCodeBt = $('#emCodeBt').val();
-    var completeText = document.getElementById("clickCompleteText").value;
+    var completeText = $('#clickCompleteText').val();
 
     emCodeBt.style.backgroundColor = "blue";
     emCodeBt.value = completeText;

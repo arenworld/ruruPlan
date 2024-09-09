@@ -18,9 +18,10 @@
 <body class="login-page">
 <div class="logo-title">
     <img class="logo" src="/images/logo.png">
-    <p>ソウルに触る</p>
+    <p th:text="#{logo}">ソウルに触る</p>
     <form th:action="@{locale/}" method="get">
-        <select name="lang" onchange="this.form.submit()">
+        <select name="lang" onchange="this.form.submit()"
+                style="width: 70px; height:40px; font-size: 12px; text-align: left; padding: 0px">
             <option value="ko" th:selected="${#locale.language == 'ko'}">한국어</option>
             <option value="ja" th:selected="${#locale.language == 'ja'}">日本語</option>
         </select>

@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
 import java.util.Locale;
 
@@ -25,7 +24,7 @@ public class LocaleController {
     }
 
     @GetMapping("/")
-    public String login(@RequestParam(value = "lang", required = false) String lang,
+    public String home(@RequestParam(value = "lang", required = false) String lang,
                         HttpServletRequest request,
                         HttpServletResponse response,
                         Model model) {
@@ -33,6 +32,6 @@ public class LocaleController {
             Locale locale = new Locale(lang);
             localeResolver.setLocale(request, response, locale); // 로케일을 변경
         }
-        return "memberView/loginForm"; // 뷰 이름 반환
+        return "redirect:/";
     }
 }

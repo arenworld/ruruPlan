@@ -25,8 +25,8 @@ public class WebSecurityConfig {
            , "/css/**"               //css파일
            , "/fonts/**"             //fonts파일
            , "/images/**"            //이미지 파일
-           , "/javascript.member/**" //자바스크립트 멤버 파일
-           , "/js/**"                //js 파일
+           , "/javascript/**" //자바스크립트 멤버 파일
+           , "/js/**"            //js 파일
     };
 
     @Bean

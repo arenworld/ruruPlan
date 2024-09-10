@@ -74,15 +74,17 @@
                 <option value="60" th:text="#{age60}">60대</option>
             </select>
         </div>
+        <!--이메일-->
         <div class="input-group">
       <label for="email" class="input-label" th:text="#{email}">Email</label>
         <input type="email" name="email" id="email" th:placeholder="#{email}" required>
+            <!--전송버튼-->
         <input type="button" id="emCodeBt" th:value="#{em.code.bt}" disabled="disabled">
-            <input type="hidden" id="clickCompleteText" th:value="#{em.clickComplete}" />
             <span id="emailmsg"></span>
         </div>
         <div class="form-group last mb-4 check_input">
             <input type="text" class="form-control" id="emailconfirm" th:placeholder="#{em.confirm}" required>
+            <input type="button" id="emCodeReBt" th:value="#{em.code.re}" disabled="disabled">
             <span id="emchkmsg"></span>
         </div>
         <div class="box-clause-round">

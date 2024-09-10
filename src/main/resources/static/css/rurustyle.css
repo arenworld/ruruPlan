@@ -38,6 +38,14 @@
   color: black;
 }
 
+/* 이메일 재전송 아이콘 */
+#emCodeReBt{
+  position: absolute;
+  left: 90%;
+  top: 50%;
+  color: black;
+}
+
 /* 네비게이션 바의 각 메뉴 항목 스타일 */
 .site-nav .site-navigation .site-menu > li {
   display: inline-block;

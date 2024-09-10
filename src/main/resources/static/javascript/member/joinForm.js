@@ -56,6 +56,7 @@ $(document).ready(function() {
     $('#email').keyup(validateEmail);
     //이메일 인증번호
     $('#emCodeBt').click(emConfirm);
+    $('#emCodeReBt').click(emConfirm);
 
     //회원가입 폼제출시 검사
     // $('#joinForm').submit(formConfirm);
@@ -197,8 +198,7 @@ function emailDuplicate() {
                     $('#emCodeBt').prop('disabled', true);
                     resolve(false);
                 } else {
-                    $('#emailmsg').css('color', 'black');
-                    $('#emailmsg').html("사용 가능");
+                    $('#emailmsg').html("");
                     $('#emCodeBt').prop('disabled', false);
                     resolve(true);
                 }

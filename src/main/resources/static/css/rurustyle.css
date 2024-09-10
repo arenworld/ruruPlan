@@ -41,8 +41,9 @@
 /* 이메일 재전송 아이콘 */
 #emCodeReBt{
   position: absolute;
-  left: 90%;
-  top: 50%;
+  font-size: 12px;
+  left: 85%;
+  top: 25%;
   color: black;
 }
 

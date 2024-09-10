@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html  class="responsive-login-page" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -8,32 +8,37 @@
     <!-- CSS 파일 가져오기 -->
     <link rel="stylesheet" href="/css/rurustyle.css" />
     <!-- JS 파일 가져오기 -->
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/javascript/member/findId.js"></script>
 </head>
 <body class="login-page">
 <div class="logo-title">
-    <img class="logo"  />
-    <p>ソウルに触る</p>
+    <img class="logo"/>
+    <p th:text="#{logo}">ソウルに触る</p>
 </div>
 <div id="frame">
     <main>
-        <p class="main-title">findId</p>
+        <p class="main-title" th:text="#{find.id}">findId</p>
         <div class="input-group">
-            <label for="email" class="input-label">email</label>
-            <input type="text" id="email" name="email" />
+            <label for="email" class="input-label" name="email" th:text="#{email}">email</label>
+            <input type="email" name="email" id="email" th:placeholder="#{email}" required/>
         </div>
         <div class="central-container mb-3">
-            <button class="cta-button" type="submit">認証</button>
+            <input class="cta-button"  type="button" id="emCodeBt" th:value="#{em.code.bt}">
         </div>
+        <input type="email" id="emailconfirm" th:placeholder="#{em.confirm}" required/>
+            <p id="emchkmsg"></p>
+        <input class="cta-button" type="submit" id="findId" th:value="#{find.id}" disabled="disabled">
     </main>
 
     <footer>
         <div class="text-group-center-row">
             <p class="footer-item">
-                <a id="findPw" th:href="@{/findPw}">PWの検索</a>
+                <a id="findPw" th:href="@{/login/findPw}" th:text="#{find.pw}"></a>
             </p>
 
             <p class="footer-item">
-                <a id="join" th:href="@{/join/joinForm}">会員加入</a>
+                <a id="join" th:href="@{/join/joinForm}" th:text="#{join}"></a>
             </p>
         </div>
     </footer>

@@ -61,7 +61,7 @@ public class QuestionService {
                 .hanokNights(gptCmdDTO.getHanokNights())
                 .build();
         GptCmdEntity savedEntity = gptCmdRepository.save(entity);
-        GptCmdDTO dto = GptCmdDTO.builder()
+        GptCmdDTO savedCmdDTO = GptCmdDTO.builder()
                 .cmdNum(savedEntity.getCmdNum())
                 .memberId(savedEntity.getMember().getMemberId())
                 .firstDate(savedEntity.getFirstDate())
@@ -92,7 +92,7 @@ public class QuestionService {
                 .hanokNights(savedEntity.getHanokNights())
                 .build();
 
-        return dto;
+        return savedCmdDTO;
     }
 }
 

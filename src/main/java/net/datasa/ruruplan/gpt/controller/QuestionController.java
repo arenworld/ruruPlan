@@ -33,7 +33,7 @@ public class QuestionController {
     public String saveGptCmd(GptCmdDTO gptCmdDTO, Model model,@AuthenticationPrincipal AuthenticatedUser user) {
         gptCmdDTO.setMemberId(user.getId());        // authenticatedUser 클래스의 id값
         GptCmdDTO dto = questionService.saveAndReturnDTO(gptCmdDTO);
-        model.addAttribute("gptCmdDTO", gptCmdDTO); // cmdNum를 보내놓고 result.html에서 ajax post로 다시 보낼 것임.
+        model.addAttribute("gptCmdDTO", dto); // cmdNum를 보내놓고 result.html에서 ajax post로 다시 보낼 것임.
         return "gptView/gptResult";
     }
 }

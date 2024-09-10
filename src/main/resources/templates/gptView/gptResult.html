@@ -52,9 +52,9 @@
                     $('#startDate').text(response.startDate);
                     $('#endDate').text(response.endDate);
                     $('#planNum').text(response.planNum);
-                    $('#theme1').text(response.theme1);
-                    $('#theme2').text(response.theme2);
-                    $('#theme3').text(response.theme3);
+                    $('#theme_1').text(response.theme1);
+                    $('#theme_2').text(response.theme2);
+                    $('#theme_3').text(response.theme3);
                     $('#coverImage').attr('src', response.coverImageUrl); // 이미지 업데이트
 
                     // Task 리스트를 처리하여 HTML에 추가
@@ -112,11 +112,11 @@
     <input type="hidden" id="tripType" th:value="${gptCmdDTO.tripType}">
     <input type="hidden" id="adult" th:value="${gptCmdDTO.adult}">
     <input type="hidden" id="children" th:value="${gptCmdDTO.children}">
-    <input type="hidden" id="theme1" th:value="${gptCmdDTO.theme1}">
+    <input type="hidden" id="theme_1" th:value="${gptCmdDTO.theme1}">
     <input type="hidden" id="theme1Weight" th:value="${gptCmdDTO.theme1Weight}">
-    <input type="hidden" id="theme2" th:value="${gptCmdDTO.theme2}">
+    <input type="hidden" id="theme_2" th:value="${gptCmdDTO.theme2}">
     <input type="hidden" id="theme2Weight" th:value="${gptCmdDTO.theme2Weight}">
-    <input type="hidden" id="theme3" th:value="${gptCmdDTO.theme3}">
+    <input type="hidden" id="theme_3" th:value="${gptCmdDTO.theme3}">
     <input type="hidden" id="theme3Weight" th:value="${gptCmdDTO.theme3Weight}">
     <input type="hidden" id="density" th:value="${gptCmdDTO.density}">
     <input type="hidden" id="moveStatus" th:value="${gptCmdDTO.moveStatus}">

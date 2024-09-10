@@ -1324,3 +1324,18 @@ a {
   text-align: center;
   font-size: 40px;
 }
+/* 박수 텍스트와 입력란을 정렬하는 컨테이너 */
+.input-container {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px; /* 박수 텍스트와 입력란 간격 조정 */
+  margin-top: 10px; /* 간격을 조정해 위에서부터 여유를 줍니다 */
+}
+
+/* 박 텍스트 크기 */
+.night_text {
+  font-size: 15px;
+  margin-left: 80px !important; /* 입력 필드와 '박' 텍스트 간격 조정 */
+  position: absolute;
+  bottom: 14px !important;
+}

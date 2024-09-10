@@ -31,6 +31,7 @@ public class CustomPlanService {
     private final TaskJpaRepository taskJpaRepository;
     private final TaskRepository taskRepository;
     private final PlaceInfoRepository placeInfoRepository;
+    private final PlaceInfoJpaRepository placeInfoJpaRepository;
 
 
     /**
@@ -81,7 +82,7 @@ public class CustomPlanService {
      * @return
      */
     private TaskDTO convertToDTO(TaskEntity taskEntity) {
-        PlaceInfoEntity placeInfoEntity = placeInfoRepository.findById(taskEntity.getPlace().getPlaceId())
+        PlaceInfoEntity placeInfoEntity = placeInfoJpaRepository.findById(taskEntity.getPlace().getPlaceId())
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않음"));
 
         PlaceInfoDTO placeInfoDTO = convertToDTO(placeInfoEntity);
@@ -122,9 +123,13 @@ public class CustomPlanService {
                 .build();
     }
 
+    /**
+     * 모든 장소에 대한 마커 정보 --> 안 쓸듯
+     * @return
+     */
     public List<Map<String, Double>> getLocationsAll() {
         Sort sort = Sort.by(Sort.Direction.ASC, "placeId");
-        List<PlaceInfoEntity> placeInfoEntityList = placeInfoRepository.findAll(sort);
+        List<PlaceInfoEntity> placeInfoEntityList = placeInfoJpaRepository.findAll(sort);
 
         List<Map<String, Double>> locationsAll = new ArrayList<>();
 
@@ -178,5 +183,20 @@ public class CustomPlanService {
                     "dateN", Double.parseDouble(String.valueOf(taskEntity.getDateN()))));
         }
         return dayLocations;
+    }
+
+    /**
+     * 테마별 장소정보(테마별 마커 및 상세정보)를 가져오는 메서드
+     * @param theme
+     * @return
+     */
+    public List<PlaceInfoDTO> getThemeLocations(String theme) {
+        List<PlaceInfoEntity> placeInfoEntityList = placeInfoRepository.findByTheme(theme);
+        List<PlaceInfoDTO> placeInfoDTOList = new ArrayList<>();
+        for (PlaceInfoEntity placeInfoEntity : placeInfoEntityList) {
+            PlaceInfoDTO placeInfoDTO = convertToDTO(placeInfoEntity);
+            placeInfoDTOList.add(placeInfoDTO);
+        }
+        return placeInfoDTOList;
     }
 }

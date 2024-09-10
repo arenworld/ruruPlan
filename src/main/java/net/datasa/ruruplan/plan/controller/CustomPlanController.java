@@ -2,6 +2,7 @@ package net.datasa.ruruplan.plan.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.ruruplan.plan.domain.dto.PlaceInfoDTO;
 import net.datasa.ruruplan.plan.service.CustomPlanService;
 import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
 import org.springframework.stereotype.Controller;
@@ -54,8 +55,11 @@ public class CustomPlanController {
 
     @ResponseBody
     @PostMapping("allPlanMarker")
-    public List<Map<String, Double>> allPlanMarker(@RequestParam ("planNum") Integer planNum) {
-        return customPlanService.getPlanLocations(planNum);
+    public List<Map<String, Double>> allPlanMarker(@RequestParam ("planNum") Integer planNum, Model model) {
+        List<Map<String, Double>> planLocations = customPlanService.getPlanLocations(planNum);
+        model.addAttribute("planLocations", planLocations);
+        log.debug("일정전체마커정보: {}", planLocations);
+        return planLocations;
     }
 
     @ResponseBody
@@ -64,6 +68,12 @@ public class CustomPlanController {
         return customPlanService.getDayLocations(planNum, dateNum);
     }
 
+    @ResponseBody
+    @PostMapping("themeMarker")
+    public List<PlaceInfoDTO> themeMarker(@RequestParam("theme") String theme) {
+        log.debug("테마별 마커정보: {} ", customPlanService.getThemeLocations(theme));
+        return customPlanService.getThemeLocations(theme);
+    }
     /**
      * 일자별 일정 리스트 가져오기
      * @param model

@@ -9,4 +9,6 @@ public interface TaskRepository {
     List<TaskDTO> getDayTaskList(Integer planNum, Integer dateN);
 
     List<TaskEntity> getDayLocations(Integer planNum, Integer dateNum);
+
+    List<TaskEntity> dayTaskList(Integer planNum, Integer dayNum);
 }

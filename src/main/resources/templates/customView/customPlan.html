@@ -5,10 +5,12 @@
 * License: https://creativecommons.org/licenses/by/3.0/
 */ -->
 <!doctype html>
-<html xmlns:th="http://thymeleaf.org"
+<html lang="kor" xmlns:th="http://thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/customPlan.js"></script>
+
     <meta charset="UTF-8">
 
     <meta charset="utf-8">
@@ -33,286 +35,12 @@
     <link rel="stylesheet" th:href="@{css/daterangepicker.css}">
     <link rel="stylesheet" th:href="@{css/aos.css}">
     <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="stylesheet" th:href="@{css/customPlan.css}">
 
     <title>custom</title>
 
-<style>
-    .day-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 20px;
-        flex-direction: row;
-    }
-    .days {
-        padding: 10px 20px;
-        background-color: #f0f0f0;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        cursor: pointer;
-        text-align: center;
-    }
-    .plan-details {
-        display: none;
-    }
-</style>
-
-    <!-- body 시작전 script -->
-    <script>
-        $(document).ready(function() {
-            $('#plan-all').css('display', 'block');
-            $('#plan-all-button').click(function() {
-                $('#plan-all').css('display', 'block');
-            });
-
-            $('#plan-1day-button').click(function() {
-                $('.day1-tasks').css('display', 'block');
-                $('.day2-tasks').css('display', 'none');
-                $('.day3-tasks').css('display', 'none');
-                $('.day4-tasks').css('display', 'none');
-                $('.day5-tasks').css('display', 'none');
-                $('.day6-tasks').css('display', 'none');
-            });
-
-            $('#plan-2day-button').click(function() {
-                $('.day1-tasks').css('display', 'none');
-                $('.day2-tasks').css('display', 'block');
-                $('.day3-tasks').css('display', 'none');
-                $('.day4-tasks').css('display', 'none');
-                $('.day5-tasks').css('display', 'none');
-                $('.day6-tasks').css('display', 'none');
-            });
-
-            $('#plan-3day-button').click(function() {
-                $('.day1-tasks').css('display', 'none');
-                $('.day2-tasks').css('display', 'none');
-                $('.day3-tasks').css('display', 'block');
-                $('.day4-tasks').css('display', 'none');
-                $('.day5-tasks').css('display', 'none');
-                $('.day6-tasks').css('display', 'none');
-            });
-
-            $('#plan-4day-button').click(function() {
-                $('.day1-tasks').css('display', 'none');
-                $('.day2-tasks').css('display', 'none');
-                $('.day3-tasks').css('display', 'none');
-                $('.day4-tasks').css('display', 'block');
-                $('.day5-tasks').css('display', 'none');
-                $('.day6-tasks').css('display', 'none');
-            });
-
-            $('#plan-5day-button').click(function() {
-                $('.day1-tasks').css('display', 'none');
-                $('.day2-tasks').css('display', 'none');
-                $('.day3-tasks').css('display', 'none');
-                $('.day4-tasks').css('display', 'none');
-                $('.day5-tasks').css('display', 'block');
-                $('.day6-tasks').css('display', 'none');
-            });
-
-            $('#plan-6day-button').click(function() {
-                $('.day1-tasks').css('display', 'none');
-                $('.day2-tasks').css('display', 'none');
-                $('.day3-tasks').css('display', 'none');
-                $('.day4-tasks').css('display', 'none');
-                $('.day5-tasks').css('display', 'none');
-                $('.day6-tasks').css('display', 'block');
-            });
-        })
-    </script>
-
     <!-- 네이버 MapApi 불러오기-->
     <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ycuy92lblj&language=ja"></script>
-
-    <script>
-        $(document).ready(function() {
-            // 지도 초기화 (경복궁이 시작점, 줌 인터페이스 설정)
-            let firstLat = $('#firstLat').val();
-            let firstLng = $('#firstLng').val();
-                console.log(firstLat);
-                console.log(firstLng);
-            // let mapOptions = {
-            //  //   center: new naver.maps.LatLng(firstLat, firstLng),
-            //     zoom: 16,
-            //     miniZoom: 15,
-            //     maxZoom: 20,
-            //     zoomControl: true,
-            //     zoomControlOptions: {
-            //         style: naver.maps.ZoomControlStyle.SMALL,
-            //         position: naver.maps.Position.TOP_RIGHT
-            //     }
-            // };
-            //
-            // let map = new naver.maps.Map(document.getElementById('mapBox'), mapOptions);
-
-            // 로딩되자 마자 보이는 마커 : 플랜 일정에 포함되어 있는 장소만
-            allPlanMarker();
-
-            $('#plan-1day-button').click(dayPlanMarker);
-            $('#plan-2day-button').click(dayPlanMarker);
-            $('#plan-3day-button').click(dayPlanMarker);
-            $('#plan-4day-button').click(dayPlanMarker);
-            $('#plan-5day-button').click(dayPlanMarker);
-            $('#plan-6day-button').click(dayPlanMarker);
-
-            $('#theme-shopping-button').click(themeMarker);
-            $('#theme-food-button').click(themeMarker);
-            $('#theme-cafe-button').click(themeMarker);
-            $('#theme-history-button').click(themeMarker);
-            $('#theme-recreation-button').click(themeMarker);
-            $('#theme-culture-button').click(themeMarker);
-            $('#theme-healing-button').click(themeMarker);
-            $('#theme-landmark-button').click(themeMarker);
-            $('#theme-experience-button').click(themeMarker);
-            $('#theme-nature-button').click(themeMarker);
-            $('#theme-walking-button').click(themeMarker);
-            $('#theme-leisure-button').click(themeMarker);
-        });
-
-        // 일정전체 마커 출력 함수
-        function allPlanMarker(map) {
-            let planNum = $('#planNum').val();
-
-            $.ajax({
-                url: '/custom/allPlanMarker',
-                type: 'post',
-                data: {planNum : planNum},
-                success : function(planLocations) {
-                    // 첫번째 일정을 지도의 중심으로 함 --> 가장 먼저 뜨는 지도의 중심은, 첫번째 일정의 위치
-                    // let centerLat = planLocations[0].lat;
-                    // let centerLng = planLocations[0].lng;
-
-                    let markers = [];
-
-                    $.each(planLocations, function(index, location) {
-                        let taskNum = location.taskNum;
-                        let dateN = location.dateN;
-                        let marker = new naver.maps.Marker({
-                            position: new naver.maps.LatLng(location.lat, location.lng),
-                            map: map
-                        });
-                        marker.taskNum = location.taskNum; // 마커에 taskNum 속성 추가
-                        markers.push(marker); // 생성된 마커 배열에 저장
-                    }); // 반복문 끝
-
-                    // 일정 클릭 시 해당 마커 위치로 이동
-                    $('.placeTitle').each(function() {
-                        $(this).on('click', function() {
-                            let clickedTaskNum = $(this).data('tasknum'); // 클릭한 td의 data-tasknum 가져오기
-
-                            // 해당 taskNum과 일치하는 마커 찾기
-                            let targetMarker = markers.find(function(marker) {
-                                return marker.taskNum === clickedTaskNum;
-                            });
-
-                            if (targetMarker) {
-                                let position = targetMarker.getPosition(); // 마커의 위치 가져오기
-                                map.setCenter(position); // 지도의 중심을 해당 마커 위치로 이동
-                                map.setZoom(15); // 줌 레벨 조정 (필요에 따라)
-                            }
-                        });
-                    });
-
-                },
-                error: function(error) {
-                    console.error('에러발생:', error);
-                    alert('데이터 전송 실패');
-                }
-            });
-        }
-
-        // 일자별 마커 출력 함수
-        // function dayPlanMarker() {
-        //     let planNum = $('#planNum').val();
-        //     let dateNum = $(this).data("date");
-        //
-        //     $.ajax({
-        //         url: '/custom/dayPlanMarker',
-        //         type: 'post',
-        //         data: {planNum : planNum
-        //             , dateNum : dateNum},
-        //         success : function(planLocations) {
-        //             let centerLat = planLocations[0].lat;
-        //             let centerLng = planLocations[0].lng;
-        //
-        //             let map = new naver.maps.Map('mapBox', {
-        //                 center: new naver.maps.LatLng(centerLat, centerLng),
-        //                 maxZoom: 20,
-        //                 miniZoom: 25,
-        //                 scaleControl: false,
-        //                 logoControl: false,
-        //                 mapDataControl: false,
-        //                 zoomControl: false,
-        //             });
-        //             let markers = [];
-        //             $.each(planLocations, function(index, location) {
-        //                 let marker = new naver.maps.Marker({
-        //                         position: new naver.maps.LatLng(location.lat, location.lng),
-        //                         map: map
-        //                 });
-        //                 marker.taskNum = location.taskNum; // 마커에 taskNum 속성 추가
-        //                 markers.push(marker); // 생성된 마커 배열에 저장
-        //             }); // 반복문 끝
-        //
-        //             // 일정 클릭 시 해당 마커 위치로 이동
-        //             $('.placeTitle').each(function() {
-        //                 $(this).on('click', function() {
-        //                     let clickedTaskNum = $(this).data('tasknum'); // 클릭한 td의 data-tasknum 가져오기
-        //
-        //                     // 해당 taskNum과 일치하는 마커 찾기
-        //                     let targetMarker = markers.find(function(marker) {
-        //                         return marker.taskNum === clickedTaskNum;
-        //                     });
-        //
-        //                     if (targetMarker) {
-        //                         let position = targetMarker.getPosition(); // 마커의 위치 가져오기
-        //                         map.setCenter(position); // 지도의 중심을 해당 마커 위치로 이동
-        //                         map.setZoom(15); // 줌 레벨 조정 (필요에 따라)
-        //                     }
-        //                 });
-        //             });
-        //         },
-        //         error: function(error) {
-        //             console.error('에러발생:', error);
-        //             alert('데이터 전송 실패');
-        //         }
-        //     });
-        // }
-
-        // 테마별 마커 출력 함수
-        // function themeMarker() {
-        //     let theme = $(this).data('theme');
-        //     console.log(theme);
-        //     $.ajax({
-        //         url: '/custom/themeMarker',
-        //         type: 'post',
-        //         data: {theme : theme},
-        //         success : function(themeLocations) {
-        //             alert('성공');
-        //             let map = new naver.maps.Map('mapBox', {
-        //                 zoom: 15,
-        //                 scaleControl: false,
-        //                 logoControl: false,
-        //                 mapDataControl: false,
-        //                 zoomControl: true,
-        //             });
-        //             let markers = [];
-        //             $.each(themeLocations, function(index, location) {
-        //                 let marker = new naver.maps.Marker({
-        //                     position: new naver.maps.LatLng(location.mapX, location.mapY),
-        //                     map: map
-        //                 });
-        //             }); // 반복문 끝
-        //         },
-        //         error: function(error) {
-        //             console.error('에러발생:', error);
-        //             alert('데이터 전송 실패');
-        //         }
-        //     });
-        // }
-
-
-    </script>
 
 </head>
 
@@ -330,7 +58,7 @@
 </div>
 
 
-<!-- 웹버전 -->
+<!-- 웹버전 / 네비게이션-->
 <nav class="site-nav">
      <div class="container">
 
@@ -388,31 +116,37 @@
 
     <!--본문 내용 (가운데 + our Team 소개 /  가운데 정사각형으로 Q왜 div를 하나 더 씌운거지?) -->
     <div class="container my-5">
+
         <!-- 플래너 정보 출력 -->
         <div class="present-planDTO">
 
-            [[${planLocations}]]
+            <h1 th:text="#{plan}"></h1>
 
-            <h1>플랜정보 출력하기</h1>
+            <form th:action="@{locale/}" method="get">
+                <select name="lang" onchange="this.form.submit()"
+                        style="width: 70px; height:40px; font-size: 12px; text-align: left; padding: 0px">
+                    <option value="ko" th:selected="${#locale.language == 'ko'}">한국어</option>
+                    <option value="ja" th:selected="${#locale.language == 'ja'}">日本語</option>
+                </select>
+            </form>
+
             <input type="hidden" id="planNum" th:value="${planDTO.planNum}">
 
-            <div th:each="planLocation, iterStat : ${planLocations}" th:if="${iterStat == 0}">
-                <input type="hidden" id="firstLat" th:value="${planLocation.lat}">
-                <input type="hidden" id="firstLng" th:value="${planLocation.lng}">
+            <div>
+<!--                <input type="hidden" id="firstLat" th:value="${planLocations[0]['lat']}">-->
+<!--                <input type="hidden" id="firstLng" th:value="${planLocations[0]['lng']}">-->
+                <input type="hidden" id="firstLat" th:value="${planLocations[0].place.mapY}">
+                <input type="hidden" id="firstLng" th:value="${planLocations[0].place.mapX}">
             </div>
 
-
-            <div class="day-buttons" >
-                <div class="days" id="plan-all-button">전체</div>
-                <div class="days" id="plan-1day-button" th:if="${days} >= 1" th:data-date="1">1Day</div>
-                <div class="days" id="plan-2day-button" th:if="${days} >= 2" th:data-date="2">2Day</div>
-                <div class="days" id="plan-3day-button" th:if="${days} >= 3" th:data-date="3">3Day</div>
-                <div class="days" id="plan-4day-button" th:if="${days} >= 4" th:data-date="4">4Day</div>
-                <div class="days" id="plan-5day-button" th:if="${days} >= 5" th:data-date="5">5Day</div>
-                <div class="days" id="plan-6day-button" th:if="${days} >= 6" th:data-date="6">6Day</div>
+            <div class="day-buttons">
+                <button class="days" th:id="plan-all-button" th:text="All" th:data-daynum="0"></button>
+                <button class="days" th:each="dayNum : ${#numbers.sequence(1, 6)}"
+                        th:id="|plan-${dayNum}day-button|" th:text="|Day${dayNum}|" th:data-daynum="${dayNum}"></button>
             </div>
 
-            <div id="mapBox" style="width:100%; height:500px; margin-bottom: 20px;"></div>
+            <div id="map" style="width:100%; height:500px; margin-bottom: 20px;"></div>
+
             <div class="theme-buttons" style="margin-bottom:20px;">
                 <button class="theme" id="theme-shopping-button" th:data-theme="쇼핑">쇼핑</button>
                 <button class="theme" id="theme-food-button">음식</button>
@@ -607,7 +341,6 @@
                 </table>
             </div>
 
-        </div>
 
         <div class="row justify-content-center">
 

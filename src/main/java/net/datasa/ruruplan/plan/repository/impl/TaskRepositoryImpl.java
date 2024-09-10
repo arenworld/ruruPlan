@@ -33,6 +33,25 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
 
+    /**
+     * getPlanLocations , 지도 맵 그리는 가장 기본 ajax에서 사용되는 dayTaskList 일자별 일정리스트를
+     * @param planNum
+     * @param dayNum
+     * @return
+     */
+    @Override
+    public List<TaskEntity> dayTaskList(Integer planNum, Integer dayNum) {
+        return  queryFactory.selectFrom(taskEntity)
+                .where(taskEntity.plan.planNum.eq(planNum)
+                        .and(taskEntity.dateN.eq(dayNum)))
+                .fetch();
+    }
+
+
+
+
+
+
     @Override
     public List<TaskDTO> getDayTaskList(Integer planNum, Integer dateN) {
         // 모든 컬럼을 불러오는 예시
@@ -58,4 +77,6 @@ public class TaskRepositoryImpl implements TaskRepository {
                         .and(taskEntity.dateN.eq(dateNum)))
                 .fetch();
     }
+
+
 }

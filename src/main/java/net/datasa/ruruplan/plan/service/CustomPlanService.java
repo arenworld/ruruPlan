@@ -10,6 +10,8 @@ import net.datasa.ruruplan.plan.domain.entity.PlaceInfoEntity;
 import net.datasa.ruruplan.plan.domain.entity.PlanEntity;
 import net.datasa.ruruplan.plan.domain.entity.TaskEntity;
 import net.datasa.ruruplan.plan.repository.*;
+import net.datasa.ruruplan.plan.repository.jpa.PlaceInfoJpaRepository;
+import net.datasa.ruruplan.plan.repository.jpa.TaskJpaRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -40,8 +42,8 @@ public class CustomPlanService {
      */
     public PlanDTO getPlan() {
         //서버로부터 전달 받은 planNum으로 플랜 조회 (지금은 없으니까, 임의로 2를 넣음)
-        PlanEntity planEntity = planRepository.findById(1)
-                .orElseThrow(() -> new EntityNotFoundException("존재하지 않음"));
+        PlanEntity planEntity = planRepository.findById(2)
+                .orElseThrow(() -> new EntityNotFoundException("플랜이 존재하지 않음"));
 
         //위에서 조회한 planEntity를 dto로 변환
         PlanDTO planDTO = convertToDTO(planEntity);
@@ -57,108 +59,46 @@ public class CustomPlanService {
     }
 
     /**
-     * planEntity DTO변환 메서드
-     * @param planEntity
-     * @return
-     */
-    private PlanDTO convertToDTO(PlanEntity planEntity) {
-        return PlanDTO.builder()
-                .planNum(planEntity.getPlanNum())
-                .memberId(planEntity.getMember().getMemberId())
-                .planName(planEntity.getPlanName())
-                .startDate(planEntity.getStartDate())
-                .endDate(planEntity.getEndDate())
-                .planCreateDate(planEntity.getPlanCreateDate())
-                .planUpdateDate(planEntity.getPlanUpdateDate())
-                .theme1(planEntity.getTheme1())
-                .theme2(planEntity.getTheme2())
-                .theme3(planEntity.getTheme3())
-                .build();
-    }
-
-    /**
-     *taskEntity, DTO변환 메서드, place객체를 직접 넣음 
-     * @param taskEntity
-     * @return
-     */
-    private TaskDTO convertToDTO(TaskEntity taskEntity) {
-        PlaceInfoEntity placeInfoEntity = placeInfoJpaRepository.findById(taskEntity.getPlace().getPlaceId())
-                .orElseThrow(() -> new EntityNotFoundException("존재하지 않음"));
-
-        PlaceInfoDTO placeInfoDTO = convertToDTO(placeInfoEntity);
-
-        return TaskDTO.builder()
-                .taskNum(taskEntity.getTaskNum())
-                .planNum(taskEntity.getPlan().getPlanNum())
-                .place(placeInfoDTO)
-                .memberId(taskEntity.getMember().getMemberId())
-                .dateN(taskEntity.getDateN())
-                .startTime(taskEntity.getStartTime())
-                .duration(taskEntity.getDuration())
-                .endTime(taskEntity.getEndTime())
-                .task(taskEntity.getTask())
-                .cost(taskEntity.getCost())
-                .build();
-    }
-
-    /**
-     * placeEntity DTO 변환 메서드
-     * @param placeInfoEntity
-     * @return
-     */
-    private PlaceInfoDTO convertToDTO(PlaceInfoEntity placeInfoEntity) {
-        return PlaceInfoDTO.builder()
-                .placeId(placeInfoEntity.getPlaceId())
-                .title(placeInfoEntity.getTitle())
-                .address(placeInfoEntity.getAddress())
-                .mapX(placeInfoEntity.getMapX())
-                .mapY(placeInfoEntity.getMapY())
-                .siGunGu(placeInfoEntity.getSiGunGu())
-                .contentsType(placeInfoEntity.getContentsType())
-                .theme1(placeInfoEntity.getTheme1())
-                .theme2(placeInfoEntity.getTheme2())
-                .theme3(placeInfoEntity.getTheme3())
-                .petFriendly(placeInfoEntity.getPetFriendly())
-                .barrierFree(placeInfoEntity.getBarrierFree())
-                .build();
-    }
-
-    /**
-     * 모든 장소에 대한 마커 정보 --> 안 쓸듯
-     * @return
-     */
-    public List<Map<String, Double>> getLocationsAll() {
-        Sort sort = Sort.by(Sort.Direction.ASC, "placeId");
-        List<PlaceInfoEntity> placeInfoEntityList = placeInfoJpaRepository.findAll(sort);
-
-        List<Map<String, Double>> locationsAll = new ArrayList<>();
-
-        for (PlaceInfoEntity placeInfoEntity : placeInfoEntityList) {
-            Map<String, Double> location = new HashMap<>();
-            locationsAll.add(Map.of("lat", Double.parseDouble(placeInfoEntity.getMapY()), "lng", Double.parseDouble(placeInfoEntity.getMapX())));
-        }
-        return locationsAll;
-    }
-
-    /**
-     * 전체일정에 대한 마커정보
+     * 전체일정 및 일정별 대한 마커정보
      * @param planNum
      * @return
      */
-    public List<Map<String, Double>> getPlanLocations(Integer planNum) {
-        Sort sort = Sort.by(Sort.Direction.ASC, "taskNum");
-        List<TaskEntity> taskEntityList = taskJpaRepository.findByPlanPlanNum(planNum, sort);
+    public List<TaskDTO> getPlanLocations(Integer planNum, Integer dayNum) {
+        List<TaskEntity> taskEntityList = new ArrayList<>();
 
-        List<Map<String, Double>> planLocations = new ArrayList<>();
-
-        for (TaskEntity taskEntity : taskEntityList) {
-            Map<String, Double> location = new HashMap<>();
-            planLocations.add(Map.of("lat", Double.parseDouble(taskEntity.getPlace().getMapY()),
-                    "lng", Double.parseDouble(taskEntity.getPlace().getMapX()),
-                    "taskNum", Double.parseDouble(String.valueOf(taskEntity.getTaskNum())),
-                    "dateN", Double.parseDouble(String.valueOf(taskEntity.getDateN()))));
+        // 전체일정 불러오기
+        if (dayNum == 0) {
+            Sort sort = Sort.by(Sort.Direction.ASC, "taskNum");
+            PlanEntity planEntity = planRepository.findById(planNum)
+                    .orElseThrow(() -> new EntityNotFoundException("플랜없음"));
+            taskEntityList = planEntity.getTaskList();
         }
-        return planLocations;
+
+        else {
+            taskEntityList = taskRepository.dayTaskList(planNum, dayNum);
+        }
+
+        List<TaskDTO> dtoList = new ArrayList<>();
+        for(TaskEntity taskEntity : taskEntityList) {
+            TaskDTO dto = convertToDTO(taskEntity);
+            dtoList.add(dto);
+        }
+
+
+        //일자별 일정 불러오기
+//        if(dayNum != 0) {
+//            taskEntityList = taskRepository.planLocations(planNum, dayNum);
+//        }
+
+//        List<Map<String, Double>> planLocations = new ArrayList<>();
+//        for (TaskEntity taskEntity : taskEntityList) {
+//            Map<String, Double> location = new HashMap<>();
+//            planLocations.add(Map.of("lat", Double.parseDouble(taskEntity.getPlace().getMapY()),
+//                    "lng", Double.parseDouble(taskEntity.getPlace().getMapX()),
+//                    "taskNum", Double.parseDouble(String.valueOf(taskEntity.getTaskNum())),
+//                    "dateN", Double.parseDouble(String.valueOf(taskEntity.getDateN()))));
+//        }
+        return dtoList;
     }
 
     public List<TaskDTO> getDayTaskList(Integer planNum, Integer dateN) {
@@ -198,5 +138,73 @@ public class CustomPlanService {
             placeInfoDTOList.add(placeInfoDTO);
         }
         return placeInfoDTOList;
+    }
+
+
+    /**
+     * planEntity DTO변환 메서드
+     * @param planEntity
+     * @return
+     */
+    private PlanDTO convertToDTO(PlanEntity planEntity) {
+        return PlanDTO.builder()
+                .planNum(planEntity.getPlanNum())
+                .memberId(planEntity.getMember().getMemberId())
+                .planName(planEntity.getPlanName())
+                .startDate(planEntity.getStartDate())
+                .endDate(planEntity.getEndDate())
+                .planCreateDate(planEntity.getPlanCreateDate())
+                .planUpdateDate(planEntity.getPlanUpdateDate())
+                .theme1(planEntity.getTheme1())
+                .theme2(planEntity.getTheme2())
+                .theme3(planEntity.getTheme3())
+                .build();
+    }
+
+    /**
+     *taskEntity, DTO변환 메서드, place객체를 직접 넣음
+     * @param taskEntity
+     * @return
+     */
+    private TaskDTO convertToDTO(TaskEntity taskEntity) {
+        PlaceInfoEntity placeInfoEntity = placeInfoJpaRepository.findById(taskEntity.getPlace().getPlaceId())
+                .orElseThrow(() -> new EntityNotFoundException("장소가 존재하지 않음"));
+
+        PlaceInfoDTO placeInfoDTO = convertToDTO(placeInfoEntity);
+
+        return TaskDTO.builder()
+                .taskNum(taskEntity.getTaskNum())
+                .planNum(taskEntity.getPlan().getPlanNum())
+                .place(placeInfoDTO)
+                .memberId(taskEntity.getMember().getMemberId())
+                .dateN(taskEntity.getDateN())
+                .startTime(taskEntity.getStartTime())
+                .duration(taskEntity.getDuration())
+                .endTime(taskEntity.getEndTime())
+                .task(taskEntity.getTask())
+                .cost(taskEntity.getCost())
+                .build();
+    }
+
+    /**
+     * placeEntity DTO 변환 메서드
+     * @param placeInfoEntity
+     * @return
+     */
+    private PlaceInfoDTO convertToDTO(PlaceInfoEntity placeInfoEntity) {
+        return PlaceInfoDTO.builder()
+                .placeId(placeInfoEntity.getPlaceId())
+                .title(placeInfoEntity.getTitle())
+                .address(placeInfoEntity.getAddress())
+                .mapX(placeInfoEntity.getMapX())
+                .mapY(placeInfoEntity.getMapY())
+                .siGunGu(placeInfoEntity.getSiGunGu())
+                .contentsType(placeInfoEntity.getContentsType())
+                .theme1(placeInfoEntity.getTheme1())
+                .theme2(placeInfoEntity.getTheme2())
+                .theme3(placeInfoEntity.getTheme3())
+                .petFriendly(placeInfoEntity.getPetFriendly())
+                .barrierFree(placeInfoEntity.getBarrierFree())
+                .build();
     }
 }

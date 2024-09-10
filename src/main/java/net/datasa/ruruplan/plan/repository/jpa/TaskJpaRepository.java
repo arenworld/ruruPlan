@@ -1,4 +1,4 @@
-package net.datasa.ruruplan.plan.repository;
+package net.datasa.ruruplan.plan.repository.jpa;
 
 import net.datasa.ruruplan.plan.domain.entity.TaskEntity;
 import org.springframework.data.domain.Sort;
@@ -13,5 +13,5 @@ import java.util.List;
 @Repository
 public interface TaskJpaRepository extends JpaRepository<TaskEntity, Integer> {
 
-    List<TaskEntity> findByPlanPlanNum(int planNum, Sort sort);
+  List<TaskEntity> findByPlanPlanNum(int planNum, Sort sort);
 }

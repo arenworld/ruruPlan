@@ -1,10 +1,167 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 페이지가 로드되면 자동으로 실행
+            let gptCmd = {
+                cmdNum: $('#cmdNum').val(),
+                memberId: $('#memberId').val(),
+                firstDate: $('#firstDate').val(),
+                lastDate: $('#lastDate').val(),
+                nights: $('#nights').val(),
+                days: $('#days').val(),
+                arrival: $('#arrival').val(),
+                depart: $('#depart').val(),
+                tripType: $('#tripType').val(),
+                adult: $('#adult').val(),
+                children: $('#children').val(),
+                theme1: $('#theme1').val(),
+                theme1Weight: $('#theme1Weight').val(),
+                theme2: $('#theme2').val(),
+                theme2Weight: $('#theme2Weight').val(),
+                theme3: $('#theme3').val(),
+                theme3Weight: $('#theme3Weight').val(),
+                density: $('#density').val(),
+                moveStatus: $('#moveStatus').val(),
+                roomCost: $('#roomCost').val(),
+                hotel: $('#hotel').val(),
+                hotelNights: $('#hotelNights').val(),
+                motel: $('#motel').val(),
+                motelNights: $('#motelNights').val(),
+                guesthouse: $('#guesthouse').val(),
+                guesthouseNights: $('#guesthouseNights').val(),
+                hanok: $('#hanok').val(),
+                hanokNights: $('#hanokNights').val()
+            };
+
+            // AJAX 요청으로 POST 데이터를 컨트롤러로 보냄
+            $.ajax({
+                url: 'getGptPlan',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(gptCmd),
+                success: function(response) {
+                    console.log('답변 성공');
+
+                    // 받아온 PlanDTO 데이터로 HTML 업데이트
+                    $('#planName').text(response.planName);
+                    $('#startDate').text(response.startDate);
+                    $('#endDate').text(response.endDate);
+                    $('#planNum').text(response.planNum);
+                    $('#theme1').text(response.theme1);
+                    $('#theme2').text(response.theme2);
+                    $('#theme3').text(response.theme3);
+                    $('#coverImage').attr('src', response.coverImageUrl); // 이미지 업데이트
+
+                    // Task 리스트를 처리하여 HTML에 추가
+                    let taskList = '';
+                    response.tasks.forEach(function(task) {
+                        taskList += `
+                            <li>
+                                <strong>Task:</strong> ${task.task} <br/>
+                                <strong>Start Time:</strong> ${task.startTime} <br/>
+                                <strong>Duration:</strong> ${task.duration} <br/>
+                                <strong>End Time:</strong> ${task.endTime} <br/>
+                                <strong>Cost:</strong> ${task.cost} <br/>
+                                <strong>Memo:</strong> ${task.memo}
+                            </li><hr>`;
+                    });
+
+                    $('#taskList').html(taskList);  // Task 리스트를 HTML에 추가
+                },
+                error: function(error) {
+                    console.log('Error sending data', error);
+                }
+            });
+        });
+    </script>
 </head>
 <body>
+<h2>Plan Details</h2>
+
+<div>
+    <p><strong>Plan Name:</strong> <span id="planName"></span></p>
+    <p><strong>Plan Number:</strong> <span id="planNum"></span></p>
+    <p><strong>Start Date:</strong> <span id="startDate"></span></p>
+    <p><strong>End Date:</strong> <span id="endDate"></span></p>
+    <p><strong>Theme 1:</strong> <span id="theme1"></span></p>
+    <p><strong>Theme 2:</strong> <span id="theme2"></span></p>
+    <p><strong>Theme 3:</strong> <span id="theme3"></span></p>
+    <p><strong>Cover Image:</strong> <img id="coverImage" src="" alt="Cover Image" /></p>
+</div>
+
+<h3>Tasks</h3>
+<ul id="taskList">
+    <!-- TaskDTO 리스트가 여기에 추가될 것임 -->
+</ul>
+
+<!-- 서버에서 사용자 질문자료 받아온것. 로딩되면서 바로 가져가서 GPT에게 질문할 것이므로 hidden처리함-->
+<form id="gptForm">
+    <input type="hidden" id="cmdNum" th:value="${gptCmdDTO.cmdNum}">
+    <input type="hidden" id="memberId" th:value="${gptCmdDTO.memberId}">
+    <input type="hidden" id="firstDate" th:value="${gptCmdDTO.firstDate}">
+    <input type="hidden" id="lastDate" th:value="${gptCmdDTO.lastDate}">
+    <input type="hidden" id="nights" th:value="${gptCmdDTO.nights}">
+    <input type="hidden" id="days" th:value="${gptCmdDTO.days}">
+    <input type="hidden" id="arrival" th:value="${gptCmdDTO.arrival}">
+    <input type="hidden" id="depart" th:value="${gptCmdDTO.depart}">
+    <input type="hidden" id="tripType" th:value="${gptCmdDTO.tripType}">
+    <input type="hidden" id="adult" th:value="${gptCmdDTO.adult}">
+    <input type="hidden" id="children" th:value="${gptCmdDTO.children}">
+    <input type="hidden" id="theme1" th:value="${gptCmdDTO.theme1}">
+    <input type="hidden" id="theme1Weight" th:value="${gptCmdDTO.theme1Weight}">
+    <input type="hidden" id="theme2" th:value="${gptCmdDTO.theme2}">
+    <input type="hidden" id="theme2Weight" th:value="${gptCmdDTO.theme2Weight}">
+    <input type="hidden" id="theme3" th:value="${gptCmdDTO.theme3}">
+    <input type="hidden" id="theme3Weight" th:value="${gptCmdDTO.theme3Weight}">
+    <input type="hidden" id="density" th:value="${gptCmdDTO.density}">
+    <input type="hidden" id="moveStatus" th:value="${gptCmdDTO.moveStatus}">
+    <input type="hidden" id="roomCost" th:value="${gptCmdDTO.roomCost}">
+    <input type="hidden" id="hotel" th:value="${gptCmdDTO.hotel}">
+    <input type="hidden" id="hotelNights" th:value="${gptCmdDTO.hotelNights}">
+    <input type="hidden" id="motel" th:value="${gptCmdDTO.motel}">
+    <input type="hidden" id="motelNights" th:value="${gptCmdDTO.motelNights}">
+    <input type="hidden" id="guesthouse" th:value="${gptCmdDTO.guesthouse}">
+    <input type="hidden" id="guesthouseNights" th:value="${gptCmdDTO.guesthouseNights}">
+    <input type="hidden" id="hanok" th:value="${gptCmdDTO.hanok}">
+    <input type="hidden" id="hanokNights" th:value="${gptCmdDTO.hanokNights}">
+</form>
+
+<!-- 잘 전달됐나 테스트용으로 만든코드 추후 삭제 예정 -->
+<div>
+    <p><strong>Command Number:</strong> <span th:text="${gptCmdDTO.cmdNum}"></span></p>
+    <p><strong>Member ID:</strong> <span th:text="${gptCmdDTO.memberId}"></span></p>
+    <p><strong>First Date:</strong> <span th:text="${gptCmdDTO.firstDate}"></span></p>
+    <p><strong>Last Date:</strong> <span th:text="${gptCmdDTO.lastDate}"></span></p>
+    <p><strong>Nights:</strong> <span th:text="${gptCmdDTO.nights}"></span></p>
+    <p><strong>Days:</strong> <span th:text="${gptCmdDTO.days}"></span></p>
+    <p><strong>Arrival Time:</strong> <span th:text="${gptCmdDTO.arrival}"></span></p>
+    <p><strong>Departure Time:</strong> <span th:text="${gptCmdDTO.depart}"></span></p>
+    <p><strong>Trip Type:</strong> <span th:text="${gptCmdDTO.tripType}"></span></p>
+    <p><strong>Adults:</strong> <span th:text="${gptCmdDTO.adult}"></span></p>
+    <p><strong>Children:</strong> <span th:text="${gptCmdDTO.children}"></span></p>
+    <p><strong>Theme 1:</strong> <span th:text="${gptCmdDTO.theme1}"></span></p>
+    <p><strong>Theme 1 Weight:</strong> <span th:text="${gptCmdDTO.theme1Weight}"></span></p>
+    <p><strong>Theme 2:</strong> <span th:text="${gptCmdDTO.theme2}"></span></p>
+    <p><strong>Theme 2 Weight:</strong> <span th:text="${gptCmdDTO.theme2Weight}"></span></p>
+    <p><strong>Theme 3:</strong> <span th:text="${gptCmdDTO.theme3}"></span></p>
+    <p><strong>Theme 3 Weight:</strong> <span th:text="${gptCmdDTO.theme3Weight}"></span></p>
+    <p><strong>Density:</strong> <span th:text="${gptCmdDTO.density}"></span></p>
+    <p><strong>Move Status:</strong> <span th:text="${gptCmdDTO.moveStatus}"></span></p>
+    <p><strong>Room Cost:</strong> <span th:text="${gptCmdDTO.roomCost}"></span></p>
+    <p><strong>Hotel:</strong> <span th:text="${gptCmdDTO.hotel}"></span></p>
+    <p><strong>Hotel Nights:</strong> <span th:text="${gptCmdDTO.hotelNights}"></span></p>
+    <p><strong>Motel:</strong> <span th:text="${gptCmdDTO.motel}"></span></p>
+    <p><strong>Motel Nights:</strong> <span th:text="${gptCmdDTO.motelNights}"></span></p>
+    <p><strong>Guesthouse:</strong> <span th:text="${gptCmdDTO.guesthouse}"></span></p>
+    <p><strong>Guesthouse Nights:</strong> <span th:text="${gptCmdDTO.guesthouseNights}"></span></p>
+    <p><strong>Hanok:</strong> <span th:text="${gptCmdDTO.hanok}"></span></p>
+    <p><strong>Hanok Nights:</strong> <span th:text="${gptCmdDTO.hanokNights}"></span></p>
+</div>
 
 </body>
 </html>

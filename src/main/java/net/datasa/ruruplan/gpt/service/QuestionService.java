@@ -21,14 +21,18 @@ public class QuestionService {
     private final GptCmdRepository gptCmdRepository;
     private final MemberRepository memberRepository;
 
-
     /**
      * 질문내용 저장 및 cmdNum 반환
      * @param gptCmdDTO 사용자의 답변 내용
      * @return  cmdNum
      */
-    public Integer saveAndReturnId(GptCmdDTO gptCmdDTO) {
+    public GptCmdDTO saveAndReturnDTO(GptCmdDTO gptCmdDTO) {
+
+        MemberEntity member = memberRepository.findById(gptCmdDTO.getMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 멤버의 정보가 존재하지 않습니다: " + gptCmdDTO.getMemberId()));
+
         GptCmdEntity entity = GptCmdEntity.builder()
+                .member(member)
                 .firstDate(gptCmdDTO.getFirstDate())
                 .lastDate(gptCmdDTO.getLastDate())
                 .nights(gptCmdDTO.getNights())
@@ -57,10 +61,39 @@ public class QuestionService {
                 .hanokNights(gptCmdDTO.getHanokNights())
                 .build();
         GptCmdEntity savedEntity = gptCmdRepository.save(entity);
+        GptCmdDTO dto = GptCmdDTO.builder()
+                .cmdNum(savedEntity.getCmdNum())
+                .memberId(savedEntity.getMember().getMemberId())
+                .firstDate(savedEntity.getFirstDate())
+                .lastDate(savedEntity.getLastDate())
+                .nights(savedEntity.getNights())
+                .days(savedEntity.getDays())
+                .arrival(savedEntity.getArrival())
+                .depart(savedEntity.getDepart())
+                .tripType(savedEntity.getTripType())
+                .adult(savedEntity.getAdult())
+                .children(savedEntity.getChildren())
+                .theme1(savedEntity.getTheme1())
+                .theme1Weight(savedEntity.getTheme1Weight())
+                .theme2(savedEntity.getTheme2())
+                .theme2Weight(savedEntity.getTheme2Weight())
+                .theme3(savedEntity.getTheme3())
+                .theme3Weight(savedEntity.getTheme3Weight())
+                .density(savedEntity.getDensity())
+                .moveStatus(savedEntity.getMoveStatus())
+                .roomCost(savedEntity.getRoomCost())
+                .hotel(savedEntity.getHotel())
+                .hotelNights(savedEntity.getHotelNights())
+                .motel(savedEntity.getMotel())
+                .motelNights(savedEntity.getMotelNights())
+                .guesthouse(savedEntity.getGuesthouse())
+                .guesthouseNights(savedEntity.getGuesthouseNights())
+                .hanok(savedEntity.getHanok())
+                .hanokNights(savedEntity.getHanokNights())
+                .build();
 
-        return savedEntity.getCmdNum();
+        return dto;
     }
-
 }
 
 

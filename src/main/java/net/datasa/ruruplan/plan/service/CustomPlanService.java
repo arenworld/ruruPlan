@@ -39,7 +39,7 @@ public class CustomPlanService {
      */
     public PlanDTO getPlan() {
         //서버로부터 전달 받은 planNum으로 플랜 조회 (지금은 없으니까, 임의로 2를 넣음)
-        PlanEntity planEntity = planRepository.findById(2)
+        PlanEntity planEntity = planRepository.findById(1)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않음"));
 
         //위에서 조회한 planEntity를 dto로 변환

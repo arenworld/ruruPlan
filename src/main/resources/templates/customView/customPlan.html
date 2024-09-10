@@ -55,8 +55,6 @@
     .plan-details {
         display: none;
     }
-
-
 </style>
 
     <!-- body 시작전 script -->
@@ -481,7 +479,7 @@
                     <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 2}" class="day2-tasks">
                         <td th:text="${task.taskNum}"></td>
                         <td th:text="${task.startTime}"></td>
-n
+
                         <!--홀수라인일 때 -->
                         <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
 

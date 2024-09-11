@@ -1,9 +1,11 @@
-.day-buttons {
+.day-buttons, .theme-buttons-div {
     display: flex;
     justify-content: center;
     gap: 10px;
     margin-bottom: 20px;
+    margin-top: 20px;
     flex-direction: row;
+    text-align: center;
 }
 .days {
     padding: 10px 20px;
@@ -15,4 +17,17 @@
 }
 .plan-details {
     display: none;
+}
+
+.theme-buttons {
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.theme-buttons:hover {
+    background-color: aqua;
+}
+
+.day-plans-table {
+    margin-bottom: 20px;
 }

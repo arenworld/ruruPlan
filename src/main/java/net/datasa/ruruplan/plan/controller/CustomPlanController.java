@@ -41,33 +41,36 @@ public class CustomPlanController {
         // start_date, end_date 활용해서 몇박 며칠인지 정의하는 기능 ChronoUnit은 날짜타입의 계산을 도와주는 객체
         long days = ChronoUnit.DAYS.between(planDTO.getStartDate(), planDTO.getEndDate()) + 1;
 
-        List<TaskDTO> planLocations = customPlanService.getPlanLocations(2, 0);
+        String[] themeArray = {"쇼핑", "음식", "카페", "역사", "문화", "힐링", "랜드마크", "체험", "레포츠"};
 
+        List<TaskDTO> taskList = planDTO.getTaskList();
+        TaskDTO lastTaskDTO = planDTO.getTaskList().get(taskList.size()-1);
+        Integer lastDay = lastTaskDTO.getDateN();
         model.addAttribute("days", days);
         model.addAttribute("planDTO", planDTO);
-        model.addAttribute("planLocations", planLocations);
-        log.debug("일정마커정보:{}", planLocations);
+        model.addAttribute("themeArray", themeArray);
+        model.addAttribute("lastDay", lastDay);
+        log.debug("플랜정보:{}", planDTO);
         return "customView/customPlan";
     };
 
-
-
+    /**
+     * 플랜에 대한 마커정보 / 전체플랜, 일자별 정보 모두 포함
+     * @param planNum
+     * @param dayNum
+     * @return
+     */
     @ResponseBody
-    @PostMapping("allPlanMarker")
+    @PostMapping("planMarkers")
     public List<TaskDTO> allPlanMarker(@RequestParam ("planNum") Integer planNum, @RequestParam("dayNum") Integer dayNum) {
         log.debug("지나감");
         return customPlanService.getPlanLocations(planNum, dayNum);
     }
 
     @ResponseBody
-    @PostMapping("dayPlanMarker")
-    public List<Map<String, Double>> dayPlanMarker(@RequestParam ("planNum") Integer planNum, @RequestParam("dateNum") Integer dateNum) {
-        return customPlanService.getDayLocations(planNum, dateNum);
-    }
-
-    @ResponseBody
-    @PostMapping("themeMarker")
+    @PostMapping("themeMarkers")
     public List<PlaceInfoDTO> themeMarker(@RequestParam("theme") String theme) {
+        log.debug("입력받은 테마:{}", theme);
         log.debug("테마별 마커정보: {} ", customPlanService.getThemeLocations(theme));
         return customPlanService.getThemeLocations(theme);
     }

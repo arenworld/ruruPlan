@@ -132,213 +132,59 @@
 
             <input type="hidden" id="planNum" th:value="${planDTO.planNum}">
 
-            <div>
-<!--                <input type="hidden" id="firstLat" th:value="${planLocations[0]['lat']}">-->
-<!--                <input type="hidden" id="firstLng" th:value="${planLocations[0]['lng']}">-->
-                <input type="hidden" id="firstLat" th:value="${planLocations[0].place.mapY}">
-                <input type="hidden" id="firstLng" th:value="${planLocations[0].place.mapX}">
-            </div>
-
             <div class="day-buttons">
                 <button class="days" th:id="plan-all-button" th:text="All" th:data-daynum="0"></button>
-                <button class="days" th:each="dayNum : ${#numbers.sequence(1, 6)}"
+                <button class="days" th:each="dayNum : ${#numbers.sequence(1, 6)}" th:if="${lastDay} >= ${dayNum}"
                         th:id="|plan-${dayNum}day-button|" th:text="|Day${dayNum}|" th:data-daynum="${dayNum}"></button>
             </div>
 
-            <div id="map" style="width:100%; height:500px; margin-bottom: 20px;"></div>
+            <div id="map" style="width:100%; height:500px;"></div>
 
-            <div class="theme-buttons" style="margin-bottom:20px;">
-                <button class="theme" id="theme-shopping-button" th:data-theme="쇼핑">쇼핑</button>
-                <button class="theme" id="theme-food-button">음식</button>
-                <button class="theme" id="theme-cafe-button">카페</button>
-                <button class="theme" id="theme-history-button">역사</button>
-                <button class="theme" id="theme-recreation-button">휴양</button>
-                <button class="theme" id="theme-culture-button">문화</button>
-                <button class="theme" id="theme-healing-button">힐링</button>
-                <button class="theme" id="theme-landmark-button">랜드마크</button>
-                <button class="theme" id="theme-experience-button">체험</button>
-                <button class="theme" id="theme-nature-button">자연</button>
-                <button class="theme" id="theme-walking-button">도보</button>
-                <button class="theme" id="theme-leisure-button">레포츠</button>
+            <div class="theme-buttons-div">
+                <button class="theme-buttons" th:each="theme : ${themeArray}"
+                        th:id="|theme-${theme}-button|" th:text="${theme}" th:data-theme="${theme}"></button>
             </div>
 
             <!-- 전체 일정 출력 -->
             <div class="plan-details" id="plan-all">
                 <h3>장소를 클릭하면 지도 상에서 해당 위치로 바로 이동합니다.</h3>
-                <table>
-                    <!-- 첫째날 일정 -->
-                    <tr class="day1-tasks">
-                        <td>첫째날 - </td>
-                        <td>시작시간</td>
-                        <td th:text="${planDTO.taskList[0].startTime}"></td>
-                        <td>/ 끝시간</td>
-                        <td th:text="${planDTO.taskList[0].endTime}"></td>
-                    </tr>
-                    <tr class="day1-tasks">
-                        <th>no</th>
-                        <th>time</th>
-                        <th>task</th>
-                        <th>place</th>
-                        <th>duration</th>
-                        <th>cost</th>
-                    </tr>
-                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 1}" class="day1-tasks">
-                        <td th:text="${task.taskNum}"></td>
-                        <td th:text="${task.startTime}"></td>
 
-                        <!--홀수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
+                <!-- 날짜별로 테이블을 생성 -->
+                <div th:each="dayNum : ${#numbers.sequence(1, lastDay)}">
+                    <!-- 날짜 제목 -->
+                    <h4 th:text="|Day${dayNum}|"></h4>
 
-                        <!-- 짝수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
+                    <table class="day-plans-table">
+                        <thead>
+                        <tr>
+                            <th>no</th>
+                            <th>time</th>
+                            <th>task</th>
+                            <th>place</th>
+                            <th>duration</th>
+                            <th>cost</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- 해당 날짜의 일정을 반복 -->
+                        <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == dayNum}" th:id="|planTable-${dayNum}day|">
+                            <td th:text="${task.taskNum}"></td>
+                            <td th:text="${task.startTime}"></td>
 
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
+                            <!-- 홀수라인일 때 -->
+                            <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
 
-                        <td th:text="${task.duration}"></td>
-                        <td th:text="|${task.cost}원|"></td>
-                    </tr>
+                            <!-- 짝수라인일 때 -->
+                            <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
 
-                    <!-- 둘째날 일정 -->
-                    <tr class="day2-tasks">
-                        <td colspan="5">둘째날</td>
-                    </tr>
-                    <tr class="day2-tasks">
-                        <th>no</th>
-                        <th>time</th>
-                        <th>task</th>
-                        <th>place</th>
-                        <th>duration</th>
-                        <th>cost</th>
-                    </tr>
-                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == 2}" class="day2-tasks">
-                        <td th:text="${task.taskNum}"></td>
-                        <td th:text="${task.startTime}"></td>
+                            <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
 
-                        <!--홀수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
-
-                        <!-- 짝수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
-
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
-
-                        <td th:text="${task.duration}"></td>
-                        <td th:text="|${task.cost}원|"></td>
-                    </tr>
-
-                    <!-- 셋째날 일정 -->
-                    <tr class="day3-tasks">
-                        <td colspan="5">셋째날</td>
-                    </tr>
-                    <tr class="day3-tasks">
-                        <th>no</th>
-                        <th>time</th>
-                        <th>task</th>
-                        <th>place</th>
-                        <th>duration</th>
-                        <th>cost</th>
-                    </tr>
-                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN eq 3} and ${days} >= 3" class="day3-tasks">
-                        <td th:text="${task.taskNum}"></td>
-                        <td th:text="${task.startTime}"></td>
-
-                        <!--홀수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
-
-                        <!-- 짝수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
-
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
-
-                        <td th:text="${task.duration}"></td>
-                        <td th:text="|${task.cost}원|"></td>
-                    </tr>
-
-                    <!-- 넷째날 일정 -->
-                    <tr class="day4-tasks" th:if="${days} >= 4">
-                        <td colspan="5">넷째날</td>
-                    </tr>
-                    <tr class="day4-tasks" th:if="${days} >= 4">
-                        <th>no</th>
-                        <th>time</th>
-                        <th>task</th>
-                        <th>place</th>
-                        <th>duration</th>
-                        <th>cost</th>
-                    </tr>
-                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN eq 4} and ${days} >= 4" class="day4-tasks">
-                        <td th:text="${task.taskNum}"></td>
-                        <td th:text="${task.startTime}"></td>
-
-                        <!--홀수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
-
-                        <!-- 짝수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
-
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
-
-                        <td th:text="${task.duration}"></td>
-                        <td th:text="|${task.cost}원|"></td>
-                    </tr>
-
-
-                    <!-- 다섯째날 일정 -->
-                    <tr class="day5-tasks" th:if="${days} >= 5">
-                        <td colspan="5">다섯째날</td>
-                    </tr>
-                    <tr class="day5-tasks" th:if="${days} >= 5">
-                        <th>no</th>
-                        <th>time</th>
-                        <th>task</th>
-                        <th>place</th>
-                        <th>duration</th>
-                        <th>cost</th>
-                    </tr>
-                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN eq 5} and ${days} >= 5" class="day5-tasks">
-                        <td th:text="${task.taskNum}"></td>
-                        <td th:text="${task.startTime}"></td>
-
-                        <!--홀수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
-
-                        <!-- 짝수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
-
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
-
-                        <td th:text="${task.duration}"></td>
-                        <td th:text="|${task.cost}원|"></td>
-                    </tr>
-
-                    <!-- 넷째날 일정 -->
-                    <tr class="day6-tasks" th:if="${days} >= 6">
-                        <td colspan="5">여섯째날</td>
-                    </tr>
-                    <tr class="day6-tasks" th:if="${days} >= 6">
-                        <th>no</th>
-                        <th>time</th>
-                        <th>task</th>
-                        <th>place</th>
-                        <th>duration</th>
-                        <th>cost</th>
-                    </tr>
-                    <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN eq 6} and ${days} >= 6" class="day6-tasks">
-                        <td th:text="${task.taskNum}"></td>
-                        <td th:text="${task.startTime}"></td>
-
-                        <!--홀수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
-
-                        <!-- 짝수라인일 때 -->
-                        <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>
-
-                        <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
-
-                        <td th:text="${task.duration}"></td>
-                        <td th:text="|${task.cost}원|"></td>
-                    </tr>
-                </table>
+                            <td th:text="${task.duration}"></td>
+                            <td th:text="|${task.cost}원|"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
 
@@ -654,6 +500,7 @@
 
 <script src="js/custom.js"></script>
 
+</div>
 </body>
 
 </html>

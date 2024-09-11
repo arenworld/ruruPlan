@@ -50,12 +50,7 @@ $(document).ready(function () {
     });
 
     $('#plan-6day-button').click(function () {
-        $('.day1-tasks').css('display', 'none');
-        $('.day2-tasks').css('display', 'none');
-        $('.day3-tasks').css('display', 'none');
-        $('.day4-tasks').css('display', 'none');
-        $('.day5-tasks').css('display', 'none');
-        $('.day6-tasks').css('display', 'block');
+
     });
 })
 
@@ -64,37 +59,33 @@ $(document).ready(function () {
 
 
 $(document).ready(function () {
-    // 지도 초기화 (경복궁이 시작점, 줌 인터페이스 설정) long경도 큰 숫자 y / lati위도 작은 숫자 x
-    let firstLat = $('#firstLat').val();
-    let firstLng = $('#firstLng').val();
-
-
-
     // 로딩되자 마자 보이는 마커 : 플랜 일정에 포함되어 있는 장소만
-    allPlanMarker(map);
+    planMarkers(map);
 
     // 일자별 버튼 생성 및 데이 플랜 호출
-    ['all', '1day', '2day', '3day', '4day', '5day', '6day'].forEach(function (day) {
-        $('#plan-' + day + '-button').click(allPlanMarker);
+    const days = ['all', '1day', '2day', '3day', '4day', '5day', '6day'];
+    days.forEach(function (day) {
+        $('#plan-' + day + '-button').click(planMarkers);
     });
 
-    $('#theme-shopping-button').click(themeMarker);
-    $('#theme-food-button').click(themeMarker);
-    $('#theme-cafe-button').click(themeMarker);
-    $('#theme-history-button').click(themeMarker);
-    $('#theme-recreation-button').click(themeMarker);
-    $('#theme-culture-button').click(themeMarker);
-    $('#theme-healing-button').click(themeMarker);
-    $('#theme-landmark-button').click(themeMarker);
-    $('#theme-experience-button').click(themeMarker);
-    $('#theme-nature-button').click(themeMarker);
-    $('#theme-walking-button').click(themeMarker);
-    $('#theme-leisure-button').click(themeMarker);
+    $('.day1-tasks').css('display', 'none');
+    $('.day2-tasks').css('display', 'none');
+    $('.day3-tasks').css('display', 'none');
+    $('.day4-tasks').css('display', 'none');
+    $('.day5-tasks').css('display', 'none');
+    $('.day6-tasks').css('display', 'block');
+    // 테마별 버튼 생성 및 테마 정보 호출, 레포츠 처리 어떻게 해야 되지?
+    const themes = ['쇼핑', '음식', '카페', '역사', '문화', '힐링', '랜드마크', '체험', '레포츠']
+    themes.forEach(function (theme) {
+        $('#theme-' + theme + '-button').click(themeMarkers);
+    });
 });
 
+//마커정보 담는 전역변수 마커배열 ***
 let allMarkers = [];
+let planLocations =null;
 // 플랜별 & 일자별 마커 출력 함수
-function allPlanMarker(map) {
+function planMarkers() {
     let planNum = $('#planNum').val();
     let dayNum = $(this).data('daynum');
     if (dayNum == null) {
@@ -103,13 +94,15 @@ function allPlanMarker(map) {
     clearMarkers();
 
     $.ajax({
-        url: '/custom/allPlanMarker',
+        url: '/custom/planMarkers',
         type: 'post',
         data: {
             planNum: planNum,
             dayNum: dayNum
         },
         success: function (planLocations) { // 해당 플랜에 해당하는 장소의 마커정보를 가져옴
+            planLocations = planLocations;
+
             let mapOptions = {
                 center: new naver.maps.LatLng(planLocations[0].place.mapY, planLocations[0].place.mapX),
                 zoom: 16,
@@ -126,9 +119,16 @@ function allPlanMarker(map) {
 
             //List<TaskDTO> planLocations
             $.each(planLocations, function (index, location) {
-                let marker = new naver.maps.Marker({
+                const marker = new naver.maps.Marker({
+                    map: map,
                     position: new naver.maps.LatLng(location.place.mapY, location.place.mapX),
-                    map: map
+                    icon: {
+                        content: `<img src="/images/customPlan/marker-red.png"
+                           style="width:25px; height:33px;"
+                           alt="marker">`,
+                        anchor: new naver.maps.Point(11, 35)
+                    },
+                    zIndex: 100
                 });
                 marker.taskNum = location.taskNum; // 마커에 taskNum 속성 추가
                 allMarkers.push(marker); // 생성된 마커 배열에 저장
@@ -167,35 +167,44 @@ function clearMarkers() {
 }
 
 // 테마별 마커 출력 함수
-// function themeMarker() {
-//     let theme = $(this).data('theme');
-//     console.log(theme);
-//     $.ajax({
-//         url: '/custom/themeMarker',
-//         type: 'post',
-//         data: {theme : theme},
-//         success : function(themeLocations) {
-//             alert('성공');
-//             let map = new naver.maps.Map('mapBox', {
-//                 zoom: 15,
-//                 scaleControl: false,
-//                 logoControl: false,
-//                 mapDataControl: false,
-//                 zoomControl: true,
-//             });
-//             let markers = [];
-//             $.each(themeLocations, function(index, location) {
-//                 let marker = new naver.maps.Marker({
-//                     position: new naver.maps.LatLng(location.mapX, location.mapY),
-//                     map: map
-//                 });
-//             }); // 반복문 끝
-//         },
-//         error: function(error) {
-//             console.error('에러발생:', error);
-//             alert('데이터 전송 실패');
-//         }
-//     });
-// }
+let themeAllMarkers = [];
+function themeMarkers(planLocations) {
+       let theme = $(this).data('theme');
+       alert('동작함');
+    $.ajax({
+        url: '/custom/themeMarkers',
+        type: 'post',
+        data: {theme : theme},
+        success : function(themeLocations) {
+            alert('성공');
+            console.log(themeLocations);
+
+            let mapOptions = {
+                center: new naver.maps.LatLng(themeLocations[0].mapY, themeLocations[0].mapX),
+                zoom: 16,
+                miniZoom: 15,
+                maxZoom: 20,
+                zoomControl: true,
+                zoomControlOptions: {
+                    style: naver.maps.ZoomControlStyle.SMALL,
+                    position: naver.maps.Position.TOP_RIGHT
+                }
+            }
+            let map = new naver.maps.Map(document.getElementById('map'), mapOptions);
+
+            $.each(themeLocations, function(index, location) {
+                let marker = new naver.maps.Marker({
+                    position: new naver.maps.LatLng(location.mapY, location.mapX),
+                    map: map
+                });
+                themeAllMarkers.push(marker);
+            }); // 반복문 끝
+        },
+        error: function(error) {
+            console.error('에러발생:', error);
+            alert('데이터 전송 실패');
+        }
+    });
+ }
 
 

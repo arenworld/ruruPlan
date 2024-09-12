@@ -1,42 +1,60 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html  class="responsive-login-page" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>findId</title>
+    <title>findPw</title>
     <!-- CSS 파일 가져오기 -->
     <link rel="stylesheet" href="/css/rurustyle.css" />
     <!-- JS 파일 가져오기 -->
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/javascript/member/findPw.js"></script>
 </head>
-<style>
-    #frame {
-        padding: 100px; /* 10px의 추가 여백을 프레임 내부에 추가 */
-        box-sizing: content-box; /* 패딩이 포함된 크기를 설정하지 않음 */
-    }
-    footer {
-        margin-top: 150px;
-    }
-</style>
 <body class="login-page">
 <div class="logo-title">
-    <img class="logo" src="/images/logo.png">
-    <p>ソウルに触る</p>
+    <img class="logo"/>
+    <p th:text="#{logo}">ソウルに触る</p>
 </div>
 <div id="frame">
     <main>
-        <p class="main-title">findId2</p>
-        <div class="text-group-center-row">
-            <p class="detail-main">고객님의 정보와 일치하는 아이디입니다</p>
-        </div>
-        <!-- 아이디 출력   div 공간안에 넣으시면 됩니다-->
-        <div class="print-id"></div>
+        <p class="main-title" th:text="#{find.pw}">findPw</p>
+        <!--비밀번호 찾기 Form-->
+        <form th:action="@{/login/findPw}" th:method="post">
+            <div class="input-group">
+                <!--아이디 입력-->
+                <div id="confirmId">
+                    <label for="memberId" class="input-label" th:text="#{find.pw.msg}">Please input your ID</label>
+                    <input type="text" name="memberId" id="memberId" th:placeholder="#{member.id}" required/>
+                    <input class="cta-button" type="button" id="IdConBt" th:value="#{confirm.bt}">
+                    <!--아이디가 존재시 가져올 email-->
+                    <input type="hidden" id="getEmail">
+                </div>
+                 <div id="confirmEm">
+                     <!--이메일 입력-->
+                     <label for="email" class="input-label" th:text="#{email}">email</label>
+                     <input type="email" name="email" id="email" th:placeholder="#{email}" required/>
+                     <p id="emailmsg"></p>
+                     <input class="cta-button" type="button" id="emCodeBt" th:value="#{em.code.bt}" disabled="disabled">
+                    <!--인증번호 입력-->
+                    <input type="text" id="emailconfirm" th:placeholder="#{em.confirm}" required/>
+                    <p id="emchkmsg"></p>
+                    <input type="submit" class="cta-button" id="findPw" th:value="#{find.pw}" disabled="disabled">
+                </div>
+            </div>
+        </form>
     </main>
 
+    <!--비밃번호 찾기/회원가입 페이지로 이동-->
     <footer>
         <div class="text-group-center-row">
-            <button class="cta-button">로그인하기</button>
-            <button class="cta-button">pw찾기</button>
+            <p class="footer-item">
+                <a id="findId" th:href="@{/login/findId}" th:text="#{find.id}"></a>
+            </p>
+
+            <p class="footer-item">
+                <a id="join" th:href="@{/join/joinForm}" th:text="#{join}"></a>
+            </p>
         </div>
     </footer>
 </div>

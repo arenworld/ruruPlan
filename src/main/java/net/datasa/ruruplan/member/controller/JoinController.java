@@ -50,7 +50,6 @@ public class JoinController {
 
     /**
      * id 중복확인
-     *
      * @param id
      * @return
      */
@@ -58,7 +57,7 @@ public class JoinController {
     @PostMapping("idDuplicate")
     public boolean idDuplicate(@RequestParam("id") String id) {
 
-        boolean res = joinService.idDuplicate(id);
+        boolean res = joinService.idExist(id);
 
         return res;
     }

@@ -24,11 +24,11 @@ public class JoinService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /**
-     * 아이디 중복확인
+     * 아이디 존재 여부 확인
      * @param id
      * @return
      */
-    public boolean idDuplicate(String id) {
+    public boolean idExist(String id) {
         boolean res = memberRepository.existsById(id);
         return res;
     }

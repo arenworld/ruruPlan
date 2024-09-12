@@ -19,18 +19,25 @@
 <div id="frame">
     <main>
         <p class="main-title" th:text="#{find.id}">findId</p>
-        <div class="input-group">
-            <label for="email" class="input-label" name="email" th:text="#{email}">email</label>
-            <input type="email" name="email" id="email" th:placeholder="#{email}" required/>
-        </div>
-        <div class="central-container mb-3">
-            <input class="cta-button"  type="button" id="emCodeBt" th:value="#{em.code.bt}">
-        </div>
-        <input type="email" id="emailconfirm" th:placeholder="#{em.confirm}" required/>
+        <!--아이디 찾기 Form-->
+        <form th:action="@{/login/findId}" th:method="post">
+            <!--이메일 입력-->
+            <div class="input-group">
+                <label for="email" class="input-label" th:text="#{email}">email</label>
+                <input type="email" name="email" id="email" th:placeholder="#{email}" required/>
+                <p id="emailmsg"></p>
+                <div class="central-container mb-3">
+                    <input class="cta-button" type="button" id="emCodeBt" th:value="#{em.code.bt}">
+                </div>
+            </div>
+            <!--인증번호 입력-->
+            <input type="text" id="emailconfirm" th:placeholder="#{em.confirm}" required/>
             <p id="emchkmsg"></p>
-        <input class="cta-button" type="submit" id="findId" th:value="#{find.id}" disabled="disabled">
+            <input type="submit" class="cta-button" id="findId" th:value="#{find.id}" disabled="disabled">
+        </form>
     </main>
 
+    <!--비밃번호 찾기/회원가입 페이지로 이동-->
     <footer>
         <div class="text-group-center-row">
             <p class="footer-item">

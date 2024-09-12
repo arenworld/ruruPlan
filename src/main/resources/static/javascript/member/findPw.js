@@ -1,18 +1,42 @@
 $(document).ready(function() {
+   //초기 설정: Em확인 부분 숨김
+    $('#confirmEm').hide();
+    //아이디 존재 여부 확인
+    $('#IdConBt').click(idConfirm);
     //이메일 형식 및 일치 검사
     $('#email').keyup(validateEmail);
     //이메일 인증번호
     $('#emCodeBt').click(emConfirm);
 });
 
+//아이디 존재 여부 확인
+function idConfirm() {
+    let id = $('#memberId').val();
+
+    $.ajax({
+        url: '/login/idConfirm',
+        type: 'post',
+        data: {id: id},
+        success: function (res) {
+            $('#confirmId').hide();   // ConfirmId div 숨기기
+            $('#confirmEm').show();   // ConfirmEm div 보여주기
+            $('#getEmail').val(res);
+        },
+        error: function () {
+            alert("입력하신 아이디를 찾을 수 없습니다.");
+        }
+    });
+}
+
 //이메일 유효성 검사 (형식+일치확인)
 function validateEmail() {
     //이메일 정규표현식
     email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
     let email = $('#email').val();
-    if (!email_regex.test(email)) {
+    let getEmail = $('#getEmail').val();
+    if (!email_regex.test(email) || email !== getEmail) {
         $('#emailmsg').css('color', 'red');
-        $('#emailmsg').html("이메일 형식이 올바르지 않습니다.");
+        $('#emailmsg').html("이메일이 일치하지 않습니다.");
         $('#emCodeBt').prop('disabled', true);
         return Promise.resolve(false);
     }
@@ -59,7 +83,7 @@ function chkEmailConfirm(code){
         } else {
             emconfirmchk = true;
             $('#emailconfirm').prop('disabled', true);
-            $('#findId').prop('disabled', false);
+            $('#findPw').prop('disabled', false);
             $('#emchkmsg').html("<span id='emconfirmchk'>인증번호 확인 완료</span>")
             $("#emconfirmchk").css({
                 "color" : "#0D6EFD",

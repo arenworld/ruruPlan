@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    //초기 설정: Id 확정 부분 숨김
+    $('#finalId').hide();
 
     // 모달 요소
     var termsModal = document.getElementById("terms");
@@ -58,8 +60,9 @@ $(document).ready(function() {
     $('#emCodeBt').click(emConfirm);
     $('#emCodeReBt').click(emConfirm);
 
+    $('#finalId').click(finalId);
+
     //회원가입 폼제출시 검사
-    // $('#joinForm').submit(formConfirm);
     $('#submit').click(formConfirm);
 
 });
@@ -72,6 +75,7 @@ function idConfirm() {
 
     /*아이디 형식 확인*/
     if (!id_regex.test(id)) {
+        $('#finalId').hide();   // 아이디 확정 버튼 숨기기
         $('#idmsg').css('color', 'red');
         $('#idmsg').html('아이디는 영문,숫자로 6~15글자 입력해 주세요');
         return Promise.resolve(false);  // 형식이 잘못되었으면 바로 false 반환
@@ -82,6 +86,7 @@ function idConfirm() {
     return idDuplicated();
 }
 
+// 아이디 중복확인
 function idDuplicated() {
     return new Promise((resolve, reject) => {
         let id = $('#memberId').val();
@@ -92,13 +97,14 @@ function idDuplicated() {
             data: {id: id},
             success: function (res) {
                 if (res) {
+                    $('#finalId').hide();
                     $('#idmsg').css('color', 'red');
                     $('#idmsg').html("이미 사용중인 ID입니다");
                     console.log("에이젝스 flase");
                     resolve(false);  // 중복된 ID이면 false 반환
                 } else {
-                    $('#idmsg').css('color', 'blue');
-                    $('#idmsg').html("사용가능한 ID입니다.");
+                    $('#finalId').show();
+                    $('#idmsg').html("");
                     console.log("에이젝스 true");
                     resolve(true);  // 사용 가능한 ID이면 true 반환
                 }
@@ -112,7 +118,11 @@ function idDuplicated() {
     });
 }
 
-
+// 아이디 확정
+function finalId() {
+    $("#memberId").prop("readonly", true);
+    $("#memberId").css('backgroundColor', 'gray');
+}
 
 // 닉네임 유효성 검사
 function nicknameConfirm(){
@@ -122,7 +132,7 @@ function nicknameConfirm(){
 
     if (!nickname_regex.test(nickname)) {
         $('#nicknamemsg').css('color', 'red');
-        $('#nicknamemsg').html('닉네임은 영문,한글,숫자로 1~10글자 입력해 주세요');
+        $('#nicknamemsg').html('닉네임은 영문,한글,숫자로 2~10 입력해 주세요');
         return false;
     } else {
         $('#nicknamemsg').css('color', 'blue');
@@ -215,6 +225,7 @@ function emailDuplicate() {
 function emConfirm(){
     let email = $('#email').val();
 
+    $("#email").prop("readonly", true);
     $('#emCodeBt').prop('disabled', true);
     $('#emCodeReBt').prop('disabled', false);
 
@@ -226,6 +237,7 @@ function emConfirm(){
             if (code) {
                 alert("이메일이 전송되었습니다." +
                 "인증번호 확인 후 입력해주세요.");
+                $('#emailconfirm').prop('readonly',false);
                 chkEmailConfirm(code);
             }
         },
@@ -238,7 +250,6 @@ function emConfirm(){
 function chkEmailConfirm(code){
     $('#emailconfirm').on("keyup", function(){
         if (code != $('#emailconfirm').val()) {
-            emconfirmchk = false;
             $('#emchkmsg').html("<span id='emconfirmchk'>인증번호가 잘못되었습니다</span>")
             $("#emconfirmchk").css({
                     "color" : "#FA3E3E",
@@ -246,73 +257,51 @@ function chkEmailConfirm(code){
                     "font-size" : "10px"
                 }
             )
-            return emconfirmchk;
         } else {
-            emconfirmchk = true;
+            $('#emailconfirm').prop('readonly',true);
             $('#emchkmsg').html("<span id='emconfirmchk'>인증번호 확인 완료</span>")
             $("#emconfirmchk").css({
                 "color" : "#0D6EFD",
                 "font-weight" : "bold",
                 "font-size" : "10px"
             });
-            return emconfirmchk;
         }
     });
 }
 
-/*//회원가입 폼 제출 내용 확인
+//회원가입 폼 제출 내용 확인
 function formConfirm(){
-    event.preventDefault();
-
-    // 비동기 검증을 위한 Promise 배열 생성
-    let promises = [
-        idConfirm(),
-        validateEmail()
-    ];
 
     alert("실행은 일단 됨");
 
     if(!validatePw()) {
         alert("유효하지 않은 비밀번호입니다.");
-        console.log(validatePw());
+        $('#memberPw').css('border-color', red);
         return false;
     }
+
     if (!pwConfirm()) {
         alert("비밀번호가 일치하지 않습니다.");
         return false;
     }
+
     if(!nicknameConfirm()) {
         alert("유효하지 않은 닉네임입니다.");
         return false;
     }
 
-    if(!emconfirmchk) {
+    if($('#emailconfirm').prop('readonly') ) {
         alert("인증번호가 일치하지 않습니다.");
         return false;
     }
 
-    // 비동기 검증 결과 처리 (Promise.all 사용)
-    Promise.all(promises).then(([isIdValid, isEmailValid]) => {
-        // 아이디 검증 결과 확인
-        if (!isIdValid) {
-            alert("유효하지 않은 아이디입니다.");
-            return;
-        }
+    if(!$('#memberId').prop('readonly')) {
+        alert("아이디가 확정되지 않았습니다.")
+        return false;
+    }
 
-        // 이메일 검증 결과 확인
-        if (!isEmailValid) {
-            alert("유효하지 않은 이메일입니다.");
-            return;
-        }
-
-        console.log("마지막 검사");
-
-        // 모든 검증 통과 시 폼 제출
-        document.getElementById('#joinForm').submit();
-    }).catch(error => {
-        console.error("검증 중 에러 발생:", error);
-    });
-
-    // 검증이 완료될 때까지 폼 제출 방지
-    return false;
-}*/
+    if($('#email').prop('readonly')) {
+        alert("유효하지 않은 이메일입니다.")
+        return false;
+    }
+}

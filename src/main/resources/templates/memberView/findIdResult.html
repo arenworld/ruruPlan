@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html  class="responsive-login-page" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>findIdResult</title>
+    <!-- CSS 파일 가져오기 -->
+    <link rel="stylesheet" href="/css/rurustyle.css" />
+    <!-- JS 파일 가져오기 -->
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/javascript/member/findId.js"></script>
+</head>
+<body class="login-page">
+<div class="logo-title">
+    <img class="logo"/>
+    <p th:text="#{logo}">ソウルに触る</p>
+</div>
+<div id="frame">
+    <main>
+        <p class="main-title" th:text="#{find.id}">findId</p>
+
+        <!-- 아이디를 못 찾았을 경우 (result가 이메일 형식일 경우) -->
+        <div th:if="${#strings.contains(result, '@')}">
+            <p th:text="${result}" style="color: red"></p>
+            <p th:text="#{find.id.fa}"></p>
+        </div>
+
+        <!-- 아이디를 찾았을 경우 (result가 이메일 형식이 아닌 경우) -->
+        <div th:unless="${#strings.contains(result, '@')}">
+            <span th:text="#{find.id.su}"></span>
+            <span th:text="${result}" style="color: blue; font-weight: bold"></span>
+            <span th:text="#{msg}"></span>
+        </div>
+
+    </main>
+
+    <!--비밃번호 찾기/회원가입 페이지로 이동-->
+    <footer>
+        <div class="text-group-center-row">
+            <a th:href="@{/}" style="color: black">Home</a>
+            <a th:href="@{/login/loginForm}" th:text="#{login.bt}" style="color: black"></a>
+            <a th:href="@{/login/findPw}" th:text="#{find.pw}" style="color: black"></a>
+        </div>
+    </footer>
+</div>
+</body>
+</html>

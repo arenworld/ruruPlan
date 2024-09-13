@@ -3,6 +3,7 @@ package net.datasa.ruruplan.plan.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.ruruplan.plan.domain.dto.PlaceInfoDTO;
+import net.datasa.ruruplan.plan.domain.dto.PlanAndThemeMarkers;
 import net.datasa.ruruplan.plan.domain.dto.TaskDTO;
 import net.datasa.ruruplan.plan.service.CustomPlanService;
 import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
@@ -62,17 +63,18 @@ public class CustomPlanController {
      */
     @ResponseBody
     @PostMapping("planMarkers")
-    public List<TaskDTO> allPlanMarker(@RequestParam ("planNum") Integer planNum, @RequestParam("dayNum") Integer dayNum) {
+    public List<TaskDTO> allPlanMarker(@RequestParam ("planNum") Integer planNum, @RequestParam("dayNumOfButton") Integer dayNum) {
         log.debug("지나감");
         return customPlanService.getPlanLocations(planNum, dayNum);
     }
 
     @ResponseBody
     @PostMapping("themeMarkers")
-    public List<PlaceInfoDTO> themeMarker(@RequestParam("theme") String theme) {
+    public PlanAndThemeMarkers themeMarker(@RequestParam("theme") String theme, @RequestParam("planNum") Integer planNum, @RequestParam("dayNumOfButton") Integer dayNum) {
         log.debug("입력받은 테마:{}", theme);
-        log.debug("테마별 마커정보: {} ", customPlanService.getThemeLocations(theme));
-        return customPlanService.getThemeLocations(theme);
+        List<PlaceInfoDTO> themeLocations = customPlanService.getThemeLocations(theme);
+        List<TaskDTO> planLocations = customPlanService.getPlanLocations(planNum, dayNum);
+        return new PlanAndThemeMarkers(themeLocations, planLocations);
     }
     /**
      * 일자별 일정 리스트 가져오기

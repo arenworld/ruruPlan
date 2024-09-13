@@ -15,9 +15,6 @@
     cursor: pointer;
     text-align: center;
 }
-.plan-details {
-    display: none;
-}
 
 .theme-buttons {
     padding: 5px;

@@ -27,6 +27,7 @@ public class WebSecurityConfig {
            , "/images/**"            //이미지 파일
            , "/javascript/**" //자바스크립트 멤버 파일
            , "/js/**"            //js 파일
+           , "/locale"
     };
 
     @Bean

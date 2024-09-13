@@ -13,19 +13,24 @@
             integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
             crossorigin="anonymous"
     />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-A7A7ljJgK9ltP4FgOItfSMLrpx1dGmReaBbRjtuYxiKjjQDglIGQmRuUGk53pIaj"
+            crossorigin="anonymous"></script>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/javascript/member/locale.js"></script>
 </head>
 
 <body class="login-page">
 <div class="logo-title">
     <img class="logo" src="/images/logo.png">
     <p th:text="#{logo}">ソウルに触る</p>
-    <form th:action="@{locale/}" th:method="get">
-        <select name="lang" onchange="this.form.submit()"
-                style="width: 70px; height:40px; font-size: 12px; text-align: left; padding: 0px">
-            <option value="ko" th:selected="${#locale.language == 'ko'}">한국어</option>
-            <option value="ja" th:selected="${#locale.language == 'ja'}">日本語</option>
-        </select>
-    </form>
+
+    <select name="lang" id="lang"
+            style="width: 70px; height:40px; font-size: 12px; text-align: left; padding: 0px">
+        <option value="ko" id="ko" th:selected="${#locale.language == 'ko'}">한국어</option>
+        <option value="ja" id="ja" th:selected="${#locale.language == 'ja'}">日本語</option>
+    </select>
+
 </div>
 <div id="frame">
     <main>

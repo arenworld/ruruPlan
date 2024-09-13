@@ -74,66 +74,18 @@ public class GptCmdEntity {
     @Column(name = "theme_1", nullable = false)
     private String theme1;
 
-    // 첫 번째 여행 테마의 가중치. 기본값은 2
-    @Column(name = "theme_1_weight", nullable = false, columnDefinition = "integer default 2 check(theme_1_weight in (1, 2, 3))")
-    private Integer theme1Weight;
-
     // 두 번째 여행 테마를 저장
     @Column(name = "theme_2", nullable = false)
     private String theme2;
-
-    @Column(name = "theme_2_weight", nullable = false, columnDefinition = "integer default 2 check(theme_2_weight in (1, 2, 3))")
-    private Integer theme2Weight;
 
     // 세 번째 여행 테마를 저장
     @Column(name = "theme_3", nullable = false)
     private String theme3;
 
-    @Column(name = "theme_3_weight", nullable = false, columnDefinition = "integer default 2 check(theme_3_weight in (1, 2, 3))")
-    private Integer theme3Weight;
-
     // 여행 일정의 밀도. 0은 널널, 1은 빽빽
     @Column(name = "density", nullable = false, columnDefinition = "tinyint(1) default 0 check(density in (0, 1))")
     private Boolean density;
 
-    // 숙박 이동 여부 0은 한곳에만 숙박, 1은 여러곳에 숙박
-    @Column(name = "move_status", nullable = false, columnDefinition = "tinyint(1) default 0 check(move_status in (0, 1))")
-    private Boolean moveStatus;
 
-    // 숙박 비용 범위. 0: 저렴, 1: 적당, 2: 호화, 3: 반반입니다.
-    @Column(name = "room_cost", nullable = false, columnDefinition = "integer default 1 check(room_cost in (0, 1, 2, 3))")
-    private Integer roomCost;
-
-    // 호텔 숙박 여부. 0: 아니오, 1: 예
-    @Column(name = "hotel", nullable = false, columnDefinition = "tinyint(1) default 0 check(hotel in (0, 1))")
-    private Boolean hotel;
-
-    // 호텔 숙박일수. 기본값은 0
-    @Column(name = "hotel_nights", nullable = false, columnDefinition = "integer default 0")
-    private Integer hotelNights;
-
-    // 모텔 숙박 여부
-    @Column(name = "motel", nullable = false, columnDefinition = "tinyint(1) default 0 check(motel in (0, 1))")
-    private Boolean motel;
-
-    // 모텔 숙박일수. 기본값은 0입니다.
-    @Column(name = "motel_nights", nullable = false, columnDefinition = "integer default 0")
-    private Integer motelNights;
-
-    // 게스트하우스 숙박 여부
-    @Column(name = "guesthouse", nullable = false, columnDefinition = "tinyint(1) default 0 check(guesthouse in (0, 1))")
-    private Boolean guesthouse;
-
-    // 게스트하우스 숙박일수. 기본값은 0
-    @Column(name = "guesthouse_nights", nullable = false, columnDefinition = "integer default 0")
-    private Integer guesthouseNights;
-
-    // 한옥 숙박 여부
-    @Column(name = "hanok", nullable = false, columnDefinition = "tinyint(1) default 0 check(hanok in (0, 1))")
-    private Boolean hanok;
-
-    // 한옥 숙박일수. 기본값은 0
-    @Column(name = "hanok_nights", nullable = false, columnDefinition = "integer default 0")
-    private Integer hanokNights;
 }
 

@@ -43,22 +43,13 @@ public class QuestionService {
                 .adult(gptCmdDTO.getAdult())
                 .children(gptCmdDTO.getChildren())
                 .theme1(gptCmdDTO.getTheme1())
-                .theme1Weight(gptCmdDTO.getTheme1Weight())
+
                 .theme2(gptCmdDTO.getTheme2())
-                .theme2Weight(gptCmdDTO.getTheme2Weight())
+
                 .theme3(gptCmdDTO.getTheme3())
-                .theme3Weight(gptCmdDTO.getTheme3Weight())
+
                 .density(gptCmdDTO.getDensity())
-                .moveStatus(gptCmdDTO.getMoveStatus())
-                .roomCost(gptCmdDTO.getRoomCost())
-                .hotel(gptCmdDTO.getHotel())
-                .hotelNights(gptCmdDTO.getHotelNights())
-                .motel(gptCmdDTO.getMotel())
-                .motelNights(gptCmdDTO.getMotelNights())
-                .guesthouse(gptCmdDTO.getGuesthouse())
-                .guesthouseNights(gptCmdDTO.getGuesthouseNights())
-                .hanok(gptCmdDTO.getHanok())
-                .hanokNights(gptCmdDTO.getHanokNights())
+
                 .build();
         GptCmdEntity savedEntity = gptCmdRepository.save(entity);
         GptCmdDTO savedCmdDTO = GptCmdDTO.builder()
@@ -74,22 +65,13 @@ public class QuestionService {
                 .adult(savedEntity.getAdult())
                 .children(savedEntity.getChildren())
                 .theme1(savedEntity.getTheme1())
-                .theme1Weight(savedEntity.getTheme1Weight())
+
                 .theme2(savedEntity.getTheme2())
-                .theme2Weight(savedEntity.getTheme2Weight())
+
                 .theme3(savedEntity.getTheme3())
-                .theme3Weight(savedEntity.getTheme3Weight())
+
                 .density(savedEntity.getDensity())
-                .moveStatus(savedEntity.getMoveStatus())
-                .roomCost(savedEntity.getRoomCost())
-                .hotel(savedEntity.getHotel())
-                .hotelNights(savedEntity.getHotelNights())
-                .motel(savedEntity.getMotel())
-                .motelNights(savedEntity.getMotelNights())
-                .guesthouse(savedEntity.getGuesthouse())
-                .guesthouseNights(savedEntity.getGuesthouseNights())
-                .hanok(savedEntity.getHanok())
-                .hanokNights(savedEntity.getHanokNights())
+
                 .build();
 
         return savedCmdDTO;

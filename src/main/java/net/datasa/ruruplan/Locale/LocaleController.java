@@ -37,4 +37,30 @@ public class LocaleController {
 
         }
     }
+
+    @GetMapping("join/locale")
+    public void joinlocale(@RequestParam(value = "lang", required = false) String lang,
+                        HttpServletRequest request,
+                        HttpServletResponse response,
+                        Model model) {
+        log.debug("locale: {}", lang);
+        if (lang != null) {
+            Locale locale = new Locale(lang);
+            localeResolver.setLocale(request, response, locale); // 로케일을 변경
+
+        }
+    }
+
+    @GetMapping("login/locale")
+    public void loginlocale(@RequestParam(value = "lang", required = false) String lang,
+                        HttpServletRequest request,
+                        HttpServletResponse response,
+                        Model model) {
+        log.debug("locale: {}", lang);
+        if (lang != null) {
+            Locale locale = new Locale(lang);
+            localeResolver.setLocale(request, response, locale); // 로케일을 변경
+
+        }
+    }
 }

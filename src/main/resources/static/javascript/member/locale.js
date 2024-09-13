@@ -10,8 +10,8 @@ $(document).ready(function() {
                 location.reload();
             },
             error: function () {
+/*                location.reload();*/
                 console.error("언어변경 과정에 문제 있음");
-                location.reload();
             }
         });
     });

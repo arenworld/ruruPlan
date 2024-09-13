@@ -16,9 +16,21 @@
 
 <body class="modal-body">
 <!-- 일정저장을 위한 히든 -->
-<!-- 시작날 -->
+<!-- 일정저장을 위한 히든 -->
+<!-- 시작일 -->
+
+<input type="hidden" id="first_date_display" name="first_date_display" />
+<!-- 마지말일 -->
+<input type="hidden" id="last_date_display " name="last_date_display " />
+<!-- 시작일 -->
+
+<input type="hidden" id="first_date" name="first_date" />
+<!-- 마지말일 -->
+<input type="hidden" id="last_date" name="last_date" />
+
+<!-- 시작일자 -->
 <input type="hidden" id="startDayValue" name="startDayValue" />
-<!-- 마지막 날 -->
+<!-- 마지막 날 일자 -->
 <input type="hidden" id="endDayValue" name="endDayValue" />
 <!-- 박 -->
 <input type="hidden" id="nightsValue" name="nightsValue" />
@@ -32,6 +44,8 @@
 <input type="hidden" id="move_status" />
 <!-- 비용 선택 -->
 <input type="hidden" id="room_cost" />
+<!-- 여행 유형 -->
+<input type="hidden" id="trip_type" />
 
 <div class="logo-title">
     <img class="logo" src="/images/logo.png" />
@@ -87,7 +101,7 @@
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
-            <div class="progress-question-step"></div>
+
         </div>
         <!-- 이동 버튼 -->
         <button class="button-next"></button>
@@ -100,10 +114,10 @@
 <div id="myModal2" class="modal-question">
     <div class="modal-question-content">
         <div class="modal-header">
-            <div class="question-real-title-main">
+            <div class="question-title-main">
                 <h1>항공권은?</h1>
             </div>
-            <div class="question-real-title-sub">
+            <div class="question-title-sub">
                 <span>항공권 예매 여부를 알려주세요</span>
             </div>
         </div>
@@ -114,11 +128,12 @@
             <div class="reservation-navigater">
                 <button type="button" class="button-reservation">
                     <i class="icon-flight"></i>예매했어요!
+                    <div class="question-selct2-text"></div>
                 </button>
                 <!-- 예약안함 -->
                 <button type="button" class="button-notreservation">
                     <i class="icon-airplanemode_inactive"></i>
-                    <div class="question-selct2-text">아직이에요!</div>
+                    <div class="question-selct1-text">아직이에요!</div>
                 </button>
             </div>
         </div>
@@ -129,12 +144,12 @@
             <div class="date-time-wrapper">
                 <div class="date-time-field">
                     <!-- 입국 일자 시간 -->
-                    <input type="time" id="startTime" name="startTime" />
+                    <input type="time" id="arrival" name="arrival" />
                 </div>
 
                 <div class="date-time-field">
                     <!--  출국 일자 시간 -->
-                    <input type="time" id="endTime" name="endTime" />
+                    <input type="time" id="depart" name="depart" />
                 </div>
             </div>
         </div>
@@ -154,6 +169,7 @@
         </form>
     </div>
 </div>
+
 
 <!-- 3번째 모달 창 -->
 <div id="myModal3" class="modal-question">
@@ -192,7 +208,7 @@
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
-            <div class="progress-question-step"></div>
+
         </div>
         <form id="modalForm3">
             <button id="backToModal2" class="button-back" type="button"></button>
@@ -200,15 +216,14 @@
         </form>
     </div>
 </div>
-
 <!-- 4번째 모달 창 -->
 <div id="myModal4" class="modal-question">
     <div class="modal-question-content">
         <div class="modal-header">
-            <div class="question-real-title-main">
+            <div class="question-title-main">
                 <h1>어떻게?</h1>
             </div>
-            <div class="question-real-title-sub">
+            <div class="question-title-sub">
                 <span>즐기고 싶은 여행테마를 골라주세요</span>
             </div>
         </div>
@@ -218,55 +233,43 @@
             <button type="button" id="shopping" value="쇼핑">쇼핑</button>
             <button type="button" id="food" value="음식">음식</button>
             <button type="button" id="cafe" value="카페">카페</button>
-            <button type="button" id="history" value="역사">역사</button>
         </div>
         <!-- 테마2행 -->
         <div class="button-theme-row2">
-            <button type="button" id="rest" value="휴양">휴양</button>
+            <button type="button" id="history" value="역사">역사</button>
             <button type="button" id="culture" value="문화">문화</button>
-            <button type="button" id="healing" value="힐링">힐링</button>
             <button type="button" id="lendmark" value="랜드마크">랜드마크</button>
         </div>
         <!-- 테마3행 -->
         <div class="button-theme-row3">
             <button type="button" id="experience" value="체험">체험</button>
-            <button type="button" id="nature" value="자연">자연</button>
-            <button type="button" id="walk" value="도보">도보</button>
+            <button type="button" id="healing" value="힐링">
+                힐링
+            </button>
+
             <button type="button" id="leisuresports" value="레포츠">
                 레포츠
             </button>
         </div>
-        <!-- 테마4행 -->
+
         <div class="theme-box button-theme-row4">
             <div class="coment-ratio">내가 선택한 여행테마</div>
 
             <div class="theme_1-box">
                 <div class="theme" id="theme_1"></div>
-                <div class="theme-weight" id="theme_1_weight">
-                    <div id="many">많이</div>
-                    <div id="fit">적당</div>
-                    <div id="little">조금</div>
-                </div>
+
                 <div class="theme-cancel1"></div>
             </div>
 
             <div class="theme_2-box">
                 <div class="theme" id="theme_2"></div>
-                <div class="theme-weight" id="theme_2_weight">
-                    <div id="many">많이</div>
-                    <div id="fit">적당</div>
-                    <div id="little">조금</div>
-                </div>
+
                 <div class="theme-cancel2"></div>
             </div>
 
             <div class="theme_3-box">
                 <div class="theme" id="theme_3"></div>
-                <div class="theme-weight" id="theme_3_weight">
-                    <div id="many">많이</div>
-                    <div id="fit">적당</div>
-                    <div id="little">조금</div>
-                </div>
+
                 <div class="theme-cancel3"></div>
             </div>
         </div>
@@ -278,7 +281,7 @@
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
-            <div class="progress-question-step"></div>
+
         </div>
         <form id="modalForm4">
             <button id="backToModal3" class="button-back" type="button"></button>
@@ -317,119 +320,15 @@
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
-            <div class="progress-question-step"></div>
+
         </div>
         <form id="modalForm5">
             <button id="backToModal4" class="button-back" type="button"></button>
-            <button class="button-next-page5"></button>
-        </form>
-    </div>
-</div>
-
-<!-- 6번째 모달 창 -->
-<div id="myModal6" class="modal-question">
-    <div class="modal-question-content1">
-        <div class="modal-header">
-            <div class="question-real-title-main1">
-                <h1>숙소는?</h1>
-            </div>
-            <div class="question-real-title-sub1">
-                <span>숙소 이동여부에 대해 알려주세요</span>
-            </div>
-        </div>
-
-        <!-- 숙소 버튼 1행 -->
-        <div class="button-move_status-row1">
-            <button type="button" class="move" id="move">
-                <div class="main-detail">이동O</div>
-                <div class="sub-detail">
-                    여행일정, 숙소성향에따라 여러곳도 괜찮아요
-                </div>
-            </button>
-            <button type="button" class="no-move" id="no-move">
-                <div class="main-detail">이동X</div>
-                <div class="sub-detail">이동없이 한곳에서 쭉 머물래요</div>
-            </button>
-        </div>
-
-        <!-- 숙소 버튼 2행 -->
-        <div class="button-move_status-row2">
-            <div class="coment-price">숙소 적정가격에 대해 알려주세요</div>
-            <button type="button" class="harmonious" id="harmonious">
-                호화롭게
-            </button>
-            <button type="button" class="moderately" id="moderately">
-                적당하게
-            </button>
-            <button type="button" class="relaxed" id="relaxed">저렴하게</button>
-            <button type="button" class="mixed" id="mixed">섞어서</button>
-        </div>
-
-        <!-- 숙소 버튼 3행 -->
-        <div class="button-move_status-row3">
-            <div class="coment-night">
-                <!-- 날짜 값을 표시할 span 태그 추가 -->
-                <p>남은 일수: <span id="remainingDaysDisplay">0</span>일</p>
-            </div>
-
-            <!-- 호텔 -->
-            <div class="hotel" id="hotel">
-                <button type="button" class="hotel-button">호텔</button>
-                <div class="input-container">
-                    <input type="text" id="hotel_nights" style="text-align: right" />
-                    <span class="night_text">박</span>
-                </div>
-            </div>
-
-            <!-- 모텔 -->
-            <div class="motel" id="motel">
-                <button type="button" class="motel-button">모텔</button>
-                <div class="input-container">
-                    <input type="text" id="motel_nights" style="text-align: right" />
-                    <span class="night_text">박</span>
-                </div>
-            </div>
-
-            <!-- 게하 -->
-            <div class="guesthouse" id="guesthouse">
-                <button type="button" class="guesthouse-button">게하</button>
-                <div class="input-container">
-                    <input
-                            type="text"
-                            id="guesthouse_nights"
-                            style="text-align: right"
-                    />
-                    <span class="night_text">박</span>
-                </div>
-            </div>
-
-            <!-- 한옥 -->
-            <div class="hanok" id="hanok">
-                <button type="button" class="hanok-button">한옥</button>
-                <div class="input-container">
-                    <input type="text" id="hanok_nights" style="text-align: right" />
-                    <span class="night_text">박</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 상태 진행도 -->
-        <div class="progress-custom-question-container">
-            <div class="progress-question-step"></div>
-            <div class="progress-question-step"></div>
-            <div class="progress-question-step"></div>
-            <div class="progress-question-step"></div>
-            <div class="progress-question-step"></div>
-            <div class="progress-question-step"></div>
-        </div>
-
-        <!-- 버튼 -->
-        <form id="modalForm6">
-            <button id="backToModal5" class="button-back" type="button"></button>
             <button class="modal-submit-button" type="submit"></button>
         </form>
     </div>
 </div>
+
 
 <!-- Bootstrap JS 및 의존성 JS 링크 -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -443,7 +342,6 @@
 <script src="/js/inputtime.js"></script>
 <script src="/js/member_num.js"></script>
 <script src="/js/thema.js"></script>
-<script src="/js/room_select.js"></script>
 <script src="/js/density.js"> </script>
 
 </body>

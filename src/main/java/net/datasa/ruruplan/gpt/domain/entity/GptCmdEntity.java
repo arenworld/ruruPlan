@@ -6,10 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.datasa.ruruplan.member.domain.entity.MemberEntity;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-
+import java.time.LocalDate;  // LocalDate import
+import java.time.LocalTime;  // LocalTime import
 
 /**
  * 여행 계획에 대해 질문 및 답변 정보를 저장하는 엔터티.
@@ -29,7 +27,6 @@ public class GptCmdEntity {
     private Integer cmdNum;
 
     // 여행 계획을 생성한 사용자의 정보를 참조
-    // 'member_id'로 MemberEntity와 다대일관계
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id", referencedColumnName = "member_id")
     private MemberEntity member;
@@ -85,7 +82,4 @@ public class GptCmdEntity {
     // 여행 일정의 밀도. 0은 널널, 1은 빽빽
     @Column(name = "density", nullable = false, columnDefinition = "tinyint(1) default 0 check(density in (0, 1))")
     private Boolean density;
-
-
 }
-

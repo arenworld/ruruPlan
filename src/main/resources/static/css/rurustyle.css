@@ -180,7 +180,7 @@ body.responsive-login-page {
 
 /* 메인 타이틀 스타일 설정 */
 .main-title {
-  font-size: 60px;
+  font-size: 40px;
   margin-bottom: 20px;
   text-align: center;
   white-space: nowrap;
@@ -205,11 +205,14 @@ body.responsive-login-page {
 .input-label {
   align-self: flex-start;
   margin-bottom: 5px;
+  white-space: nowrap;
+
 }
 
 /* 텍스트 입력 필드, 패스워드 입력 필드, 셀렉트 박스, 버튼의 스타일 */
 input[type="text"],
 input[type="password"],
+input[type="email"],
 select,
 .cta-button {
   width: var(--input-button-width);
@@ -254,7 +257,7 @@ select,
 /* 약관 박스 스타일 설정 */
 .box-clause-round {
   border: 2px solid black;
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
   width: 100%;
 }
@@ -593,7 +596,7 @@ footer a {
 .button-next-page3,
 .button-next-page2,
 .button-next {
-  background-image: url("static/images/page_right.png");
+  background-image: url("/static/images/page_right.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

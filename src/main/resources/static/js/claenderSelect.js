@@ -18,8 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
     calendarCells.forEach((cell, index) => {
       cell.addEventListener("mouseover", function () {
         if (
-          !cell.classList.contains("disabled") &&
-          !cell.classList.contains("dates-selected")
+            !cell.classList.contains("disabled") &&
+            !cell.classList.contains("dates-selected")
         ) {
           this.style.backgroundColor = "#e0e0e0";
         }
@@ -27,8 +27,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       cell.addEventListener("mouseout", function () {
         if (
-          !cell.classList.contains("disabled") &&
-          !cell.classList.contains("dates-selected")
+            !cell.classList.contains("disabled") &&
+            !cell.classList.contains("dates-selected")
         ) {
           this.style.backgroundColor = "#ffffff";
         }
@@ -74,9 +74,9 @@ document.addEventListener("DOMContentLoaded", function () {
           displayMessage("도착일을 선택해 주세요");
           nextButton.style.display = "none";
         } else if (
-          startDay !== null &&
-          index >= startDay &&
-          index <= startDay + 5
+            startDay !== null &&
+            index >= startDay &&
+            index <= startDay + 5
         ) {
           lastDay = index;
           document.getElementById("endDayValue").value = cell.textContent;
@@ -97,8 +97,8 @@ document.addEventListener("DOMContentLoaded", function () {
           const startDate = calendarCells[startDay].textContent;
           const endDate = calendarCells[lastDay].textContent;
           const calendarHeader = cell
-            .closest(".calendar")
-            .querySelector(".calendar-header").textContent;
+              .closest(".calendar")
+              .querySelector(".calendar-header").textContent;
 
           displayResult(nights, days, calendarHeader, startDate, endDate);
           nextButton.style.display = "block";
@@ -111,9 +111,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const totalCells = calendarCells.length;
 
     for (
-      let i = clickedDateIndex;
-      i < totalCells && i <= clickedDateIndex + 5;
-      i++
+        let i = clickedDateIndex;
+        i < totalCells && i <= clickedDateIndex + 5;
+        i++
     ) {
       calendarCells[i].classList.remove("disabled");
       calendarCells[i].style.backgroundColor = "#ffffff";
@@ -154,10 +154,33 @@ document.addEventListener("DOMContentLoaded", function () {
   function displayResult(nights, days, calendarHeader, startDate, endDate) {
     const resultBox = document.querySelector(".box-result-round");
     const monthMatch = calendarHeader.match(/(\d{1,2})월/);
-    const monthText = monthMatch ? monthMatch[1] : "";
-    const first_date = `2024년 ${monthText}월 ${startDate}일`;
-    const last_date = `2024년 ${monthText}월 ${endDate}일`;
-    resultBox.textContent = `${nights}박 ${days}일, 시작일: ${first_date}, 종료일: ${last_date}`;
+    const monthText = monthMatch ? monthMatch[1].padStart(2, "0") : ""; // 월을 두 자리로 맞춤
+
+    // 디스플레이용 날짜 (포맷된 날짜)
+    const first_date_display = `2024년 ${monthText}월 ${String(
+        startDate
+    ).padStart(2, "0")}일`;
+    const last_date_display = `2024년 ${monthText}월 ${String(endDate).padStart(
+        2,
+        "0"
+    )}일`;
+
+    // 화면에 표시
+    resultBox.textContent = `${nights}박 ${days}일, 시작일: ${first_date_display}, 종료일: ${last_date_display}`;
+
+    // YYYY-MM-DD 형식으로 변환
+    const first_date = `2024-${monthText}-${String(startDate).padStart(
+        2,
+        "0"
+    )}`;
+    const last_date = `2024-${monthText}-${String(endDate).padStart(2, "0")}`;
+
+    // 숨겨진 필드에 값 저장
+    document.getElementById("first_date").value = first_date;
+    document.getElementById("last_date").value = last_date;
+
+    // 반환값이 필요하면 return 가능
+    return { first_date, last_date };
   }
 
   function displayMessage(message) {
@@ -172,21 +195,21 @@ document.addEventListener("DOMContentLoaded", function () {
   updateCalendars();
 
   document
-    .getElementById("prev-month")
-    .addEventListener("click", updateCalendars);
+      .getElementById("prev-month")
+      .addEventListener("click", updateCalendars);
   document
-    .getElementById("next-month")
-    .addEventListener("click", updateCalendars);
+      .getElementById("next-month")
+      .addEventListener("click", updateCalendars);
 });
 // 모달이 열릴 때 days 값을 다시 가져오는 코드 추가
 document
-  .getElementById("myModal6")
-  .addEventListener("shown.bs.modal", function () {
-    const days = document.getElementById("daysValue").value;
-    console.log("모달에서 days 값:", days); // 확인용 콘솔 출력
+    .getElementById("myModal6")
+    .addEventListener("shown.bs.modal", function () {
+      const days = document.getElementById("daysValue").value;
+      console.log("모달에서 days 값:", days); // 확인용 콘솔 출력
 
-    // days 값이 없는 경우 처리
-    if (!days) {
-      console.log("days 값이 아직 설정되지 않았습니다.");
-    }
-  });
+      // days 값이 없는 경우 처리
+      if (!days) {
+        console.log("days 값이 아직 설정되지 않았습니다.");
+      }
+    });

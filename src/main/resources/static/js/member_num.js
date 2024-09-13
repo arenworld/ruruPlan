@@ -3,13 +3,13 @@
  *
  * 문제점
  *
- * 1.인원수 0명 입력도 가능하다 아이랑 어른 입력때문에 일단은 허용은해놓음 
+ * 1.인원수 0명 입력도 가능하다 아이랑 어른 입력때문에 일단은 허용은해놓음
  *
  *
  * 사용법
  *
  * 혼자 , 커플은 자동적으로 각각 어른 1 아이0 어른2 아이영으로 값저장
- * 
+ *
  *친구 , 부모님은 어른 칸만 나오며 숫자인지 범위내에 들어오는지 검증
 
  아이는 합이 6이하이며 검증내용은 위의 내용과 같음
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const num_resultBox = document.querySelector(".box-who-result-round");
   const adultInputDiv = num_resultBox.querySelector(".adult");
   const kidsInputDiv = num_resultBox.querySelector(".kids");
-
+  const trip_type = document.getElementById("trip_type");
   console.log("adult_num element:", adult_num); // adult_num이 제대로 선택되었는지 확인
 
   // 상태를 추적하는 변수 (true: 활성화 상태, false: 비활성화 상태)
@@ -70,6 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
   alone.onclick = function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!aloneActive) {
+      trip_type.textContent = "혼자";
       couple.style.backgroundColor = "gray";
       kids.style.backgroundColor = "gray";
       parents.style.backgroundColor = "gray";
@@ -86,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
   couple.onclick = function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!coupleActive) {
+      trip_type.textContent = "커플";
       alone.style.backgroundColor = "gray";
       kids.style.backgroundColor = "gray";
       parents.style.backgroundColor = "gray";
@@ -101,6 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
   kids.onclick = function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!kidsActive) {
+      trip_type.textContent = "아이들";
       couple.style.backgroundColor = "gray";
       alone.style.backgroundColor = "gray";
       parents.style.backgroundColor = "gray";
@@ -116,6 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
   parents.onclick = function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!parentsActive) {
+      trip_type.textContent = "부모님";
       alone.style.backgroundColor = "gray";
       couple.style.backgroundColor = "gray";
       kids.style.backgroundColor = "gray";
@@ -131,6 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
   friend.onclick = function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!friendActive) {
+      trip_type.textContent = "친구";
       alone.style.backgroundColor = "gray";
       couple.style.backgroundColor = "gray";
       kids.style.backgroundColor = "gray";
@@ -171,10 +176,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const childrenValue = parseInt(children_num.value) || 0; // 아이 값, 없으면 0
 
     console.log(
-      "adult_num value:",
-      adultValue,
-      "children_num value:",
-      childrenValue
+        "adult_num value:",
+        adultValue,
+        "children_num value:",
+        childrenValue
     ); // 로그로 값 확인
 
     // 숫자가 아닌 값이 입력된 경우
@@ -187,7 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 어른 수가 1~6 범위를 벗어난 경우
-    if (adultValue < 0 || adultValue > 6) {
+    if (adultValue <= 0 || adultValue > 6) {
       alert("인원 수는 최소 1명, 최대 6명이어야 합니다.");
       adult_num.value = ""; // 잘못된 값일 경우 어른 수 초기화
       next_button3.style.display = "none"; // 다음 버튼 숨기기

@@ -4,13 +4,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const modal3 = document.getElementById("myModal3");
   const modal4 = document.getElementById("myModal4");
   const modal5 = document.getElementById("myModal5");
-  const modal6 = document.getElementById("myModal6");
 
   const backToModal1 = document.getElementById("backToModal1");
   const backToModal2 = document.getElementById("backToModal2");
   const backToModal3 = document.getElementById("backToModal3");
   const backToModal4 = document.getElementById("backToModal4");
-  const backToModal5 = document.getElementById("backToModal5");
 
   const daysValueField = document.getElementById("daysValue");
 
@@ -43,57 +41,108 @@ document.addEventListener("DOMContentLoaded", function () {
     showModal(modal2, 1, "항공권은?");
   };
 
-  document.querySelector("#myModal2 .button-next-page2").onclick = function (
-    event
-  ) {
+  document.querySelector("#myModal2 .button-next-page2").onclick = function (event) {
     event.preventDefault();
     modal2.style.display = "none";
     showModal(modal3, 2, "누구랑?");
   };
 
-  document.querySelector("#myModal3 .button-next-page3").onclick = function (
-    event
-  ) {
+  document.querySelector("#myModal3 .button-next-page3").onclick = function (event) {
     event.preventDefault();
     modal3.style.display = "none";
     showModal(modal4, 3, "어떻게?");
   };
 
-  document.querySelector("#myModal4 .button-next-page4").onclick = function (
-    event
-  ) {
+  document.querySelector("#myModal4 .button-next-page4").onclick = function (event) {
     event.preventDefault();
     modal4.style.display = "none";
     showModal(modal5, 4, "일정의 밀도는?");
   };
 
-  document.querySelector("#myModal5 .button-next-page5").onclick = function (
-    event
-  ) {
+  // 5번째 모달 제출 시 완료 메시지 표시
+  document.querySelector("#myModal5 .modal-submit-button").addEventListener("click", function (event) {
     event.preventDefault();
-    modal5.style.display = "none";
-    showModal(modal6, 5, "숙소는?");
 
-    const days = daysValueField.value;
-    console.log("버튼 클릭 후 days 값:", days);
+    // first_date와 last_date 값을 숨겨진 필드에서 가져오기
+    const first_date = document.getElementById("first_date")?.value;
+    const last_date = document.getElementById("last_date")?.value;
 
-    // initialDaysValue 및 remainingDays 확인
-    const initialDaysValue = parseInt(days) || 0;
-    const remainingDays = initialDaysValue;
-    console.log("버튼 클릭 후 remainingDays 값:", remainingDays);
-  };
+    // 전송할 값들을 확인하기 위해 출력
+    console.log("first_date:", first_date);
+    console.log("last_date:", last_date);
+    console.log("nights:", document.getElementById("nightsValue")?.value);
+    console.log("days:", document.getElementById("daysValue")?.value);
+    console.log("arrival:", document.getElementById("arrival")?.value);
+    console.log("depart:", document.getElementById("depart")?.value);
+    console.log("trip_type:", document.getElementById("trip_type")?.textContent);
+    console.log("children:", document.getElementById("children")?.value);
+    console.log("adult:", document.getElementById("adult")?.value);
+    console.log("theme1:", document.getElementById("theme_1")?.textContent);
+    console.log("theme2:", document.getElementById("theme_2")?.textContent);
+    console.log("theme3:", document.getElementById("theme_3")?.textContent);
+    console.log("density:", document.getElementById("density")?.value);
+// density 값을 true 또는 false로 변환
+    const densityValue = document.getElementById("density")?.value === "1" ? true : false;
+    // 폼에서 입력한 값들을 객체로 저장
+    const GptCmdDTO = {
+      // 질문1
+      firstDate: first_date,   // 변경
+      lastDate: last_date,
+      nights: document.getElementById("nightsValue")?.value,
+      days: document.getElementById("daysValue")?.value,
+      // 질문2
+      arrival: document.getElementById("arrival")?.value,
+      depart: document.getElementById("depart")?.value,
+      //질문3
+      tripType: document.getElementById("trip_type")?.textContent,
+      children: document.getElementById("children")?.value,
+      adult: document.getElementById("adult")?.value,
+      // 질문4
+      theme1: document.getElementById("theme_1")?.textContent,
+      theme2: document.getElementById("theme_2")?.textContent,
+      theme3: document.getElementById("theme_3")?.textContent,
+      // 질문 5
+      density: densityValue // Boolean 값으로 변환된 density
+    };
 
-  // 6번째 모달 제출 시 완료 메시지 표시
-  document.querySelector("#myModal6 .modal-submit-button").onclick = function (
-    event
-  ) {
-    event.preventDefault();
-    modal6.style.display = "none";
-    alert("정보가 성공적으로 제출되었습니다.");
-    window.location.href = "/home.html"; // 원하는 페이지로 이동
-  };
+    console.log("전송할 데이터:", GptCmdDTO);
 
-  // 이전 모달로 돌아가기 버튼 클릭 시 이벤트 핸들러 설정
+    // POST 요청으로 GptCmdDTO 전송
+    fetch("/gptView/saveGptCmd", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(GptCmdDTO),
+    })
+        .then((response) => {
+          console.log("Response status:", response.status); // 응답 상태 코드 확인
+
+          // 응답이 성공적이지 않은 경우 (200번대 이외의 상태 코드)
+          if (!response.ok) {
+            // 응답 본문을 파싱하여 오류 메시지 출력
+            return response.text().then((text) => {
+              console.error(`Server responded with status: ${response.status}, body: ${text}`);
+              throw new Error(`Server responded with status: ${response.status}, body: ${text}`);
+            });
+          }
+
+          // 응답이 성공적일 경우 JSON 파싱
+          return response.json();
+        })
+        .then((data) => {
+          console.log("서버 응답:", data); // 서버로부터 받은 데이터 로그 출력
+          modal5.style.display = "none"; // 모달 닫기
+          alert("제출이 완료되었습니다!"); // 완료 메시지 표시
+        })
+        .catch((error) => {
+          // 상세한 오류 메시지 출력
+          console.error("오류 발생:", error);
+          alert(`전송 중 오류 발생: ${error.message}`);
+        });
+  });
+
+    // 이전 모달로 돌아가기 버튼 클릭 시 이벤트 핸들러 설정
   backToModal1.onclick = function () {
     modal2.style.display = "none";
     showModal(modal1, 0, "여행기간은?");
@@ -118,20 +167,4 @@ document.addEventListener("DOMContentLoaded", function () {
     modal6.style.display = "none";
     showModal(modal5, 4, "일정의 밀도는?");
   };
-
-  document
-    .getElementById("myModal6")
-    .addEventListener("shown.bs.modal", function () {
-      if (daysValueField) {
-        const days = daysValueField.value;
-        console.log("모달에서 days 값:", days);
-
-        let initialDaysValue = parseInt(days) || 0;
-        let remainingDays = initialDaysValue;
-
-        console.log("모달 shown 이후 remainingDays 값:", remainingDays);
-      } else {
-        console.log("daysValueField를 찾을 수 없습니다.");
-      }
-    });
 });

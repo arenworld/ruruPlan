@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const density = document.getElementById("density");
   const button_density = document.querySelector(".button-density");
   const button_notdensity = document.querySelector(".button-notdensity");
-  const next_button = document.querySelector(".button-next-page5");
+  const next_button = document.querySelector(".modal-submit-button");
 
   // 초기 작업
   next_button.style.visibility = "hidden";

@@ -13,11 +13,11 @@ document.addEventListener("DOMContentLoaded", function () {
   reservation.onclick = function () {
     const startDayValue = document.getElementById("startDayValue").value;
     const endDayValue = document.getElementById("endDayValue").value;
-    const startTimeValue = document.getElementById("startTime").value;
-    const endTimeValue = document.getElementById("endTime").value;
+    const startTimeValue = document.getElementById("arrival").value;
+    const endTimeValue = document.getElementById("depart").value;
 
     const calendarHeader =
-      document.querySelector(".calendar-header").textContent;
+        document.querySelector(".calendar-header").textContent;
     const monthMatch = calendarHeader.match(/(\d{1,2})월/);
     const monthText = monthMatch ? monthMatch[1] : ""; // '월' 값 추출
 
@@ -31,13 +31,13 @@ document.addEventListener("DOMContentLoaded", function () {
           <strong>입국일자:2024년 ${monthText}월 ${startDayValue}일</strong>
           <input type="time" id="startTime" name="startTime" value="${
             startTimeValue || ""
-          }" />
+        }" />
         </div>
         <div class="date-time-wrapper">
           <strong>출국일자: 2024년 ${monthText}월 ${endDayValue}일</strong>
           <input type="time" id="endTime" name="endTime" value="${
             endTimeValue || ""
-          }" />
+        }" />
         </div>
       `;
 
@@ -60,11 +60,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // 시간 입력 필드에 이벤트 리스너 추가
         document
-          .getElementById("startTime")
-          .addEventListener("input", updateNextButtonState);
+            .getElementById("startTime")
+            .addEventListener("input", updateNextButtonState);
         document
-          .getElementById("endTime")
-          .addEventListener("input", updateNextButtonState);
+            .getElementById("endTime")
+            .addEventListener("input", updateNextButtonState);
 
         // 다음 버튼 표시 여부 결정
         updateNextButtonState();

@@ -43,6 +43,13 @@
         <div class="container">
             <div class="site-navigation">
                 <a class="logo m-0" th:text="#{logo}">ソウルに触る <span class="text-primary"></span></a>
+                <!--언어 변경 버튼-->
+                <select name="lang" id="lang"
+                        style="width: 70px; height:40px; font-size: 12px; text-align: left; padding: 0px">
+                    <option value="ko" id="ko" th:selected="${#locale.language == 'ko'}">한국어</option>
+                    <option value="ja" id="ja" th:selected="${#locale.language == 'ja'}">日本語</option>
+                </select>
+
                 <ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right">
                     <li class="active"><a th:href="@{/}">Home</a></li>
                     <li class="has-children">
@@ -588,6 +595,7 @@
     <script src="js/aos.js"></script>
     <script src="js/moment.min.js"></script>
     <script src="js/daterangepicker.js"></script>
+    <script src="/javascript/member/locale.js"></script>
 
     <script src="js/typed.js"></script>
     <script>

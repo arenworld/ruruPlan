@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ODsay 경로 테스트</title>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#search").on("click",function(){
+                alert("눌림");
+                var data = {
+                    sx : $("#sx").val(),
+                    sy : $("#sy").val(),
+                    ex : $("#ex").val(),
+                    ey : $("#ey").val()
+                };
+                $.ajax({
+                    url: 'route',
+                    type: 'post',
+                    data: data,
+                    success: function (res) {
+                        alert("성공")
+                    },
+                    error: function () {
+                        alert("경로 검색 실패");
+                    }
+                });
+            })
+        });
+    </script>
+</head>
+<body>
+    <input type="text" id="sx">
+    <input type="text" id="sy">
+    <input type="text" id="ex">
+    <input type="text" id="ey">
+    <button id="search">경로 검색</button>
+    <pre id="result"></pre>
+</body>
+</html>

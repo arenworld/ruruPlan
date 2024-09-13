@@ -15,12 +15,21 @@
     <script src="https://kit.fontawesome.com/0efaee6f1c.js" crossorigin="anonymous"></script>
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/javascript/member/joinForm.js"></script>
+    <script src="/javascript/member/locale.js"></script>
 </head>
 <body class="responsive-login-page">
     <div class="logo-title">
         <img class="logo" src="/images/logo.png">
       <p>ソウルに触る</p>
+
+        <!--언어 변경 버튼-->
+        <select name="lang" id="lang"
+                style="width: 70px; height:40px; font-size: 12px; text-align: left; padding: 0px">
+            <option value="ko" id="ko" th:selected="${#locale.language == 'ko'}">한국어</option>
+            <option value="ja" id="ja" th:selected="${#locale.language == 'ja'}">日本語</option>
+        </select>
     </div>
+
     <div class="responsive-frame">
         <main>
     <p class="main-title" th:text="#{join}"></p>

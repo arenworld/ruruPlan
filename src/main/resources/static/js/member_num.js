@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const num_resultBox = document.querySelector(".box-who-result-round");
   const adultInputDiv = num_resultBox.querySelector(".adult");
   const kidsInputDiv = num_resultBox.querySelector(".kids");
-  const trip_type = document.getElementById("trip_type");
+  const trip_type=document.getElementById("trip_type");
   console.log("adult_num element:", adult_num); // adult_num이 제대로 선택되었는지 확인
 
   // 상태를 추적하는 변수 (true: 활성화 상태, false: 비활성화 상태)
@@ -39,8 +39,8 @@ document.addEventListener("DOMContentLoaded", function () {
   let friendActive = false;
 
   // 처음에는 다음버튼과 인원수 버튼 숨김
-  next_button3.style.display = "none";
-  num_resultBox.style.display = "none";
+  next_button3.style.visibility = "hidden";
+  num_resultBox.style.visibility = "hidden";
 
   // 다른 버튼 상태 초기화 함수
   function resetButtons() {
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     kids.style.backgroundColor = "";
     parents.style.backgroundColor = "";
     friend.style.backgroundColor = "";
-
+    trip_type.textContent = ""; // 여행 유형 초기화
     // 각 버튼의 활성화 상태를 초기화
     aloneActive = false;
     coupleActive = false;
@@ -62,21 +62,25 @@ document.addEventListener("DOMContentLoaded", function () {
     children_num.value = "";
 
     // 결과 및 버튼 초기화
-    next_button3.style.display = "none";
-    num_resultBox.style.display = "none";
+    next_button3.style.visibility = "hidden";
+    num_resultBox.style.visibility = "hidden";
+    trip_type.textContent = ""; // 여행 유형 초기화
   }
 
   // 혼자 버튼 클릭 시
   alone.onclick = function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!aloneActive) {
-      trip_type.textContent = "혼자";
+      trip_type.textContent="혼자";
       couple.style.backgroundColor = "gray";
       kids.style.backgroundColor = "gray";
       parents.style.backgroundColor = "gray";
       friend.style.backgroundColor = "gray";
-      next_button3.style.display = "block";
+      next_button3.style.visibility = "visible";
       adult_num.value = 1; // 혼자이므로 어른 수 1명
+      num_resultBox.style.visibility = "hidden";
+      adultInputDiv.style.visibility = "hidden";
+      kidsInputDiv.style.visibility = "hidden";
       children_num.value = 0; // 혼자이므로 아이 수는 0명
       console.log(adult_num.value); // 어른 수를 콘솔에 출력
     }
@@ -87,12 +91,15 @@ document.addEventListener("DOMContentLoaded", function () {
   couple.onclick = function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!coupleActive) {
-      trip_type.textContent = "커플";
+      trip_type.textContent="커플";
       alone.style.backgroundColor = "gray";
       kids.style.backgroundColor = "gray";
       parents.style.backgroundColor = "gray";
       friend.style.backgroundColor = "gray";
-      next_button3.style.display = "block";
+      next_button3.style.visibility = "visible";
+      num_resultBox.style.visibility = "hidden";
+      adultInputDiv.style.visibility = "hidden";
+      kidsInputDiv.style.visibility = "hidden";
       adult_num.value = 2; // 커플이므로 어른 수 2명
       children_num.value = 0; // 커플이므로 아이 수는 0명
     }
@@ -103,14 +110,14 @@ document.addEventListener("DOMContentLoaded", function () {
   kids.onclick = function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!kidsActive) {
-      trip_type.textContent = "아이들";
+      trip_type.textContent="아이";
       couple.style.backgroundColor = "gray";
       alone.style.backgroundColor = "gray";
       parents.style.backgroundColor = "gray";
       friend.style.backgroundColor = "gray";
-      num_resultBox.style.display = "block";
-      adultInputDiv.style.display = "block";
-      kidsInputDiv.style.display = "block";
+      num_resultBox.style.visibility = "visible";
+      adultInputDiv.style.visibility = "visible";
+      kidsInputDiv.style.visibility = "visible";
     }
     kidsActive = !kidsActive; // 상태를 토글
   };
@@ -119,14 +126,14 @@ document.addEventListener("DOMContentLoaded", function () {
   parents.onclick = function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!parentsActive) {
-      trip_type.textContent = "부모님";
+      trip_type.textContent="부모님";
       alone.style.backgroundColor = "gray";
       couple.style.backgroundColor = "gray";
       kids.style.backgroundColor = "gray";
       friend.style.backgroundColor = "gray";
-      num_resultBox.style.display = "block";
-      adultInputDiv.style.display = "block";
-      kidsInputDiv.style.display = "none";
+      num_resultBox.style.visibility = "visible";
+      adultInputDiv.style.visibility = "visible";
+      kidsInputDiv.style.visibility = "hidden";
     }
     parentsActive = !parentsActive; // 상태를 토글
   };
@@ -135,16 +142,16 @@ document.addEventListener("DOMContentLoaded", function () {
   friend.onclick = function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!friendActive) {
-      trip_type.textContent = "친구";
+      trip_type.textContent="친구";
       alone.style.backgroundColor = "gray";
       couple.style.backgroundColor = "gray";
       kids.style.backgroundColor = "gray";
       parents.style.backgroundColor = "gray";
 
       // 어른 입력칸만 보이기
-      num_resultBox.style.display = "block";
-      adultInputDiv.style.display = "block";
-      kidsInputDiv.style.display = "none";
+      num_resultBox.style.visibility = "visible";
+      adultInputDiv.style.visibility = "visible";
+      kidsInputDiv.style.visibility = "hidden";
       console.log(adult_num.value);
 
       friendActive = true;
@@ -187,15 +194,15 @@ document.addEventListener("DOMContentLoaded", function () {
       alert("숫자를 입력해 주세요");
       children_num.value = ""; // 잘못된 값일 경우 아이 수 초기화
       adult_num.value = ""; // 잘못된 값일 경우 어른 수 초기화
-      next_button3.style.display = "none"; // 다음 버튼 숨기기
+      next_button3.style.visibility = "hidden"; // 다음 버튼 숨기기
       return; // 검증 함수 종료
     }
 
     // 어른 수가 1~6 범위를 벗어난 경우
-    if (adultValue <= 0 || adultValue > 6) {
+    if (adultValue < 0 || adultValue > 6) {
       alert("인원 수는 최소 1명, 최대 6명이어야 합니다.");
       adult_num.value = ""; // 잘못된 값일 경우 어른 수 초기화
-      next_button3.style.display = "none"; // 다음 버튼 숨기기
+      next_button3.style.visibility = "hidden"; // 다음 버튼 숨기기
       return; // 검증 함수 종료
     }
 
@@ -203,9 +210,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (adultValue + childrenValue > 6) {
       alert("어른과 아이 수의 합은 최대 6명이어야 합니다.");
       children_num.value = ""; // 잘못된 값일 경우 아이 수 초기화
-      next_button3.style.display = "none"; // 다음 버튼 숨기기
+      next_button3.style.visibility = "hidden"; // 다음 버튼 숨기기
     } else {
-      next_button3.style.display = "block"; // 올바른 값일 경우 다음 버튼 표시
+      next_button3.style.visibility = "visible"; // 올바른 값일 경우 다음 버튼 표시
     }
   }
 });

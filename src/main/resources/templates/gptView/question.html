@@ -10,7 +10,7 @@
             href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
             rel="stylesheet"
     />
-    <link rel="stylesheet" th:href="@{/css/rurustyle.css}">
+    <link rel="stylesheet" th:href="@{/css/modal.bootstring.css}">
     <link rel="stylesheet"th:href="@{/fonts/icomoon/style.css}">
 </head>
 
@@ -51,7 +51,6 @@
     <img class="logo" src="/images/logo.png" />
     <p>ソウルに触る</p>
 </div>
-
 <!-- 1번째 모달 창 -->
 <div id="myModal1" class="modal-question">
     <div class="modal-question-content">
@@ -95,13 +94,12 @@
         </div>
 
         <!-- 현재 페이지 상황 -->
-        <div class="progress-question-container">
+        <div class="progress-custom-question-container">
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
-
         </div>
         <!-- 이동 버튼 -->
         <button class="button-next"></button>
@@ -118,7 +116,7 @@
                 <h1>항공권은?</h1>
             </div>
             <div class="question-title-sub">
-                <span>항공권 예매 여부를 알려주세요</span>
+                <h2>항공권 예매 여부를 알려주세요</h2>
             </div>
         </div>
 
@@ -127,13 +125,13 @@
             <!-- 예약함 -->
             <div class="reservation-navigater">
                 <button type="button" class="button-reservation">
-                    <i class="icon-flight"></i>예매했어요!
-                    <div class="question-selct2-text"></div>
+                    <img src="/images/예약o이모티콘.png" class="flight" alt="예매함" />
+                    <div class="question-selct1-text">예매했어요!</div>
                 </button>
                 <!-- 예약안함 -->
                 <button type="button" class="button-notreservation">
                     <i class="icon-airplanemode_inactive"></i>
-                    <div class="question-selct1-text">아직이에요!</div>
+                    <div class="question-selct2-text">아직이에요!</div>
                 </button>
             </div>
         </div>
@@ -154,8 +152,8 @@
             </div>
         </div>
 
+
         <div class="progress-custom-question-container">
-            <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
@@ -170,37 +168,52 @@
     </div>
 </div>
 
-
 <!-- 3번째 모달 창 -->
 <div id="myModal3" class="modal-question">
     <div class="modal-question-content">
         <div class="modal-header">
-            <div class="question-real-title-main">
+            <div class="question-title-main">
                 <h1>누구랑?</h1>
             </div>
-            <div class="question-real-title-sub">
-                <span>함께가는 사람과 인원수를 알려주세요 </span>
+            <div class="question-title-sub">
+                <h2>함께가는 사람과 인원수를 알려주세요</h2>
             </div>
         </div>
         <!-- 인원수 선택버튼 -->
         <div class="button-coustom-who">
             <div class="button-who-row1">
-                <button type="button" id="button-alone">혼자</button>
-
-                <button type="button" id="button-couple">커플</button>
-
-                <button type="button" id="button-kids">아이</button>
+                <button type="button" id="button-alone">
+                    <img src="/images/혼자이모티콘.png" class="who-icon" alt="혼자 아이콘" />
+                    <span class="who-text">혼자</span>
+                </button>
+                <button type="button" id="button-couple">
+                    <img src="/images/커플이모티콘.png" class="who-icon" alt="커플 아이콘" />
+                    <span class="who-text">커플</span>
+                </button>
+                <button type="button" id="button-kids">
+                    <img src="/images/가족이모티콘.png" class="who-icon" alt="아이 아이콘" />
+                    <span class="who-text">아이</span>
+                </button>
             </div>
-
             <div class="button-who-row2">
-                <button type="button" id="button-parents">부모님</button>
-                <button type="button" id="button-friend">친구</button>
+                <button type="button" id="button-parents">
+                    <img
+                            src="/images/부모님이모티콘.png"
+                            class="who-icon"
+                            alt="부모님 아이콘"
+                    />
+                    <span class="who-text">부모님</span>
+                </button>
+                <button type="button" id="button-friend">
+                    <img src="/images/친구이모티콘.png" class="who-icon" alt="친구 아이콘" />
+                    <span class="who-text">친구</span>
+                </button>
             </div>
         </div>
 
         <div class="box-who-result-round text-group-center-row-who">
-            <div class="kids">아이: <input type="text" id="children" />명</div>
             <div class="adult">어른: <input type="text" id="adult" />명</div>
+            <div class="kids">아이: <input type="text" id="children" />명</div>
         </div>
         <div class="progress-custom-question-container">
             <div class="progress-question-step"></div>
@@ -208,7 +221,6 @@
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
-
         </div>
         <form id="modalForm3">
             <button id="backToModal2" class="button-back" type="button"></button>
@@ -216,6 +228,7 @@
         </form>
     </div>
 </div>
+
 <!-- 4번째 모달 창 -->
 <div id="myModal4" class="modal-question">
     <div class="modal-question-content">
@@ -224,64 +237,100 @@
                 <h1>어떻게?</h1>
             </div>
             <div class="question-title-sub">
-                <span>즐기고 싶은 여행테마를 골라주세요</span>
+                <h2>즐기고 싶은 여행테마를 골라주세요</h2>
             </div>
         </div>
 
         <!-- 테마1행 -->
         <div class="button-theme-row1">
-            <button type="button" id="shopping" value="쇼핑">쇼핑</button>
-            <button type="button" id="food" value="음식">음식</button>
-            <button type="button" id="cafe" value="카페">카페</button>
-        </div>
-        <!-- 테마2행 -->
-        <div class="button-theme-row2">
-            <button type="button" id="history" value="역사">역사</button>
-            <button type="button" id="culture" value="문화">문화</button>
-            <button type="button" id="lendmark" value="랜드마크">랜드마크</button>
-        </div>
-        <!-- 테마3행 -->
-        <div class="button-theme-row3">
-            <button type="button" id="experience" value="체험">체험</button>
-            <button type="button" id="healing" value="힐링">
-                힐링
+            <button type="button" id="shopping" value="쇼핑">
+                <img src="/images/쇼핑이모티콘.png" class="theme-icon" />
+                <span class="theme-text">쇼핑</span>
+            </button>
+
+            <button type="button" id="food" value="음식">
+                <img src="/images/음식이모티콘.png" class="theme-icon" />
+                <span class="theme-text">음식</span>
             </button>
 
             <button type="button" id="leisuresports" value="레포츠">
-                레포츠
+                <div class="theme-text">
+                    <img src="/images/레포츠이모티콘.png" class="theme-icon" />
+                    <span class="theme-text">레포츠 </span>
+                </div>
+            </button>
+        </div>
+        <!-- 테마2행 -->
+        <div class="button-theme-row2">
+            <button type="button" id="history" value="역사">
+                <img src="/images/역사이모티콘.png" class="theme-icon" />
+                <span class="theme-text">역사 </span>
+            </button>
+            <button type="button" id="culture" value="문화">
+                <img src="/images/문화이모티콘.png" class="theme-icon" />
+                <span class="theme-text">문화 </span>
+            </button>
+            <button type="button" id="healing" value="힐링">
+                <img src="/images/힐링이모티콘.png" class="theme-icon" />
+                <span class="theme-text">힐링</span>
+            </button>
+
+            <button type="button" id="water_skiing" value="수상레저">
+                <img src="/images/수상이모티콘.png" class="theme-icon" />
+                <span class="theme-text">수상레저 </span>
+            </button>
+
+            <button type="button" id="ice_rink" value="아이스링크">
+                <div class="sports">
+                    <img src="/images/아이스링크이모티콘.png" class="theme-icon" />
+                    <span class="theme-text">아이스링크 </span>
+                </div>
+            </button>
+        </div>
+        <!-- 테마3행 -->
+        <div class="button-theme-row3">
+            <button type="button" id="experience" value="체험">
+                <img src="/images/체험이모티콘.png" class="theme-icon" />
+                <span class="theme-text">체험</span>
+            </button>
+            <button type="button" id="landmark" value="랜드마크">
+                <img src="/images/랜드마크이모티콘.png" class="theme-icon" />
+                <span class="theme-text">랜드마크</span>
+            </button>
+
+            <button type="button" id="cafe" value="카페">
+                <img src="/images/카페이모티콘.png" class="theme-icon" />
+                <span class="theme-text">카페</span>
+            </button>
+
+            <button type="button" id="bike" value="자전거">
+                <img src="/images/자전거이모티콘.png" class="theme-icon" />
+                <span class="theme-text">자전거 </span>
             </button>
         </div>
 
+        <!-- 테마4행 -->
         <div class="theme-box button-theme-row4">
             <div class="coment-ratio">내가 선택한 여행테마</div>
 
             <div class="theme_1-box">
                 <div class="theme" id="theme_1"></div>
-
-                <div class="theme-cancel1"></div>
             </div>
 
             <div class="theme_2-box">
                 <div class="theme" id="theme_2"></div>
-
-                <div class="theme-cancel2"></div>
             </div>
 
             <div class="theme_3-box">
                 <div class="theme" id="theme_3"></div>
-
-                <div class="theme-cancel3"></div>
             </div>
         </div>
-
-        <!-- 상태창 -->
         <div class="progress-custom-question-container">
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
-
         </div>
         <form id="modalForm4">
             <button id="backToModal3" class="button-back" type="button"></button>
@@ -294,24 +343,32 @@
 <div id="myModal5" class="modal-question">
     <div class="modal-question-content">
         <div class="modal-header">
-            <div class="question-real-title-main">
+            <div class="question-title-main">
                 <h1>일정의 밀도는?</h1>
             </div>
-            <div class="question-real-title-sub">
-                <span>${nickname}님이 선호하는 활동수준을 선택해주세요</span>
+            <div class="question-title-sub">
+                <h2>선호하는 활동수준을 선택해주세요</h2>
             </div>
         </div>
-        <!-- 밀도 선택 버튼 -->
-        <div class="density-navigater">
-            <!-- 빡 -->
-            <button type="button" class="button-density">
-                <i class="icon-flight"></i>빡
-            </button>
-            <!--널-->
-            <button type="button" class="button-notdensity">
-                <i class="icon-airplanemode_inactive"></i>
-                <div class="question-selct2-text">널</div>
-            </button>
+
+        <div class="modal-selct-air-button">
+            <!-- 밀도 선택 버튼 -->
+            <!-- 빡빡 -->
+            <div class="reservation-navigater">
+                <button type="button" class="button-density">
+                    <img src="/images/빡이모티콘.png" class="density-img" />
+                    <div class="question-selct1-text">꽉 찬일정</div>
+                    <div class="question-selct1-text-sub">보고싶은건 다 볼래요!</div>
+                </button>
+                <!-- 널널 -->
+                <button type="button" class="button-notdensity">
+                    <img src="/images/널이모티콘.png" class="density-img" />
+                    <div class="question-selct2-text">널널한 일정</div>
+                    <div class="question-selct1-text-sub">
+                        느긋하고 여유롭게 즐길래요!
+                    </div>
+                </button>
+            </div>
         </div>
 
         <div class="progress-custom-question-container">
@@ -320,7 +377,7 @@
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
-
+            <div class="progress-question-step"></div>
         </div>
         <form id="modalForm5">
             <button id="backToModal4" class="button-back" type="button"></button>

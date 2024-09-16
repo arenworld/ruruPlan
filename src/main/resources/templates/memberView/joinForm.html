@@ -76,12 +76,16 @@
         <label for="age" class="input-label">Age</label>
             <select id="age" name="age" ckass="input=select" required>
                 <option value="" th:text="#{age}">Age</option>
-                <option value="10" th:text="#{age10}">10대</option>
-                <option value="20" th:text="#{age20}">20대</option>
-                <option value="30" th:text="#{age30}">30대</option>
-                <option value="40" th:text="#{age40}">40대</option>
-                <option value="50" th:text="#{age50}">50대</option>
-                <option value="60" th:text="#{age60}">60대</option>
+                <option value="20세미만" th:text="#{age_under20}"></option>
+                <option value="20세~24세" th:text="#{age_20_24}"></option>
+                <option value="25세~29세" th:text="#{age_25_29}"></option>
+                <option value="30세~34세" th:text="#{age_30_34}"></option>
+                <option value="35세~39세" th:text="#{age_35_39}"></option>
+                <option value="40세~44세" th:text="#{age_40_44}"></option>
+                <option value="45세~49세" th:text="#{age_45_49}"></option>
+                <option value="50세~54세" th:text="#{age_50_54}"></option>
+                <option value="55세~59세" th:text="#{age_55_59}"></option>
+                <option value="60세이상" th:text="#{age_over60}"></option>
             </select>
         </div>
         <!--이메일-->

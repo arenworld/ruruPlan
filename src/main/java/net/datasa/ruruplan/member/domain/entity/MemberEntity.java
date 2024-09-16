@@ -38,8 +38,8 @@ public class MemberEntity {
     private String email;
 
     //회원 나이
-    @Column(name = "age", nullable = false)
-    private Integer age;
+    @Column(name = "age", nullable = false, columnDefinition = "check(age in ('20세미만', '20세~24세', '25세~29세', '30세~34세', '35세~39세', '40세~44세', '45세~49세', '50세~54세', '55세~59세', '60세이상'))")
+    private String age;
 
     //회원 닉네임
     @Column(name = "nickname", length = 50, nullable = false)

@@ -26,7 +26,7 @@ public class MemberDTO {
     private String email;
 
     //회원 나이
-    private Integer age;
+    private String age;
 
     //회원 닉네임
     private String nickname;

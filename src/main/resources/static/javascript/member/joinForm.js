@@ -290,7 +290,7 @@ function formConfirm(){
         return false;
     }
 
-    if($('#emailconfirm').prop('readonly') ) {
+    if(!$('#emailconfirm').prop('readonly') ) {
         alert("인증번호가 일치하지 않습니다.");
         return false;
     }
@@ -300,7 +300,7 @@ function formConfirm(){
         return false;
     }
 
-    if($('#email').prop('readonly')) {
+    if(!$('#email').prop('readonly')) {
         alert("유효하지 않은 이메일입니다.")
         return false;
     }

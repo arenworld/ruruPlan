@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 /**
  * 관광지 정보 Entity
@@ -26,13 +27,22 @@ public class PlaceInfoEntity {
     @Column(name = "place_id", length = 50)
     private String placeId;
 
-    // 광광지명
-    @Column(name = "title", nullable = false, length = 100)
-    private String title;
+    // 관광지명(한글)
+    @Column(name = "title_kr", nullable = false, length = 100)
+    private String titleKor;
 
-    // 관광지 주소
-    @Column(name = "address", nullable = false, length = 200)
-    private String address;
+    // 관광지명(일본어)
+    @Column(name = "title_jp", nullable = false, length = 200)
+    private String titleJap;
+
+
+    // 관광지 주소(한글)
+    @Column(name = "address_kr", nullable = false, length = 200)
+    private String addressKor;
+
+    // 관광지 주소(일본어)
+    @Column(name = "address_jp", nullable = false, length = 200)
+    private String addressJap;
 
     // x좌표
     @Column(name = "map_x", length = 20)
@@ -62,12 +72,57 @@ public class PlaceInfoEntity {
     @Column(name = "theme3", length = 20)
     private String theme3;
 
-    // 애완동물 보유여부
+    // 펫프렌들리
     @Column(name = "pet_friendly", nullable = false)
     private Boolean petFriendly;
 
-    // 장애 여부
+    // 도로편의성 - 무장애 여부
     @Column(name = "barrier_free", nullable = false)
     private Boolean barrierFree;
+
+    // 개요
+    @Column(name = "overview", length=8000)
+    private String overview;
+
+    //세계유산여부
+    @Column(name = "heritage", columnDefinition = "tinyint(1) check(enabled in (0, 1))")
+    @ColumnDefault("0")
+    private Boolean heritage;
+
+    // 안내센터, 연락망
+    @Column(name = "infocenter", length=200)
+    private String infocenter;
+
+    // 이용시간
+    @Column(name = "usetime", length=2000)
+    private String usetime;
+
+    // 휴무일
+    @Column(name = "restdate", length=200)
+    private String restdate;
+
+    // 요금
+    @Column(name = "fee", length=200)
+    private Integer fee;
+
+    // 요금정보
+    @Column(name = "fee_info", length=200)
+    private String feeInfo;
+
+    // 판매품목
+    @Column(name = "sale_item", length=200)
+    private String saleItem;
+
+    // 원본 이미지
+    @Column(name = "origin_imgurl", length=200)
+    private String originImgUrl;
+
+    // 섬네일 이미지
+    @Column(name = "small_imgurl", length=200)
+    private String smallImgUrl;
+
+
+
+
 
 }

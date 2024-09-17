@@ -184,8 +184,10 @@ public class CustomPlanService {
     private PlaceInfoDTO convertToDTO(PlaceInfoEntity placeInfoEntity) {
         return PlaceInfoDTO.builder()
                 .placeId(placeInfoEntity.getPlaceId())
-                .title(placeInfoEntity.getTitle())
-                .address(placeInfoEntity.getAddress())
+                .titleKor(placeInfoEntity.getTitleKor())
+                .titleJpa(placeInfoEntity.getTitleJap())
+                .addressKor(placeInfoEntity.getAddressKor())
+                .addressJpa(placeInfoEntity.getAddressJap())
                 .mapX(placeInfoEntity.getMapX())
                 .mapY(placeInfoEntity.getMapY())
                 .siGunGu(placeInfoEntity.getSiGunGu())

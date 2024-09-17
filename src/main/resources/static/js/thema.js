@@ -18,23 +18,25 @@ document.addEventListener("DOMContentLoaded", function () {
   const cafe = document.getElementById("cafe");
   const healing = document.getElementById("healing");
 
+  const sportsbox = [leisure_sports, bike, water_skiing, ice_rink];
+
   let selectedThemes = [];
   let hoverTimeout;
 
   // 테마와 해당 이미지 경로 매핑
   const themeImages = {
     쇼핑: "/images/쇼핑이모티콘.png",
-    음식:  "/images/음식이모티콘.png",
-    카페:  "/images/카페이모티콘.png",
-    역사:  "/images/역사이모티콘.png",
+    음식: "/images/음식이모티콘.png",
+    카페: "/images/카페이모티콘.png",
+    역사: "/images/역사이모티콘.png",
     문화: "/images/문화이모티콘.png",
-    힐링:  "/images/힐링이모티콘.png",
-    체험:  "/images/체험이모티콘.png",
-    랜드마크:  "/images/랜드마크이모티콘.png",
+    힐링: "/images/힐링이모티콘.png",
+    체험: "/images/체험이모티콘.png",
+    랜드마크: "/images/랜드마크이모티콘.png",
     레포츠: "/images/레포츠이모티콘.png",
     수상레저: "/images/수상이모티콘.png",
-    자전거:  "/images/자전거이모티콘.png",
-    아이스링크:  "/images/아이스링크이모티콘.png",
+    자전거: "/images/자전거이모티콘.png",
+    아이스링크: "/images/아이스링크이모티콘.png",
   };
 
   // 처음에 '다음' 버튼과 테마 박스 숨기기
@@ -113,37 +115,37 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault(); // 클릭 이벤트 무시
   });
 
-  // 레포츠 호버 효과 (클릭 막음)
-  leisure_sports.addEventListener("mouseover", function () {
-    healing.style.display = "none";
-    cafe.style.display = "none";
-    bike.style.display = "block";
+  // '레포츠' 그룹 마우스 오버 및 아웃 이벤트 처리
+  sportsbox.forEach((element) => {
+    element.addEventListener("mouseover", function () {
+      clearTimeout(hoverTimeout); // 타이머 초기화
+      healing.style.display = "none";
+      cafe.style.display = "none";
+      bike.style.display = "block";
 
-    // 달력에서 월 정보를 매번 가져옴
-    const calendarHeader =
-        document.querySelector(".calendar-header").textContent;
-    const monthMatch = calendarHeader.match(/(\d{1,2})월/);
-    const monthText = monthMatch ? parseInt(monthMatch[1]) : null;
+      // 달력에서 월 정보를 가져옴
+      const calendarHeader = document.querySelector(".calendar-header").textContent;
+      const monthMatch = calendarHeader.match(/(\d{1,2})월/);
+      const monthText = monthMatch ? parseInt(monthMatch[1]) : null;
 
-    // 4월 ~ 11월: 수상스키 보이기, 12월 ~ 3월: 아이스링크 보이기
-    if (monthText >= 4 && monthText <= 11) {
-      water_skiing.style.display = "block";
-      ice_rink.style.display = "none";
-    } else if (monthText !== null) {
-      ice_rink.style.display = "block";
-      water_skiing.style.display = "none";
-    }
+      // 4월 ~ 11월: 수상스키 보이기, 12월 ~ 3월: 아이스링크 보이기
+      if (monthText >= 4 && monthText <= 11) {
+        water_skiing.style.display = "block";
+        ice_rink.style.display = "none";
+      } else if (monthText !== null) {
+        ice_rink.style.display = "block";
+        water_skiing.style.display = "none";
+      }
+    });
 
-    clearTimeout(hoverTimeout);
-  });
-
-  leisure_sports.addEventListener("mouseleave", function () {
-    hoverTimeout = setTimeout(function () {
-      healing.style.display = "block";
-      cafe.style.display = "block";
-      ice_rink.style.display = "none";
-      bike.style.display = "none";
-      water_skiing.style.display = "none";
-    }, 1000);
+    element.addEventListener("mouseleave", function () {
+      hoverTimeout = setTimeout(function () {
+        healing.style.display = "block";
+        cafe.style.display = "block";
+        bike.style.display = "none";
+        water_skiing.style.display = "none";
+        ice_rink.style.display = "none";
+      }, 500); // 1초 후에 원래 상태로 복귀
+    });
   });
 });

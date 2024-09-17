@@ -656,7 +656,7 @@ footer a {
     position: absolute;
     top: 1.8125rem; /* 29px -> 1.8125rem */
     left: 50%;
-    transform: translateX(-50%);
+
     border-radius: 50%;
 }
 
@@ -674,19 +674,19 @@ footer a {
     height: 0.625rem; /* 10px -> 0.625rem */
     background-color: #ffeb3b;
     position: absolute;
-    top: 1.8125rem; /* 29px -> 1.8125rem */
-    left: 50%;
-    transform: translateX(-50%);
+    top:2rem; /* 29px -> 1.8125rem */
+    left: 10%;
+
     border-radius: 50%;
 }
 
 /* 공휴일이 겹치는 경우 보라색 원 표시 */
-.calendar-cell.purple-holiday::before {
-    background-color: #800080;
-    left: 50%;
-    top: 1.8125rem; /* 29px -> 1.8125rem */
-    transform: translateX(-50%);
-}
+/*.calendar-cell.purple-holiday::before {*/
+/*    background-color: #800080;*/
+/*    left: 50%;*/
+/*    top: 1.8125rem; !* 29px -> 1.8125rem *!*/
+/*    transform: translateX(-50%);*/
+/*}*/
 
 /* 빈 달력 셀 스타일 */
 .calendar-cell.empty {
@@ -738,7 +738,7 @@ footer a {
     border-radius: 0.625rem; /* 10px -> 0.625rem */
     width: 77%;
     position: absolute;
-    top: 80%;
+    top: 82%;
     text-align: center;
 }
 
@@ -926,10 +926,11 @@ a {
     justify-content: center;
     width: 10.625rem; /* 기존 너비 유지 */
     height: 8.75rem; /* 기존 높이 유지 */
-    background-color: #27c5b8;
+    background-color: #ffffff;
     border-radius: 1.875rem;
-    border: none;
+
     cursor: pointer;
+    border: 1px solid black !important;
 }
 
 /* 인원수 버튼 1행 위치 */
@@ -938,6 +939,7 @@ a {
     display: flex;
     justify-content: center;
     gap: 4rem; /* 70px -> 4.375rem */
+
 }
 
 /* 인원수 버튼 2행 위치 */
@@ -980,14 +982,14 @@ a {
     gap: 1.875rem; /* 30px -> 1.875rem */
 }
 
-/* 예매버튼 스타일 */
+/* 밀도버튼 스타일 */
 .button-density,
 .button-notdensity {
     width: 18.75rem; /* 300px -> 18.75rem */
     height: 21.875rem; /* 350px -> 21.875rem */
-    background-color: #27c5b8;
-    color: white;
-    border: none;
+    background-color: white ;
+    color: black !important;
+    border: 1px solid black!important;
     border-radius: 1.5625rem; /* 25px -> 1.5625rem */
     cursor: pointer;
     font-size: 1.875rem; /* 30px -> 1.875rem */
@@ -1434,4 +1436,46 @@ a {
     position: relative;
     align-items: center;
     bottom: 2rem; /* 170px -> 10.625rem */
+}
+.calendar-red {
+    color: red;
+}
+
+.calendar-dates-selected {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.calendar-dates-selected.calendar-red {
+    color: #ffffff;
+}
+
+.calendar-highlighted {
+    background-color: #e0e0e0;
+    color: #000000;
+}
+
+.calendar-disabled {
+    color: #e1e2e6;
+}
+
+.calendar-hovered {
+    background-color: #e0e0e0;
+}
+
+.calendar-day-name {
+    font-weight: bold;
+    text-align: center;
+}
+
+.calendar-date {
+    cursor: pointer;
+    text-align: center;
+}
+.selected {
+    background-color: gray !important;
+}
+
+.unselected {
+    background-color: white !important;
 }

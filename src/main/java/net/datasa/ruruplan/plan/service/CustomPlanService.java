@@ -3,6 +3,9 @@ package net.datasa.ruruplan.plan.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.ruruplan.gpt.domain.dto.GptCmdDTO;
+import net.datasa.ruruplan.gpt.domain.entity.GptCmdEntity;
+import net.datasa.ruruplan.gpt.repository.GptCmdRepository;
 import net.datasa.ruruplan.plan.domain.dto.PlaceInfoDTO;
 import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
 import net.datasa.ruruplan.plan.domain.dto.TaskDTO;
@@ -29,6 +32,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CustomPlanService {
 
+    private final GptCmdRepository cmdRepository;
     private final PlanRepository planRepository;
     private final TaskJpaRepository taskJpaRepository;
     private final TaskRepository taskRepository;
@@ -83,21 +87,6 @@ public class CustomPlanService {
             TaskDTO dto = convertToDTO(taskEntity);
             dtoList.add(dto);
         }
-
-
-        //일자별 일정 불러오기
-//        if(dayNum != 0) {
-//            taskEntityList = taskRepository.planLocations(planNum, dayNum);
-//        }
-
-//        List<Map<String, Double>> planLocations = new ArrayList<>();
-//        for (TaskEntity taskEntity : taskEntityList) {
-//            Map<String, Double> location = new HashMap<>();
-//            planLocations.add(Map.of("lat", Double.parseDouble(taskEntity.getPlace().getMapY()),
-//                    "lng", Double.parseDouble(taskEntity.getPlace().getMapX()),
-//                    "taskNum", Double.parseDouble(String.valueOf(taskEntity.getTaskNum())),
-//                    "dateN", Double.parseDouble(String.valueOf(taskEntity.getDateN()))));
-//        }
         return dtoList;
     }
 
@@ -149,6 +138,7 @@ public class CustomPlanService {
     private PlanDTO convertToDTO(PlanEntity planEntity) {
         return PlanDTO.builder()
                 .planNum(planEntity.getPlanNum())
+                .cmdNum(planEntity.getCmd().getCmdNum())
                 .memberId(planEntity.getMember().getMemberId())
                 .planName(planEntity.getPlanName())
                 .startDate(planEntity.getStartDate())
@@ -206,5 +196,31 @@ public class CustomPlanService {
                 .petFriendly(placeInfoEntity.getPetFriendly())
                 .barrierFree(placeInfoEntity.getBarrierFree())
                 .build();
+    }
+
+    private GptCmdDTO convertToDTO(GptCmdEntity cmdEntity) {
+        return GptCmdDTO.builder()
+                .cmdNum(cmdEntity.getCmdNum())
+                .memberId(cmdEntity.getMember().getMemberId())
+                .firstDate(cmdEntity.getFirstDate())
+                .lastDate(cmdEntity.getLastDate())
+                .nights(cmdEntity.getNights())
+                .days(cmdEntity.getDays())
+                .arrival(cmdEntity.getArrival())
+                .depart(cmdEntity.getDepart())
+                .tripType(cmdEntity.getTripType())
+                .adult(cmdEntity.getAdult())
+                .children(cmdEntity.getChildren())
+                .theme1(cmdEntity.getTheme1())
+                .theme2(cmdEntity.getTheme2())
+                .theme3(cmdEntity.getTheme3())
+                .density(cmdEntity.getDensity())
+                .build();
+    }
+
+    public GptCmdDTO getCmd(Integer cmdNum) {
+        GptCmdEntity cmdEntity = cmdRepository.findById(cmdNum)
+                .orElseThrow(()-> new EntityNotFoundException("존재하지 않는 명령어"));
+        return convertToDTO(cmdEntity);
     }
 }

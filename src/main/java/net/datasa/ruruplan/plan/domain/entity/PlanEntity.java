@@ -39,7 +39,7 @@ public class PlanEntity {
     // 질문번호 참조
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cmd_num", referencedColumnName = "cmd_num")
-    private GptCmdEntity gptCmd;
+    private GptCmdEntity cmd;
 
     // 멤버 아이디 참조
     @ManyToOne(fetch = FetchType.LAZY)

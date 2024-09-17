@@ -2,6 +2,8 @@ package net.datasa.ruruplan.plan.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.ruruplan.gpt.domain.dto.GptCmdDTO;
+import net.datasa.ruruplan.gpt.domain.entity.GptCmdEntity;
 import net.datasa.ruruplan.plan.domain.dto.PlaceInfoDTO;
 import net.datasa.ruruplan.plan.domain.dto.PlanAndThemeMarkers;
 import net.datasa.ruruplan.plan.domain.dto.TaskDTO;
@@ -38,7 +40,11 @@ public class CustomPlanController {
 
         // custom.html로드될 때 뿌려줄 플랜정보불러오기
         PlanDTO planDTO = customPlanService.getPlan();
+        log.debug("cmdNum: {}", planDTO.getCmdNum());
+        log.debug("planDTO: {}", planDTO);
 
+        // 기존에 선택한 옵션사항을 보여주기 위한 cmdDTO 불러오기
+        GptCmdDTO cmdDTO = customPlanService.getCmd(planDTO.getCmdNum());
         // start_date, end_date 활용해서 몇박 며칠인지 정의하는 기능 ChronoUnit은 날짜타입의 계산을 도와주는 객체
         long days = ChronoUnit.DAYS.between(planDTO.getStartDate(), planDTO.getEndDate()) + 1;
 
@@ -51,7 +57,8 @@ public class CustomPlanController {
         model.addAttribute("planDTO", planDTO);
         model.addAttribute("themeArray", themeArray);
         model.addAttribute("lastDay", lastDay);
-        log.debug("플랜정보:{}", planDTO);
+        model.addAttribute("cmdDTO", cmdDTO);
+        log.debug("옵션정보:{}", cmdDTO);
         return "customView/customPlan";
     };
 

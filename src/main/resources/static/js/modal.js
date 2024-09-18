@@ -66,8 +66,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const last_date = document.getElementById("last_date")?.value ;
 
     // 동적으로 추가된 필드에서 값을 가져옴
-    const startTimeValue = document.getElementById("startTime").value || null;
-    const endTimeValue = document.getElementById("endTime").value|| null;
+    const startTimeElement = document.getElementById("startTime");
+    const endTimeElement = document.getElementById("endTime");
+
+    const startTimeValue = startTimeElement ? startTimeElement.value : null;
+    const endTimeValue = endTimeElement ? endTimeElement.value : null;
+
 
     // 로그 확인
     console.log("arrival:", startTimeValue);

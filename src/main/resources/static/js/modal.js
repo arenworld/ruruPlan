@@ -62,12 +62,12 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
 
     // 데이터를 가져오기 전에 요소가 존재하는지 확인
-    const first_date = document.getElementById("first_date")?.value || null;
-    const last_date = document.getElementById("last_date")?.value || null;
+    const first_date = document.getElementById("first_date")?.value ;
+    const last_date = document.getElementById("last_date")?.value ;
 
     // 동적으로 추가된 필드에서 값을 가져옴
-    const startTimeValue = document.getElementById("startTime").value;
-    const endTimeValue = document.getElementById("endTime").value;
+    const startTimeValue = document.getElementById("startTime").value || null;
+    const endTimeValue = document.getElementById("endTime").value|| null;
 
     // 로그 확인
     console.log("arrival:", startTimeValue);
@@ -134,6 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
           console.log("서버 응답:", data);
           modal5.style.display = "none"; // 모달 닫기
           alert("제출이 완료되었습니다!");
+          window.location.href = `/gptView/loading?cmdNum=${data.cmdNum}`;
         })
         .catch((error) => {
           console.error("오류 발생:", error);

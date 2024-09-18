@@ -466,18 +466,19 @@ footer a {
     width: 100%;
     background-color: #f4f3f3;
     z-index: 900;
-    padding: 1.25rem 0; /* 20px -> 1.25rem */
+    height: 100%;
+    overflow: hidden;
 }
 
 /* 모달 내용 스타일 */
 .modal-question-content {
     background-color: white;
-    margin: auto;
+    margin: 2.5rem auto; /* 상하 여백을 균등하게 설정 */
     padding: 1.25rem;
-    height: 620px;
+    min-height: 620px;
+    max-height: 1000px;
     border: none;
     width: 80%;
-
     max-width: 50rem;
     box-sizing: border-box;
     display: flex;
@@ -674,7 +675,7 @@ footer a {
     height: 0.625rem; /* 10px -> 0.625rem */
     background-color: #ffeb3b;
     position: absolute;
-    top:2rem; /* 29px -> 1.8125rem */
+    top: 2rem; /* 29px -> 1.8125rem */
     left: 10%;
 
     border-radius: 50%;
@@ -895,13 +896,24 @@ a {
 
 .date-time-wrapper {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0.625rem; /* 10px -> 0.625rem */
+    align-items: center; /* 수직 정렬을 중앙으로 맞춤 */
+    justify-content: center; /* 왼쪽 정렬 */
+    margin-bottom: 0.625rem; /* 하단 여백 */
+    gap: 0.5rem; /* 요소 간의 간격을 일정하게 */
 }
 
 .date-time-wrapper strong {
-    margin-right: 0.625rem; /* 10px -> 0.625rem */
+    margin-right: 0.625rem; /* 텍스트와 입력 필드 사이의 여백 */
+    font-size: 16px; /* 텍스트 크기 */
+    line-height: 1.5; /* 텍스트 높이를 고정 */
+    display: inline-block; /* 텍스트의 높이를 고정하기 위해 inline-block 사용 */
+}
+
+.date-time-wrapper input[type="time"] {
+    height: 2rem; /* 입력 필드 높이를 고정 */
+    font-size: 16px; /* 입력 필드 글자 크기 */
+    padding: 0.25rem; /* 내부 여백 */
+    box-sizing: border-box; /* padding과 border가 전체 크기에 포함되도록 */
 }
 
 /* 인원수 정보창에 대한 정의 */
@@ -911,7 +923,7 @@ a {
     border-radius: 0.625rem;
     width: 80%;
     position: absolute;
-    top: 70%;
+    top: 75%;
     text-align: center;
     /* 기존에 있던 Flexbox 속성 제거 */
     /* display: flex; */
@@ -939,14 +951,13 @@ a {
     display: flex;
     justify-content: center;
     gap: 4rem; /* 70px -> 4.375rem */
-
 }
 
 /* 인원수 버튼 2행 위치 */
 .button-who-row2 {
     position: absolute;
     top: 17rem; /* 320px -> 20rem */
-    right: 12rem; /* 570px -> 35.625rem */
+    right: 6rem; /* 570px -> 35.625rem */
     display: flex;
     justify-content: center;
     gap: 4rem; /* 70px -> 4.375rem */
@@ -961,13 +972,21 @@ a {
     border-radius: 0.5rem; /* 8px -> 0.5rem */
 }
 
+.adult {
+    position: relative;
+    left: 3rem;
+
+    justify-content: center;
+}
+
 /* 수평 정렬을 위한 클래스 */
 .text-group-center-row-who {
     display: flex;
     flex-direction: row;
     align-items: center;
+
     justify-content: center;
-    gap: 1rem; /* 요소 사이의 간격 조절 */
+    gap: 4rem; /* 요소 사이의 간격 조절 */
 }
 /* 인원수 버튼에 마우스를 올렸을 때 스타일 */
 .button-coustom-who button:hover {
@@ -987,9 +1006,9 @@ a {
 .button-notdensity {
     width: 18.75rem; /* 300px -> 18.75rem */
     height: 21.875rem; /* 350px -> 21.875rem */
-    background-color: white ;
+    background-color: white;
     color: black !important;
-    border: 1px solid black!important;
+    border: 1px solid black !important;
     border-radius: 1.5625rem; /* 25px -> 1.5625rem */
     cursor: pointer;
     font-size: 1.875rem; /* 30px -> 1.875rem */
@@ -1143,7 +1162,7 @@ a {
     bottom: 14.5rem; /* 265px -> 16.5625rem */
     font-size: 1.1875rem; /* 19px -> 1.1875rem */
 }
-
+.button-theme-row4 button,
 .button-theme-row1 button,
 .button-theme-row2 button,
 .button-theme-row3 button {
@@ -1162,11 +1181,12 @@ a {
 /* 테마 4행 */
 .button-theme-row4 {
     display: flex;
+    flex-direction: row;
     justify-content: center;
-    gap: 2rem; /* 120px -> 7.5rem */
-    font-size: 1.1875rem; /* 19px -> 1.1875rem */
+    gap: 1.875rem; /* 30px -> 1.875rem */
     position: absolute;
-    bottom: 4rem !important; /* 100px -> 6.25rem */
+    bottom: 4.5rem; /* 265px -> 16.5625rem */
+    font-size: 1.1875rem; /* 19px -> 1.1875rem */
 }
 
 /* 테마 박스 스타일 */
@@ -1200,6 +1220,16 @@ a {
     bottom: 7rem; /* 130px -> 8.125rem */
     font-size: 1.5rem; /* 16px -> 1rem */
 }
+/*레포츠 선택문구*/
+.coment-ratio2 {
+    justify-content: center;
+    white-space: nowrap;
+    position: absolute;
+    bottom: 7rem; /* 130px -> 8.125rem */
+    font-size: 1.5rem; /* 16px -> 1rem */
+}
+
+
 
 /* 취소 버튼 스타일 */
 .theme-cancel3,

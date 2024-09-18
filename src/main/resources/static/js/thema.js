@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   // '레포츠' 버튼을 제외한 테마 버튼 선택
   const themes = document.querySelectorAll(
-      ".button-theme-row1 button:not(#leisuresports), .button-theme-row2 button:not(#leisuresports), .button-theme-row3 button:not(#leisuresports)"
+      ".button-theme-row1 button, .button-theme-row2 button, .button-theme-row3 button, .button-theme-row4 button"
   );
 
   const themeBoxes = document.querySelectorAll(".theme-box .theme");
@@ -15,10 +15,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const bike = document.getElementById("bike");
   const water_skiing = document.getElementById("water_skiing");
   const ice_rink = document.getElementById("ice_rink");
-  const cafe = document.getElementById("cafe");
-  const healing = document.getElementById("healing");
 
   const sportsbox = [leisure_sports, bike, water_skiing, ice_rink];
+const  ment1 =document.querySelector(".coment-ratio");
+const  ment2 =document.querySelector(".coment-ratio2");
+
 
   let selectedThemes = [];
   let hoverTimeout;
@@ -47,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
   bike.style.display = "none";
   water_skiing.style.display = "none";
   ice_rink.style.display = "none";
-
+ment2.style.display = "none";
   // 테마 버튼 클릭 이벤트 처리
   themes.forEach((theme) => {
     theme.addEventListener("click", function () {
@@ -119,33 +120,47 @@ document.addEventListener("DOMContentLoaded", function () {
   sportsbox.forEach((element) => {
     element.addEventListener("mouseover", function () {
       clearTimeout(hoverTimeout); // 타이머 초기화
-      healing.style.display = "none";
-      cafe.style.display = "none";
-      bike.style.display = "block";
+      console.log(ment1, ment2);
 
+      bike.style.display = "block";
+      ice_rink.style.display = "block";
+      water_skiing.style.display = "block";
+      ment1.style.display = "none"; // 기존 멘트 숨기기
+      ment2.style.display = "block"; // 새로운 멘트 보이기
+
+      theme_1_box.style.display = "none";
+      theme_2_box.style.display = "none";
+      theme_3_box.style.display = "none";
+
+      // 사용 가능성 있음
       // 달력에서 월 정보를 가져옴
-      const calendarHeader = document.querySelector(".calendar-header").textContent;
-      const monthMatch = calendarHeader.match(/(\d{1,2})월/);
-      const monthText = monthMatch ? parseInt(monthMatch[1]) : null;
+      // const calendarHeader = document.querySelector(".calendar-header").textContent;
+      // const monthMatch = calendarHeader.match(/(\d{1,2})월/);
+      // const monthText = monthMatch ? parseInt(monthMatch[1]) : null;
 
       // 4월 ~ 11월: 수상스키 보이기, 12월 ~ 3월: 아이스링크 보이기
-      if (monthText >= 4 && monthText <= 11) {
-        water_skiing.style.display = "block";
-        ice_rink.style.display = "none";
-      } else if (monthText !== null) {
-        ice_rink.style.display = "block";
-        water_skiing.style.display = "none";
-      }
+      // if (monthText >= 4 && monthText <= 11) {
+      //   water_skiing.style.display = "block";
+      //   ice_rink.style.display = "none";
+      // } else if (monthText !== null) {
+      //   ice_rink.style.display = "block";
+      //   water_skiing.style.display = "none";
+      // }
     });
 
     element.addEventListener("mouseleave", function () {
       hoverTimeout = setTimeout(function () {
-        healing.style.display = "block";
-        cafe.style.display = "block";
+        theme_1_box.style.display = "block";
+        theme_2_box.style.display = "block";
+        theme_3_box.style.display = "block";
+
+        ment1.style.display = "block"; // 기존 멘트 다시 보이기
+        ment2.style.display = "none"; // 새로운 멘트 숨기기
+
         bike.style.display = "none";
         water_skiing.style.display = "none";
         ice_rink.style.display = "none";
-      }, 500); // 1초 후에 원래 상태로 복귀
+      }, 300); // 0.5초 후에 원래 상태로 복귀
     });
   });
 });

@@ -5,7 +5,7 @@
 * License: https://creativecommons.org/licenses/by/3.0/
 */ -->
 <!doctype html>
-<html lang="kor" xmlns:th="http://thymeleaf.org"
+<html lang="kor" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <script src="js/jquery-3.4.1.min.js"></script>
@@ -41,6 +41,7 @@
 
     <!-- 네이버 MapApi 불러오기-->
     <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ycuy92lblj&language=ja"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.4/dayjs.min.js"></script>
 
 </head>
 
@@ -120,7 +121,7 @@
     <div class="container my-5">
 
         <!-- 플래너 정보 출력 -->
-        <div class="present-planDTO">
+        <div class="info-current-plan">
 
             <div class="plan-head">
                 <h1>
@@ -200,17 +201,17 @@
                             th:id="|plan-${dayNum}day-button|" th:text="|Day${dayNum}|" th:data-daynum-button="${dayNum}"></button>
                 </div>
 
-                <div class="plan-details" id="planTable-allday">
+                <div class="plan-details" id="planTable-allDay">
 
-                    <!-- 일자별로 테이블을 생성 -->
+     <!--               &lt;!&ndash; 일자별로 테이블을 생성 &ndash;&gt;
                     <div th:each="dayNum : ${#numbers.sequence(1, lastDay)}" th:id="|planTable-${dayNum}day|" th:data-daynum-table="${dayNum}" th:class="planTables">
-                        <!-- 날짜 제목 -->
+                        &lt;!&ndash; 날짜 제목 &ndash;&gt;
                         <h4 th:text="|Day ${dayNum}|" class="day-plans-dayTitle"></h4>
 
                         <table class="day-plans-table">
                             <thead>
                             <tr class="day-table-tr1">
-                                <th class="day-table-th1">no</th>
+                               &lt;!&ndash; <th class="day-table-th1">no</th> &ndash;&gt;
                                 <th class="day-table-th2">time</th>
                                 <th class="day-table-th3">task</th>
                                 <th class="day-table-th4">place</th>
@@ -219,18 +220,18 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <!-- 해당 날짜의 일정을 반복 -->
+                            &lt;!&ndash; 해당 날짜의 일정을 반복 &ndash;&gt;
                             <tr th:class="task-list" th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == dayNum}">
-                                <td th:text="${task.taskNum}" th:class="|task-list${task.taskNum+1}|"></td>
+                                <input type="hidden" th:value="${task.taskNum}" th:class="|task-list${task.taskNum+1}|">
                                 <td th:text="${task.startTime}"></td>
 
-                                <!-- 홀수라인일 때 -->
+                                &lt;!&ndash; 홀수라인일 때 &ndash;&gt;
                                 <th:block th:if="${iterStat.count % 2 != 0}">
                                     <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
-                                    <td th:text="${task.place.title}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
+                                    <td th:text="${task.place.titleKor}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
                                 </th:block>
 
-                                <!-- 짝수라인일 때-->
+                                &lt;!&ndash; 짝수라인일 때&ndash;&gt;
                                 <th:block th:if="${iterStat.count % 2 == 0}">
                                     <td th:attr="colspan=2" th:text="${task.task}"></td>
                                 </th:block>
@@ -243,12 +244,12 @@
                                     <td th:text="${#temporals.format(task.duration, 'm분')}"></td>
                                 </th:block>
 
-                                <td th:text="|${task.cost}|" class="day-table-td-cost"></td>
+                                <td th:text="|${task.cost}|" th:class="day-table-td-cost" th:data-daynum-cost="${task.dateN}"></td>
                                 <td>원</td>
                             </tr>
                             </tbody>
                         </table>
-                    </div>
+                    </div>-->
                 </div>
 
 

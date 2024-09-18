@@ -90,8 +90,34 @@ public class CustomPlanService {
         return dtoList;
     }
 
-    public List<TaskDTO> getDayTaskList(Integer planNum, Integer dateN) {
-        return taskRepository.getDayTaskList(planNum, dateN);
+    /**
+     *
+     * @param planNum
+     * @param dayNum
+     * @return
+     */
+    public List<TaskDTO> getDayTaskList(Integer planNum, Integer dayNum) {
+
+        List<TaskEntity> taskEntityList;
+
+        // 전체일정 불러오기
+        if (dayNum == 0) {
+            Sort sort = Sort.by(Sort.Direction.ASC, "taskNum");
+            PlanEntity planEntity = planRepository.findById(planNum)
+                    .orElseThrow(() -> new EntityNotFoundException("플랜없음"));
+            taskEntityList = planEntity.getTaskList();
+        }
+        else {
+            taskEntityList = taskRepository.dayTaskList(planNum, dayNum);
+        }
+
+        List<TaskDTO> dtoList = new ArrayList<>();
+
+        for(TaskEntity taskEntity : taskEntityList) {
+            TaskDTO dto = convertToDTO(taskEntity);
+            dtoList.add(dto);
+        }
+        return dtoList;
     }
 
     /**

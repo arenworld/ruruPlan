@@ -32,7 +32,6 @@ public class TaskRepositoryImpl implements TaskRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-
     /**
      * getPlanLocations , 지도 맵 그리는 가장 기본 ajax에서 사용되는 dayTaskList 일자별 일정리스트를
      * @param planNum
@@ -46,11 +45,6 @@ public class TaskRepositoryImpl implements TaskRepository {
                         .and(taskEntity.dateN.eq(dayNum)))
                 .fetch();
     }
-
-
-
-
-
 
     @Override
     public List<TaskDTO> getDayTaskList(Integer planNum, Integer dateN) {

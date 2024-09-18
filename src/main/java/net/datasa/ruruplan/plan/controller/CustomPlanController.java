@@ -30,8 +30,17 @@ public class CustomPlanController {
 
     private final CustomPlanService customPlanService;
 
+    @ResponseBody
+    @PostMapping("getPlan")
+    public List<TaskDTO> getPlan(@RequestParam("planNum") Integer planNum, @RequestParam("dayNumOfButton") Integer dayNum) {
+
+        return  customPlanService.getDayTaskList(planNum, dayNum);
+    }
+
+
+
     /**
-     * 플랜 하나를 가져와서 출력하기 위한 메서드
+     * 플랜 하나를 가져와서 출력하기 위한 메서드(html에 작성, origin용)
      * @param model
      * @return
      */
@@ -51,6 +60,7 @@ public class CustomPlanController {
         String[] themeArray = {"쇼핑", "음식", "카페", "역사", "문화", "힐링", "랜드마크", "체험", "레포츠"};
 
         List<TaskDTO> taskList = planDTO.getTaskList();
+
         TaskDTO lastTaskDTO = planDTO.getTaskList().get(taskList.size()-1);
         Integer lastDay = lastTaskDTO.getDateN();
         model.addAttribute("days", days);

@@ -10,14 +10,17 @@ let clickCountThemeButton = 0;
 
 $(document).ready(function () {
 
-    // 일정표 출력
-    dayPlansPrint(dayNumOfButton);
-
-    // 일정마커
+    // 로딩되자 마자 보이는 마커 : 플랜 일정에 포함되어 있는 장소만
     planMarkers(dayNumOfButton);
 
-    // 총비용 계산
     calculateTotalCost(dayNumOfButton);
+
+
+    // 테마별 버튼 생성 및 테마 정보 호출, 레포츠 처리 어떻게 해야 되지?
+    const themes = ['쇼핑', '음식', '카페', '역사', '문화', '힐링', '랜드마크', '체험', '레포츠']
+    themes.forEach(function (theme) {
+        $('#theme-' + theme + '-button').click(themeMarkers);
+    });
 
     // 일자별 버튼 생성 및 데이 플랜 호출
     const days = ['allday', '1day', '2day', '3day', '4day', '5day', '6day'];
@@ -26,11 +29,10 @@ $(document).ready(function () {
         $('#plan-' + day + '-button').click(function() {
             dayNumOfButton = $(this).data('daynum-button');
 
-            dayPlansPrint(dayNumOfButton);
             planMarkers(dayNumOfButton);
             calculateTotalCost(dayNumOfButton);
 
-            // 테이블 번호랑 비교하기 --> ajax로 하면 이런짓을 안해도 되는 것 같은데?
+            // 테이블 번호랑 비교하기
             $('.planTables').each(function() {
                 let dayNumOfTable = $(this).data('daynum-table');
                 if(dayNumOfButton === 0) {
@@ -44,15 +46,9 @@ $(document).ready(function () {
         });
     });
 
-    // 테마별 버튼 생성 및 테마 정보 호출, 레포츠 처리 어떻게 해야 되지?
-    const themes = ['쇼핑', '음식', '카페', '역사', '문화', '힐링', '랜드마크', '체험', '레포츠']
-    themes.forEach(function (theme) {
-        $('#theme-' + theme + '-button').click(themeMarkers);
-    });
-
-
     // 일정에서 장소명을 클릭할 때 발생하는 함수
     $('.placeTitle').click(selectTask);
+
 
     $('.day-table-td-cost').on('change', function() {
         let newValue = $(this).text(); // 수정된 값
@@ -74,95 +70,11 @@ $(document).ready(function () {
             }
         });
     });
+
+
     
 });
 
-// 일정표 그리기
-function dayPlansPrint(dayNumOfButton) {
-    let planNum = $('#planNum').val();
-
-    $.ajax( {
-        url: '/custom/getPlan',
-        type: 'post',
-        data: {
-            planNum : planNum,
-            dayNumOfButton: dayNumOfButton
-        },
-        success: function (taskList) {
-            console.log(taskList);
-            $('#planTable-allDay').empty();
-            console.log(dayjs);
-            let lastDay = taskList[taskList.length - 1].dateN;
-
-            if (dayNumOfButton === 0) {
-                dayNumOfButton++;
-            }
-            for (let dayNum = dayNumOfButton; dayNum <= lastDay; dayNum++) {
-                let dayTable =  `
-                        <div id="planTable-${dayNum}day" class="planTables" data-daynum-table="${dayNum}">
-                            <h4 class="day-plans-dayTitle">Day ${dayNum}</h4>
-                            <table class="day-plans-table">
-                                <thead>
-                                    <tr class="day-table-tr1">
-                                        <th class="day-table-th2">time</th>
-                                        <th class="day-table-th3">task</th>
-                                        <th class="day-table-th4">place</th>
-                                        <th class="day-table-th5">duration</th>
-                                        <th class="day-table-th6">cost</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`;
-
-                // Filter tasks by the current day (inner loop)
-                taskList.forEach(function(task, index) {
-                    if (task.dateN === dayNum) {
-
-                        let formattedTime = task.startTime.substring(0, 5);
-
-                        let durationHour = task.duration.substring(1, 2);
-                        let durationMinute = task.duration.substring(3, 5);
-                        let duration = (durationHour !== '0') ?
-                                    durationHour + '시간' + durationMinute + '분' : durationMinute + '분';
-
-                        // Start building task row
-                        dayTable += `<tr class="task-list">
-                                <input type="hidden" value="${task.taskNum}" class="task-list${task.taskNum+1}">
-                                <td>${formattedTime}</td>`;
-
-                        // 이동이 아닐 때 -->
-                        if (task.task !== '이동') {
-                            dayTable += `
-                                    <td>${task.task}</td>
-                                    <td class="placeTitle" data-tasknum="${task.taskNum}" style="cursor:pointer;">${task.place.titleKor}</td>`;
-                        }
-                        // Even rows
-                        else {
-                            dayTable += `
-                                    <td colspan="2">${task.task}</td>`;
-                        }
-
-                        // Add duration and cost columns
-                        dayTable += `
-                                <td>${duration}</td>
-                                <td class="day-table-td-cost" data-daynum-cost="${task.dateN}">${task.cost}</td>
-                                <td>원</td>
-                            </tr>`;
-                    }
-                });
-
-                // Close the table structure
-                dayTable += `</tbody></table></div>`;
-
-                // Append the table for this day to the container
-                $('#planTable-allDay').append(dayTable);
-            }
-        },
-        error : function () {
-            console.log('error');
-        }
-    });
-
-}
 
 
 // 플랜별 & 일자별 마커 출력 함수

@@ -1,35 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <title>오디세이 테스트</title>
     <script src="/js/jquery-3.4.1.min.js"></script>
+    <script
+            src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=7ejrjQSxsM8Vp5U8WbLArOuHpOwQNnJ31hqE3Pt7"></script>
     <script>
         $(document).ready(function(){
-            $('#route').click(searchPubTransPathAJAX);
+            $('#callRoute').click(searchPubTransPathAJAX);
+            $('#callRoute').click(Tmap);
         });
 
         function searchPubTransPathAJAX() {
-            alert("실행됨");
+            let sx = '127.0979006';
+            let sy = '37.51135169';
+            let ex = '126.9865899';
+            let ey = '37.56196326';
+
             var xhr = new XMLHttpRequest();
-            var url = "https://api.odsay.com/v1/api/searchPubTransPathT?SX=127.0979006&SY=37.51135169&EX=126.9865899&EY=37.56196326&apiKey=AbfWDSywAKWcKBRv/ClpFQ";
+            var url = "https://api.odsay.com/v1/api/searchPubTransPathT?SX=" + sx + "&SY=" + sy +
+            "&EX=" + ex + "&EY=" + ey + "&apiKey=AbfWDSywAKWcKBRv/ClpFQ";
+
             xhr.open("GET", url, true);
             xhr.send();
-            xhr.onreadystatechange = function() {
 
+            xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4 && xhr.status == 200) {
-/*                    $('#result').text(xhr.responseText);*/
-                    console.log(xhr.responseText);
-                     // <- xhr.responseText 로 결과를 가져올 수 있음
+                    var responseText = xhr.responseText;
+                    var data = JSON.parse(responseText);
+
+                    // 가장 빠른 경로 찾기
+                    const fastestRoute = data.result.path.reduce((min, current) => {
+                        return current.info.totalTime < min.info.totalTime ? current : min;
+                    });
+
+                    // 필요한 정보 추출
+                    const routeInfo = {
+                        trafficDistance: fastestRoute.info.trafficDistance,
+                        totalWalk: fastestRoute.info.totalWalk,
+                        totalTime: fastestRoute.info.totalTime,
+                        payment: fastestRoute.info.payment,
+                        firstStartStation: fastestRoute.info.firstStartStation,
+                        lastEndStation: fastestRoute.info.lastEndStation,
+                        totalStationCount: fastestRoute.info.totalStationCount,
+                        subwayStationCount: fastestRoute.info.subwayStationCount,
+                        busStationCount: fastestRoute.info.busStationCount,
+                        subPaths: fastestRoute.subPath.map(subPath => {
+                            return {
+                                trafficType: subPath.trafficType,  // 교통수단 타입 (1: 지하철, 2: 버스, 3: 도보)
+                                startName: subPath.startName,      // 출발역 이름
+                                endName: subPath.endName,          // 도착역 이름
+                                laneName: subPath.lane ? subPath.lane[0].name : null,  // 노선 이름 (지하철 또는 버스)
+                                startExitNo: subPath.startExitNo,  // 출발 출구 번호
+                                way: subPath.way,                  // 이동 방향
+                                stationList: subPath.passStopList ? subPath.passStopList.stations.map(station => station.stationName) : [],  // 경유역 리스트
+                            };
+                        })
+                    };
+                    document.getElementById('pResult').innerHTML= "대중교통 \n총 시간: " + routeInfo.totalTime + "\n금액: " + routeInfo.payment + "\n출발역: " + routeInfo.firstStartStation
+                        + "\n도착역: " + routeInfo.lastEndStation + "\n경유역: " + routeInfo.subPaths[1].endName;
+                    console.log(fastestRoute);
                 }
-            }
+            };
+        }
+
+        function Tmap() {
+            var headers = {};
+            headers["appKey"] = "7ejrjQSxsM8Vp5U8WbLArOuHpOwQNnJ31hqE3Pt7";
+
+            $.ajax({
+                method: "POST",
+                headers: headers,
+                url: "https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1&format=json&callback=result",
+                async: false,
+                data: {
+                    "startX": "127.0979006",
+                    "startY": "37.51135169",
+                    "endX": "126.9865899",
+                    "endY": "37.56196326",
+                    "reqCoordType": "WGS84GEO",
+                    "resCoordType": "EPSG3857",
+                    "startName": "출발지",
+                    "endName": "도착지"
+                },
+                success: function (response) {
+                    var resultData = response.features;
+
+                    //결과 출력
+                    var tDistance = "총 거리 : "
+                        + ((resultData[0].properties.totalDistance) / 1000)
+                            .toFixed(1) + "km,";
+                    var tTime = " 총 시간 : "
+                        + ((resultData[0].properties.totalTime) / 60)
+                            .toFixed(0) + "분";
+
+                    $("#result").text("도보\n" + tDistance + tTime);
+                }, error: function(){
+                    alert("뭔가 이상있음")
+                }
+            });
         }
     </script>
 </head>
 <body>
     <h1>실행됨</h1>
-    <button id="route">클릭</button>
+    <form th:action="@{/RtestResult}" th:method="get">
+        <input type="submit" id="saveRoute" value="Java">
+    </form>
+    <button id="callRoute">불러오기</button>
+    <pre id="pResult"></pre>
     <pre id="result"></pre>
 </body>
 </html>

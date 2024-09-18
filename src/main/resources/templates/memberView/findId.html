@@ -30,7 +30,7 @@
         <!--아이디 찾기 Form-->
         <form th:action="@{/login/findId}" th:method="post">
             <!--이메일 입력-->
-            <div class="input-group">
+            <div class="input-group" id="confirmEm">
                 <label for="email" class="input-label" th:text="#{email}">email</label>
                 <input type="email" name="email" id="email" th:placeholder="#{email}" required/>
                 <p id="emailmsg"></p>
@@ -39,9 +39,11 @@
                 </div>
             </div>
             <!--인증번호 입력-->
+            <div id="confirmCode">
             <input type="text" id="emailconfirm" th:placeholder="#{em.confirm}" required/>
             <p id="emchkmsg"></p>
             <input type="submit" class="cta-button" id="findId" th:value="#{find.id}" disabled="disabled">
+            </div>
         </form>
     </main>
 

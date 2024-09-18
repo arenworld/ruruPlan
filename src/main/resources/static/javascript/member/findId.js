@@ -1,4 +1,5 @@
 $(document).ready(function() {
+   $('#confirmCode').hide();
     //이메일 형식 및 일치 검사
     $('#email').keyup(validateEmail);
     //이메일 인증번호
@@ -25,6 +26,8 @@ function emConfirm(){
     let email = $('#email').val();
     $("#email").prop("readonly", true);
     $('#emCodeBt').prop('disabled', true);
+    $('#confirmEm').hide();
+    $('#confirmCode').show();
 
     $.ajax({
         url: '/join/mailConfirm',

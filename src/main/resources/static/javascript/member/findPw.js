@@ -1,6 +1,7 @@
 $(document).ready(function() {
    //초기 설정: Em확인 부분 숨김
     $('#confirmEm').hide();
+    $('#confirmCode').hide();
     //아이디 존재 여부 확인
     $('#IdConBt').click(idConfirm);
     //이메일 형식 및 일치 검사
@@ -49,6 +50,9 @@ function emConfirm(){
     let email = $('#email').val();
     $("#email").prop("readonly", true);
     $('#emCodeBt').prop('disabled', true);
+
+    $('#confirmEm').hide();
+    $('#confirmCode').show();
 
     $.ajax({
         url: '/join/mailConfirm',

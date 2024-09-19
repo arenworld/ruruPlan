@@ -3,7 +3,7 @@
 * */
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const apiKey = "F4yv4m0bUBkXqSmWQ"; // Calendarific API 키
+  const apiKey = "U58nlLVqpjVurWKBP5FUBKANSkfgPXW8"; // Calendarific API 키
   const countryCodes = ["JP", "KR"]; // 일본(JP)과 한국(KR)의 국가 코드
 
   const today = new Date();

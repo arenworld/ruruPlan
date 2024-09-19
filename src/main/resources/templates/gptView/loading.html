@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" class="loding_html">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+        /* 로딩 html, body 스타일 */
+        .loding_html,
+        .loding_body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* 스크롤바 숨기기 */
+            height: 100%; /* html과 body의 전체 높이 설정 */
+        }
+        /* 로딩박스 수평 중앙배치 */
+        .loding_box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            position: relative;
+        }
+        /* 하늘 일러스트 */
+        .img_sky {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        /* 비행기 일러스트 */
+        .img_airplane {
+            width: 400px;
+            height: 400px;
+            z-index: 999;
+            position: absolute;
+            top: 120px;
+            animation: moveUpDown 1s infinite;
+        }
+        /* 로딩 텍스트 */
+        .loding_box_loding_text {
+            border: 4px solid black;
+            color: white;
+            background-color: #51a6e7;
+            text-align: center;
+            width: 200px;
+            height: 50px;
+            margin-top: 300px;
+            border-radius: 30px;
+        }
+        /* 글자 애니메이션 설정 */
+        .typed-words {
+            font-size: 24px;
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            width: 0;
+            animation: typing 2s steps(10, end) forwards,
+            erase 1s steps(10, end) 4s forwards;
+        }
+        /* 비행기 애니메이션 설정 */
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 10ch;
+            }
+        }
+
+        @keyframes erase {
+            from {
+                width: 10ch;
+            }
+            to {
+                width: 0;
+            }
+        }
+
+        @keyframes moveUpDown {
+            0% {
+                top: 110px;
+            }
+            50% {
+                top: 120px;
+            }
+            100% {
+                top: 110px;
+            }
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // cmdNum은 이미 서버에서 저장되었고, 이제 placeIdList를 요청
+            const cmdNum = $('#cmdNum').val().trim();
+            console.log("Sending cmdNum:", cmdNum);
+            $.ajax({
+                url: "/getGptPlan",
+                type: "POST",
+                data: { cmdNum: cmdNum }, // cmdNum이 아닌 단순히 서버에서 데이터를 받기 위한 형식
+                success: function(response) {
+                    // response가 placeIdList
+                    console.log(response.cmdNum);
+                    console.log(response.placeIdList);
+                    // placeIdList를 쿼리 파라미터로 전달하여 다음 페이지로 이동
+                    const placeIdList = response.placeIdList;
+                    const cmdNum = response.cmdNum;
+                    const encodedPlaceIds = encodeURIComponent(placeIdList.join(','));
+
+                    // cmdNum과 placeIdList를 URL에 쿼리 파라미터로 전달
+                    window.location.href = `/gptView/result?cmdNum=${cmdNum}&placeIds=${encodedPlaceIds}`;
+                },
+                error: function() {
+                    alert("gpt 답변 못받아옴.(loading ajax오류)");
+                }
+            });
+        });
+    </script>
+</head>
+<body class="loding_body">
+<div class="back">
+
+    <div class="loding_box">
+        <img class="img_sky" src="/images/lodingpage/로딩용하늘.jpg" />
+        <img class="img_airplane" src="/images/lodingpage/로딩용비행기.png" />
+        <div class="loding_box_loding_text">
+            <span class="typed-words">Loding...</span>
+        </div>
+    </div>
+    <div>
+        <input type="hidden" th:value="${cmdNum}" id="cmdNum"/>
+    </div>
+    <script>
+        document
+            .querySelector(".typed-words")
+            .addEventListener("animationend", function () {
+                const typedElement = this;
+                setTimeout(function () {
+                    typedElement.style.animation = "none";
+                    void typedElement.offsetWidth;
+                    typedElement.style.animation =
+                        "typing 2s steps(10, end) forwards, erase 1s steps(10, end) 4s forwards";
+                }, 1000);
+            });
+    </script>
+</div>
+</body>
+</html>

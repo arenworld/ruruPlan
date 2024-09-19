@@ -1,5 +1,6 @@
 package net.datasa.ruruplan.gpt.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,16 +20,20 @@ public class GptCmdDTO {
     // 멤버 아이디
     private String memberId;
     // 여행 첫날
+    @JsonFormat(pattern = "yyyy-MM-dd") // 날짜 형식 지정
     private LocalDate firstDate;
     // 여행 마지막날
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate lastDate;
     // 몇 박
     private Integer nights;
     // 며칠
     private Integer days;
     // 도착시간
+    @JsonFormat(pattern = "HH:mm") // 시간 형식 지정
     private LocalTime arrival;
     // 떠나는 시간
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime depart;
     // 여행타입(혼자, 가족 등등)
     private String tripType;
@@ -38,13 +43,10 @@ public class GptCmdDTO {
     private Integer children;
     // 테마1
     private String theme1;
-
     // 테마2
     private String theme2;
-
     // 테마3
     private String theme3;
-
     // 밀도(빽뺵, 여유?)
     private Boolean density;
 

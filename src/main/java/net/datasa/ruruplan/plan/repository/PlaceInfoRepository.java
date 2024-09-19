@@ -9,5 +9,7 @@ import java.util.Optional;
 
 public interface PlaceInfoRepository {
     List<PlaceInfoEntity> findByTheme(String theme);
-
+    List<String> findPlaceIdsByAddressAndThemes(String address, List<String> themes);
+    List<String> findAlternativePlaceIds(String address);
+    List<String> findRestaurantOrCafePlaceIds(String address, String placeType);
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.ruruplan.gpt.domain.dto.GptCmdDTO;
 //import net.datasa.ruruplan.gpt.service.GptResultService;
+import net.datasa.ruruplan.gpt.domain.dto.GptResultDTO;
 import net.datasa.ruruplan.gpt.service.GptResultService;
 import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
 import net.datasa.ruruplan.plan.domain.dto.TaskDTO;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -22,16 +24,19 @@ public class GptResultController {
 
     private final GptResultService gptResultService;
 
-    /**
-     * ajax로 질문내용을 받아와서 gpt에게 질문 후 답변 내용 리턴(아직 plan테이블에 저장 x)
-     * @param gptCmdDTO 사용자의 질문 내용
-     * @return planDTO  gpt의 답변내용
-     */
     @ResponseBody
-    @PostMapping("getGptPlan")
-    public List<String> getGptPlan(@RequestParam("cmdNum") Integer cmdNum) throws IOException {
-        List<String> placeIdList = new ArrayList<>(gptResultService.gptApi(cmdNum));
-        return placeIdList;
+    @PostMapping("/getGptPlan")
+    public GptResultDTO getGptPlan(@RequestParam("cmdNum") Integer cmdNum) throws IOException {
+        log.debug("cmdNum: {}", cmdNum);
+        return gptResultService.gptApi(cmdNum);
+    }
+
+    @GetMapping("/gptView/result")
+    public String showGptResult(@RequestParam("cmdNum") Integer cmdNum, @RequestParam("placeIds") String placeIds, Model model) {
+        List<String> placeIdList = Arrays.asList(placeIds.split(","));
+        model.addAttribute("cmdNum", cmdNum);
+        model.addAttribute("placeIdList", placeIdList);
+        return "gptView/gptResult"; // gptResultView.html 파일로 이동
     }
 
     @GetMapping("gptView/question")

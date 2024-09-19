@@ -14,7 +14,8 @@ from dotenv import load_dotenv
 import time
 
 # 환경변수 불러오기.
-load_dotenv() 
+env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+load_dotenv(dotenv_path=env_path)
 
 
 
@@ -33,14 +34,14 @@ client = OpenAI(api_key=api_key)
 # print(my_assistant)
 
 
-assistant_id = "asst_PcLuGmBHj3jCggDUy2JtEUEd"
+assistant_id = "asst_phfPcHoqLt3v7iTm4LuGy3EQ"
 
 # 스레드 아이디 만들기
 # Threads -> create thread
 # empty_thread = client.beta.threads.create()
 # print(empty_thread)
 
-thread_id = "thread_Uengq1DJswXbg6gqgl98v1Uj"
+thread_id = "thread_nDy1Pkemts4yhP73fbWYPgXP"
 
 
 
@@ -49,7 +50,7 @@ thread_id = "thread_Uengq1DJswXbg6gqgl98v1Uj"
 thread_message = client.beta.threads.messages.create(
     thread_id,
     role="user",
-    content="서울 여행지 2 곳을 추천해줘.",
+    content= content1,
 )
 # print(thread_message.content[0].text.value)
 

@@ -41,4 +41,49 @@ public class PlaceInfoRepositoryImpl implements PlaceInfoRepository {
                 )
                 .fetch();
     }
+
+    @Override
+    public List<String> findPlaceIdsByAddressAndThemes(String address, List<String> themes) {
+        return queryFactory.select(placeInfoEntity.placeId)
+                .from(placeInfoEntity)
+                .where(
+                        placeInfoEntity.siGunGu.eq(address)
+                                .and(
+                                        placeInfoEntity.theme1.in(themes)
+                                                .or(placeInfoEntity.theme2.in(themes))
+                                                .or(placeInfoEntity.theme3.in(themes))
+                                )
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<String> findAlternativePlaceIds(String address) {
+        return queryFactory.select(placeInfoEntity.placeId)
+                .from(placeInfoEntity)
+                .where(
+                        placeInfoEntity.siGunGu.eq(address)
+                                .and(
+                                        placeInfoEntity.theme1.notIn("식당", "카페")
+                                                .and(placeInfoEntity.theme2.notIn("식당", "카페"))
+                                                .and(placeInfoEntity.theme3.notIn("식당", "카페"))
+                                )
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<String> findRestaurantOrCafePlaceIds(String address, String placeType) {
+        return queryFactory.select(placeInfoEntity.placeId)
+                .from(placeInfoEntity)
+                .where(
+                        placeInfoEntity.siGunGu.eq(address)
+                                .and(
+                                        placeInfoEntity.theme1.eq(placeType)
+                                                .or(placeInfoEntity.theme2.eq(placeType))
+                                                .or(placeInfoEntity.theme3.eq(placeType))
+                                )
+                )
+                .fetch();
+    }
 }

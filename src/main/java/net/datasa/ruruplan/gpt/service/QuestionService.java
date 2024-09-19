@@ -27,7 +27,7 @@ public class QuestionService {
      * @param gptCmdDTO 사용자의 답변 내용
      * @return  cmdNum
      */
-    public GptCmdDTO saveAndReturnDTO(GptCmdDTO gptCmdDTO) {
+    public Integer saveAndReturnDTO(GptCmdDTO gptCmdDTO) {
 
         MemberEntity member = memberRepository.findById(gptCmdDTO.getMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 멤버의 정보가 존재하지 않습니다: " + gptCmdDTO.getMemberId()));
@@ -44,38 +44,33 @@ public class QuestionService {
                 .adult(gptCmdDTO.getAdult())
                 .children(gptCmdDTO.getChildren())
                 .theme1(gptCmdDTO.getTheme1())
-
                 .theme2(gptCmdDTO.getTheme2())
-
                 .theme3(gptCmdDTO.getTheme3())
-
                 .density(gptCmdDTO.getDensity())
-
                 .build();
         GptCmdEntity savedEntity = gptCmdRepository.save(entity);
-        GptCmdDTO savedCmdDTO = GptCmdDTO.builder()
-                .cmdNum(savedEntity.getCmdNum())
-                .memberId(savedEntity.getMember().getMemberId())
-                .firstDate(savedEntity.getFirstDate())
-                .lastDate(savedEntity.getLastDate())
-                .nights(savedEntity.getNights())
-                .days(savedEntity.getDays())
-                .arrival(savedEntity.getArrival())
-                .depart(savedEntity.getDepart())
-                .tripType(savedEntity.getTripType())
-                .adult(savedEntity.getAdult())
-                .children(savedEntity.getChildren())
-                .theme1(savedEntity.getTheme1())
+        Integer cmdNum = savedEntity.getCmdNum();
 
-                .theme2(savedEntity.getTheme2())
+//        GptCmdDTO savedCmdDTO = GptCmdDTO.builder()
+//                .cmdNum(savedEntity.getCmdNum())
+//                .memberId(savedEntity.getMember().getMemberId())
+//                .firstDate(savedEntity.getFirstDate())
+//                .lastDate(savedEntity.getLastDate())
+//                .nights(savedEntity.getNights())
+//                .days(savedEntity.getDays())
+//                .arrival(savedEntity.getArrival())
+//                .depart(savedEntity.getDepart())
+//                .tripType(savedEntity.getTripType())
+//                .adult(savedEntity.getAdult())
+//                .children(savedEntity.getChildren())
+//                .theme1(savedEntity.getTheme1())
+//                .theme2(savedEntity.getTheme2())
+//                .theme3(savedEntity.getTheme3())
+//                .density(savedEntity.getDensity())
+//
+//                .build();
 
-                .theme3(savedEntity.getTheme3())
-
-                .density(savedEntity.getDensity())
-
-                .build();
-
-        return savedCmdDTO;
+        return cmdNum;
     }
 }
 

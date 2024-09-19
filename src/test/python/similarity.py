@@ -22,7 +22,7 @@ conn = mysql.connector.connect(
 cursor = conn.cursor()
 
 # si_gun_gu에 맞는 데이터 가져오기 (LIKE 사용)
-query = "SELECT place_id, title, address, si_gun_gu FROM ruru_place_info WHERE si_gun_gu LIKE %s"
+query = "SELECT place_id, title_kr, address_kr, si_gun_gu FROM ruru_place_info WHERE si_gun_gu LIKE %s"
 cursor.execute(query, (si_gun_gu,))
 
 # 쿼리 결과 가져오기

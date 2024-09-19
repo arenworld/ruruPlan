@@ -541,7 +541,7 @@ footer a {
 
 /* 이전버튼 */
 .button-back {
-    background-image: url("../images/page_left.png");
+    background-image: url("../images/modal/page_left.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -563,7 +563,7 @@ footer a {
 .button-next-page3,
 .button-next-page2,
 .button-next {
-    background-image: url("../images/page_right.png");
+    background-image: url("../images/modal/page_right.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -706,11 +706,11 @@ footer a {
 }
 
 .prev-month-button {
-    background-image: url("../images/calender_lefgt.png");
+    background-image: url("../images/modal/calender_lefgt.png");
 }
 
 .next-month-button {
-    background-image: url("../images/calender_right.png");
+    background-image: url("../images/modal/calender_right.png");
 }
 
 .calendar-navigation {

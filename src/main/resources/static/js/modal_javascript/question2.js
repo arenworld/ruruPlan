@@ -1,3 +1,9 @@
+/*
+*  질문2 항공권 예매 여부를 파악하여 이미 예매시 입.출국 정보를 받아 DB에 저장을 담당하는 자바스크립트
+*
+* */
+
+
 document.addEventListener("DOMContentLoaded", function () {
   const reservation = document.querySelector(".button-reservation");
   const notreservation = document.querySelector(".button-notreservation");

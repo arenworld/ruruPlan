@@ -1,4 +1,6 @@
-// calendar.js
+/*
+*  질문 1    날짜선택을 위한 캘린더를 만들고 공휴일을 표사를 담당하는 자바 스크립트
+* */
 
 document.addEventListener("DOMContentLoaded", async () => {
   const apiKey = "F4yv4m0bUBkXqSmWQ"; // Calendarific API 키

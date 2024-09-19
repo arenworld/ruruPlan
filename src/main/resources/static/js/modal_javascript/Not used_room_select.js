@@ -1,3 +1,9 @@
+/*   질문 1에서 선택한 일자를 바탕으로  숙소를 선택하게하는 자바스크립트
+
+      하지만 쓰이는일은 없었다
+*
+* */
+
 document.addEventListener("DOMContentLoaded", function () {
   const submit_button = document.querySelector(".modal-submit-button");
   const move_button = document.getElementById("move");

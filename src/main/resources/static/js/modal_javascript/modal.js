@@ -1,3 +1,7 @@
+/*    모달의 전.후 페이지로 이동 DB로 전달을 담당하는 자바스크립트
+*
+* */
+
 document.addEventListener("DOMContentLoaded", function () {
   const modal1 = document.getElementById("myModal1");
   const modal2 = document.getElementById("myModal2");

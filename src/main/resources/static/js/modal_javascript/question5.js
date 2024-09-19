@@ -1,3 +1,9 @@
+/*
+*  질문5  여행의 밀도를 조사하는 자바 스크립트
+*
+* */
+
+
 document.addEventListener("DOMContentLoaded", function () {
   const density = document.getElementById("density");
   const button_density = document.querySelector(".button-density");

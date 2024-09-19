@@ -1,4 +1,6 @@
-// calendarSelector.js
+/*
+*  질문 1    캘린더에서 선택시 이벤트를 담당하는 자바스크립트
+* */
 
 // DOMContentLoaded 이벤트: HTML 문서가 모두 로드된 후 실행될 코드
 document.addEventListener("DOMContentLoaded", function () {

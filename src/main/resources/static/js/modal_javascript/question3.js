@@ -1,3 +1,9 @@
+/*
+*  질문3 여행타입(친구,커플,부모님,아이,혼자)를 우선 파악 아이,친구,부모님 일경우 세부인원을 조사하는 자바스크립트
+*
+* */
+
+
 document.addEventListener("DOMContentLoaded", function () {
   const alone = document.getElementById("button-alone");
   const couple = document.getElementById("button-couple");

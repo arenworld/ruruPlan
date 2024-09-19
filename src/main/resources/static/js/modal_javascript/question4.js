@@ -1,3 +1,8 @@
+/*
+*  질문4  12개의 테마중 원하는 3개를 골르게 하는 자바스크립트
+*
+* */
+
 document.addEventListener("DOMContentLoaded", function () {
   // '레포츠' 버튼을 제외한 테마 버튼 선택
   const themes = document.querySelectorAll(
@@ -26,18 +31,18 @@ const  ment2 =document.querySelector(".coment-ratio2");
 
   // 테마와 해당 이미지 경로 매핑
   const themeImages = {
-    쇼핑: "/images/쇼핑이모티콘.png",
-    음식: "/images/음식이모티콘.png",
-    카페: "/images/카페이모티콘.png",
-    역사: "/images/역사이모티콘.png",
-    문화: "/images/문화이모티콘.png",
-    힐링: "/images/힐링이모티콘.png",
-    체험: "/images/체험이모티콘.png",
-    랜드마크: "/images/랜드마크이모티콘.png",
-    레포츠: "/images/레포츠이모티콘.png",
-    수상레저: "/images/수상이모티콘.png",
-    자전거: "/images/자전거이모티콘.png",
-    아이스링크: "/images/아이스링크이모티콘.png",
+    쇼핑: "/images/modal/쇼핑_수정.png",
+    음식: "/images/modal/음식이모티콘.png",
+    카페: "/images/modal/카페이모티콘.png",
+    역사: "/images/modal/역사_수정.png",
+    문화: "/images/modal/문화이모티콘.png",
+    힐링: "/images/modal/힐링이모티콘.png",
+    체험: "/images/modal/체험이모티콘.png",
+    랜드마크: "/images/modal/랜드마크이모티콘.png",
+    레포츠: "/images/modal/레포츠이모티콘.png",
+    수상레저: "/images/modal/수상이모티콘.png",
+    자전거: "/images/modal/자전거이모티콘.png",
+    아이스링크: "/images/modal/아이스링크이모티콘.png",
   };
 
   // 처음에 '다음' 버튼과 테마 박스 숨기기

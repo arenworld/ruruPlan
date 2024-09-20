@@ -149,7 +149,7 @@ public class GptResultService {
 
     // 여행 테마와 일정 기반으로 GPT에게 전달할 '질문' 구조 만들기
     private String gptQuestion(boolean density, LocalDate firstDate, LocalDate lastDate, String theme1, String theme2, String theme3) {
-        int days = firstDate.until(lastDate).getDays();
+        int days = firstDate.until(lastDate).getDays() + 1;
         String season = Season(firstDate.getMonthValue());
 
         // 첫날 활동 리스트
@@ -204,7 +204,7 @@ public class GptResultService {
 
         // 중간 날들의 활동 리스트를 생성
         StringBuilder middleDaysActivities = new StringBuilder();
-        for (int i = 2; i <= days; i++) {
+        for (int i = 2; i < days; i++) {
             middleDaysActivities.append(String.format("%d일차\n%s\n\n", i, String.join("\n", middleDayActivities)));
         }
 
@@ -232,7 +232,7 @@ public class GptResultService {
 
     private String gptQuestion2(boolean density, LocalDate firstDate, LocalDate lastDate, String theme1, String theme2, String theme3, float totalFirstDayTime, float totalLastDayTime) throws IOException {
         // 두 날짜 사이의 차이를 Period 객체로 반환
-        int dayCount = firstDate.until(lastDate).getDays();
+        int days = firstDate.until(lastDate).getDays() + 1;
         String season = Season(firstDate.getMonthValue());
 
         // 첫날 활동 리스트
@@ -303,7 +303,7 @@ public class GptResultService {
 
         // 중간 날들의 활동 리스트를 생성
         StringBuilder middleDaysActivities = new StringBuilder();
-        for (int i = 2; i <= dayCount; i++) {
+        for (int i = 2; i < days; i++) {
             middleDaysActivities.append(String.format("%d일차\n%s\n\n", i, String.join("\n", middleDayActivities)));
         }
 
@@ -320,11 +320,11 @@ public class GptResultService {
                         "%d일차\n" +
                         "%s", // 마지막 날 활동 리스트를 넣는 부분
                 season,                              // 계절
-                dayCount,                            // 여행 일수
+                days,                            // 여행 일수
                 theme1, theme2, theme3,              // 테마1, 테마2, 테마3
                 String.join("\n", finalFirstDayActivities),  // 첫날 활동 리스트를 줄바꿈으로 연결
                 middleDaysActivities.toString(),     // 중간 날짜 활동 리스트 줄바꿈으로 연결
-                dayCount,                            // 마지막 날 (여행 일자)
+                days,                            // 마지막 날 (여행 일자)
                 String.join("\n", finalLastDayActivities)   // 마지막 날 활동 리스트 줄바꿈으로 연결
         );
     }

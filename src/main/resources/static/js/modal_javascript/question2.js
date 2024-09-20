@@ -3,6 +3,12 @@
 *
 * */
 
+//필요한 텍스트
+let arrivalT = $("#arrivalTimeT").text();
+let departT = $("#departTimeT").text();
+let daysT = $("#daysT").text();
+let monthT = $("#monthT").text();
+let yearT = $("#yearT").text();
 
 document.addEventListener("DOMContentLoaded", function () {
   const reservation = document.querySelector(".button-reservation");
@@ -37,11 +43,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (startDayValue && endDayValue) {
       resultBox.innerHTML = `
         <div class="date-time-wrapper">
-          <strong>입국일자: 2024년 ${monthText}월 ${startDayValue}일</strong>
+          <strong>${arrivalT}: 2024${yearT} ${monthText}${monthT} ${startDayValue}${daysT}</strong>
           <input type="time" id="startTime" name="startTime" value="${startTimeValue || ""}" />
         </div>
         <div class="date-time-wrapper">
-          <strong>출국일자: 2024년 ${monthText}월 ${endDayValue}일</strong>
+          <strong>${departT}: 2024${yearT} ${monthText}${monthT} ${endDayValue}${daysT}</strong>
           <input type="time" id="endTime" name="endTime" value="${endTimeValue || ""}" />
         </div>
       `;

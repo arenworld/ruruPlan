@@ -34,36 +34,37 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // 첫 번째 모달 자동 열기
-  /*질문1*/
+  /*질문1~5*/
   let qs1 = $("#qs1").text();
+  let qs2 = $("#qs2").text();
+  let qs3 = $("#qs3").text();
+  let qs4 = $("#qs4").text();
+  let qs5 = $("#qs5").text();
+
   showModal(modal1, 0, `${qs1}`);
 
   // 다음 버튼 클릭 시 이벤트 핸들러 설정
   document.querySelector("#myModal1 .button-next").onclick = function (event) {
     event.preventDefault();
     modal1.style.display = "none";
-    let qs2 = $("#qs2").text();
     showModal(modal2, 1, `${qs2}`);
   };
 
   document.querySelector("#myModal2 .button-next-page2").onclick = function (event) {
     event.preventDefault();
     modal2.style.display = "none";
-    let qs3 = $("#qs3").text();
     showModal(modal3, 2, `${qs3}`);
   };
 
   document.querySelector("#myModal3 .button-next-page3").onclick = function (event) {
     event.preventDefault();
     modal3.style.display = "none";
-    let qs4 = $("#qs4").text();
     showModal(modal4, 3, `${qs4}`);
   };
 
   document.querySelector("#myModal4 .button-next-page4").onclick = function (event) {
     event.preventDefault();
     modal4.style.display = "none";
-    let qs5 = $("#qs5").text();
     showModal(modal5, 4, `${qs5}`);
   };
 
@@ -159,21 +160,21 @@ document.addEventListener("DOMContentLoaded", function () {
   // 이전 모달로 돌아가기 버튼 클릭 시 이벤트 핸들러 설정
   backToModal1.onclick = function () {
     modal2.style.display = "none";
-    showModal(modal1, 0, "여행기간은?");
+    showModal(modal1, 0, `${qs1}`);
   };
 
   backToModal2.onclick = function () {
     modal3.style.display = "none";
-    showModal(modal2, 1, "항공권은?");
+    showModal(modal2, 1, `${qs2}`);
   };
 
   backToModal3.onclick = function () {
     modal4.style.display = "none";
-    showModal(modal3, 2, "누구랑?");
+    showModal(modal3, 2, `${qs3}`);
   };
 
   backToModal4.onclick = function () {
     modal5.style.display = "none";
-    showModal(modal4, 3, "어떻게?");
+    showModal(modal4, 3, `${qs4}`);
   };
 });

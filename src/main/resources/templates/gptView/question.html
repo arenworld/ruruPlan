@@ -60,15 +60,16 @@
     </select>
 </div>
 <div hidden="hidden">
-    <span th:text="#{year}"></span>
-    <span th:text="#{month}"></span>
-    <span th:text="#{days}"></span>
-    <span th:text="#{nights}"></span>
-    <span th:text="#{start_date}"></span>
-    <span th:text="#{end_date}"></span>
-    <span th:text="#{arrival_time}"></span>
-    <span th:text="#{depart_time}"></span>
-    <span th:text="#{please_select}"></span>
+    <span id="yearT" th:text="#{year}"></span>
+    <span id="monthT" th:text="#{month}"></span>
+    <span id="daysT" th:text="#{days}"></span>
+    <span id="nightsT" th:text="#{nights}"></span>
+    <span id="startDateT" th:text="#{start_date}"></span>
+    <span id="endDateT" th:text="#{end_date}"></span>
+    <span id="arrivalTimeT" th:text="#{arrival_time}"></span>
+    <span id="departTimeT" th:text="#{depart_time}"></span>
+    <span id="pleaseSelectT" th:text="#{please_select}"></span>
+    <span id="themeAlert1" th:text="#{theme_alert1}"></span>
 </div>
 <!-- 1번째 모달 창 -->
 <div id="myModal1" class="modal-question">
@@ -147,12 +148,12 @@
             <div class="reservation-navigater">
                 <button type="button" class="button-reservation">
                     <i class="icon-flight"></i>
-                    <div class="question-selct1-text">예매했어요!</div>
+                    <div class="question-selct1-text" th:text="#{book_ticket}"></div>
                 </button>
                 <!-- 예약안함 -->
                 <button type="button" class="button-notreservation">
                     <i class="icon-airplanemode_inactive"></i>
-                    <div class="question-selct2-text">아직이에요!</div>
+                    <div class="question-selct2-text" th:text="#{no_ticket}"></div>
                 </button>
             </div>
         </div>

@@ -33,9 +33,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     calendar.innerHTML = "";
 
+    let monthT = $("#monthT").text();
+
     const header = document.createElement("div");
     header.classList.add("calendar-header");
-    header.textContent = `${month}월 ${year}`;
+    header.textContent = `${month}${monthT} ${year}`;
 
     calendar.appendChild(header);
 

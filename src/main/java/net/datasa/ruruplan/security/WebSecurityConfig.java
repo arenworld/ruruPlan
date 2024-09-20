@@ -44,7 +44,7 @@ public class WebSecurityConfig {
                         .passwordParameter("memberPw")
                         .loginProcessingUrl("/member/login")
                         .defaultSuccessUrl("/", true)
-                        .failureUrl("/")
+                        .failureHandler(new CustomAuthenticationFailureHandler())
                         .permitAll()
                 )
                 .logout(logout -> logout

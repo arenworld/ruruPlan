@@ -72,7 +72,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // 선택된 테마가 3개 이상일 경우 추가 선택을 방지
       if (selectedThemes.length >= 3) {
-        alert("최대 3개의 테마만 선택 가능합니다.");
+        let themeAlert = $("#themeAlert1").text();
+        alert(themeAlert);
         return;
       }
 

@@ -9,8 +9,17 @@ document.addEventListener("DOMContentLoaded", function () {
   const resultBox = document.querySelector(".box-result-round");
   const nextButton = document.querySelector(".button-next");
 
+  //필요한 텍스트
+  let startDateT = $("#startDateT").text();
+  let endDateT = $("#endDateT").text();
+  let pleseSelectT = $("#pleaseSelectT").text();
+  let nightT = $("#nightsT").text();
+  let daysT = $("#daysT").text();
+  let monthT = $("#monthT").text();
+  let yearT = $("#yearT").text();
+
   // 초기 텍스트를 '출발일을 선택해 주세요'로 설정
-  resultBox.textContent = "출발일을 선택해 주세요";
+  resultBox.textContent = startDateT + pleseSelectT;
 
   // 날짜 선택, 인덱스, 시작일 및 마지막 일자를 저장할 변수들 초기화
   let selectedDate = null;
@@ -54,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
           resetCalendarStates(calendarCells);
           startDay = null;
           lastDay = null;
-          displayMessage("출발일을 선택해 주세요");
+          displayMessage(startDateT + pleseSelectT);
           nextButton.style.display = "none";
           document.getElementById("startDayValue").value = "";
           document.getElementById("endDayValue").value = "";
@@ -86,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
           selectedDate.style.backgroundColor = "#000000";
           selectedDate.style.color = "#ffffff";
 
-          displayMessage("도착일을 선택해 주세요");
+          displayMessage(endDateT  + pleseSelectT);
           nextButton.style.display = "none";
         } else if (startDay !== null && index >= startDay && index <= startDay + 5) {
           // 도착일 선택
@@ -171,10 +180,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const monthMatch = calendarHeader.match(/(\d{1,2})월/);
     const monthText = monthMatch ? monthMatch[1].padStart(2, "0") : "";  // 월을 두 자리로 맞춤
 
-    const first_date_display = `${window.currentYear}년 ${monthText}월 ${String(startDate).padStart(2, "0")}일`;
-    const last_date_display = `${window.currentYear}년 ${monthText}월 ${String(endDate).padStart(2, "0")}일`;
+    const first_date_display = `${window.currentYear}${yearT} ${monthText}${monthT} ${String(startDate).padStart(2, "0")}${daysT}`;
+    const last_date_display = `${window.currentYear}${yearT} ${monthText}${monthT} ${String(endDate).padStart(2, "0")}${daysT}`;
 
-    resultBox.textContent = `${nights}박 ${days}일, 시작일: ${first_date_display}, 종료일: ${last_date_display}`;
+    resultBox.textContent = `${nights}${nightT} ${days}${daysT}, ${startDateT}: ${first_date_display}, ${endDateT}: ${last_date_display}`;
 
     const first_date = `${window.currentYear}-${monthText}-${String(startDate).padStart(2, "0")}`;
     const last_date = `${window.currentYear}-${monthText}-${String(endDate).padStart(2, "0")}`;

@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // 선택한 결과를 화면에 표시
   function displayResult(nights, days, calendarHeader, startDate, endDate) {
     const resultBox = document.querySelector(".box-result-round");
-    const monthMatch = calendarHeader.match(/(\d{1,2})월/);
+    const monthMatch = calendarHeader.match(/(\d{1,2})/);
     const monthText = monthMatch ? monthMatch[1].padStart(2, "0") : "";  // 월을 두 자리로 맞춤
 
     const first_date_display = `${window.currentYear}${yearT} ${monthText}${monthT} ${String(startDate).padStart(2, "0")}${daysT}`;

@@ -17,4 +17,4 @@ client = OpenAI(api_key=api_key)
 # 스레드 아이디 만들기
 # Threads -> create thread
 empty_thread = client.beta.threads.create()
-print(empty_thread)
+print(empty_thread.id)

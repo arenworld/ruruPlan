@@ -21,4 +21,4 @@ my_assistant = client.beta.assistants.create(
     tools=[{"type": "code_interpreter"}],
     model="gpt-4o",     # gpt-3.5-turbo-1106    # gpt-4o
 )  
-print(my_assistant)
+print(my_assistant.id)

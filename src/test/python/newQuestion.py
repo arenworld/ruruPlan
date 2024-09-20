@@ -25,23 +25,23 @@ client = OpenAI(api_key=api_key)
 
 
 # 어시스턴트 아이디 만들기
-# my_assistant = client.beta.assistants.create(
-#     instructions="당신은 서울여행 가이드의 모든 정보를 알고있는 로봇입니다. 질문자가 원하는 답변 형식에 맞춰서 답변합니다.",
-#     name="SeoulGuide1",
-#     tools=[{"type": "code_interpreter"}],
-#     model="gpt-4o",
-# )
+my_assistant = client.beta.assistants.create(
+    instructions="당신은 서울여행 가이드의 모든 정보를 알고있는 로봇입니다. 질문자가 원하는 답변 형식에 맞춰서 답변합니다.",
+    name="SeoulGuide1",
+    tools=[{"type": "code_interpreter"}],
+    model="gpt-4o",
+)
 # print(my_assistant)
 
 
-assistant_id = "asst_ke9OSU5i8Z6MvWuJEEUaktvy"
+assistant_id = my_assistant.id
 
 # 스레드 아이디 만들기
 # Threads -> create thread
-# empty_thread = client.beta.threads.create()
+empty_thread = client.beta.threads.create()
 # print(empty_thread)
 
-thread_id = "thread_2iU6im0NpNLpS8zcOnJFpZP6"
+thread_id = empty_thread.id
 
 
 

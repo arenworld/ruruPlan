@@ -34,31 +34,37 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // 첫 번째 모달 자동 열기
-  showModal(modal1, 0, "여행기간은?");
+  /*질문1*/
+  let qs1 = $("#qs1").text();
+  showModal(modal1, 0, `${qs1}`);
 
   // 다음 버튼 클릭 시 이벤트 핸들러 설정
   document.querySelector("#myModal1 .button-next").onclick = function (event) {
     event.preventDefault();
     modal1.style.display = "none";
-    showModal(modal2, 1, "항공권은?");
+    let qs2 = $("#qs2").text();
+    showModal(modal2, 1, `${qs2}`);
   };
 
   document.querySelector("#myModal2 .button-next-page2").onclick = function (event) {
     event.preventDefault();
     modal2.style.display = "none";
-    showModal(modal3, 2, "누구랑?");
+    let qs3 = $("#qs3").text();
+    showModal(modal3, 2, `${qs3}`);
   };
 
   document.querySelector("#myModal3 .button-next-page3").onclick = function (event) {
     event.preventDefault();
     modal3.style.display = "none";
-    showModal(modal4, 3, "어떻게?");
+    let qs4 = $("#qs4").text();
+    showModal(modal4, 3, `${qs4}`);
   };
 
   document.querySelector("#myModal4 .button-next-page4").onclick = function (event) {
     event.preventDefault();
     modal4.style.display = "none";
-    showModal(modal5, 4, "일정의 밀도는?");
+    let qs5 = $("#qs5").text();
+    showModal(modal5, 4, `${qs5}`);
   };
 
   // 5번째 모달 제출 시 완료 메시지 표시

@@ -12,6 +12,8 @@
     />
     <link rel="stylesheet" th:href="@{/css/modal.bootstring.css}" />
     <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}" />
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/javascript/member/locale.js"></script>
 </head>
 
 <body class="modal-body">
@@ -50,25 +52,48 @@
 
 <div class="logo-title">
     <img class="logo" src="/images/logo.png" />
-    <p>ソウルに触る</p>
+    <p th:text="#{logo}">ソウルに触る</p>
+
+    <!--언어 변경 버튼-->
+    <select name="lang" id="lang"
+            style="width: 70px; height:40px; font-size: 12px; text-align: left; padding: 0px">
+        <option value="ko" id="ko" th:selected="${#locale.language == 'ko'}">한국어</option>
+        <option value="ja" id="ja" th:selected="${#locale.language == 'ja'}">日本語</option>
+    </select>
+</div>
+<div hidden="hidden">
+    <span th:text="#{year}"></span>
+    <span th:text="#{month}"></span>
+    <span th:text="#{days}"></span>
+    <span th:text="#{nights}"></span>
+    <span th:text="#{start_date}"></span>
+    <span th:text="#{end_date}"></span>
+    <span th:text="#{arrival_time}"></span>
+    <span th:text="#{depart_time}"></span>
+    <span th:text="#{please_select}"></span>
 </div>
 <!-- 1번째 모달 창 -->
 <div id="myModal1" class="modal-question">
     <div class="modal-question-content">
         <div class="modal-header">
             <div class="question-title-main">
-                <h1>여행기간은?</h1>
+                <!--질문1-->
+                <h1 th:text="#{qs1}" id="qs1"></h1>
             </div>
             <div class="question-title-sub">
-                <h2>원하는 기간을 선택해 주세요(최대 5박6일)</h2>
+                <!--메세지-->
+                <h2 th:text="#{qs1_ms1}"></h2>
             </div>
         </div>
         <div class="colorinfo">
+            <!--휴일정보-->
             <div class="holiday-info">
-                <span class="circle korean-holiday-circle"></span> 한국공휴일
+                <span class="circle korean-holiday-circle"></span>
+                <span th:text="#{k_holiday}"></span>
             </div>
             <div class="holiday-info">
-                <span class="circle japanese-holiday-circle"></span> 일본공휴일
+                <span class="circle japanese-holiday-circle"></span>
+                <span th:text="#{j_holiday}"></span>
             </div>
         </div>
 
@@ -111,10 +136,10 @@
     <div class="modal-question-content">
         <div class="modal-header">
             <div class="question-title-main">
-                <h1>항공권은?</h1>
+                <h1 th:text="#{qs2}" id="qs2"></h1>
             </div>
             <div class="question-title-sub">
-                <h2>항공권 예매 여부를 알려주세요</h2>
+                <h2 th:text="#{qs2_ms1}"></h2>
             </div>
         </div>
 
@@ -170,10 +195,10 @@
     <div class="modal-question-content">
         <div class="modal-header">
             <div class="question-title-main">
-                <h1>누구랑?</h1>
+                <h1 th:text="#{qs3}" id="qs3"></h1>
             </div>
             <div class="question-title-sub">
-                <h2>함께가는 사람과 인원수를 알려주세요</h2>
+                <h2 th:text="#{qs3_ms1}"></h2>
             </div>
         </div>
         <!-- 인원수 선택버튼 -->
@@ -225,8 +250,8 @@
         </div>
 
         <div class="box-who-result-round text-group-center-row-who">
-            <div class="adult">어른: <input type="text" id="adult" />명</div>
-            <div class="kids">아이: <input type="text" id="children" />명</div>
+            <div class="adult"><span th:text="#{adult}"></span><input type="text" id="adult" /><span th:text="#{num_people}"></span> </div>
+            <div class="kids"><span th:text="#{kids}"></span><input type="text" id="children" /><span th:text="#{num_people}"></span> </div>
         </div>
         <div class="progress-custom-question-container">
             <div class="progress-question-step"></div>
@@ -247,10 +272,10 @@
     <div class="modal-question-content">
         <div class="modal-header">
             <div class="question-title-main">
-                <h1>어떻게?</h1>
+                <h1 th:text="#{qs4}" id="qs4"></h1>
             </div>
             <div class="question-title-sub">
-                <h2>즐기고 싶은 여행테마를 골라주세요</h2>
+                <h2 th:text="#{qs4_ms1}"></h2>
             </div>
         </div>
 
@@ -307,7 +332,7 @@
 
         <!-- 테마4행 -->
         <div class="theme-box button-theme-row4">
-            <div class="coment-ratio">내가 선택한 여행테마</div>
+            <div class="coment-ratio" th:text="#{my_theme}">내가 선택한 여행테마</div>
             <div class="coment-ratio2">좋아하는 레포츠를 선택하세요</div>
             <div class="theme_1-box">
                 <div class="theme" id="theme_1"></div>
@@ -357,10 +382,10 @@
     <div class="modal-question-content">
         <div class="modal-header">
             <div class="question-title-main">
-                <h1>일정의 밀도는?</h1>
+                <h1 th:text="#{qs5}" id="qs5"></h1>
             </div>
             <div class="question-title-sub">
-                <h2>선호하는 활동수준을 선택해주세요</h2>
+                <h2 th:text="#{qs5_ms1}"></h2>
             </div>
         </div>
 

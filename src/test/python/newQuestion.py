@@ -34,14 +34,14 @@ client = OpenAI(api_key=api_key)
 # print(my_assistant)
 
 
-assistant_id = "asst_phfPcHoqLt3v7iTm4LuGy3EQ"
+assistant_id = "asst_ke9OSU5i8Z6MvWuJEEUaktvy"
 
 # 스레드 아이디 만들기
 # Threads -> create thread
 # empty_thread = client.beta.threads.create()
 # print(empty_thread)
 
-thread_id = "thread_nDy1Pkemts4yhP73fbWYPgXP"
+thread_id = "thread_2iU6im0NpNLpS8zcOnJFpZP6"
 
 
 

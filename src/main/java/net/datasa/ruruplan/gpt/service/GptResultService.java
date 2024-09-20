@@ -204,7 +204,7 @@ public class GptResultService {
 
         // 중간 날들의 활동 리스트를 생성
         StringBuilder middleDaysActivities = new StringBuilder();
-        for (int i = 2; i < days; i++) {
+        for (int i = 2; i <= days; i++) {
             middleDaysActivities.append(String.format("%d일차\n%s\n\n", i, String.join("\n", middleDayActivities)));
         }
 
@@ -303,7 +303,7 @@ public class GptResultService {
 
         // 중간 날들의 활동 리스트를 생성
         StringBuilder middleDaysActivities = new StringBuilder();
-        for (int i = 2; i < dayCount; i++) {
+        for (int i = 2; i <= dayCount; i++) {
             middleDaysActivities.append(String.format("%d일차\n%s\n\n", i, String.join("\n", middleDayActivities)));
         }
 

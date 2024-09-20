@@ -80,9 +80,13 @@ public class PlaceInfoEntity {
     @Column(name = "barrier_free", nullable = false)
     private Boolean barrierFree;
 
-    // 개요
-    @Column(name = "overview", length=8000)
-    private String overview;
+    // 개요(한국어)
+    @Column(name = "overview_kr", columnDefinition = "text")
+    private String overviewKr;
+
+    // 개요(일본어)
+    @Column(name = "overview_jp", columnDefinition = "text")
+    private String overviewJp;
 
     //세계유산여부
     @Column(name = "heritage", columnDefinition = "tinyint(1) check(enabled in (0, 1))")
@@ -93,25 +97,41 @@ public class PlaceInfoEntity {
     @Column(name = "infocenter", length=200)
     private String infocenter;
 
-    // 이용시간
-    @Column(name = "usetime", length=2000)
-    private String usetime;
+    // 이용시간(한국어)
+    @Column(name = "usetime_kr", length=2000)
+    private String usetimeKr;
 
-    // 휴무일
-    @Column(name = "restdate", length=200)
-    private String restdate;
+    // 이용시간(일본어)
+    @Column(name = "usetime_jp", length=2000)
+    private String usetimeJp;
+
+    // 휴무일(한국어)
+    @Column(name = "restdate_kr", length=200)
+    private String restdateKr;
+
+    // 휴무일(일본어)
+    @Column(name = "restdate_jp", length=200)
+    private String restdateJp;
 
     // 요금
     @Column(name = "fee", length=200)
     private Integer fee;
 
-    // 요금정보
-    @Column(name = "fee_info", length=200)
-    private String feeInfo;
+    // 요금정보(한국어)
+    @Column(name = "fee_info_kr", length=200)
+    private String feeInfoKr;
 
-    // 판매품목
-    @Column(name = "sale_item", length=200)
-    private String saleItem;
+    // 요금정보(일본어)
+    @Column(name = "fee_info_jp", length=200)
+    private String feeInfo_Jp;
+
+    // 판매품목(한국어)
+    @Column(name = "sale_item_kr", length=200)
+    private String saleItemKr;
+
+    // 판매품목(일본어)
+    @Column(name = "sale_item_jp", length=200)
+    private String saleItemJp;
 
     // 원본 이미지
     @Column(name = "origin_imgurl", length=200)

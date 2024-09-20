@@ -13,7 +13,7 @@ public class PlaceInfoDTO {
     // 관광지 고유번호
     private String placeId;
     
-    // 관광지명(한글)
+    // 관광지명
     private String titleKor;
     
     private String titleJpa;
@@ -51,7 +51,9 @@ public class PlaceInfoDTO {
     private Boolean barrierFree;
 
     // 개요
-    private String overview;
+    private String overviewKr;
+
+    private String overviewJp;
 
     // 세계유산여부
     private Boolean heritage;
@@ -60,19 +62,27 @@ public class PlaceInfoDTO {
     private String infocenter;
     
     // 이용시간
-    private String usetime;
+    private String usetimeKr;
+
+    private String usetimeJp;
 
     // 휴무일
-    private String restdate;
+    private String restdateKr;
+
+    private String restdateJp;
 
     // 요금
     private Integer fee;
 
     // 요금정보
-    private String feeInfo;
+    private String feeInfoKr;
+
+    private String feeInfoJp;
 
     // 판매품목
-    private String saleItem;
+    private String saleItemKr;
+
+    private String saleItemJp;
     
     // 원본 이미지
     private String originImgUrl;

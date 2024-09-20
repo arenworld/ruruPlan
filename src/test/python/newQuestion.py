@@ -4,6 +4,7 @@
 import sys
 import io
 
+
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 content1 = sys.argv[1] if len(sys.argv) > 1 else ""

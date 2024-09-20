@@ -12,8 +12,6 @@
     />
     <link rel="stylesheet" th:href="@{/css/modal.bootstring.css}" />
     <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}" />
-    <script src="/js/jquery-3.4.1.min.js"></script>
-    <script src="/javascript/member/locale.js"></script>
 </head>
 
 <body class="modal-body">
@@ -210,7 +208,7 @@
                             class="who-icon"
                             alt="혼자 아이콘"
                     />
-                    <span class="who-text">혼자</span>
+                    <span class="who-text" th:text="#{trip_type1}"></span>
                 </button>
                 <button type="button" id="button-couple">
                     <img
@@ -218,7 +216,7 @@
                             class="who-icon"
                             alt="커플 아이콘"
                     />
-                    <span class="who-text">커플</span>
+                    <span class="who-text" th:text="#{trip_type2}"></span>
                 </button>
             </div>
             <div class="button-who-row2">
@@ -228,7 +226,7 @@
                             class="who-icon"
                             alt="부모님 아이콘"
                     />
-                    <span class="who-text">부모님</span>
+                    <span class="who-text" th:text="#{trip_type3}"></span>
                 </button>
                 <button type="button" id="button-friend">
                     <img
@@ -236,7 +234,7 @@
                             class="who-icon"
                             alt="친구 아이콘"
                     />
-                    <span class="who-text">친구</span>
+                    <span class="who-text" th:text="#{trip_type4}"></span>
                 </button>
                 <button type="button" id="button-kids">
                     <img
@@ -244,7 +242,7 @@
                             class="who-icon"
                             alt="아이 아이콘"
                     />
-                    <span class="who-text">아이</span>
+                    <span class="who-text" th:text="#{kids}"></span>
                 </button>
             </div>
         </div>
@@ -283,57 +281,57 @@
         <div class="button-theme-row1">
             <button type="button" id="shopping" value="쇼핑">
                 <img src="/images/modal/쇼핑_수정.png" class="theme-icon" />
-                <span class="theme-text">쇼핑</span>
+                <span class="theme-text" th:text="#{theme1}"></span>
             </button>
 
             <button type="button" id="food" value="음식">
                 <img src="/images/modal/음식이모티콘.png" class="theme-icon" />
-                <span class="theme-text">음식</span>
+                <span class="theme-text" th:text="#{theme2}"></span>
             </button>
 
             <button type="button" id="cafe" value="카페">
                 <img src="/images/modal/카페이모티콘.png" class="theme-icon" />
-                <span class="theme-text">카페</span>
+                <span class="theme-text" th:text="#{theme3}"></span>
             </button>
         </div>
         <!-- 테마2행 -->
         <div class="button-theme-row2">
             <button type="button" id="history" value="역사">
                 <img src="/images/modal/역사_수정.png" class="theme-icon" />
-                <span class="theme-text">역사 </span>
+                <span class="theme-text" th:text="#{theme4}"></span>
             </button>
             <button type="button" id="culture" value="문화">
                 <img src="/images/modal/문화이모티콘.png" class="theme-icon" />
-                <span class="theme-text">문화 </span>
+                <span class="theme-text" th:text="#{theme5}"></span>
             </button>
             <button type="button" id="healing" value="힐링">
                 <img src="/images/modal/힐링이모티콘.png" class="theme-icon" />
-                <span class="theme-text">힐링</span>
+                <span class="theme-text" th:text="#{theme6}"></span>
             </button>
         </div>
         <!-- 테마3행 -->
         <div class="button-theme-row3">
             <button type="button" id="experience" value="체험">
                 <img src="/images/modal/체험이모티콘.png" class="theme-icon" />
-                <span class="theme-text">체험</span>
+                <span class="theme-text" th:text="#{theme7}"></span>
             </button>
             <button type="button" id="landmark" value="랜드마크">
                 <img src="/images/modal/랜드마크이모티콘.png" class="theme-icon" />
-                <span class="theme-text">랜드마크</span>
+                <span class="theme-text" th:text="#{theme8}"></span>
             </button>
 
             <button type="button" id="leisuresports" value="레포츠">
                 <div class="theme-text">
                     <img src="/images/modal/레포츠이모티콘.png" class="theme-icon" />
-                    <span class="theme-text">레포츠 </span>
+                    <span class="theme-text" th:text="#{theme9}"></span>
                 </div>
             </button>
         </div>
 
         <!-- 테마4행 -->
         <div class="theme-box button-theme-row4">
-            <div class="coment-ratio" th:text="#{my_theme}">내가 선택한 여행테마</div>
-            <div class="coment-ratio2">좋아하는 레포츠를 선택하세요</div>
+            <div class="coment-ratio" th:text="#{my_theme}"></div>
+            <div class="coment-ratio2" th:text="#{qs4_ms2}"></div>
             <div class="theme_1-box">
                 <div class="theme" id="theme_1"></div>
             </div>
@@ -348,19 +346,19 @@
 
             <button type="button" id="water_skiing" value="수상레저">
                 <img src="/images/modal/수상이모티콘.png" class="theme-icon" />
-                <span class="theme-text">수상레저 </span>
+                <span class="theme-text" th:text="#{theme9_1}"></span>
             </button>
 
             <button type="button" id="ice_rink" value="아이스링크">
                 <div class="sports">
                     <img src="/images/modal/아이스링크이모티콘.png" class="theme-icon" />
-                    <span class="theme-text">아이스링크 </span>
+                    <span class="theme-text" th:text="#{theme9_2}"></span>
                 </div>
             </button>
 
             <button type="button" id="bike" value="자전거">
                 <img src="/images/modal/자전거이모티콘.png" class="theme-icon" />
-                <span class="theme-text">자전거 </span>
+                <span class="theme-text" th:text="#{theme9_3}"></span>
             </button>
         </div>
         <div class="progress-custom-question-container">
@@ -395,15 +393,14 @@
             <div class="reservation-navigater">
                 <button type="button" class="button-density">
                     <img src="/images/modal/빡이모티콘.png" class="density-img" />
-                    <div class="question-selct1-text">꽉 찬일정</div>
-                    <div class="question-selct1-text-sub">보고싶은건 다 볼래요!</div>
+                    <div class="question-selct1-text" th:text="#{density1}"></div>
+                    <div class="question-selct1-text-sub" th:text="#{qs5_ms2}"></div>
                 </button>
                 <!-- 널널 -->
                 <button type="button" class="button-notdensity">
                     <img src="/images/modal/널_수정.png" class="density-img" />
-                    <div class="question-selct2-text">널널한 일정</div>
-                    <div class="question-selct1-text-sub">
-                        느긋하고 여유롭게 즐길래요!
+                    <div class="question-selct2-text" th:text="#{density2}"></div>
+                    <div class="question-selct1-text-sub" th:text="#{qs5_ms3}">
                     </div>
                 </button>
             </div>
@@ -424,7 +421,9 @@
 </div>
 
 <!-- Bootstrap JS 및 의존성 JS 링크 -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="/js/jquery-3.7.1.min.js"></script>
+<script src="/javascript/member/locale.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 

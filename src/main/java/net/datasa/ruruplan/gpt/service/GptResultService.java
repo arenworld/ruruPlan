@@ -341,7 +341,7 @@ public class GptResultService {
     // DB와의 유사성 확인을 위한 파이썬 스크립트 실행
     private String checkSimilarity(String name, String address) throws IOException {
         String pythonInterpreter = "python";
-        String simPythonScriptPath = "C:/vscode/api_practice/similarity.py";
+        String simPythonScriptPath = "src/test/python/similarity.py";
         ProcessBuilder simProcessBuilder = new ProcessBuilder(pythonInterpreter, simPythonScriptPath, name, address);
         simProcessBuilder.redirectErrorStream(true);
         Process simProcess = simProcessBuilder.start();

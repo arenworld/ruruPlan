@@ -863,7 +863,7 @@ a {
 .question-selct2-text {
     text-align: center;
 
-    font-size: 2.4rem;
+    font-size: 2rem;
 }
 
 /* 예약관련 택스트 위치*/
@@ -1442,7 +1442,7 @@ a {
 }
 
 .theme-text {
-    font-size: 1.3rem !important; /* 텍스트 크기 */
+    font-size: 1rem !important; /* 텍스트 크기 */
     color: #000000; /* 텍스트 색상 */
     margin: 0; /* 여백 초기화 */
 }

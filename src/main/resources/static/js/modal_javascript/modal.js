@@ -106,6 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // density 값을 true 또는 false로 변환
     const densityValue = document.getElementById("density")?.value === "1" ? true : false;
 
+
     // 폼에서 입력한 값들을 객체로 저장
     const GptCmdDTO = {
       firstDate: first_date,
@@ -117,9 +118,9 @@ document.addEventListener("DOMContentLoaded", function () {
       tripType: document.getElementById("trip_type")?.textContent,
       children: document.getElementById("children")?.value,
       adult: document.getElementById("adult")?.value,
-      theme1: document.getElementById("theme_1")?.textContent,
-      theme2: document.getElementById("theme_2")?.textContent,
-      theme3: document.getElementById("theme_3")?.textContent,
+      theme1: selectedThemeValues[0] ,  // 한국어 value 값 전송
+      theme2: selectedThemeValues[1]  , //
+      theme3: selectedThemeValues[2]  ,// 한국어 value 값 전송
       density: densityValue
     };
 

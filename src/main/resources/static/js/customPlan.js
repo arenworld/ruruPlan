@@ -7,17 +7,23 @@ let themeAllMarkers = [];
 var map = null;
 var mapOptions = {};
 let clickCountThemeButton = 0;
+let planNum;
 
 $(document).ready(function () {
+    planNum = $('#planNum').val();
 
     // 일정표 출력
-    dayPlansPrint(dayNumOfButton);
+    dayPlansPrint(dayNumOfButton, planNum);
 
     // 일정마커
     planMarkers(dayNumOfButton);
 
     // 총비용 계산
-    calculateTotalCost(dayNumOfButton);
+    setTimeout(function() {
+        calculateTotalCost(dayNumOfButton);
+    }, 100);
+
+    $(document).on('click', '.editImgButton', updateDurationCost);
 
     // 일자별 버튼 생성 및 데이 플랜 호출
     const days = ['allday', '1day', '2day', '3day', '4day', '5day', '6day'];
@@ -54,32 +60,14 @@ $(document).ready(function () {
     // 일정에서 장소명을 클릭할 때 발생하는 함수
     $('.placeTitle').click(selectTask);
 
-    $('.day-table-td-cost').on('change', function() {
-        let newValue = $(this).text(); // 수정된 값
-        let id = $(this).attr('id'); // 해당 요소의 ID
 
-        $.ajax({
-            url: '/updateCost', // 서버에서 처리할 URL
-            type: 'POST',
-            data: {
-                id: id,
-                value: newValue
-            },
-            success: function(response) {
-                // 서버에서 응답을 받으면 총합을 다시 계산
-                calculateTotalCost();
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX 요청 실패:', status, error);
-            }
-        });
-    });
     
 });
 
+
+
 // 일정표 그리기
-function dayPlansPrint(dayNumOfButton) {
-    let planNum = $('#planNum').val();
+function dayPlansPrint(dayNumOfButton, planNum) {
 
     $.ajax( {
         url: '/custom/getPlan',
@@ -89,9 +77,9 @@ function dayPlansPrint(dayNumOfButton) {
             dayNumOfButton: dayNumOfButton
         },
         success: function (taskList) {
-            console.log(taskList);
+
             $('#planTable-allDay').empty();
-            console.log(dayjs);
+
             let lastDay = taskList[taskList.length - 1].dateN;
 
             if (dayNumOfButton === 0) {
@@ -107,35 +95,37 @@ function dayPlansPrint(dayNumOfButton) {
                                         <th class="day-table-th2">time</th>
                                         <th class="day-table-th3">task</th>
                                         <th class="day-table-th4">place</th>
-                                        <th class="day-table-th5">duration</th>
+                                        <th class="day-table-th5" colspan="4">duration</th>
                                         <th class="day-table-th6">cost</th>
+                                        <th class="day-table-th7">edit</th>
                                     </tr>
                                 </thead>
                                 <tbody>`;
 
-                // Filter tasks by the current day (inner loop)
                 taskList.forEach(function(task, index) {
                     if (task.dateN === dayNum) {
 
-                        let formattedTime = task.startTime.substring(0, 5);
-
+                        // 소요시간 변환
                         let durationHour = task.duration.substring(1, 2);
                         let durationMinute = task.duration.substring(3, 5);
-                        let duration = (durationHour !== '0') ?
-                                    durationHour + '시간' + durationMinute + '분' : durationMinute + '분';
+
+                        // 타임라인 변환
+                        let startTimeHour = task.startTime.substring(0, 2);
+                        let startTimeMinute = task.startTime.substring(3, 5);
+                        let startTime = startTimeHour + ':' + startTimeMinute;
+
 
                         // Start building task row
                         dayTable += `<tr class="task-list">
-                                <input type="hidden" value="${task.taskNum}" class="task-list${task.taskNum+1}">
-                                <td>${formattedTime}</td>`;
+                                   <td>${startTime}</td>`;
 
-                        // 이동이 아닐 때 -->
+                        // 이동 task가 아닐 때
                         if (task.task !== '이동') {
                             dayTable += `
                                     <td>${task.task}</td>
                                     <td class="placeTitle" data-tasknum="${task.taskNum}" style="cursor:pointer;">${task.place.titleKor}</td>`;
                         }
-                        // Even rows
+                        // 이동 task 일때
                         else {
                             dayTable += `
                                     <td colspan="2">${task.task}</td>`;
@@ -143,17 +133,25 @@ function dayPlansPrint(dayNumOfButton) {
 
                         // Add duration and cost columns
                         dayTable += `
-                                <td>${duration}</td>
-                                <td class="day-table-td-cost" data-daynum-cost="${task.dateN}">${task.cost}</td>
-                                <td>원</td>
-                            </tr>`;
-                    }
+                                <td class="day-table-td-durationHour"><input type="number" min="0" max="5" step="1" value="${durationHour}"></td>
+                                <td>시간</td>
+                                <td class="day-table-td-durationMinute"><input type="number" min="0" max="50" step="10" value="${durationMinute}"></td>
+                                <td>분</td>
+                                <td class="day-table-td-cost"><input type="text" disabled class="day-table-cost" data-daynum-cost="${task.dateN}" value="${task.cost}"></td>
+                                <td>원</td>`;
+
+                        if(task.task !== '이동')
+                            dayTable += `    
+                                <td class="day-table-td-editImgButton"><img src="/images/customPlan/edit-circle.png" alt="Button Image" class="editImgButton" data-tasknum="${task.taskNum}"></td>
+                                <td class="day-table-td-deleteImgButton"><img src="/images/customPlan/delete-minus2.png" alt="Button Image" class="deleteImgButton"></td></tr>`;
+                        }
                 });
 
                 // Close the table structure
                 dayTable += `</tbody></table></div>`;
 
                 // Append the table for this day to the container
+
                 $('#planTable-allDay').append(dayTable);
             }
         },
@@ -164,6 +162,32 @@ function dayPlansPrint(dayNumOfButton) {
 
 }
 
+function updateDurationCost() {
+    // validation function 필요 입력값이 정수인지, 정상적인 시간범위인지 duration - h는 최대 5, 분은 < 60 + 정수일것
+    // number
+
+    let tr = $(this).closest('tr');
+    let newDurationHour = tr.find('td.day-table-td-durationHour input').val();
+    let newDurationMinute = tr.find('td.day-table-td-durationMinute input').val();
+    let taskNum = $(this).data('tasknum');
+
+    $.ajax({
+        url: 'custom/updateDuration',
+        type: 'post',
+        data : {
+            newDurationHour : newDurationHour,
+            newDurationMinute : newDurationMinute,
+            taskNum: taskNum,
+            planNum: planNum
+        },
+        success : function() {
+            dayPlansPrint(dayNumOfButton, planNum);
+        },
+        error : function() {
+            console.log('소요시간 업데이트 실패');
+        }
+    });
+}
 
 // 플랜별 & 일자별 마커 출력 함수
 function planMarkers(dayNumOfButton) {
@@ -436,7 +460,6 @@ function showMarker(map, marker) {
     marker.setMap(map);
 }
 
-
 // 안보이게
 function hideMarker(map, marker) {
     if(!marker.getMap()) return;
@@ -445,21 +468,22 @@ function hideMarker(map, marker) {
 
 function calculateTotalCost(dayNumOfButton) {
     let totalCost = 0;
-
-    $('.day-table-td-cost').each(function() {
+    console.log(dayNumOfButton);
+    $('.day-table-td-cost input').each(function () {
         let dayNumOfCost = $(this).data('daynum-cost');
-
+        console.log('계산중');
         // 0일때 즉; 처음 로딩하거나, all-day이일때
-        if(dayNumOfButton === 0) {
+        if (dayNumOfButton === 0) {
             // 모든 cost
-            let cost = parseInt($(this).text());
+            let cost = parseInt($(this).val());
+            console.log(cost);
             if (!isNaN(cost)) {
                 totalCost += cost;
             }
         } else {
             //데이값이 일치하는 cost만
             if (dayNumOfButton === dayNumOfCost) {
-                let cost = parseInt($(this).text());
+                let cost = parseInt($(this).val());
                 if (!isNaN(cost)) {
                     totalCost += cost;
                 }

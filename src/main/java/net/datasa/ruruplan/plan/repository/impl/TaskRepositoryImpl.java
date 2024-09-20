@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Transactional
@@ -46,6 +47,23 @@ public class TaskRepositoryImpl implements TaskRepository {
                 .fetch();
     }
 
+    /**
+     * duration 한 개 수정시, 해당 일자에 대한 모든 일장의 첫시간 수정
+     * @param planNum
+     * @param dayNum
+     * @param fromPoint
+     * @return
+     */
+    @Override
+    public List<TaskEntity> updateDurationList(Integer planNum, int dayNum, LocalTime fromPoint) {
+        return queryFactory.selectFrom(taskEntity)
+                .where(taskEntity.plan.planNum.eq(planNum)
+                    .and(taskEntity.dateN.eq(dayNum))
+                    .and(taskEntity.startTime.gt(fromPoint) ))
+                .orderBy(taskEntity.startTime.asc())
+                .fetch();
+    }
+
     @Override
     public List<TaskDTO> getDayTaskList(Integer planNum, Integer dateN) {
         // 모든 컬럼을 불러오는 예시
@@ -65,12 +83,14 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public List<TaskEntity> getDayLocations(Integer planNum, Integer dateNum) {
+    public List<TaskEntity> getDayLocations(Integer planNum, Integer dayNum) {
         return queryFactory.selectFrom(taskEntity)
                 .where(taskEntity.plan.planNum.eq(planNum)
-                        .and(taskEntity.dateN.eq(dateNum)))
+                        .and(taskEntity.dateN.eq(dayNum)))
                 .fetch();
     }
+
+
 
 
 }

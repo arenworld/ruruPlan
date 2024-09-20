@@ -102,4 +102,12 @@ public class CustomPlanController {
     public void test(Model model, @RequestParam("planNum") Integer planNum, @RequestParam("dateN") Integer dateN) {
         customPlanService.getDayTaskList(planNum, dateN);
     }
+
+    @ResponseBody
+    @PostMapping("updateDuration")
+    public void updateDuration(@RequestParam("newDurationHour") Integer newDurationHour, @RequestParam("newDurationMinute") Integer newDurationMinute, @RequestParam("taskNum") Integer taskNum, @RequestParam("planNum") Integer planNum) {
+        customPlanService.updateDuration(newDurationHour, newDurationMinute, taskNum, planNum);
+    }
+
+
 }

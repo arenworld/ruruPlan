@@ -340,8 +340,9 @@ public class GptResultService {
 
     // DB와의 유사성 확인을 위한 파이썬 스크립트 실행
     private String checkSimilarity(String name, String address) throws IOException {
+        String pythonInterpreter = "python";
         String simPythonScriptPath = "C:/vscode/api_practice/similarity.py";
-        ProcessBuilder simProcessBuilder = new ProcessBuilder("C:/python/python.exe", simPythonScriptPath, name, address);
+        ProcessBuilder simProcessBuilder = new ProcessBuilder(pythonInterpreter, simPythonScriptPath, name, address);
         simProcessBuilder.redirectErrorStream(true);
         Process simProcess = simProcessBuilder.start();
         // 파이썬에서 일치하면 placeId를 출력, 불일치하면 "일치하는 정보 없음" 출력. 그 값을 읽어옴.

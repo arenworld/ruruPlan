@@ -105,8 +105,10 @@ public class CustomPlanController {
 
     @ResponseBody
     @PostMapping("updateDuration")
-    public void updateDuration(@RequestParam("newDurationHour") Integer newDurationHour, @RequestParam("newDurationMinute") Integer newDurationMinute, @RequestParam("taskNum") Integer taskNum, @RequestParam("planNum") Integer planNum) {
-        customPlanService.updateDuration(newDurationHour, newDurationMinute, taskNum, planNum);
+    public void updateDuration(@RequestParam("newDurationHour") Integer newDurationHour, @RequestParam("newDurationMinute") Integer newDurationMinute, @RequestParam("taskNum") Integer taskNum, @RequestParam("planNum") Integer planNum
+    , @RequestParam("newCost") Integer newCost) {
+
+        customPlanService.updateDuration(newDurationHour, newDurationMinute, taskNum, planNum, newCost);
     }
 
 

@@ -18,7 +18,7 @@ $(document).ready(function () {
     // 일정마커
     planMarkers(dayNumOfButton);
 
-    // 총비용 계산
+    //총비용 계산
     setTimeout(function() {
         calculateTotalCost(dayNumOfButton);
     }, 100);
@@ -60,8 +60,6 @@ $(document).ready(function () {
     // 일정에서 장소명을 클릭할 때 발생하는 함수
     $('.placeTitle').click(selectTask);
 
-
-    
 });
 
 
@@ -137,7 +135,7 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                                 <td>시간</td>
                                 <td class="day-table-td-durationMinute"><input type="number" min="0" max="50" step="10" value="${durationMinute}"></td>
                                 <td>분</td>
-                                <td class="day-table-td-cost"><input type="text" disabled class="day-table-cost" data-daynum-cost="${task.dateN}" value="${task.cost}"></td>
+                                <td class="day-table-td-cost"><input type="number" min="0" step="1000" class="day-table-cost" data-daynum-cost="${task.dateN}" value="${task.cost}"></td>
                                 <td>원</td>`;
 
                         if(task.task !== '이동')
@@ -155,8 +153,8 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                 $('#planTable-allDay').append(dayTable);
             }
         },
-        error : function () {
-            console.log('error');
+        error : function (e) {
+            console.log(SON.stringify(e));
         }
     });
 
@@ -169,6 +167,7 @@ function updateDurationCost() {
     let tr = $(this).closest('tr');
     let newDurationHour = tr.find('td.day-table-td-durationHour input').val();
     let newDurationMinute = tr.find('td.day-table-td-durationMinute input').val();
+    let newCost = tr.find('td.day-table-td-cost input').val();
     let taskNum = $(this).data('tasknum');
 
     $.ajax({
@@ -178,10 +177,15 @@ function updateDurationCost() {
             newDurationHour : newDurationHour,
             newDurationMinute : newDurationMinute,
             taskNum: taskNum,
+            newCost : newCost,
             planNum: planNum
         },
         success : function() {
             dayPlansPrint(dayNumOfButton, planNum);
+
+            setTimeout(function() {
+                calculateTotalCost(dayNumOfButton);
+            }, 100);
         },
         error : function() {
             console.log('소요시간 업데이트 실패');
@@ -468,15 +472,13 @@ function hideMarker(map, marker) {
 
 function calculateTotalCost(dayNumOfButton) {
     let totalCost = 0;
-    console.log(dayNumOfButton);
     $('.day-table-td-cost input').each(function () {
         let dayNumOfCost = $(this).data('daynum-cost');
-        console.log('계산중');
+
         // 0일때 즉; 처음 로딩하거나, all-day이일때
         if (dayNumOfButton === 0) {
             // 모든 cost
             let cost = parseInt($(this).val());
-            console.log(cost);
             if (!isNaN(cost)) {
                 totalCost += cost;
             }

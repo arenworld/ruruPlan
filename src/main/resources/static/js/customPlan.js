@@ -154,12 +154,13 @@ function dayPlansPrint(dayNumOfButton, planNum) {
             }
         },
         error : function (e) {
-            console.log(SON.stringify(e));
+            console.log(JSON.stringify(e));
         }
     });
 
 }
 
+//소요시간, 비용 수정 메서드
 function updateDurationCost() {
     // validation function 필요 입력값이 정수인지, 정상적인 시간범위인지 duration - h는 최대 5, 분은 < 60 + 정수일것
     // number
@@ -193,7 +194,7 @@ function updateDurationCost() {
     });
 }
 
-// 플랜별 & 일자별 마커 출력 함수
+// 일자별 마커 출력 함수
 function planMarkers(dayNumOfButton) {
     let planNum = $('#planNum').val();
 
@@ -203,15 +204,15 @@ function planMarkers(dayNumOfButton) {
     clearPlanMarkers();
 
     $.ajax({
-        url: '/custom/planMarkers',
+        url: '/custom/getPlan',
         type: 'post',
         data: {
             planNum: planNum,
             dayNumOfButton: dayNumOfButton
         },
-        success: function (planLocations) { // 해당 플랜에 해당하는 장소의 마커정보를 가져옴
+        success: function (taskList) { // 해당 플랜에 해당하는 장소의 마커정보를 가져옴
             mapOptions = {
-                center: new naver.maps.LatLng(planLocations[0].place.mapY, planLocations[0].place.mapX),
+                center: new naver.maps.LatLng(taskList[0].place.mapY, taskList[0].place.mapX),
                 zoom: 14,
                 miniZoom: 13,
                 maxZoom: 20,
@@ -225,12 +226,12 @@ function planMarkers(dayNumOfButton) {
             // 최초 로딩시 만들어지는 맵객체로 쭉간다.
             map = new naver.maps.Map(document.getElementById('map'), mapOptions);
 
-            //List<TaskDTO> planLocations
-            $.each(planLocations, function (index, location) {
+            //List<TaskDTO>
+            $.each(taskList, function (index, task) {
                 const marker = new naver.maps.Marker({
                     map: map,
-                    position: new naver.maps.LatLng(location.place.mapY, location.place.mapX),
-                    title: location.taskNum,
+                    position: new naver.maps.LatLng(task.place.mapY, task.place.mapX),
+                    title: task.taskNum,
                     icon: {
                         content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff9999" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
                         // content: `<img src="/images/customPlan/marker-red.png"
@@ -240,16 +241,30 @@ function planMarkers(dayNumOfButton) {
                     },
                     zIndex: 100
                 });
-                marker.taskNum = location.taskNum; // 마커에 taskNum 속성 추가
+                // marker.taskNum = task.taskNum; // 마커에 taskNum 속성 추가
+
+                let contents = [
+                    '<div class="iw_inner">',
+                    '   <h3>${task.place.titleKr}</h3>',
+                    '   <p>서울특별시 중구 태평로1가 31 | 서울특별시 중구 세종대로 110 서울특별시청<br />',
+                    '       02-120 | 공공,사회기관 &gt; 특별,광역시청<br />',
+                    '       <a href="http://www.seoul.go.kr" target="_blank">www.seoul.go.kr/</a>',
+                    '   </p>',
+                    '</div>'
+                ].join('')
+                //console.log(task.place.titleKr);
+                marker.contents = contents;
                 planAllMarkers.push(marker); // 생성된 마커 배열에 저장
             }); // 반복문 끝
 
-            // 만들어진 planAllMarkers를 순회하며 클릭 이벤트 생성
+            // 만들어진 planAllMarkers를 순회하며 클릭 이벤트 --> 색상
             for (const marker of planAllMarkers) {
                 naver.maps.Event.addListener(marker, 'click', function () { // 뭐야 표시는 이렇게 되는데 정상적으로 작동하잖아
                     // 마커는 title이라는 값을 관광지 데이터는 객체의 key 값으로 관리하였기 때문에 마커 클릭과 관광지 클릭이라는 별개의 이벤트에 대해 동일한 함수를 사용할 수 있음 (db의 외래키 개념 차용, 실제 프로젝트에서는 관광지 데이터의 primary 키를 객체의 key값으로 사용)
                     const markerKey = marker.getTitle();
                     selectMarker(markerKey);
+
+                    $('.placeInfo').html(marker.contents);
                 });
             };
         },
@@ -259,6 +274,10 @@ function planMarkers(dayNumOfButton) {
         }
     });
 }
+
+
+
+
 
 // 일정표-장소명 클릭시: 마커 색 변경, 일정표 해당 tr 색 변경
 function selectTask() {
@@ -310,7 +329,6 @@ function clearPlanMarkers() {
     });
     planAllMarkers.length = 0; // 배열 비우기
 }
-
 
 // 테마마커 배열을 비우기
 function clearThemeMarkers() {
@@ -470,6 +488,8 @@ function hideMarker(map, marker) {
     marker.setMap(null);
 }
 
+
+// 총비용 계산(allDay, 일자별 계산 모두 가능)
 function calculateTotalCost(dayNumOfButton) {
     let totalCost = 0;
     $('.day-table-td-cost input').each(function () {

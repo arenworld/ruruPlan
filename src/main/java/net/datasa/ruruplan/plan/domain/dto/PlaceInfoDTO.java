@@ -14,14 +14,14 @@ public class PlaceInfoDTO {
     private String placeId;
     
     // 관광지명
-    private String titleKor;
+    private String titleKr;
     
-    private String titleJpa;
+    private String titleJp;
     
     // 관광지 주소
-    private String addressKor;
+    private String addressKr;
     
-    private String addressJpa;
+    private String addressJp;
     
     // x좌표, 테이블에서 varchar타입으로 만들었나보다 --> service에서 형변환 시켜줌
     private String mapX;

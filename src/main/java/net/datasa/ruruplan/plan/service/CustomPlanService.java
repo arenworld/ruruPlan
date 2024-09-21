@@ -50,7 +50,7 @@ public class CustomPlanService {
 
 
     /**
-     * plan정보 가져오기 / 전체일정
+     * plan정보 가져오기 / 전체일정 / html에 연결되어 있는 getPlan메서드
      * @return
      */
     public PlanDTO getPlan() {
@@ -72,11 +72,11 @@ public class CustomPlanService {
     }
 
     /**
-     * 전체일정 및 일정별 대한 마커정보
+     * 전체일정 및 일정별 대한 마커정보, 첫 로드시 allDay, 일자별 클릭시 일자별 리스크
      * @param planNum
      * @return
      */
-    public List<TaskDTO> getPlanLocations(Integer planNum, Integer dayNum) {
+    public List<TaskDTO> getTaskList(Integer planNum, Integer dayNum) {
         List<TaskEntity> taskEntityList = new ArrayList<>();
 
         // 전체일정 불러오기
@@ -99,55 +99,6 @@ public class CustomPlanService {
         return dtoList;
     }
 
-    /**
-     *
-     * @param planNum
-     * @param dayNum
-     * @return
-     */
-    public List<TaskDTO> getDayTaskList(Integer planNum, Integer dayNum) {
-
-        List<TaskEntity> taskEntityList;
-
-        // 전체일정 불러오기
-        if (dayNum == 0) {
-            Sort sort = Sort.by(Sort.Direction.ASC, "taskNum");
-            PlanEntity planEntity = planRepository.findById(planNum)
-                    .orElseThrow(() -> new EntityNotFoundException("플랜없음"));
-            taskEntityList = planEntity.getTaskList();
-        }
-        else {
-            taskEntityList = taskRepository.dayTaskList(planNum, dayNum);
-        }
-
-        List<TaskDTO> dtoList = new ArrayList<>();
-
-        for(TaskEntity taskEntity : taskEntityList) {
-            TaskDTO dto = convertToDTO(taskEntity);
-            dtoList.add(dto);
-        }
-        return dtoList;
-    }
-
-    /**
-     * 일자별 일정에 대한 마커정보
-     * @param planNum
-     * @param dateNum
-     * @return
-     */
-    public List<Map<String, Double>> getDayLocations(Integer planNum, Integer dateNum) {
-        List<Map<String, Double>> dayLocations = new ArrayList<>();
-        List<TaskEntity> taskEntityList = taskRepository.getDayLocations(planNum, dateNum);
-
-        for (TaskEntity taskEntity : taskEntityList) {
-            Map<String, Double> location = new HashMap<>();
-            dayLocations.add(Map.of("lat", Double.parseDouble(taskEntity.getPlace().getMapY()),
-                    "lng", Double.parseDouble(taskEntity.getPlace().getMapX()),
-                    "taskNum", Double.parseDouble(String.valueOf(taskEntity.getTaskNum())),
-                    "dateN", Double.parseDouble(String.valueOf(taskEntity.getDateN()))));
-        }
-        return dayLocations;
-    }
 
     /**
      * 테마별 장소정보(테마별 마커 및 상세정보)를 가져오는 메서드
@@ -219,10 +170,10 @@ public class CustomPlanService {
     private PlaceInfoDTO convertToDTO(PlaceInfoEntity placeInfoEntity) {
         return PlaceInfoDTO.builder()
                 .placeId(placeInfoEntity.getPlaceId())
-                .titleKor(placeInfoEntity.getTitleKor())
-                .titleJpa(placeInfoEntity.getTitleJap())
-                .addressKor(placeInfoEntity.getAddressKor())
-                .addressJpa(placeInfoEntity.getAddressJap())
+                .titleKr(placeInfoEntity.getTitleKr())
+                .titleJp(placeInfoEntity.getTitleJp())
+                .addressKr(placeInfoEntity.getAddressKr())
+                .addressJp(placeInfoEntity.getAddressJp())
                 .mapX(placeInfoEntity.getMapX())
                 .mapY(placeInfoEntity.getMapY())
                 .siGunGu(placeInfoEntity.getSiGunGu())

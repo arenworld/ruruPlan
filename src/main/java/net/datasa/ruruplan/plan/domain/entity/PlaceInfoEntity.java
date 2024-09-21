@@ -29,20 +29,20 @@ public class PlaceInfoEntity {
 
     // 관광지명(한글)
     @Column(name = "title_kr", nullable = false, length = 100)
-    private String titleKor;
+    private String titleKr;
 
     // 관광지명(일본어)
     @Column(name = "title_jp", nullable = false, length = 200)
-    private String titleJap;
+    private String titleJp;
 
 
     // 관광지 주소(한글)
     @Column(name = "address_kr", nullable = false, length = 200)
-    private String addressKor;
+    private String addressKr;
 
     // 관광지 주소(일본어)
     @Column(name = "address_jp", nullable = false, length = 200)
-    private String addressJap;
+    private String addressJp;
 
     // x좌표
     @Column(name = "map_x", length = 20)

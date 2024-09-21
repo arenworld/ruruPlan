@@ -82,17 +82,13 @@ public class CustomPlanController {
     /**
      * 테마별 / 테마 마커 출력시, 일자별 마커도 있어야 해서 같이 보냄
      * @param theme
-     * @param planNum
-     * @param dayNum
      * @return
      */
     @ResponseBody
     @PostMapping("themeMarkers")
-    public PlanAndThemeMarkers themeMarker(@RequestParam("theme") String theme, @RequestParam("planNum") Integer planNum, @RequestParam("dayNumOfButton") Integer dayNum) {
+    public List<PlaceInfoDTO> themeMarker(@RequestParam("theme") String theme) {
         log.debug("입력받은 테마:{}", theme);
-        List<PlaceInfoDTO> themeLocations = customPlanService.getThemeLocations(theme);
-        List<TaskDTO> planLocations = customPlanService.getTaskList(planNum, dayNum);
-        return new PlanAndThemeMarkers(themeLocations, planLocations);
+        return customPlanService.getThemeLocations(theme);
     }
 
 
@@ -112,5 +108,9 @@ public class CustomPlanController {
         customPlanService.updateDuration(newDurationHour, newDurationMinute, taskNum, planNum, newCost);
     }
 
-
+    @ResponseBody
+    @PostMapping("placeInfoMore")
+    public PlaceInfoDTO getPlaceInfo (@RequestParam("placeId") String placeId) {
+        return customPlanService.getPlaceInfo(placeId);
+    }
 }

@@ -108,3 +108,17 @@ tr.selected {
 .day-table-td-deleteImgButton {
     padding: 0px;
 }
+
+.placeInfoBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.placeInfo-Modal {
+    display: none;
+    justify-content: center;
+    align-items : center;
+    border: solid 2px black;
+    background-color: white;
+}

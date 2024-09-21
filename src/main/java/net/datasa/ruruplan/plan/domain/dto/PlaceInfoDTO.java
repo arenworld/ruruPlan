@@ -15,12 +15,10 @@ public class PlaceInfoDTO {
     
     // 관광지명
     private String titleKr;
-    
     private String titleJp;
     
     // 관광지 주소
     private String addressKr;
-    
     private String addressJp;
     
     // x좌표, 테이블에서 varchar타입으로 만들었나보다 --> service에서 형변환 시켜줌
@@ -44,7 +42,7 @@ public class PlaceInfoDTO {
     // 테마3
     private String theme3;
     
-    // 애완동물 보유여부
+    // 펫 프렌들리
     private Boolean petFriendly;
     
     // 도로편의성 - 무장애 여부
@@ -52,7 +50,6 @@ public class PlaceInfoDTO {
 
     // 개요
     private String overviewKr;
-
     private String overviewJp;
 
     // 세계유산여부
@@ -63,12 +60,10 @@ public class PlaceInfoDTO {
     
     // 이용시간
     private String usetimeKr;
-
     private String usetimeJp;
 
     // 휴무일
     private String restdateKr;
-
     private String restdateJp;
 
     // 요금
@@ -76,12 +71,10 @@ public class PlaceInfoDTO {
 
     // 요금정보
     private String feeInfoKr;
-
     private String feeInfoJp;
 
     // 판매품목
     private String saleItemKr;
-
     private String saleItemJp;
     
     // 원본 이미지

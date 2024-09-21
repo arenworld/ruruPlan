@@ -543,8 +543,8 @@ pre code {
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-  /**  margin-right: -15px;
-    margin-left: -15px **/
+    margin-right: -15px;
+    margin-left: -15px
 }
 
 .no-gutters {
@@ -567,7 +567,7 @@ pre code {
 .col-lg-4 {
     position: realative;
     width: 100%;
-    padding: 10px;
+    margin-left: 10px;
     margin: 5px;
 }
 
@@ -1382,8 +1382,8 @@ pre code {
 
     .col-lg-4 {
         -ms-flex: 0 0 33.333333%;
-        flex: 0 0 66.66666%;
-        max-width: 45.555555%
+        flex: 0 0 50%;
+        max-width: 49%
     }
 
     .col-lg-5 {

@@ -183,6 +183,17 @@ public class CustomPlanService {
                 .theme3(placeInfoEntity.getTheme3())
                 .petFriendly(placeInfoEntity.getPetFriendly())
                 .barrierFree(placeInfoEntity.getBarrierFree())
+                .heritage(placeInfoEntity.getHeritage())
+                .infocenter(placeInfoEntity.getInfocenter())
+                .usetimeKr(placeInfoEntity.getUsetimeKr())
+                .usetimeJp(placeInfoEntity.getUsetimeJp())
+                .restdateKr(placeInfoEntity.getRestdateKr())
+                .restdateJp(placeInfoEntity.getRestdateJp())
+                .fee(placeInfoEntity.getFee())
+                .feeInfoKr(placeInfoEntity.getFeeInfoKr())
+                .feeInfoJp(placeInfoEntity.getFeeInfo_Jp())
+                .originImgUrl(placeInfoEntity.getOriginImgUrl())
+                .smallImgUrl(placeInfoEntity.getSmallImgUrl())
                 .build();
     }
 
@@ -261,4 +272,9 @@ public class CustomPlanService {
 
     }
 
+    public PlaceInfoDTO getPlaceInfo(String placeId) {
+        PlaceInfoEntity placeEntity = placeInfoJpaRepository.findById(placeId)
+                .orElseThrow(() -> new EntityNotFoundException("없는 장소"));
+        return convertToDTO(placeEntity);
+    }
 }

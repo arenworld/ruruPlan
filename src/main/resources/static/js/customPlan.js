@@ -1,42 +1,61 @@
-
+/** 전역변수 **/
 //버튼번호 전역변수, 들어오자마자 0이고 그뒤로는 클릭한 버튼의 일자번호를 가져옴.
 let dayNumOfButton = 0;
-//마커정보 담는 전역변수 마커배열 ***
-var planAllMarkers = [];
+//일정마커 배열
+let planAllMarkers = [];
+//테마마커 배열
 let themeAllMarkers = [];
-var map = null;
-var mapOptions = {};
+// 지도
+let map = null;
+// 지도 옵션(초기값 등)
+let mapOptions = {};
+// 테마클릭 번호(다른 테마 누르면 초기화 해야하므로, 전역)
 let clickCountThemeButton = 0;
+// 플랜번호
 let planNum;
 
 $(document).ready(function () {
     planNum = $('#planNum').val();
 
-    // 일정표 출력
+    // 일정표 출력함수
     dayPlansPrint(dayNumOfButton, planNum);
 
-    // 일정마커
+    // 일정마커 출력함수
     planMarkers(dayNumOfButton);
 
-    //총비용 계산
+    //총비용 계산(ajax 로딩시간 주고, 계산)
     setTimeout(function() {
         calculateTotalCost(dayNumOfButton);
     }, 100);
 
+    /** ajax로 그린 DOM요소에 이벤트 걸기 **/
+    // 수정버튼 클릭시 기간, 비용 수정함수
     $(document).on('click', '.editImgButton', updateDurationCost);
+
+    // 일정명클릭시
+    $(document).on('click', '.placeTitle', selectTask);
+
+    // 장소 상세정보 more 클릭시
+    $(document).on('click', '.place-info-more', placeInfoMore);
+
 
     // 일자별 버튼 생성 및 데이 플랜 호출
     const days = ['allday', '1day', '2day', '3day', '4day', '5day', '6day'];
     days.forEach(function (day) {
         //const dayNum = day.replace('day', ''); // 숫자부분만 남긴다
         $('#plan-' + day + '-button').click(function() {
+            
+            // dayNum 저장
             dayNumOfButton = $(this).data('daynum-button');
 
+            // 일자별 플랜 출력
             dayPlansPrint(dayNumOfButton);
+            // 일자별 일정마커 출력
             planMarkers(dayNumOfButton);
+            // 일자별 총비용 계산
             calculateTotalCost(dayNumOfButton);
-
-            // 테이블 번호랑 비교하기 --> ajax로 하면 이런짓을 안해도 되는 것 같은데?
+            
+            // 테이블 번호 비교 --> 해당 일자만 프린트
             $('.planTables').each(function() {
                 let dayNumOfTable = $(this).data('daynum-table');
                 if(dayNumOfButton === 0) {
@@ -57,11 +76,7 @@ $(document).ready(function () {
     });
 
 
-    // 일정에서 장소명을 클릭할 때 발생하는 함수
-    $('.placeTitle').click(selectTask);
-
 });
-
 
 
 // 일정표 그리기
@@ -121,7 +136,7 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                         if (task.task !== '이동') {
                             dayTable += `
                                     <td>${task.task}</td>
-                                    <td class="placeTitle" data-tasknum="${task.taskNum}" style="cursor:pointer;">${task.place.titleKor}</td>`;
+                                    <td class="placeTitle" data-tasknum="${task.taskNum}" style="cursor:pointer;">${task.place.titleKr}</td>`;
                         }
                         // 이동 task 일때
                         else {
@@ -194,7 +209,7 @@ function updateDurationCost() {
     });
 }
 
-// 일자별 마커 출력 함수
+// 일정마커 출력 함수
 function planMarkers(dayNumOfButton) {
     let planNum = $('#planNum').val();
 
@@ -234,37 +249,107 @@ function planMarkers(dayNumOfButton) {
                     title: task.taskNum,
                     icon: {
                         content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff9999" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
-                        // content: `<img src="/images/customPlan/marker-red.png"
-                        //   style="width:25px; height:33px;"
-                        //   alt="marker">`,
                         anchor: new naver.maps.Point(11, 35)
                     },
                     zIndex: 100
                 });
                 // marker.taskNum = task.taskNum; // 마커에 taskNum 속성 추가
-
                 let contents = [
-                    '<div class="iw_inner">',
-                    '   <h3>${task.place.titleKr}</h3>',
-                    '   <p>서울특별시 중구 태평로1가 31 | 서울특별시 중구 세종대로 110 서울특별시청<br />',
-                    '       02-120 | 공공,사회기관 &gt; 특별,광역시청<br />',
-                    '       <a href="http://www.seoul.go.kr" target="_blank">www.seoul.go.kr/</a>',
-                    '   </p>',
+                    '<div class="place-info">',
+                    `<img class="place-info-img" src="${task.place.originImgUrl}"></img>`,
+                    `<h3 class="place-info-title">${task.place.titleKr}</h3>`,
+                    `<img class="place-info-more" src="./images/customPlan/more.png" data-place-id="${task.place.placeId}"></img>`,
+                    `<h6 class="place-info-more2">more</h6>`,
+                    `<p class="place-info-address">${task.place.addressKr}</p>`,
+                    `<p class="place-info-contentsType">${task.place.contentsType}</p>`,
+                    `<img class="place-info-infocenterImg" src="./images/customPlan/infocenter.png"></img>`,
+                    `<p class="place-info-infocenter">${task.place.infocenter}</p>`,
                     '</div>'
                 ].join('')
-                //console.log(task.place.titleKr);
+
                 marker.contents = contents;
                 planAllMarkers.push(marker); // 생성된 마커 배열에 저장
             }); // 반복문 끝
 
-            // 만들어진 planAllMarkers를 순회하며 클릭 이벤트 --> 색상
+            // 일정마커 클릭 이벤트 --> 색상 / 상세정보
             for (const marker of planAllMarkers) {
                 naver.maps.Event.addListener(marker, 'click', function () { // 뭐야 표시는 이렇게 되는데 정상적으로 작동하잖아
                     // 마커는 title이라는 값을 관광지 데이터는 객체의 key 값으로 관리하였기 때문에 마커 클릭과 관광지 클릭이라는 별개의 이벤트에 대해 동일한 함수를 사용할 수 있음 (db의 외래키 개념 차용, 실제 프로젝트에서는 관광지 데이터의 primary 키를 객체의 key값으로 사용)
                     const markerKey = marker.getTitle();
-                    selectMarker(markerKey);
+                    selectPlanMarker(markerKey);
 
-                    $('.placeInfo').html(marker.contents);
+                    // 마커 클릭 시 해당 내용으로 plcaeInfo 업데이트
+                    $('.placeInfoBox').html(marker.contents);
+
+                    // 동적으로 삽입된 .marker-place-info에 CSS 적용
+                    $('.place-info').css({
+                        'height' : '130px',
+                        'width' : '100%',
+                        'border-top' : '2px solid #efefef',
+                        'border-bottom' : '2px solid #efefef',
+                        'border-radius': '10px',
+                        'background-color': '#FFFAFA',  // 예시로 배경 색상 추가
+                        'position' : 'relative'
+
+                    });
+
+                    $('.place-info > *').css({
+                        'position': 'absolute',
+                        'border-radius': '10px'
+                    });
+
+                    $('.place-info-img').css ({
+                        'top' : '5px',
+                        'left' : '5px',
+                        'width' : '120px',
+                        'height' : '120px',
+                        'border-radius' : '10px',
+                    });
+
+                    $('.place-info-title').css({
+                        'top' : '10px',
+                        'left' : '140px'
+                    });
+
+                    $('.place-info-address').css({
+                        'top': '50px',
+                        'left': '140px'
+                    });
+
+                    $('.place-info-more').css({
+                        'top': '10px',
+                        'right': '10px',
+                        'width': '25px',
+                        'height': '25px',
+                        'cursor' : 'pointer',
+                    });
+
+                    $('.place-info-more2').css({
+                        'top': '50px',
+                        'right': '10px',
+                    });
+
+                    $('.place-info-contentsType').css({
+                        'top': '90px',
+                        'left': '140px',
+                        'color' : '#666666'
+                    });
+
+                    $('.place-info-infocenterImg').css({
+                        'top': '92px',
+                        'left': '200px',
+                        'width': '15px',
+                        'height': '15px',
+                        'margin-left' : '3px',
+                    });
+
+                    $('.place-info-infocenter').css({
+                        'top': '90px',
+                        'left': '220px',
+                        'color' : '#666666'
+                    });
+
+
                 });
             };
         },
@@ -275,7 +360,60 @@ function planMarkers(dayNumOfButton) {
     });
 }
 
+function placeInfoMore() {
+    let placeId = $(this).data('place-id');
 
+    $.ajax({
+        url: 'custom/placeInfoMore',
+        type : 'post',
+        data : { placeId : placeId },
+        success : function (placeDTO) {
+            let contents = [
+                '<div class="info-more">',
+                    `<img class="info-more-img" src="${placeDTO.originImgUrl}"></img>`,
+                    `<h3 class="info-more-title">${placeDTO.titleKr}</h3>`,
+                    `<p class="info-more-overview">${placeDTO.overviewKr}</p>`,
+                    `<p class="place-info-contentsType">${placeDTO.contentsType}</p>`,
+                    `<p class="place-info-infocenter">${placeDTO.infocenter}</p>`,
+                '</div>'
+            ].join('')
+
+
+            $('.placeInfo-Modal').html(contents);
+
+            // 동적으로 삽입된 .marker-place-info에 CSS 적용
+            $('.info-more').css({
+                'height' : '130px',
+                'width' : '100%',
+                'border-top' : '2px solid #efefef',
+                'border-bottom' : '2px solid #efefef',
+                'border-radius': '10px',
+                'background-color': '#FFFAFA',  // 예시로 배경 색상 추가
+                'position' : 'relative'
+
+            });
+
+            $('.info-more > *').css({
+                'position': 'absolute',
+                'border-radius': '10px'
+            });
+
+            $('.info-more-img').css ({
+                'top' : '5px',
+                'left' : '5px',
+                'width' : '120px',
+                'height' : '120px',
+                'border-radius' : '10px',
+            });
+
+
+
+            $('.placeInfo-Modal').css('display', 'block');
+            $('.placeInfoBox').css('display', 'none');
+        }
+
+    })
+}
 
 
 
@@ -322,30 +460,16 @@ function selectTask() {
     });
 }
 
-// 일정마커 배열을 비우기
-function clearPlanMarkers() {
-    $.each(planAllMarkers, function (index, marker) {
-            marker.setMap(null); // 마커를 지도에서 제거
-    });
-    planAllMarkers.length = 0; // 배열 비우기
-}
 
-// 테마마커 배열을 비우기
-function clearThemeMarkers() {
-    $.each(themeAllMarkers, function (index, marker) {
-        marker.setMap(null); // 마커를 지도에서 제거
-    });
-    themeAllMarkers.length = 0; // 배열 비우기
-}
 
-// 마커 클릭시 발생하는 이벤트(전체 마커 목록을 순회하며 이벤트 부여)
-function selectMarker(markerKey) {
+// 일정마커 클릭시 발생하는 이벤트(전체 마커 목록을 순회하며 이벤트 부여)
+function selectPlanMarker(markerKey) {
 
     // 전체 task-list tr 배경색상 원래대로
     $('.task-list').removeClass('selected');
 
     $('.task-list' + markerKey).closest('tr').addClass('selected');
-    console.log(markerKey);
+    console.log(markerKey); //#228B22
     // 마커 목록 순회
     planAllMarkers.forEach(marker => {
         if (marker.getTitle() === markerKey) {
@@ -364,21 +488,57 @@ function selectMarker(markerKey) {
             });
         }
     });
+    themeAllMarkers.forEach(marker => {
+        marker.setIcon({
+            content: `<svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#7FFF00" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+            size: new naver.maps.Size(22, 35),
+            anchor: new naver.maps.Point(11, 35)
+        });
+    })
 }
-// 테마별 마커 출력 함수
+
+function selectThemeMarker(markerKey) {
+
+    console.log(markerKey); //
+    // 마커 목록 순회
+    themeAllMarkers.forEach(marker => {
+        if (marker.placeId === markerKey) {
+            // 선택된 마커 강조
+            marker.setIcon({
+                content: `<svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#228B22" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+                size: new naver.maps.Size(22, 35),
+                anchor: new naver.maps.Point(11, 35)
+            });
+        } else {
+            // 나머지 마커는 기본 색상으로 초기화
+            marker.setIcon({
+                content: `<svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#7FFF00" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+                size: new naver.maps.Size(22, 35),
+                anchor: new naver.maps.Point(11, 35)
+            });
+        }
+    });
+    planAllMarkers.forEach(marker => {
+        marker.setIcon({
+            content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff9999" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+            size: new naver.maps.Size(22, 35),
+            anchor: new naver.maps.Point(11, 35)
+        });
+    })
+}
 
 
-// 일정마커 출력함수
+
+
+// 테마마커 출력
 function themeMarkers() {
     let theme = $(this).data('theme');
-    let planNum = $('#planNum').val();
+    // 아니 이것만 하면 되는 거였잖아..!
 
     if(clickCountThemeButton === 1) {
         clearThemeMarkers();
         clickCountThemeButton--;
     }
-
-    console.log(clickCountThemeButton);
 
     $.ajax({
         url: '/custom/themeMarkers',
@@ -386,62 +546,55 @@ function themeMarkers() {
         data: {theme : theme
             , planNum : planNum
             , dayNumOfButton : dayNumOfButton},
-        success : function(planAndThemeLocations) {
+        success : function(themeLocations) {
 
             if(clickCountThemeButton === 0) {
                 clickCountThemeButton++;
             }
-            console.log(clickCountThemeButton);
-
-            let themeLocations = planAndThemeLocations.themeLocations;
-            let planLocations = planAndThemeLocations.planLocations;
 
             let bounds = map.getBounds();
-            $.each(themeLocations, function(index, location) {
+
+            // 테마 마커배열 채우기 & 상세정보
+            $.each(themeLocations, function(index, themeLocation) {
                 let marker = new naver.maps.Marker({
-                    position: new naver.maps.LatLng(location.mapY, location.mapX),
-                    map: map
-                });
-                themeAllMarkers.push(marker);
-            }); // 테마정보 반복문 끝
-
-            naver.maps.addEventListener(map, 'idle', function() {
-                updateMarkers(map, themeAllMarkers, planAllMarkers);
-            });
-
-            $.each(planLocations, function (index, location) {
-                const marker = new naver.maps.Marker({
                     map: map,
-                    position: new naver.maps.LatLng(location.place.mapY, location.place.mapX),
+                    position: new naver.maps.LatLng(themeLocation.mapY, themeLocation.mapX),
+                    title: themeLocation.titleKr,
                     icon: {
-                        content: `<img src="/images/customPlan/marker-red.png"
-                           style="width:25px; height:33px;"
-                           alt="marker">`,
+                        content: `<svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#7FFF00" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
                         anchor: new naver.maps.Point(11, 35)
                     },
                     zIndex: 100
                 });
-                marker.taskNum = location.taskNum; // 마커에 taskNum 속성 추가
-                planAllMarkers.push(marker); // 생성된 마커 배열에 저장
-            }); // 일정정보 반복문 끝
+                let contents = [
+                    '<div class="marker-place-info">',
+                    `<img src="${themeLocation.originImgUrl}">`,
+                    `   <h3>${themeLocation.titleKr}</h3>`,
+                    `   <p>${themeLocation.addressKr}<br />`,
+                    '       <br />',
+                    '   </p>',
+                    '</div>'
+                ].join('')
+                marker.placeId = themeLocation.placeId;
+                marker.contents = contents;
+                let imgUrl = themeLocation.originImgUrl;
+                console.log(imgUrl);
 
-            // 일정 클릭 시 해당 마커 위치로 이동
-            $('.placeTitle').each(function () {
-                $(this).on('click', function () {
-                    let clickedTaskNum = $(this).data('tasknum'); // 클릭한 td의 data-tasknum 가져오기
+                themeAllMarkers.push(marker);
+            }); // 테마정보 반복문 끝
 
-                    // 해당 taskNum과 일치하는 마커 찾기
-                    let targetMarker = planAllMarkers.find(function (marker) {
-                        return marker.taskNum === clickedTaskNum;
-                    });
 
-                    if (targetMarker) {
-                        let position = targetMarker.getPosition(); // 마커의 위치 가져오기
-                        map.setCenter(position); // 지도의 중심을 해당 마커 위치로 이동
-                        map.setZoom(16); // 줌 레벨 조정 (필요에 따라)
-                    }
+            // 모든 테마마커를 순회하며 클릭 이벤트 --> 색상, 저장된 상세내용 프린트
+            for (const marker of themeAllMarkers) {
+                naver.maps.Event.addListener(marker, 'click', function () { // 뭐야 표시는 이렇게 되는데 정상적으로 작동하잖아
+                    // 마커는 title이라는 값을 관광지 데이터는 객체의 key 값으로 관리하였기 때문에 마커 클릭과 관광지 클릭이라는 별개의 이벤트에 대해 동일한 함수를 사용할 수 있음 (db의 외래키 개념 차용, 실제 프로젝트에서는 관광지 데이터의 primary 키를 객체의 key값으로 사용)
+                    const markerKey = marker.placeId;
+                    selectThemeMarker(markerKey);
+
+                    $('.placeInfo').html(marker.contents);
                 });
-            });// 일정정보에 클릭이벤트 추가 해당마커로 이동하기
+            };
+
         },
         error: function(error) {
             console.error('에러발생:', error);
@@ -449,6 +602,10 @@ function themeMarkers() {
         }
     });
  }
+
+naver.maps.addEventListener(map, 'idle', function() {
+    updateMarkers(map, themeAllMarkers, planAllMarkers);
+});
 
 // 업로드 최적화 위한 함수 - 보이는 지도에서만 마커 뜨게
 function updateMarkers(map, themeAllMarkers, planAllMarkers) {
@@ -476,18 +633,17 @@ function updateMarkers(map, themeAllMarkers, planAllMarkers) {
     } // planAllMarkers 리스트 체크
 }
 
-// 보이게
+// 범위 내 마커 보이게
 function showMarker(map, marker) {
     if (marker.getMap()) return;
     marker.setMap(map);
 }
 
-// 안보이게
+// 범위 밖 마커 안보이게
 function hideMarker(map, marker) {
     if(!marker.getMap()) return;
     marker.setMap(null);
 }
-
 
 // 총비용 계산(allDay, 일자별 계산 모두 가능)
 function calculateTotalCost(dayNumOfButton) {
@@ -515,8 +671,21 @@ function calculateTotalCost(dayNumOfButton) {
     $('#totalCost').text(totalCost.toLocaleString() + ' 원'); // 총합을 표시할 요소에 추가
 }
 
+// 일정마커 배열을 비우기
+function clearPlanMarkers() {
+    $.each(planAllMarkers, function (index, marker) {
+        marker.setMap(null); // 마커를 지도에서 제거
+    });
+    planAllMarkers.length = 0; // 배열 비우기
+}
 
-
+// 테마마커 배열을 비우기
+function clearThemeMarkers() {
+    $.each(themeAllMarkers, function (index, marker) {
+        marker.setMap(null); // 마커를 지도에서 제거
+    });
+    themeAllMarkers.length = 0; // 배열 비우기
+}
 
 
 

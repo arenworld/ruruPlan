@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const theme_2_box = document.querySelector(".theme_2-box");
   const theme_3_box = document.querySelector(".theme_3-box");
 
-
   const leisure_sports = document.getElementById("leisuresports");
   const bike = document.getElementById("bike");
   const water_skiing = document.getElementById("water_skiing");
@@ -24,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let selectedThemes = []; // 화면에 표시될 국제화된 텍스트를 저장할 배열
 
-  // 테마와 해당 이미지 경로 매핑
+  // 테마와 해당 이미지 경로 매핑 일본어
   const themeImages = {
     쇼핑: "/images/modal/쇼핑_수정.png",
     음식: "/images/modal/음식이모티콘.png",
@@ -50,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
   water_skiing.style.display = "none";
   ice_rink.style.display = "none";
   ment2.style.display = "none";
+
   // 테마 버튼 클릭 이벤트 처리
   themes.forEach((theme) => {
     theme.addEventListener("click", function () {
@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
         theme.style.backgroundColor = ""; // 배경색 원래대로
         updateThemeBoxes(); // 테마 박스 재정렬
         checkSelectionComplete(); // 선택 완료 여부 확인
+        checkSelectionSports(); // 레포츠 상태 확인
         return;
       }
 
@@ -79,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
       selectedThemeValues.push(saveText); // DB로 보낼 목록에 추가
       updateThemeBoxes(); // 테마 박스 재정렬
       checkSelectionComplete(); // 선택 완료 여부 확인
+      checkSelectionSports(); // 레포츠 상태 확인
     });
   });
 
@@ -106,6 +108,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // 레포츠 관련 상태 확인 함수
+  function checkSelectionSports() {
+    const sportsSelected = selectedThemeValues.some((value) =>
+        ["자전거", "아이스링크", "수상레저"].includes(value)
+    );
+
+    // 스포츠 테마가 하나라도 선택되었을 경우 레포츠 버튼 회색으로 변경
+    if (sportsSelected) {
+      leisure_sports.style.backgroundColor = "gray";
+    } else {
+      leisure_sports.style.backgroundColor = "white";
+    }
+  }
+
   // 선택 완료 여부 확인하는 함수
   function checkSelectionComplete() {
     if (selectedThemes.length === 3) {
@@ -115,9 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-
-
-// 레포츠 클릭 비활성화 (호버는 가능, 클릭 이벤트 무시)
+  // 레포츠 클릭 비활성화 (호버는 가능, 클릭 이벤트 무시)
   leisure_sports.addEventListener("click", function (event) {
     event.preventDefault(); // 클릭 이벤트 무시
   });

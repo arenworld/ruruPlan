@@ -50,7 +50,7 @@ public class CustomPlanController {
         // start_date, end_date 활용해서 몇박 며칠인지 정의하는 기능 ChronoUnit은 날짜타입의 계산을 도와주는 객체
         long days = ChronoUnit.DAYS.between(planDTO.getStartDate(), planDTO.getEndDate()) + 1;
 
-        String[] themeArray = {"쇼핑", "음식", "카페", "역사", "문화", "힐링", "랜드마크", "체험", "레포츠"};
+        String[] themeArray = {"쇼핑", "식당", "카페", "역사", "문화", "힐링", "랜드마크", "체험", "레포츠"};
 
         List<TaskDTO> taskList = planDTO.getTaskList();
 
@@ -111,6 +111,7 @@ public class CustomPlanController {
     @ResponseBody
     @PostMapping("placeInfoMore")
     public PlaceInfoDTO getPlaceInfo (@RequestParam("placeId") String placeId) {
+        log.debug("장솢어보 : {}", customPlanService.getPlaceInfo(placeId));
         return customPlanService.getPlaceInfo(placeId);
     }
 }

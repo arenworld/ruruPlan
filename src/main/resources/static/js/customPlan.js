@@ -38,6 +38,10 @@ $(document).ready(function () {
     // 장소 상세정보 more 클릭시
     $(document).on('click', '.place-info-more', placeInfoMore);
 
+    // 무장애  아이콘 후버시
+    $(document).on('mouseover', '.info-table-barrierBadge', badgeExplain);
+    $(document).on('mouseleave', '.info-table-barrierBadge', badgeExplainHide);
+
 
     // 일자별 버튼 생성 및 데이 플랜 호출
     const days = ['allday', '1day', '2day', '3day', '4day', '5day', '6day'];
@@ -70,7 +74,7 @@ $(document).ready(function () {
     });
 
     // 테마별 버튼 생성 및 테마 정보 호출, 레포츠 처리 어떻게 해야 되지?
-    const themes = ['쇼핑', '음식', '카페', '역사', '문화', '힐링', '랜드마크', '체험', '레포츠']
+    const themes = ['쇼핑', '식당', '카페', '역사', '문화', '힐링', '랜드마크', '체험', '레포츠']
     themes.forEach(function (theme) {
         $('#theme-' + theme + '-button').click(themeMarkers);
     });
@@ -246,20 +250,24 @@ function planMarkers(dayNumOfButton) {
                 const marker = new naver.maps.Marker({
                     map: map,
                     position: new naver.maps.LatLng(task.place.mapY, task.place.mapX),
-                    title: task.taskNum,
+                    title: task.place.titleKr,
+                    taskNum : task.taskNum,
+                    placeId : task.place.placeId,
                     icon: {
                         content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff9999" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
                         anchor: new naver.maps.Point(11, 35)
                     },
                     zIndex: 100
                 });
-                // marker.taskNum = task.taskNum; // 마커에 taskNum 속성 추가
+
+                let img = task.place.originImgUrl ==  '' ? '<img src="../images/customPlan/nonImg.png" class="place-info-imgNone">'
+                                                                  : `<img src="${task.place.originImgUrl}" class="place-info-img">`;
                 let contents = [
                     '<div class="place-info">',
-                    `<img class="place-info-img" src="${task.place.originImgUrl}"></img>`,
+                    img,
+                    //`<img class="place-info-img" src="${task.place.originImgUrl}"></img>`,
                     `<h3 class="place-info-title">${task.place.titleKr}</h3>`,
                     `<img class="place-info-more" src="./images/customPlan/more.png" data-place-id="${task.place.placeId}"></img>`,
-                    `<h6 class="place-info-more2">more</h6>`,
                     `<p class="place-info-address">${task.place.addressKr}</p>`,
                     `<p class="place-info-contentsType">${task.place.contentsType}</p>`,
                     `<img class="place-info-infocenterImg" src="./images/customPlan/infocenter.png"></img>`,
@@ -275,11 +283,13 @@ function planMarkers(dayNumOfButton) {
             for (const marker of planAllMarkers) {
                 naver.maps.Event.addListener(marker, 'click', function () { // 뭐야 표시는 이렇게 되는데 정상적으로 작동하잖아
                     // 마커는 title이라는 값을 관광지 데이터는 객체의 key 값으로 관리하였기 때문에 마커 클릭과 관광지 클릭이라는 별개의 이벤트에 대해 동일한 함수를 사용할 수 있음 (db의 외래키 개념 차용, 실제 프로젝트에서는 관광지 데이터의 primary 키를 객체의 key값으로 사용)
-                    const markerKey = marker.getTitle();
+                    const markerKey = marker.taskNum; // planMarker는 title: placeId, taskNum: task.taskNum
                     selectPlanMarker(markerKey);
 
                     // 마커 클릭 시 해당 내용으로 plcaeInfo 업데이트
-                    $('.placeInfoBox').html(marker.contents);
+                    $('.placeInfoList').html(marker.contents);
+                    $('.placeInfo-Modal').css('display', 'none');
+                    $('.placeInfoList').css('display', 'block');
 
                     // 동적으로 삽입된 .marker-place-info에 CSS 적용
                     $('.place-info').css({
@@ -290,7 +300,6 @@ function planMarkers(dayNumOfButton) {
                         'border-radius': '10px',
                         'background-color': '#FFFAFA',  // 예시로 배경 색상 추가
                         'position' : 'relative'
-
                     });
 
                     $('.place-info > *').css({
@@ -303,6 +312,13 @@ function planMarkers(dayNumOfButton) {
                         'left' : '5px',
                         'width' : '120px',
                         'height' : '120px',
+                        'border-radius' : '10px',
+                    });
+                    $('.place-info-imgNone').css ({
+                        'top' : '15px',
+                        'left' : '15px',
+                        'width' : '80px',
+                        'height' : '80px',
                         'border-radius' : '10px',
                     });
 
@@ -324,10 +340,6 @@ function planMarkers(dayNumOfButton) {
                         'cursor' : 'pointer',
                     });
 
-                    $('.place-info-more2').css({
-                        'top': '50px',
-                        'right': '10px',
-                    });
 
                     $('.place-info-contentsType').css({
                         'top': '90px',
@@ -360,6 +372,7 @@ function planMarkers(dayNumOfButton) {
     });
 }
 
+// placeInfoList 에서 More을 클릭하면 출력되는 상세페이지
 function placeInfoMore() {
     let placeId = $(this).data('place-id');
 
@@ -368,54 +381,100 @@ function placeInfoMore() {
         type : 'post',
         data : { placeId : placeId },
         success : function (placeDTO) {
-            let contents = [
-                '<div class="info-more">',
-                    `<img class="info-more-img" src="${placeDTO.originImgUrl}"></img>`,
-                    `<h3 class="info-more-title">${placeDTO.titleKr}</h3>`,
-                    `<p class="info-more-overview">${placeDTO.overviewKr}</p>`,
-                    `<p class="place-info-contentsType">${placeDTO.contentsType}</p>`,
-                    `<p class="place-info-infocenter">${placeDTO.infocenter}</p>`,
-                '</div>'
-            ].join('')
 
+            let heritageIcon = placeDTO.heritage ? '<img src="../images/customPlan/heritage.png" class="info-table-heritageBadge" data-badge="heritage">' : '';
+            let barrierFreeIcon = placeDTO.barrierFree ? '<img src="../images/customPlan/barrier.png" class="info-table-barrierBadge" data-badge="barrier">' : '';
+            let petFriendlyIcon = placeDTO.petFriendly ? '<img src="../images/customPlan/pet.png" class="info-table-petBadge" data-badge="pet">' : '';
 
-            $('.placeInfo-Modal').html(contents);
+            let infoTable = `
+                         <div class="info-table-box">
+                            <table class="info-table">
+                                <thead>     
+                                    <tr class="info-table-basic">
+                                        <th class="info-table-title" colspan="3">
+                                            <h3 class="in-title">${placeDTO.titleKr}</h3>
+                                            <span>${heritageIcon}</span>
+                                            <span>${barrierFreeIcon}</span>
+                                            <span>${petFriendlyIcon}</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>    
+                                        <th class="info-table-usetime">운영시간</th>
+                                        <td class="info-table-usetimeDetail">[미술관]화요일~금요일 10:00~20:00 주말 10:00~18:00 ※ 마감시간 1시간 전까지 입장 가능</td>
+                                    </tr>
+                                </tbody>    
+                            </table>
+                        </div>`
+            let barrier = placeDTO.barrierFree;
+            let pet = placeDTO.petFriendly;
+            let heritage = placeDTO.heritage;
+            console.log(barrier);
+            console.log(pet);
+            console.log(heritage);
+
+            $('.placeInfo-Modal').html(infoTable);
 
             // 동적으로 삽입된 .marker-place-info에 CSS 적용
-            $('.info-more').css({
-                'height' : '130px',
+            $('.info-table-box').css({
                 'width' : '100%',
                 'border-top' : '2px solid #efefef',
                 'border-bottom' : '2px solid #efefef',
                 'border-radius': '10px',
                 'background-color': '#FFFAFA',  // 예시로 배경 색상 추가
-                'position' : 'relative'
-
             });
 
-            $('.info-more > *').css({
-                'position': 'absolute',
-                'border-radius': '10px'
+            $('.info-table').css({
+                'border-radius': '10px',
+                'border' : '1px solid black'
             });
 
-            $('.info-more-img').css ({
-                'top' : '5px',
-                'left' : '5px',
-                'width' : '120px',
-                'height' : '120px',
-                'border-radius' : '10px',
+            $('.info-table-title').css({
+                'width': '50%',
+                'border-radius': '10px',
+                'padding-top' : '10px'
             });
 
+            $('.in-title').css({
+                'display' : "inline",
+                'width': '50%',
+                'border-radius': '10px',
+                'padding-left' : '5px'
+            });
 
+            $('.info-table-heritageBadge').css ({
+                'width' : '25px',
+                'height' : '25px',
+                'margin-left' : '5px',
+                'padding-bottom' : '5px',
+                'cursor' : 'pointer'
+            });
+
+            $('.info-table-barrierBadge').css ({
+                'width' : '25px',
+                'height' : '25px',
+                'margin-left' : '5px',
+                'padding-bottom' : '5px',
+                'cursor' : 'pointer'
+            });
+
+            $('.info-table-petBadge').css ({
+                'width' : '25px',
+                'height' : '25px',
+                'padding-bottom' : '5px',
+                'cursor' : 'pointer'
+            });
+
+            $('.info-more-overview').css({
+            });
 
             $('.placeInfo-Modal').css('display', 'block');
-            $('.placeInfoBox').css('display', 'none');
+            $('.placeInfoList').css('display', 'none');
         }
 
     })
 }
-
-
 
 // 일정표-장소명 클릭시: 마커 색 변경, 일정표 해당 tr 색 변경
 function selectTask() {
@@ -472,7 +531,7 @@ function selectPlanMarker(markerKey) {
     console.log(markerKey); //#228B22
     // 마커 목록 순회
     planAllMarkers.forEach(marker => {
-        if (marker.getTitle() === markerKey) {
+        if (marker.taskNum === markerKey) {
             // 선택된 마커 강조
             marker.setIcon({
                 content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff0000" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
@@ -480,7 +539,7 @@ function selectPlanMarker(markerKey) {
                 anchor: new naver.maps.Point(11, 35)
             });
         } else {
-            // 나머지 마커는 기본 색상으로 초기화
+            // 나머지 일정마커 색상 초기화
             marker.setIcon({
                 content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff9999" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
                 size: new naver.maps.Size(22, 35),
@@ -488,6 +547,8 @@ function selectPlanMarker(markerKey) {
             });
         }
     });
+
+    // 일정마커 클릭시, 테마마커 색상 초기화
     themeAllMarkers.forEach(marker => {
         marker.setIcon({
             content: `<svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#7FFF00" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
@@ -496,38 +557,6 @@ function selectPlanMarker(markerKey) {
         });
     })
 }
-
-function selectThemeMarker(markerKey) {
-
-    console.log(markerKey); //
-    // 마커 목록 순회
-    themeAllMarkers.forEach(marker => {
-        if (marker.placeId === markerKey) {
-            // 선택된 마커 강조
-            marker.setIcon({
-                content: `<svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#228B22" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
-                size: new naver.maps.Size(22, 35),
-                anchor: new naver.maps.Point(11, 35)
-            });
-        } else {
-            // 나머지 마커는 기본 색상으로 초기화
-            marker.setIcon({
-                content: `<svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#7FFF00" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
-                size: new naver.maps.Size(22, 35),
-                anchor: new naver.maps.Point(11, 35)
-            });
-        }
-    });
-    planAllMarkers.forEach(marker => {
-        marker.setIcon({
-            content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff9999" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
-            size: new naver.maps.Size(22, 35),
-            anchor: new naver.maps.Point(11, 35)
-        });
-    })
-}
-
-
 
 
 // 테마마커 출력
@@ -552,20 +581,20 @@ function themeMarkers() {
                 clickCountThemeButton++;
             }
 
-            let bounds = map.getBounds();
-
             // 테마 마커배열 채우기 & 상세정보
             $.each(themeLocations, function(index, themeLocation) {
                 let marker = new naver.maps.Marker({
                     map: map,
                     position: new naver.maps.LatLng(themeLocation.mapY, themeLocation.mapX),
                     title: themeLocation.titleKr,
+                    placeId: themeLocation.placeId,
                     icon: {
                         content: `<svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#7FFF00" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
                         anchor: new naver.maps.Point(11, 35)
                     },
                     zIndex: 100
                 });
+
                 let contents = [
                     '<div class="marker-place-info">',
                     `<img src="${themeLocation.originImgUrl}">`,
@@ -603,9 +632,68 @@ function themeMarkers() {
     });
  }
 
+
+// 테마마커 선택시
+function selectThemeMarker(markerKey) {
+
+    console.log(markerKey); //
+    // 마커 목록 순회
+    themeAllMarkers.forEach(marker => {
+        if (marker.placeId === markerKey) {
+            // 선택된 마커 강조
+            marker.setIcon({
+                content: `<svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#228B22" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+                size: new naver.maps.Size(22, 35),
+                anchor: new naver.maps.Point(11, 35)
+            });
+        } else {
+            // 나머지 마커는 기본 색상으로 초기화
+            marker.setIcon({
+                content: `<svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#7FFF00" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+                size: new naver.maps.Size(22, 35),
+                anchor: new naver.maps.Point(11, 35)
+            });
+        }
+    });
+    planAllMarkers.forEach(marker => {
+        marker.setIcon({
+            content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff9999" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+            size: new naver.maps.Size(22, 35),
+            anchor: new naver.maps.Point(11, 35)
+        });
+    })
+}
+
+
+// 지도 이동 및 확대&축소 동작이 끝나면 발생하는 이벤트
 naver.maps.addEventListener(map, 'idle', function() {
-    updateMarkers(map, themeAllMarkers, planAllMarkers);
+    idleEvent(map, planAllMarkers, themeAllMarkers); // 처리대상 마커리스트가 2개 : 일정, 테마
+    // updateMarkers(map, themeAllMarkers, planAllMarkers);
 });
+
+function idleEvent (map, planAllMarkers, themeAllMarkers) {
+    const mapBounds = map.getBounds();
+    const visiblePlanMarkerKeyList = [];
+    const visibleThemeMarkerKeyList = [];
+      for(const planMarker of planAllMarkers) {
+          const position = marker.getPosition();
+          if (mapBounds.hasLatLng(position)) {
+              visiblePlanMarkerKeyList.push(planAllMarkers.getTitle());
+          } else {
+
+          }
+      }
+    for(const themeMarker of themeAllMarkers) {
+        const position = marker.getPosition();
+        if (mapBounds.hasLatLng(position)) {
+            visibleThemeMarkerKeyList.push(themeAllMarkers.getTitle());
+        } else {
+
+        }
+    }
+      updateMarkers(visiblePlanMarkerKeyList);
+      updateMarkers(visibleThemeMarkerKeyList);
+}
 
 // 업로드 최적화 위한 함수 - 보이는 지도에서만 마커 뜨게
 function updateMarkers(map, themeAllMarkers, planAllMarkers) {
@@ -687,8 +775,20 @@ function clearThemeMarkers() {
     themeAllMarkers.length = 0; // 배열 비우기
 }
 
+// 배지 mouseover 효과, 상세설명 출력
+function badgeExplain() {
+    let badge = $(this).data('badge');
 
+    $('#' + badge + 'Badge-explain').css({
+        display: 'block'
+    })
+}
 
+// 배지 mouseleave 효과, 상세설명 숨기기
+function badgeExplainHide() {
+    let badge = $(this).data('badge');
+    $('#' + badge + 'Badge-explain').css('display', 'none');
+}
 
 
 

@@ -1,26 +1,147 @@
-<!-- /*
-* Template Name: Tour
-* Template Author: Untree.co
-* Tempalte URI: https://untree.co/
-* License: https://creativecommons.org/licenses/by/3.0/
-*/ -->
-<!doctype html>
-<html lang="kor" xmlns:th="http://thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
-<!--    <script th:src="@{/js/customPlan.js}"></script>-->
-
     <meta charset="UTF-8">
+    <title>GPT 결과</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Untree.co">
+        .container {
+            width: 50%; /* 화면 가운데 50% 너비 */
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
 
-    <link rel="shortcut icon" href="favicon.png">
+        h2, h3 {
+            color: #333;
+            font-size: 16px;
+        }
 
-    <meta name="description" content="" />
-    <meta name="keywords" content="bootstrap, bootstrap4" />
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f9f9f9;
+            color: #555;
+        }
+
+        td {
+            background-color: #fdfdfd;
+        }
+
+        td[colspan="2"] {
+            background-color: #f0f0f0;
+            color: #888;
+            font-style: italic;
+        }
+
+        .placeTitle {
+            color: #007bff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .placeTitle:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 th:text="'GPT 추천 여행 일정'"></h2>
+    <h3 th:text="'여행 기간: ' + ${planDTO.startDate} + ' ~ ' + ${planDTO.endDate}"></h3>
+
+    <div th:each="dayNum : ${#numbers.sequence(1, lastDay)}">
+        <h3 th:text="'Day ' + ${dayNum}"></h3>
+        <table>
+            <thead>
+            <tr>
+                <th>No</th>
+                <th>Time</th>
+                <th>Task</th>
+                <th>Place</th>
+                <th>Duration</th>
+                <th>Cost</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == dayNum}">
+                <td th:text="${task.taskNum}"></td>
+                <td th:text="${task.startTime}"></td>
+
+                <!-- 이동과 일반 Task를 구분하여 출력 -->
+                <td th:if="${task.task == '이동'}" th:attr="colspan=2" th:text="${task.task}"></td>
+                <td th:if="${task.task != '이동'}" th:text="${task.task}"></td>
+                <td th:if="${task.task != '이동'}" th:text="${task.place.titleKr}" th:data-tasknum="${task.taskNum}" class="placeTitle"></td>
+
+                <td th:text="${task.duration}"></td>
+                <td th:text="|${task.cost}원|"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
+
+
+
+
+<!--&lt;!&ndash; /*-->
+<!--* Template Name: Tour-->
+<!--* Template Author: Untree.co-->
+<!--* Tempalte URI: https://untree.co/-->
+<!--* License: https://creativecommons.org/licenses/by/3.0/-->
+<!--*/ &ndash;&gt;-->
+<!--<!doctype html>-->
+<!--<html lang="kor" xmlns:th="http://thymeleaf.org"-->
+<!--      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">-->
+<!--<head>-->
+<!--    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>-->
+<!--    <script th:src="@{/js/gptPlan.js}"></script>-->
+
+<!--    <meta charset="UTF-8">-->
+
+<!--    <meta charset="utf-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+<!--    <meta name="author" content="Untree.co">-->
+
+<!--    <link rel="shortcut icon" href="favicon.png">-->
+
+<!--    <meta name="description" content="" />-->
+<!--    <meta name="keywords" content="bootstrap, bootstrap4" />-->
 
 <!--    <link rel="preconnect" href="https://fonts.googleapis.com">-->
 <!--    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
@@ -43,8 +164,8 @@
 <!--    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ycuy92lblj&language=ja"></script>-->
 <!--    <script>-->
 <!--    </script>-->
-</head>
-<body>
+<!--</head>-->
+<!--<body>-->
 
 
 <!--&lt;!&ndash;네비게이션 / 헤더 &ndash;&gt;-->
@@ -173,13 +294,14 @@
 <!--                            <td th:text="${task.taskNum}"></td>-->
 <!--                            <td th:text="${task.startTime}"></td>-->
 
-<!--                            &lt;!&ndash; 홀수라인일 때 &ndash;&gt;-->
-<!--                            <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>-->
+<!--                            &lt;!&ndash; '이동'이 아닐 때 &ndash;&gt;-->
+<!--                            <td th:if="${task.task != '이동'}" th:text="${task.task}"></td>-->
 
-<!--                            &lt;!&ndash; 짝수라인일 때 &ndash;&gt;-->
-<!--                            <td th:if="${iterStat.count % 2 == 0}" th:attr="colspan=2" th:text="${task.task}"></td>-->
+<!--                            &lt;!&ndash; '이동'일 때, colspan 적용 &ndash;&gt;-->
+<!--                            <td th:if="${task.task == '이동'}" th:attr="colspan=2" th:text="${task.task}"></td>-->
 
-<!--                            <td th:if="${iterStat.count % 2 != 0}" th:text="${task.place.title}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>-->
+<!--                            &lt;!&ndash; '이동'이 아닐 때, 장소명 출력 &ndash;&gt;-->
+<!--                            <td th:if="${task.task != '이동'}" th:text="${task.place.titleKr}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>-->
 
 <!--                            <td th:text="${task.duration}"></td>-->
 <!--                            <td th:text="|${task.cost}원|"></td>-->
@@ -302,26 +424,5 @@
 <!--</div>-->
 
 
-
-
-
-<div class="plan-details" id="planTable-allday">
-    <h3>추천된 장소</h3>
-    <p>전달된 cmdNum: <span th:text="${cmdNum}"></span></p>
-    <table>
-        <thead>
-        <tr>
-            <th>No</th>
-            <th>Place ID</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="place, index : ${placeIdList}">
-            <td th:text="${index.count}"></td>
-            <td th:text="${place}"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-</body>
-</html>
+<!--</body>-->
+<!--</html>-->

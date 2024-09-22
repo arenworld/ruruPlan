@@ -1,5 +1,6 @@
 package net.datasa.ruruplan.gpt.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.ruruplan.gpt.domain.dto.GptCmdDTO;
@@ -13,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,21 +27,53 @@ public class GptResultController {
 
     private final GptResultService gptResultService;
 
-    @ResponseBody
+
+    /**
+     * 로딩창 ajax에서 요청을 받아 planDTO를 만드는 메서드
+     * @param cmdNum    로딩창에서 ajax로 받아온 값
+     * @param session   세션에 planDTO를 저장할 예정
+     * @return  리다이렉트 및 페이지 이동 요청
+     * @throws IOException  책임회피
+     */
     @PostMapping("/getGptPlan")
-    public GptResultDTO getGptPlan(@RequestParam("cmdNum") Integer cmdNum) throws IOException {
+    public String getGptPlan(@RequestParam("cmdNum") Integer cmdNum, HttpSession session) throws IOException {
         log.debug("cmdNum: {}", cmdNum);
-        return gptResultService.gptApi(cmdNum);
+
+        // GPT API 호출 및 PlanDTO 생성
+        GptResultDTO result = gptResultService.gptApi(cmdNum);
+        PlanDTO plan = gptResultService.planCreate(result);
+
+        // PlanDTO를 세션에 저장
+        session.setAttribute("planDTO", plan);
+
+        // 여기서 리다이렉트는 브라우저에게 /gptView/result로 요청을 보내라고 알려주는 것
+        return "redirect:/gptView/result";
     }
 
+    /**
+     * 세션값에 저장된 PlanDTO를 모델에 넣어 gptResult.html로 보내는 메서드
+     * @param session   저장된 PlanDTO불러오기 위함
+     * @param model     planDTO를 모델값에 저장
+     * @return          결과창으로 페이지 이동
+     */
     @GetMapping("/gptView/result")
-    public String showGptResult(@RequestParam("cmdNum") Integer cmdNum, @RequestParam("placeIds") String placeIds, Model model) {
-        List<String> placeIdList = Arrays.asList(placeIds.split(","));
-        model.addAttribute("cmdNum", cmdNum);
-        model.addAttribute("placeIdList", placeIdList);
-        return "gptView/gptResult"; // gptResultView.html 파일로 이동
+    public String getGptResultPage(HttpSession session, Model model) {
+        // 세션에서 PlanDTO를 가져옴
+        PlanDTO planDTO = (PlanDTO) session.getAttribute("planDTO");
+
+        LocalDate startDate = planDTO.getStartDate();
+        LocalDate endDate = planDTO.getEndDate();
+        long lastDay = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+        model.addAttribute("lastDay", lastDay);
+
+        // 모델에 PlanDTO를 추가하여 화면에서 사용할 수 있게 함
+        model.addAttribute("planDTO", planDTO);
+
+        // gptResult.html 페이지로 이동
+        return "gptView/gptResult";
     }
 
+    // 임시로 만든 것이라 나중에 삭제하고 다른 곳으로 옮길 예정.
     @GetMapping("gptView/question")
     public String gptViewQuestion() {
         return "gptView/question";

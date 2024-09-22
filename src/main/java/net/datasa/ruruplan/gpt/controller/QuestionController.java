@@ -1,5 +1,6 @@
 package net.datasa.ruruplan.gpt.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.ruruplan.gpt.domain.dto.GptCmdDTO;
@@ -30,25 +31,36 @@ public class QuestionController {
      */
     @PostMapping("saveGptCmd")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> saveGptCmd(@RequestBody GptCmdDTO gptCmdDTO, @AuthenticationPrincipal AuthenticatedUser user) {
+    public ResponseEntity<Map<String, Object>> saveGptCmd(
+            @RequestBody GptCmdDTO gptCmdDTO,
+            @AuthenticationPrincipal AuthenticatedUser user,
+            HttpSession session) {
+
         gptCmdDTO.setMemberId(user.getId()); // 로그인된 사용자 ID 설정
         Integer cmdNum = questionService.saveAndReturnDTO(gptCmdDTO);
 
-        // cmdNum을 JSON 형태로 반환
-        Map<String, Object> response = new HashMap<>();
-        response.put("cmdNum", cmdNum);
+        // 세션에 cmdNum 저장
+        session.setAttribute("cmdNum", cmdNum);
 
+        // 성공 메시지만 응답으로 전달
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "저장 완료");
         return ResponseEntity.ok(response);
     }
 
     /**
-     * modal.js에서 ajax실행 성공시 loading으로 이동(url값에 cmdNum포함)
-     * @param cmdNum    modal.js에서 보낸 url값에 있는 cmdNum
-     * @param model     loading창으로 보낼 cmdNum값 저장
-     * @return  cmdNum
+     * loading 페이지로 이동할 때 세션에서 cmdNum을 가져옴
+     * @param session 세션 객체
+     * @param model   loading 창으로 보낼 cmdNum 값 저장
+     * @return cmdNum을 모델에 추가하여 반환
      */
     @GetMapping("loading")
-    public String loading(@RequestParam("cmdNum") Integer cmdNum, Model model) {
+    public String loading(HttpSession session, Model model) {
+        Integer cmdNum = (Integer) session.getAttribute("cmdNum");
+        if (cmdNum == null) {
+            // cmdNum이 세션에 없을 경우 에러 처리
+            return "error";
+        }
         model.addAttribute("cmdNum", cmdNum);
         return "gptView/loading";
     }

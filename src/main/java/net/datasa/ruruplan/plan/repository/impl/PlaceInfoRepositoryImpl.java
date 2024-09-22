@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -85,5 +86,32 @@ public class PlaceInfoRepositoryImpl implements PlaceInfoRepository {
                                 )
                 )
                 .fetch();
+    }
+
+    // 테마 1, 2, 3 중 하나라도 일치하는 장소를 찾고 기존 장소들을 제외하는 메서드
+    @Override
+    public List<String> findByThemeAndExcludeExistingPlaces(String theme, List<String> existingPlaceIds) {
+        return queryFactory.select(placeInfoEntity.placeId)
+                .from(placeInfoEntity)
+                .where(
+                        (placeInfoEntity.theme1.in(theme)
+                                .or(placeInfoEntity.theme2.in(theme))
+                                .or(placeInfoEntity.theme3.in(theme)))
+                                .and(placeInfoEntity.placeId.notIn(existingPlaceIds))
+                )
+                .fetch();
+    }
+
+
+    public Optional<PlaceInfoEntity> findById(String placeId) {
+        if (placeId == null) {
+            return Optional.empty(); // placeId가 null이면 빈 값을 반환
+        }
+
+        PlaceInfoEntity placeInfoEntity = queryFactory.selectFrom(QPlaceInfoEntity.placeInfoEntity)
+                .where(QPlaceInfoEntity.placeInfoEntity.placeId.eq(placeId))
+                .fetchOne();
+
+        return Optional.ofNullable(placeInfoEntity);
     }
 }

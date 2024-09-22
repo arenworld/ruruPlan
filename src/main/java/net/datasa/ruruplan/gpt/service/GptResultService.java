@@ -6,15 +6,22 @@ import lombok.extern.slf4j.Slf4j;
 import net.datasa.ruruplan.gpt.domain.dto.GptResultDTO;
 import net.datasa.ruruplan.gpt.domain.entity.GptCmdEntity;
 import net.datasa.ruruplan.gpt.repository.GptCmdRepository;
+import net.datasa.ruruplan.plan.domain.dto.PlaceInfoDTO;
+import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
+import net.datasa.ruruplan.plan.domain.dto.TaskDTO;
+import net.datasa.ruruplan.plan.domain.entity.PlaceInfoEntity;
 import net.datasa.ruruplan.plan.repository.PlaceInfoRepository;
 import net.datasa.ruruplan.plan.repository.PlanRepository;
 import net.datasa.ruruplan.plan.repository.TaskRepository;
+import net.datasa.ruruplan.plan.repository.impl.PlaceInfoRepositoryImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -26,7 +33,11 @@ public class GptResultService {
     private final GptCmdRepository gptCmdRepository;
     private final PlanRepository planRepository;
     private final TaskRepository taskRepository;
-    private final PlaceInfoRepository placeInfoRepository;
+
+    @Autowired
+    private PlaceInfoRepository placeInfoRepository;
+
+
 
     public GptResultDTO gptApi(Integer cmdNum) throws IOException {
 
@@ -350,6 +361,7 @@ public class GptResultService {
         return simReader.readLine().trim(); // placeId or "일치하는 정보 없음" 반환
     }
 
+    // 관광지 데이터가 없을때 대체 데이터 가져오는 메서드
     private String changeTour(String address, String theme1, String theme2, String theme3, List<String> existingPlaceIds) throws IOException {
         List<String> themes = Arrays.asList(theme1, theme2, theme3);
         List<String> placeIds = placeInfoRepository.findPlaceIdsByAddressAndThemes(address, themes);
@@ -372,7 +384,7 @@ public class GptResultService {
         }
     }
 
-    // 식당이나 카페를 찾는 메서드
+    // DB에 데이터가 없을 때 대체할 데이터 찾는 메서드
     private String changeFoodOrCafe(String address, String placeType, List<String> existingPlaceIds) {
         List<String> placeIds = placeInfoRepository.findRestaurantOrCafePlaceIds(address, placeType);
 
@@ -384,7 +396,26 @@ public class GptResultService {
             Random random = new Random();
             return placeIds.get(random.nextInt(placeIds.size()));
         } else {
-            return "자료 없음"; // 해당 구에 일치하는 곳이 없을 때
+            log.debug("해당 구가 없거나 해당 구에 같은 테마를 가진 장소가 없음. : {}", address);
+            // 테마로만 일치하는 랜덤 장소 가져오기
+            String randomPlaceId = getRandomPlaceByTheme(placeType, existingPlaceIds);
+            log.debug("랜덤 추천된 장소 ID: {}", randomPlaceId);
+            return randomPlaceId;
+        }
+    }
+
+    // 테마 1, 2, 3 중 하나라도 일치하는 장소 중 랜덤으로 가져오는 메서드
+    private String getRandomPlaceByTheme(String placeType, List<String> existingPlaceIds) {
+        List<String> allMatchingPlaceIds = placeInfoRepository.findByThemeAndExcludeExistingPlaces(placeType, existingPlaceIds);
+
+        if (!allMatchingPlaceIds.isEmpty()) {
+            Random random = new Random();
+            String randomPlaceId = allMatchingPlaceIds.get(random.nextInt(allMatchingPlaceIds.size()));
+            log.debug("랜덤으로 선택된 placeId: {}", randomPlaceId);
+            return randomPlaceId;
+        } else {
+            log.debug("일치하는 테마를 가진 장소가 없음.");
+            return "자료 없음"; // 만약 장소가 없으면 이 값을 반환
         }
     }
 
@@ -431,4 +462,213 @@ public class GptResultService {
             }
         }
     }
+
+
+
+
+    public PlanDTO planCreate(GptResultDTO result) throws IOException {
+        Integer cmdNum = result.getCmdNum();
+        List<String> placeIdList = result.getPlaceIdList();
+
+        log.debug("cmdNum: {}", cmdNum);
+        log.debug("placeIdList: {}", placeIdList);
+
+        // GptCmdEntity에서 필요한 정보를 불러옴
+        GptCmdEntity gptCmdEntity = gptCmdRepository.findById(cmdNum)
+                .orElseThrow(() -> new EntityNotFoundException("cmdNum으로 Entity를 불러오지 못했습니다: " + cmdNum));
+
+        LocalDate firstDate = gptCmdEntity.getFirstDate();
+        LocalDate lastDate = gptCmdEntity.getLastDate();
+        LocalTime arrival = gptCmdEntity.getArrival();
+        LocalTime depart = gptCmdEntity.getDepart();
+        String theme1 = gptCmdEntity.getTheme1();
+        String theme2 = gptCmdEntity.getTheme2();
+        String theme3 = gptCmdEntity.getTheme3();
+        boolean density = gptCmdEntity.getDensity();
+
+        // 계획 생성 (PlanDTO)
+        PlanDTO planDTO = PlanDTO.builder()
+                .planNum(cmdNum)  // cmdNum을 임시로 planNum으로 사용 나중에 저장하게되면 이 값은 빼고 저장
+                .planName("Gpt_Plan")  // 임시 이름
+                .cmdNum(cmdNum)
+                .memberId(gptCmdEntity.getMember().getMemberId())
+                .startDate(firstDate)
+                .endDate(lastDate)
+                .theme1(theme1)
+                .theme2(theme2)
+                .theme3(theme3)
+                .planCreateDate(LocalDateTime.now())  // 현재 시간으로 생성
+                .planUpdateDate(LocalDateTime.now())  // 현재 시간으로 생성
+                .taskList(new ArrayList<>())  // taskList는 빈 리스트로 초기화
+                .build();
+
+        log.debug("planDTO: {}", planDTO);
+
+        int totalDays = firstDate.until(lastDate).getDays() + 1;  // 총 여행 일 수
+        int placeIndex = 0;
+        int taskNum = 1;  // taskNum을 계속 증가시키기 위한 변수
+
+        // 각 날의 순서 설정 사용자가 선택한 조건에 따라 달라짐.
+        List<String> firstDayOrder;
+        List<String> middleDayOrder;
+        List<String> lastDayOrder;
+
+        // 활동 수 구하기
+        float totalFirstDayTime = 0;
+        float totalLastDayTime = 0;
+        int firstDayTaskCount = 0;
+        int lastDayTaskCount = 0;
+        int middleDayTaskCount = 7;  // 기본 중간 날 활동 수는 7개 (조건에 따라 다름)
+
+        // 비행기 시간 입력 했을 때
+        if (arrival != null && depart != null) {
+            float floatArrival = arrival.getHour() + arrival.getMinute() / 60.0f;
+            float floatDepart = depart.getHour() + depart.getMinute() / 60.0f;
+
+            if (density) {
+                totalFirstDayTime = 22 - floatArrival - 3;
+                totalLastDayTime = floatDepart - 10 - 3;
+                firstDayTaskCount = calculateTaskCount(totalFirstDayTime, true);  // 첫 날 활동 개수
+                lastDayTaskCount = calculateTaskCount(totalLastDayTime, true);    // 마지막 날 활동 개수
+
+                // 첫날, 중간날, 마지막날 활동 순서 설정 (density=true)
+                firstDayOrder = Arrays.asList("식당", "관광지", "카페", "관광지", "식당", "관광지", "카페");
+                middleDayOrder = Arrays.asList("관광지", "식당", "관광지", "카페", "관광지", "식당", "관광지");
+                lastDayOrder = Arrays.asList("관광지", "식당", "카페", "관광지", "식당", "관광지", "카페");
+            } else {
+                totalFirstDayTime = 21 - floatArrival - 3;
+                totalLastDayTime = floatDepart - 10 - 3;
+                firstDayTaskCount = calculateTaskCount(totalFirstDayTime, false); // 첫 날 활동 개수
+                lastDayTaskCount = calculateTaskCount(totalLastDayTime, false);   // 마지막 날 활동 개수
+                middleDayTaskCount = 5;  // 중간 날 활동 수는 5개로 변경 (density=false인 경우)
+
+                // 첫날, 중간날, 마지막날 활동 순서 설정 (density=false)
+                firstDayOrder = Arrays.asList("식당", "관광지", "카페", "관광지", "식당");
+                middleDayOrder = Arrays.asList("관광지", "식당", "관광지", "카페", "식당");
+                lastDayOrder = Arrays.asList("관광지", "식당", "카페", "관광지", "식당");
+            }
+        } else {
+            // 비행기 시간 정보 없을 때
+            if (density) {
+                firstDayTaskCount = 6;  // 첫 날 6개
+                middleDayTaskCount = 7;  // 중간 날 7개
+                lastDayTaskCount = 3;  // 마지막 날 3개
+
+                // 첫날, 중간날, 마지막날 활동 순서 설정 (arrival=null, depart=null, density=true)
+                firstDayOrder = Arrays.asList("식당", "관광지", "카페", "관광지", "식당", "관광지");
+                middleDayOrder = Arrays.asList("관광지", "식당", "관광지", "카페", "관광지", "식당", "관광지");
+                lastDayOrder = Arrays.asList("관광지", "식당", "관광지");
+            } else {
+                firstDayTaskCount = 4;  // 첫 날 4개
+                middleDayTaskCount = 5;  // 중간 날 5개
+                lastDayTaskCount = 3;  // 마지막 날 3개
+
+                // 첫날, 중간날, 마지막날 활동 순서 설정 (arrival=null, depart=null, density=false)
+                firstDayOrder = Arrays.asList("식당", "관광지", "카페", "관광지");
+                middleDayOrder = Arrays.asList("관광지", "식당", "관광지", "카페", "식당");
+                lastDayOrder = Arrays.asList("관광지", "식당", "카페", "관광지", "식당");
+            }
+        }
+
+// 첫 날 TaskDTO 생성 (이동 Task 포함)
+        for (int i = 0; i < firstDayTaskCount && placeIndex < placeIdList.size(); i++) {
+            // 일반 활동 추가
+            createAndAddTask(planDTO, cmdNum, firstDate, 1, placeIdList.get(placeIndex++), taskNum++, firstDayOrder.get(i));
+
+            // 첫 번째 활동이 아니고 마지막 활동이 아닌 경우에만 '이동' 추가
+            if (i >= 0 && i < firstDayTaskCount - 1) {
+                createAndAddTask(planDTO, cmdNum, firstDate, 1, null, taskNum++, "이동");
+            }
+        }
+
+// 중간 날 TaskDTO 생성 (이동 Task 포함)
+        for (int day = 2; day < totalDays && placeIndex < placeIdList.size(); day++) {
+            for (int i = 0; i < middleDayTaskCount && placeIndex < placeIdList.size(); i++) {
+                // 일반 활동 추가
+                createAndAddTask(planDTO, cmdNum, firstDate.plusDays(day - 1), day, placeIdList.get(placeIndex++), taskNum++, middleDayOrder.get(i));
+
+                // 첫 번째 활동이 아니고 마지막 활동이 아닌 경우에만 '이동' 추가
+                if (i >= 0 && i < middleDayTaskCount - 1) {
+                    createAndAddTask(planDTO, cmdNum, firstDate.plusDays(day - 1), day, null, taskNum++, "이동");
+                }
+            }
+        }
+
+// 마지막 날 TaskDTO 생성 (이동 Task 포함)
+        for (int i = 0; i < lastDayTaskCount && placeIndex < placeIdList.size(); i++) {
+            // 일반 활동 추가
+            createAndAddTask(planDTO, cmdNum, lastDate, totalDays, placeIdList.get(placeIndex++), taskNum++, lastDayOrder.get(i));
+
+            // 첫 번째 활동이 아니고 마지막 활동이 아닌 경우에만 '이동' 추가
+            if (i >= 0 && i < lastDayTaskCount - 1) {
+                createAndAddTask(planDTO, cmdNum, lastDate, totalDays, null, taskNum++, "이동");
+            }
+        }
+
+        return planDTO;  // 생성된 PlanDTO 반환
+    }
+
+    // TaskDTO 생성 및 PlanDTO에 추가하는 함수
+    private void createAndAddTask(PlanDTO planDTO, Integer planNum, LocalDate date, int dayNum, String placeId, int index, String taskType) {
+        // '이동'일 경우에는 PlaceInfoEntity가 필요하지 않으므로 placeId가 null이면 바로 TaskDTO를 생성
+        PlaceInfoDTO placeInfoDTO = null;
+
+        if (placeId != null) {
+            // placeId로 PlaceInfoDTO를 가져옴
+            log.debug("placeId: {}", placeId);
+            PlaceInfoEntity placeInfoEntity = placeInfoRepository.findById(placeId)
+                    .orElseThrow(() -> new EntityNotFoundException("placeId로 장소를 찾을 수 없습니다: " + placeId));
+            placeInfoDTO = PlaceInfoDTO.builder()
+                    .placeId(placeInfoEntity.getPlaceId())
+                    .titleKr(placeInfoEntity.getTitleKr())
+                    .titleJp(placeInfoEntity.getTitleJp())
+                    .addressKr(placeInfoEntity.getAddressKr())
+                    .addressJp(placeInfoEntity.getAddressJp())
+                    .mapX(placeInfoEntity.getMapX())
+                    .mapY(placeInfoEntity.getMapY())
+                    .siGunGu(placeInfoEntity.getSiGunGu())
+                    .contentsType(placeInfoEntity.getContentsType())
+                    .theme1(placeInfoEntity.getTheme1())
+                    .theme2(placeInfoEntity.getTheme2())
+                    .theme3(placeInfoEntity.getTheme3())
+                    .petFriendly(placeInfoEntity.getPetFriendly())
+                    .barrierFree(placeInfoEntity.getBarrierFree())
+                    .overviewKr(placeInfoEntity.getOverviewKr())
+                    .overviewJp(placeInfoEntity.getOverviewJp())
+                    .heritage(placeInfoEntity.getHeritage())
+                    .infocenter(placeInfoEntity.getInfocenter())
+                    .usetimeKr(placeInfoEntity.getUsetimeKr())
+                    .usetimeJp(placeInfoEntity.getUsetimeJp())
+                    .restdateKr(placeInfoEntity.getRestdateKr())
+                    .restdateJp(placeInfoEntity.getRestdateJp())
+                    .fee(placeInfoEntity.getFee())
+                    .feeInfoKr(placeInfoEntity.getFeeInfoKr())
+                    .feeInfoJp(placeInfoEntity.getFeeInfo_Jp())
+                    .saleItemKr(placeInfoEntity.getSaleItemKr())
+                    .saleItemJp(placeInfoEntity.getSaleItemJp())
+                    .originImgUrl(placeInfoEntity.getOriginImgUrl())
+                    .smallImgUrl(placeInfoEntity.getSmallImgUrl())
+                    .build();
+
+            log.debug("placeInfoDTO : {}", placeInfoDTO);
+        }
+
+        // TaskDTO 생성
+        TaskDTO task = TaskDTO.builder()
+                .taskNum(index + 1)  // 활동 번호 (단순 인덱스)
+                .planNum(planNum)
+                .place(placeInfoDTO)  // '이동'일 경우에는 placeInfoDTO가 null
+                .memberId(planDTO.getMemberId())
+                .dateN(dayNum)
+                .task(taskType)  // 활동 유형 (식당, 관광지, 카페, 이동)
+                .cost(0)  // 비용은 일단 0으로 설정
+                .memo("")
+                .build();
+
+        log.debug("task : {}", task.getTask());
+
+        // PlanDTO의 taskList에 추가
+        planDTO.getTaskList().add(task);
+    }
+
 }

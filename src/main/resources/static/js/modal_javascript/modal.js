@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
           console.log("서버 응답:", data);
           modal5.style.display = "none"; // 모달 닫기
           alert("제출이 완료되었습니다!");
-          window.location.href = `/gptView/loading?cmdNum=${data.cmdNum}`;
+          window.location.href = "/gptView/loading";
         })
         .catch((error) => {
           console.error("오류 발생:", error);

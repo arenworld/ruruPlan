@@ -44,17 +44,19 @@
         }
         /* 로딩 텍스트 */
         .loding_box_loding_text {
-            border: 4px solid black;
+            border: 4px solid rgb(100, 124, 242);
             color: white;
-            background-color: #51a6e7;
+            background-color: #90cbf9;
             text-align: center;
             width: 200px;
             height: 50px;
-            margin-top: 300px;
+            margin-top: 200px !important;
             border-radius: 30px;
         }
         /* 글자 애니메이션 설정 */
         .typed-words {
+            position: relative;
+            transform: translateY(15%);
             font-size: 24px;
             white-space: nowrap;
             overflow: hidden;
@@ -96,36 +98,34 @@
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            const cmdNum = $('#cmdNum').val().trim(); // 모델에서 넘긴 cmdNum을 가져옴
+        $(document).ready(function () {
+            const cmdNum = $("#cmdNum").val().trim(); // 모델에서 넘긴 cmdNum을 가져옴
             console.log("전달된 cmdNum:", cmdNum);
 
             // cmdNum을 서버로 전송하고, gptApi 실행 결과를 가져옴
             $.ajax({
                 url: "/getGptPlan",
                 type: "POST",
-                data: { cmdNum: cmdNum },  // cmdNum 전달
-                success: function(response) {
+                data: { cmdNum: cmdNum }, // cmdNum 전달
+                success: function (response) {
                     console.log("받은 값:", response);
 
                     // 서버 응답 처리 후 페이지 전환
                     // 원하는 값이 준비되면 페이지 이동
                     window.location.href = "/gptView/result";
                 },
-                error: function(error) {
+                error: function (error) {
                     console.error("Error:", error);
                     alert("오류가 발생했습니다. 다시 시도해주세요.");
-                }
+                },
             });
         });
     </script>
 </head>
 <body class="loding_body">
-
 <input type="hidden" th:value="${cmdNum}" id="cmdNum" />
 
 <div class="back">
-
     <div class="loding_box">
         <img class="img_sky" src="/images/lodingpage/로딩용하늘.jpg" />
         <img class="img_airplane" src="/images/lodingpage/로딩용비행기.png" />
@@ -134,7 +134,7 @@
         </div>
     </div>
     <div>
-        <input type="hidden" th:value="${cmdNum}" id="cmdNum"/>
+        <input type="hidden" th:value="${cmdNum}" id="cmdNum" />
     </div>
     <script>
         document

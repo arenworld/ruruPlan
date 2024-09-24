@@ -13,6 +13,21 @@
             integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
             crossorigin="anonymous"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Serif+Pro:wght@400;700&display=swap" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/css/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="/fonts/icomoon/style.css">
+    <link rel="stylesheet" href="/fonts/flaticon/font/flaticon.css">
+    <link rel="stylesheet" href="/css/daterangepicker.css">
+    <link rel="stylesheet" href="/css/aos.css">
+    <link rel="stylesheet" href="/css/home.css" />
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-A7A7ljJgK9ltP4FgOItfSMLrpx1dGmReaBbRjtuYxiKjjQDglIGQmRuUGk53pIaj"
@@ -28,12 +43,21 @@
 <div class="logo-title">
     <img class="logo" src="/images/logo.png">
     <p th:text="#{logo}">ソウルに触る</p>
-    <!--언어 변경 버튼-->
-    <select name="lang" id="lang"
-            style="width: 70px; height:40px; font-size: 12px; text-align: left; padding: 0px">
-        <option value="ko" id="ko" th:selected="${#locale.language == 'ko'}">한국어</option>
-        <option value="ja" id="ja" th:selected="${#locale.language == 'ja'}">日本語</option>
-    </select>
+    <!-- 언어변경파트 -->
+    <div class="select-container">
+        <div class="lenge_select-toggle">
+            <div class="language-selector">
+                <img src="/images/home/지구본.png" alt="Globe Icon" />
+                <div class="languages">
+                    <span class="span_kor" th:if="${#locale.language == 'ko'}" style="font-weight: bold;">KOR</span>
+                    <span class="span_kor" th:if="${#locale.language != 'ko'}">KOR</span>
+                    <div class="separator"></div>
+                    <span class="span_jp"  th:if="${#locale.language == 'ja'}" style="font-weight: bold;">JP</span>
+                    <span class="span_jp"  th:if="${#locale.language != 'ja'}">JP</span>
+                </div>
+            </div>
+        </div>
+    </div>
     <!--실시간 날씨 정보-->
     <div>
         <pre class="weather"></pre>

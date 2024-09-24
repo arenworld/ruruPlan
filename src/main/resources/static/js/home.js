@@ -4,22 +4,6 @@ aiButton.onclick = () => {
     window.location.href = "/gptView/question";
 };
 
-// 언어 선택 시 글자 굵기 변경
-const spanKor = document.querySelector(".span_kor");
-const spanJp = document.querySelector(".span_jp");
-// 일단 한국어부터
-spanKor.style.fontWeight = "bold";
-
-spanKor.onclick = () => {
-    spanKor.style.fontWeight = "bold"; // 한국어 굵게 표시
-    spanJp.style.fontWeight = "normal"; // 일본어는 기본 굵기로
-};
-
-spanJp.onclick = () => {
-    spanJp.style.fontWeight = "bold"; // 일본어 굵게 표시
-    spanKor.style.fontWeight = "normal"; // 한국어는 기본 굵기로
-};
-
 // 슬라이더 기능
 document.addEventListener("DOMContentLoaded", () => {
     let currentIndex = 0; // 현재 슬라이드 인덱스

@@ -647,7 +647,6 @@ public class GptResultService {
                     .saleItemKr(placeInfoEntity.getSaleItemKr())
                     .saleItemJp(placeInfoEntity.getSaleItemJp())
                     .originImgUrl(placeInfoEntity.getOriginImgUrl())
-                    .smallImgUrl(placeInfoEntity.getSmallImgUrl())
                     .build();
 
             log.debug("placeInfoDTO : {}", placeInfoDTO);

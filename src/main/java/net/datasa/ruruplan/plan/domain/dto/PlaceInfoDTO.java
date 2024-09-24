@@ -80,6 +80,4 @@ public class PlaceInfoDTO {
     // 원본 이미지
     private String originImgUrl;
 
-    // 섬네일 이미지
-    private String smallImgUrl;
 }

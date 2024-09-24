@@ -183,6 +183,8 @@ public class CustomPlanService {
                 .theme3(placeInfoEntity.getTheme3())
                 .petFriendly(placeInfoEntity.getPetFriendly())
                 .barrierFree(placeInfoEntity.getBarrierFree())
+                .overviewKr(placeInfoEntity.getOverviewKr())
+                .overviewJp(placeInfoEntity.getOverviewJp())
                 .heritage(placeInfoEntity.getHeritage())
                 .infocenter(placeInfoEntity.getInfocenter())
                 .usetimeKr(placeInfoEntity.getUsetimeKr())
@@ -275,6 +277,8 @@ public class CustomPlanService {
     public PlaceInfoDTO getPlaceInfo(String placeId) {
         PlaceInfoEntity placeEntity = placeInfoJpaRepository.findById(placeId)
                 .orElseThrow(() -> new EntityNotFoundException("없는 장소"));
+        log.debug("장소엔티티:{}", placeEntity);
+
         return convertToDTO(placeEntity);
     }
 }

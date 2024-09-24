@@ -1,0 +1,495 @@
+body {
+    /* 기본 글꼴, 줄 높이, 배경 색상, 오버플로우 설정 */
+    font-family: "Inter", sans-serif;
+    line-height: 1.5;
+    background: #ffffff;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    font-size: 14px;
+}
+
+.bg-primary {
+    /* 주요 배경 색상을 설정 */
+    background-color: #1a374d !important;
+}
+
+.text-black {
+    /* 검은색 텍스트 설정 */
+    color: #000000 !important;
+}
+
+a {
+    /* 링크 색상 및 전환 효과 */
+    color: #1a374d;
+    transition: 0.3s all ease;
+}
+
+a:hover {
+    /* 링크 호버 시 색상 유지 및 밑줄 제거 */
+    color: #1a374d;
+    text-decoration: none;
+}
+
+.text-primary {
+    /* 주요 색상의 텍스트 설정 */
+    color: #1a374d !important;
+}
+
+a.text-primary:hover {
+    /* 주요 색상의 텍스트 링크 호버 시 색상 유지 */
+    color: #1a374d !important;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    /* 제목 폰트 설정 */
+    font-family: "Source Serif Pro", serif;
+}
+
+.btn {
+    /* 버튼 패딩, 테두리 반경 및 글꼴 크기 설정 */
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 14px;
+}
+
+.btn.btn-primary {
+    /* 기본 버튼 색상 및 테두리 색상 설정 */
+    background: #1a374d;
+    border-color: #1a374d;
+}
+
+.btn.btn-primary:hover {
+    /* 버튼 호버 시 색상 변경 */
+    border-color: #1f425c;
+    background: #1f425c;
+}
+
+.form-control,
+.custom-select {
+    /* 입력 폼과 선택 박스의 테두리 및 크기 설정 */
+    border: 2px solid #e9ecef;
+    font-size: 16px;
+    height: 45px;
+}
+
+.form-control:focus,
+.custom-select:focus {
+    /* 포커스된 입력 필드의 테두리 색상 및 그림자 제거 */
+    border-color: #1a374d;
+    box-shadow: none;
+}
+
+.spinner-border {
+    /* 로딩 스피너 색상 설정 */
+    color: #1a374d;
+}
+
+#overlayer {
+    /* 화면을 덮는 레이어 설정 */
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 7100;
+    background: #ffffff;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.loader {
+    /* 로더의 위치를 화면 중앙에 고정 */
+    z-index: 7700;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.position-relative {
+    /* 요소의 상대적인 위치 설정 */
+    position: relative;
+}
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: 20px; /* 로고와 다른 요소 사이 간격 */
+}
+.logo span {
+    /* 로고 글자 크기 및 색상 설정 */
+    font-size: 24px;
+    color: #000000;
+    font-weight: 700;
+    margin-left: -170px !important;
+}
+
+.logo:hover {
+    /* 로고 호버 시 색상 변경 */
+    color: #e90000;
+}
+
+#lang {
+    /* 언어 선택 박스 왼쪽 여백 설정 */
+    margin-left: 10px !important;
+}
+
+.site-nav {
+    /* 네비게이션 바의 기본 위치 및 스타일 설정 */
+    position: absolute;
+    top: 0;
+    z-index: 9;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.site-nav .site-navigation .site-menu > li > a {
+    /* 네비게이션 링크의 글꼴 크기 및 패딩 설정 */
+    font-size: 14px;
+    padding: 10px 15px;
+    color: rgb(0, 0, 0);
+}
+
+.site-nav .site-navigation .site-menu > li > a:hover {
+    /* 네비게이션 링크 호버 시 색상 변경 */
+    color: #f40000;
+}
+
+.site-nav .site-navigation .site-menu .has-children:hover > .dropdown {
+    /* 드롭다운 메뉴가 자식 메뉴를 포함할 경우 보이도록 설정 */
+    visibility: visible;
+    opacity: 1;
+}
+
+.hero {
+    /* 히어로 섹션의 높이 및 배경 설정 */
+    height: 100vh;
+    background: #ffffff;
+}
+
+.hero h1 {
+    /* 히어로 섹션의 큰 제목 스타일 설정 */
+    color: #000000;
+    font-size: 60px;
+}
+
+.hero h1 .typed-words:before {
+    /* 타이핑 효과의 밑줄 스타일 설정 */
+    position: absolute;
+    height: 7px;
+    background-color: #a6dbe8;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    content: "";
+    width: 380px;
+}
+
+.hero .intro-wrap {
+    /* 히어로 텍스트 섹션의 위치 설정 */
+    position: relative;
+    z-index: 1;
+    top: 20px !important;
+    left: -180px !important;
+    width: 700px;
+}
+
+.hero .slides {
+    /* 이미지 슬라이더의 스타일 설정 */
+    background: #000000;
+    top: 150px !important;
+    left: -300px !important;
+    z-index: 0;
+    position: relative;
+    box-shadow: 0 25px 50px -10px rgba(26, 55, 77, 0.4);
+    width: 880px;
+    height: 450px;
+}
+
+.hero .slides img {
+    /* 슬라이더 이미지 스타일 및 전환 효과 */
+    position: absolute;
+    opacity: 0;
+    transition: 4s opacity ease;
+    width: 880px;
+    height: 450px;
+}
+
+.hero .slides img.active {
+    /* 현재 활성화된 슬라이더 이미지 설정 */
+    opacity: 1;
+    z-index: 1;
+}
+
+.home-select-button-container {
+    /* 홈 선택 버튼 컨테이너 스타일 설정 */
+    display: flex;
+    top: 300px !important;
+    position: absolute;
+    right: 400px !important;
+    gap: 30px;
+}
+
+.home-select-button {
+    /* 홈 선택 버튼 스타일 설정 */
+    width: 200px;
+    height: 80px;
+    background-color: rgb(0, 0, 0, 0.72);
+}
+
+.home-button-text {
+    /* 홈 선택 버튼의 텍스트 스타일 설정 */
+    font-size: 30px;
+    color: rgb(255, 255, 255);
+}
+
+.lenge_select {
+    /* 언어 선택 박스 스타일 설정 */
+    position: absolute; /* 부모 요소 기준으로 절대 위치 */
+    top: 30px; /* 부모 요소로부터 아래로 50px */
+    left: 1380px !important; /* 부모 요소의 왼쪽 정렬 */
+    width: 70px;
+    height: 30px;
+    font-size: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    z-index: 100; /* 다른 요소 위에 표시되도록 설정 */
+    display: none; /* 기본적으로 숨김 처리 */
+}
+
+.lenge_select-toggle {
+    /* 언어 선택 토글 버튼 스타일 설정 */
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative; /* 또는 absolute로 변경 가능 */
+    right: -120px; /* 오른쪽으로 100px 이동 */
+}
+
+.lenge_select-toggle img {
+    /* 언어 선택 토글 버튼 이미지 크기 설정 */
+    width: 20px;
+    height: 20px;
+}
+
+.show-select {
+    /* 선택 박스가 보일 때의 설정 */
+    display: block !important;
+}
+
+.select-container {
+    /* 선택 박스를 포함하는 컨테이너 설정 */
+    display: flex;
+    align-items: center; /* 지구본 아이콘과 셀렉트 박스를 중앙 정렬 */
+}
+
+/* 네비게이션 관련 스타일 */
+.site-nav {
+    /* 네비게이션 바의 위치 및 정렬 */
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* 네비게이션 메뉴 스타일을 수평으로 배치하기 위한 flexbox 설정 */
+.site-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center; /* 리스트 항목들을 수직 중앙 정렬 */
+}
+
+.site-menu li {
+    margin-right: 20px; /* 각 리스트 항목 사이의 간격 */
+}
+
+.site-menu li a {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    padding: 10px 15px; /* 각 링크에 적당한 패딩을 추가 */
+}
+
+.site-menu li a:hover {
+    color: #f40000; /* 호버 시 텍스트 색상 변경 */
+}
+
+.site-nav .site-navigation .site-menu > li > a {
+    /* 네비게이션 메뉴 링크의 텍스트 스타일 및 패딩 설정 */
+    font-size: 14px;
+    padding: 10px 15px;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+}
+
+.site-nav .site-navigation .site-menu > li > a:hover {
+    /* 네비게이션 메뉴 링크 호버 시 색상 변경 */
+    color: #f40000;
+}
+
+.site-nav .site-navigation .site-menu > li.cta-button a {
+    /* 네비게이션 메뉴의 Call To Action 버튼 스타일 */
+    padding: 6px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    color: #000000;
+    border-radius: 30px;
+}
+
+.site-nav .site-navigation .site-menu > li.cta-button a:hover {
+    /* Call To Action 버튼 호버 시 배경 및 테두리 색상 변경 */
+    color: #d6b9b9;
+    background: #1a374d;
+    border-color: #1a374d;
+}
+
+.site-nav .site-navigation .site-menu > li.active > a {
+    /* 현재 활성화된 네비게이션 메뉴 링크 색상 설정 */
+    color: #000000;
+}
+
+.site-nav .site-navigation .site-menu .has-children {
+    /* 하위 메뉴를 포함하는 네비게이션 항목 스타일 */
+    position: relative;
+}
+
+.site-nav .site-navigation .site-menu .has-children > a {
+    /* 하위 메뉴 항목의 링크 스타일 및 패딩 */
+    position: relative;
+    padding-right: 20px;
+}
+
+.site-nav .site-navigation .site-menu .has-children:hover > .dropdown {
+    /* 하위 메뉴가 포함된 네비게이션 항목을 호버 시 드롭다운 보이기 */
+    visibility: visible;
+    opacity: 1;
+}
+
+.site-nav .site-navigation .site-menu .has-children .dropdown {
+    /* 드롭다운 메뉴의 초기 상태 */
+    visibility: hidden;
+    opacity: 0;
+    top: 100%;
+    z-index: 999;
+    position: absolute;
+    text-align: left;
+    box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    padding: 20px 0;
+    margin-top: 20px;
+    margin-left: 0px;
+    background: #ffffff;
+    transition: 0.2s 0s;
+}
+
+.site-nav .site-navigation .site-menu .has-children .dropdown a {
+    /* 드롭다운 메뉴 링크 스타일 */
+    font-size: 14px;
+    text-transform: none;
+    letter-spacing: normal;
+    transition: 0s all;
+    color: #000000;
+}
+
+.site-nav .site-navigation .site-menu .has-children .dropdown > li {
+    /* 드롭다운 메뉴 항목의 스타일 */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    min-width: 180px;
+}
+
+.site-nav .site-navigation .site-menu .has-children .dropdown > li > a {
+    /* 드롭다운 메뉴 링크 패딩 설정 */
+    padding: 5px 20px;
+    display: block;
+}
+
+.site-nav .site-navigation .site-menu .has-children .dropdown > li > a:hover {
+    /* 드롭다운 메뉴 링크 호버 시 색상 변경 */
+    color: #1a374d;
+}
+
+.site-nav .site-navigation .site-menu .has-children:hover > .dropdown,
+.site-nav .site-navigation .site-menu .has-children:focus > .dropdown,
+.site-nav .site-navigation .site-menu .has-children:active > .dropdown {
+    /* 호버, 포커스, 클릭 시 드롭다운 메뉴 보이기 */
+    margin-top: 0px;
+    visibility: visible;
+    opacity: 1;
+}
+/* 날씨 박스  */
+
+.weather_box {
+    display: flex;
+    align-items: center; /* 날씨 아이콘과 텍스트 수직 중앙 정렬 */
+    margin-right: -110px;
+}
+.weather_icon_set {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px; /* 아이콘과 텍스트 간격 */
+}
+
+.temperature {
+    font-size: 14px;
+    color: rgb(0, 0, 0);
+}
+
+.humidity {
+    font-size: 14px;
+    color: #edbbbb;
+    margin-left: 5px;
+}
+
+.site-navigation {
+    display: flex;
+    justify-content: space-between; /* 각 요소 간 간격을 자동 조절 */
+    align-items: center; /* 요소들을 수직 중앙 정렬 */
+}
+.site-navigation .logo {
+    margin-right: auto; /* 로고가 네비게이션 메뉴 왼쪽에 붙도록 설정 */
+
+}
+.language-selector {
+    border: 2px solid black; /* 외곽선 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    display: flex;
+    align-items: center;
+    padding: 4px 10px; /* 내부 여백 */
+    width: fit-content; /* 내용에 맞게 너비 조정 */
+    background-color: #ffffff; /* 배경색 */
+    color: rgb(0, 0, 0); /* 텍스트 색상 */
+    font-family: Arial, sans-serif;
+}
+
+.language-selector img {
+    width: 20px;
+    height: 20px;
+    margin-right: 3px; /* 지구본과 텍스트 간격 */
+}
+
+.languages {
+    display: flex;
+    align-items: center;
+}
+
+.languages strong {
+    margin: 0 3px;
+}
+
+.separator {
+    border-left: 1px solid rgb(0, 0, 0); /* KOR | EN 사이의 세로선 */
+    height: 16px;
+    margin: 0 5px;
+}

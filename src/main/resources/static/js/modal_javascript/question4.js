@@ -26,18 +26,29 @@ document.addEventListener("DOMContentLoaded", function () {
   // 테마와 해당 이미지 경로 매핑 일본어
   const themeImages = {
     쇼핑: "/images/modal/쇼핑_수정.png",
+    ショッピング:"/images/modal/쇼핑_수정.png",
     음식: "/images/modal/음식이모티콘.png",
     食べ物: "/images/modal/음식이모티콘.png", // 일본어와 한국어 모두 동일한 경로 사용
     카페: "/images/modal/카페이모티콘.png",
+    カフェ: "/images/modal/카페이모티콘.png",
     역사: "/images/modal/역사_수정.png",
+    歴史:"/images/modal/역사_수정.png",
     문화: "/images/modal/문화이모티콘.png",
+    文化:"/images/modal/문화이모티콘.png",
     힐링: "/images/modal/힐링이모티콘.png",
+    ヒーリング:"/images/modal/힐링이모티콘.png",
     체험: "/images/modal/체험이모티콘.png",
+    体験:"/images/modal/체험이모티콘.png",
     랜드마크: "/images/modal/랜드마크이모티콘.png",
+    ランドマーク:"/images/modal/랜드마크이모티콘.png",
     레포츠: "/images/modal/레포츠이모티콘.png",
+    レポーツ:"/images/modal/레포츠이모티콘.png",
     수상레저: "/images/modal/수상이모티콘.png",
+    水上レジャー:"/images/modal/수상이모티콘.png",
     자전거: "/images/modal/자전거이모티콘.png",
+    自転車:"/images/modal/자전거이모티콘.png",
     아이스링크: "/images/modal/아이스링크이모티콘.png",
+    アイスリンク: "/images/modal/아이스링크이모티콘.png"
   };
 
   // 처음에 '다음' 버튼과 테마 박스 숨기기

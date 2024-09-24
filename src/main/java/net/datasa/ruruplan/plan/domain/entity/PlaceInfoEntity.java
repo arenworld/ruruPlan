@@ -137,12 +137,4 @@ public class PlaceInfoEntity {
     @Column(name = "origin_imgurl", length=200)
     private String originImgUrl;
 
-    // 섬네일 이미지
-    @Column(name = "small_imgurl", length=200)
-    private String smallImgUrl;
-
-
-
-
-
 }

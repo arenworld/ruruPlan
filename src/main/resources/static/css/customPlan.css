@@ -1,3 +1,4 @@
+/******** 플랜명 + 국제화선택 ********/
 .plan-head {
     display: flex;
     justify-content: center;
@@ -8,44 +9,48 @@
     text-align: center;
 }
 
-
-.day-buttons, .theme-buttons-div {
+/*************** 데이버튼 & 테마버튼 ****************/
+.day-buttons-div, .theme-buttons-div {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
     margin-top: 20px;
     flex-direction: row;
     text-align: center;
-}
-.days {
+}/* 데이버튼, 테마버튼 박스 */
+
+.days-button {
     padding: 10px 20px;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     border-radius: 5px;
     cursor: pointer;
     text-align: center;
-}
+}/* 데이버튼 */
 
-.theme-buttons {
+.theme-button {
     padding: 5px;
     border-radius: 5px;
-}
+} /* 테마버튼 */
 
 .theme-buttons:hover {
     background-color: aqua;
-}
+}/* 테마버튼 후버효과 */
+
+
+
+/*************** 일정표 그리기 ****************/
 
 .day-plans-table {
     margin-bottom: 20px;
     border-top: solid 2px grey;
     border-bottom: solid 2px grey;
     width: 100%;
-}
+} /* 데이 일정 테이블  */
 
 tr.selected {
-
     background-color: #ffe6e6;
-}
+} /* tr에 selected 인자 추가되었을 때의 효과*/
 
 .day-plans-dayTitle {
     background-color: pink;
@@ -109,13 +114,99 @@ tr.selected {
     padding: 0px;
 }
 
-.placeInfoList {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/********** 장소 정보 리스트 박스 (페이징 필요) **********/
+.place-info-list-box {
+    width: 100%;
+    height: auto;
+    border-top : 2px solid #efefef;
+    border-bottom : 2px solid #efefef;
+    border-radius : 10px;
+    background-color : #FFFAFA;
+    position: relative;
     margin-top: 10px;
 }
 
+/***************** 장소 정보 섹션 *****************/
+[class^="place-info-section"]  {
+    display: flex;
+    justify-content: center;
+    height: 120px;
+    width: 100%;
+    border-top : 2px solid #efefef;
+    border-bottom : 2px solid #efefef;
+    border-radius : 10px;
+    background-color : #FFFAFA;
+    position: relative;
+    align-items: center;
+}
+
+[class^="place-info-section"].selected {
+    background-color: #ffe6e6;
+}
+
+.place-info-imgNone {
+    top: 20px;
+    left: 20px;
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    position: absolute;
+}
+
+.place-info-img {
+    top: 5px;
+    left: 5px;
+    width: 110px;
+    height: 110px;
+    border-radius: 10px;
+    position: absolute;
+}
+
+.place-info-title {
+    top: 10px;
+    left: 140px;
+    position: absolute;
+}
+
+.place-info-address {
+    top : 50px;
+    left: 140px;
+    position: absolute;
+}
+
+.place-info-more {
+    top: 10px;
+    right : 10px;
+    width : 25px;
+    height : 25px;
+    cursor : pointer;
+    position: absolute;
+}
+
+.place-info-contentsType {
+    top : 85px;
+    left : 140px;
+    color : #666666;
+    position: absolute;
+}
+
+.place-info-infocenterImg {
+    top: 87px;
+    left: 200px;
+    width: 15px;
+    height: 15px;
+    margin-left: 3px;
+    position: absolute;
+}
+
+.place-info-infocenter {
+    top: 85px;
+    left: 220px;
+    color: #666666;
+    position: absolute;
+}
+
+/**************** 장소정보 상세페이지 - 모달 **************/
 .placeInfo-Modal {
     display: none;
     width: 100%;
@@ -138,4 +229,60 @@ tr.selected {
 
 .badges {
     margin-bottom: 10px;
+}
+
+/* Style for .info-table-box */
+.info-table-box {
+    width: 100%;
+    border-top: 2px solid #efefef;
+    border-bottom: 2px solid #efefef;
+    border-radius: 10px;
+    background-color: #FFFAFA; /* Example background color */
+}
+
+/* Style for .info-table */
+.info-table {
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+/* Style for .info-table-title */
+.info-table-title {
+    width: 50%;
+    border-radius: 10px;
+    padding-top: 10px;
+}
+
+/* Style for .in-title */
+.in-title {
+    display: inline;
+    width: 50%;
+    border-radius: 10px;
+    padding-left: 5px;
+}
+
+/* Style for .info-table-heritageBadge */
+.info-table-heritageBadge {
+    width: 25px;
+    height: 25px;
+    margin-left: 5px;
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+
+/* Style for .info-table-barrierBadge */
+.info-table-barrierBadge {
+    width: 25px;
+    height: 25px;
+    margin-left: 5px;
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+
+/* Style for .info-table-petBadge */
+.info-table-petBadge {
+    width: 25px;
+    height: 25px;
+    padding-bottom: 5px;
+    cursor: pointer;
 }

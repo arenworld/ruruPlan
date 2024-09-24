@@ -195,7 +195,6 @@ public class CustomPlanService {
                 .feeInfoKr(placeInfoEntity.getFeeInfoKr())
                 .feeInfoJp(placeInfoEntity.getFeeInfo_Jp())
                 .originImgUrl(placeInfoEntity.getOriginImgUrl())
-                .smallImgUrl(placeInfoEntity.getSmallImgUrl())
                 .build();
     }
 

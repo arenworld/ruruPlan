@@ -137,38 +137,38 @@
                 </form>
             </div>
 
-            <div class ="plan-options">
+<!--            <div class ="plan-options">-->
 
-                <table id="plan-options">
-                    <tr>
-                        <th>『[[${planDTO.planName}]]』 플래너 </th>
-                        <td th:text="|(${lastDay-1}박 ${lastDay}일)|" id="nightsNdays"></td>
-                    </tr>
-                    <tr>
-                        <th>여행기간</th>
-                        <td th:text="|${#temporals.format(planDTO.startDate, 'yyyy년 MM월 dd일')}~|" id="firstDate"></td>
-                        <td th:text="${#temporals.format(planDTO.endDate, 'yyyy년 MM월 dd일')}" id="lastDate"></td>
-                    </tr>
-                    <tr>
-                        <th>누구랑?</th>
-                        <td th:text="${cmdDTO.tripType}"></td>
-                            <th>총 인원</th>
-                        <th:block th:if="${cmdDTO.tripType} != 아이들">
-                            <td th:text="|${cmdDTO.adult}명|"></td>
-                        </th:block>
-                        <th:block th:if="${cmdDTO.tripType} == 아이들">
-                            <td th:text="|${cmdDTO.adult}명) 아이(${cmdDTO.children}명)|"></td>
-                        </th:block>
+<!--                <table id="plan-options">-->
+<!--                    <tr>-->
+<!--                        <th>『[[${planDTO.planName}]]』 플래너 </th>-->
+<!--                        <td th:text="|(${lastDay-1}박 ${lastDay}일)|" id="nightsNdays"></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <th>여행기간</th>-->
+<!--                        <td th:text="|${#temporals.format(planDTO.startDate, 'yyyy년 MM월 dd일')}~|" id="firstDate"></td>-->
+<!--                        <td th:text="${#temporals.format(planDTO.endDate, 'yyyy년 MM월 dd일')}" id="lastDate"></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <th>누구랑?</th>-->
+<!--                        <td th:text="${cmdDTO.tripType}"></td>-->
+<!--                            <th>총 인원</th>-->
+<!--                        <th:block th:if="${cmdDTO.tripType} != 아이들">-->
+<!--                            <td th:text="|${cmdDTO.adult}명|"></td>-->
+<!--                        </th:block>-->
+<!--                        <th:block th:if="${cmdDTO.tripType} == 아이들">-->
+<!--                            <td th:text="|${cmdDTO.adult}명) 아이(${cmdDTO.children}명)|"></td>-->
+<!--                        </th:block>-->
 
-                    </tr>
-                    <tr>
-                        <th>선택테마</th>
-                        <td th:text="|①${cmdDTO.theme1}|"></td>
-                        <td th:text="|②${cmdDTO.theme2}|"></td>
-                        <td th:text="|③${cmdDTO.theme3}"|></td>
-                    </tr>
-                </table>
-            </div>
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <th>선택테마</th>-->
+<!--                        <td th:text="|①${cmdDTO.theme1}|"></td>-->
+<!--                        <td th:text="|②${cmdDTO.theme2}|"></td>-->
+<!--                        <td th:text="|③${cmdDTO.theme3}"|></td>-->
+<!--                    </tr>-->
+<!--                </table>-->
+<!--            </div>-->
 
             <input type="hidden" id="planNum" th:value="${planDTO.planNum}">
 
@@ -187,11 +187,11 @@
 
                 <!-- 테마버튼 -->
                 <div class="theme-buttons-div">
-                    <button class="theme-buttons" th:each="theme : ${themeArray}"
+                    <button class="theme-button" th:each="theme : ${themeArray}"
                             th:id="|theme-${theme}-button|" th:text="${theme}" th:data-theme="${theme}"></button>
                 </div>
 
-                <div class="placeInfoList">
+                <div class="place-info-list-box">
 
                 </div>
 
@@ -201,21 +201,21 @@
                     <span class="badge-explain" id="heritageBadge-explain">세계문화 유산으로 인정</span>
                 </div>
 
-                <div class="placeInfo-Modal">
+                <div class="place-info-modal">
 
                 </div>
 
 
-            </div>1
+            </div>
 
             <!-- 오른쪽 파트 -->
             <div class="col-lg-4">
                 <!-- 전체 일정 출력 -->
                 <h6>장소를 클릭하면 지도 상에서 해당 위치로 바로 이동합니다.</h6>
 
-                <div class="day-buttons">
-                    <button class="days" th:id="plan-allday-button" th:text="All" th:data-daynum-button="0"></button>
-                    <button class="days" th:each="dayNum : ${#numbers.sequence(1, 6)}" th:if="${lastDay} >= ${dayNum}"
+                <div class="day-buttons-div">
+                    <button class="days-button" th:id="plan-allday-button" th:text="All" th:data-daynum-button="0"></button>
+                    <button class="days-button" th:each="dayNum : ${#numbers.sequence(1, 6)}" th:if="${lastDay} >= ${dayNum}"
                             th:id="|plan-${dayNum}day-button|" th:text="|Day${dayNum}|" th:data-daynum-button="${dayNum}"></button>
                 </div>
 

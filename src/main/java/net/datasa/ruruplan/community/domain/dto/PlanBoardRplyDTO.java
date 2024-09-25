@@ -13,4 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlanBoardRplyDTO {
+
+    private Integer replyNum;
 }

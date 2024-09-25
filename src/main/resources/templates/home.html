@@ -25,63 +25,93 @@
     <link rel="stylesheet" href="/css/aos.css">
     <link rel="stylesheet" href="/css/home.css" />
     <title>RuruPlan Home</title>
+<style>
+    .site-menu li a {
+        z-index: 10000 !important ; /* 더 높은 값으로 설정 */
+    }
+    .col-lg-5 {
+        position: relative; /* 위치를 명시적으로 설정 */
+        z-index: 1 !important ; /* 값에 따라 레이어 순서를 조정 */
+        visibility: hidden;
+    }
+    .slides{
+        visibility: visible;
+    }
+</style>
 </head>
+
 
 <body>
 <nav class="site-nav">
-    <div class="container">
-        <div class="site-navigation">
-            <!-- 로고 -->
-            <a class="logo" th:text="#{logo}">
+    <div class="site-navigation">
+        <!-- 로고 -->
+        <div class="logo-container">
+            <a class="logo">
+                <img class="logo_img" src="/images/home/로고_수정.png" />
                 <span class="text-primary">ソウルに触る</span>
             </a>
+        </div>
+        <!-- 네비바  로그인x 로그인,조인  로그인o 로그아웃,마이페이지-->
+        <ul class="site-menu">
+            <li class="has-children">
+                <a>일정공유</a>
+                <ul class="dropdown">
+                    <li><a href="#">나만의 일정</a></li>
+                    <li><a href="#">스크랩한일정</a></li>
+                </ul>
+            </li>
+            <li><a href="#">커뮤니티</a></li>
+            <li><a th:href="@{custom}">Customizing</a></li>
 
-            <!-- 네비바  로그인x 로그인,조인  로그인o 로그아웃,마이페이지-->
-            <ul class="js-clone-nav site-menu">
-                <li class="has-children">
-                    <a>일정공유</a>
-                    <ul class="dropdown">
-                        <li><a href="#">나만의 일정</a></li>
-                        <li><a href="#">스크랩한일정</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">커뮤니티</a></li>
-                <li><a th:href="@{custom}">Customizing</a></li>
-                <li sec:authorize="not isAuthenticated()">
-                    <a th:href="@{login/loginForm}" th:text="#{login.bt}">Login</a>
-                    <a href="#">join</a>
-                </li>
-                <li sec:authorize="isAuthenticated()">
-                    <a th:href="@{member/logout}">Logout</a>
-                    <a href="#">mypage</a>
-                </li>
-            </ul>
+            <li sec:authorize="not isAuthenticated()">
+                <a th:href="@{login/loginForm}" th:text="#{login.bt}">Login</a>
+                <a href="#">join</a>
+            </li>
 
-            <!-- 날씨정보 박스 -->
-            <div class="weather_box">
-                <div id="weather_icon">
-                    <!-- 이모티콘자리 -->
-                    <img class="weather_icon_set" src="/images/home/비.png" />
-                </div>
-                <!-- 온도 -->
-                <span class="temperature" id="tem"> -°C</span>
-                <!-- 습도 -->
-                <span class="humidity" id="hum"> -%</span>
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{member/logout}">Logout</a>
+                <a href="#">mypage</a>
+            </li>
+
+        </ul>
+
+        <!-- 날씨정보 박스 -->
+        <div class="weather_box">
+            <div id="weather_icon">
+                <!-- 이모티콘자리 -->
+                <img class="weather_icon_set" src="/images/home/비.png" />
             </div>
+            <!-- 온도 -->
+            <span class="temperature" id="tem"> -°C</span>
+            <!-- 습도 -->
+            <span class="humidity" id="hum"> -%</span>
+        </div>
 
-            <!-- 언어변경파트 -->
-            <div class="select-container">
-                <div class="lenge_select-toggle">
-                    <div class="language-selector">
-                        <img src="/images/home/지구본.png" alt="Globe Icon" />
-                        <div class="languages">
-                            <span class="span_kor" th:if="${#locale.language == 'ko'}" style="font-weight: bold;">KOR</span>
-                            <span class="span_kor" th:if="${#locale.language != 'ko'}">KOR</span>
-                            <div class="separator"></div>
-                            <span class="span_jp"  th:if="${#locale.language == 'ja'}" style="font-weight: bold;">JP</span>
-                            <span class="span_jp"  th:if="${#locale.language != 'ja'}">JP</span>
-                        </div>
-                    </div>
+        <!-- 언어변경파트 -->
+
+        <div class="lenge_select-toggle">
+            <div class="language-selector">
+                <img src="/images/home/지구본.png" alt="Globe Icon" />
+                <div class="languages">
+              <span
+                      class="span_kor"
+                      th:if="${#locale.language == 'ko'}"
+                      style="font-weight: bold"
+              >KOR</span
+              >
+                    <span class="span_kor" th:if="${#locale.language != 'ko'}"
+                    >KOR</span
+                    >
+                    <div class="separator"></div>
+                    <span
+                            class="span_jp"
+                            th:if="${#locale.language == 'ja'}"
+                            style="font-weight: bold"
+                    >JP</span
+                    >
+                    <span class="span_jp" th:if="${#locale.language != 'ja'}"
+                    >JP</span
+                    >
                 </div>
             </div>
         </div>
@@ -99,7 +129,7 @@
                     </h1>
                 </div>
                 <div class="home-select-button-container">
-                    <button class="home-select-button">
+                    <button class="home-select-button" id="ai">
                         <span class="home-button-text ai_button">ai추천</span>
                     </button>
                     <button class="home-select-button" id="zero">
@@ -117,6 +147,7 @@
                     <img src="/images/home/한옥_후보4.jpg" alt="Image" class="img-fluid" />
                     <img src="/images/home/한옥_후보5.jpg" alt="Image" class="img-fluid" />
                 </div>
+
             </div>
         </div>
     </div>

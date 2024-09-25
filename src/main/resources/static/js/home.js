@@ -17,6 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+
+    // 첫 슬라이드를 미리 보여주기
+    showSlide(currentIndex); // 첫 슬라이드 표시
+
+
     // 6초마다 슬라이드를 변경하는 함수
     function startSlider() {
         setInterval(() => {

@@ -20,7 +20,7 @@
 }/* 데이버튼, 테마버튼 박스 */
 
 .days-button {
-    padding: 10px 20px;
+    padding: 5px 10px;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -28,15 +28,27 @@
     text-align: center;
 }/* 데이버튼 */
 
+.days-button:hover {
+    background-color: pink;
+}
+
 .theme-button {
     padding: 5px;
     border-radius: 5px;
 } /* 테마버튼 */
 
-.theme-buttons:hover {
-    background-color: aqua;
+.theme-button:hover {
+    background-color: pink;
 }/* 테마버튼 후버효과 */
 
+
+@keyframes vibration {
+    0% { transform: translate(0); }
+    25% { transform: translate(-0.5px, 0.5px); } /* 변위 줄임 */
+    50% { transform: translate(0.5px, -0.5px); } /* 변위 줄임 */
+    75% { transform: translate(-0.5px, -0.5px); } /* 변위 줄임 */
+    100% { transform: translate(0.5px, 0.5px); } /* 변위 줄임 */
+}
 
 
 /*************** 일정표 그리기 ****************/
@@ -46,11 +58,21 @@
     border-top: solid 2px grey;
     border-bottom: solid 2px grey;
     width: 100%;
+    position: relative;
 } /* 데이 일정 테이블  */
+
+
+.day-plans-table input {
+    border: none;
+}
 
 tr.selected {
     background-color: #ffe6e6;
+
 } /* tr에 selected 인자 추가되었을 때의 효과*/
+
+tr.selected input {
+}
 
 .day-plans-dayTitle {
     background-color: pink;
@@ -63,16 +85,44 @@ tr.selected {
     border-bottom: 1px solid grey;
 
 }
-.day-plans-totalCost {
-    position: absolute;
-    right: 30%;
+
+.day-table-place-title {
+    width: 200px;
+    background-color: transparent;
 }
 
-#totalCost {
+.input-container {
+    position: relative;
+    display: inline-block;
+}
+
+.click-overlay {
     position: absolute;
-    padding-right: 5px;
-    right: 0%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+    background: transparent; /* Make it invisible */
+    z-index: 10; /* Ensure it's on top of the input */
+}
+
+.click-overlay-edit {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+    background: transparent; /* Make it invisible */
+    z-index: 5; /* Ensure it's on top of the input */
+}
+
+
+.day-table-td-duration input {
+    width : 30px;
     text-align: right;
+    background-color: transparent;
 }
 
 .day-table-td-cost {
@@ -85,7 +135,7 @@ tr.selected {
     width: 70px;
     text-align: right;
     margin: 0px;
-    background-color: white;
+    background-color: transparent;
 }
 
 .day-table-td-cost input:focus {
@@ -95,14 +145,21 @@ tr.selected {
 }
 
 .editImgButton {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.saveImgButton {
+    display: none;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
 }
 
 .deleteImgButton {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     cursor: pointer;
 }
 
@@ -114,8 +171,23 @@ tr.selected {
     padding: 0px;
 }
 
+.day-plans-totalCost {
+    position: absolute;
+    right: 30%;
+}
+
+#totalCost {
+    position: absolute;
+    padding-right: 5px;
+    right: 0%;
+    text-align: right;
+}
+
+
+
 /********** 장소 정보 리스트 박스 (페이징 필요) **********/
-.place-info-list-box {
+/* 일정마커 정보리스트 박스 */
+.task-place-info-list-box {
     width: 100%;
     height: auto;
     border-top : 2px solid #efefef;
@@ -124,6 +196,20 @@ tr.selected {
     background-color : #FFFAFA;
     position: relative;
     margin-top: 10px;
+}
+
+/* 테마마커 정보리스트 박스 */
+.theme-place-info-list-box {
+    display: none;
+    width: 100%;
+    height: auto;
+    border-top : 2px solid #efefef;
+    border-bottom : 2px solid #efefef;
+    border-radius : 10px;
+    background-color : #FFFAFA;
+    position: relative;
+    margin-top: 10px;
+    text-align: center;
 }
 
 /***************** 장소 정보 섹션 *****************/
@@ -219,7 +305,7 @@ tr.selected {
 
 .badge-explain {
     display: none;
-    position : absolute;
+
     background-color : rgb(255, 255, 255, 0.5);
     border-radius: 20px;
     pointer-events: none;
@@ -229,11 +315,16 @@ tr.selected {
 
 .badges {
     margin-bottom: 10px;
+    position : absolute;
+    left: 30px;
+    top: 50px;
 }
 
 /* Style for .info-table-box */
-.info-table-box {
+.info-more-table-box {
     width: 100%;
+    padding-right: 10px;
+    padding-bottom: 5px;
     border-top: 2px solid #efefef;
     border-bottom: 2px solid #efefef;
     border-radius: 10px;
@@ -243,26 +334,34 @@ tr.selected {
 /* Style for .info-table */
 .info-table {
     border-radius: 10px;
-    border: 1px solid black;
 }
+
 
 /* Style for .info-table-title */
 .info-table-title {
-    width: 50%;
     border-radius: 10px;
     padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 /* Style for .in-title */
 .in-title {
     display: inline;
-    width: 50%;
     border-radius: 10px;
     padding-left: 5px;
 }
+.add-task-button {
+    width: 50px;
+    padding-right: 10px;
+    cursor: pointer;
+}
+.info-table-add-task-image {
+    width: 25px;
+    height: 30px;
+}
 
 /* Style for .info-table-heritageBadge */
-.info-table-heritageBadge {
+.info-table-badge {
     width: 25px;
     height: 25px;
     margin-left: 5px;
@@ -270,19 +369,14 @@ tr.selected {
     cursor: pointer;
 }
 
-/* Style for .info-table-barrierBadge */
-.info-table-barrierBadge {
-    width: 25px;
-    height: 25px;
-    margin-left: 5px;
+.info-table-th {
+    padding-left: 20px;
+    padding-right: 10px;
     padding-bottom: 5px;
-    cursor: pointer;
+    width: 40px;
 }
 
-/* Style for .info-table-petBadge */
-.info-table-petBadge {
-    width: 25px;
-    height: 25px;
-    padding-bottom: 5px;
-    cursor: pointer;
+.info-table-images {
+    width: 20px;
+    height: 20px;
 }

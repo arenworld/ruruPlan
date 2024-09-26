@@ -224,9 +224,9 @@ public class CustomPlanService {
         return convertToDTO(cmdEntity);
     }
 
-    public void updateDuration(Integer newDurationHour, Integer newDurationMinute, Integer taskNum, Integer planNum, Integer newCost) {
+    public void updateDuration(String newDurationHour, String newDurationMinute, Integer taskNum, Integer planNum, String newCost) {
         // 수정할 새로운 소요시간
-        LocalTime newDuration = LocalTime.of(newDurationHour, newDurationMinute);
+        LocalTime newDuration = LocalTime.of(Integer.parseInt(newDurationHour), Integer.parseInt(newDurationMinute));
 
         // 소요시간을 업데이트 해야 하는 taskEntity를 불러옴
         TaskEntity thisTaskEntity = taskJpaRepository.findById(taskNum)
@@ -234,7 +234,7 @@ public class CustomPlanService {
 
         // 일단 바뀌어야 하는 일정의 소요시간을 바꾸고
         thisTaskEntity.setDuration(newDuration);
-        thisTaskEntity.setCost(newCost);
+        thisTaskEntity.setCost(Integer.parseInt(newCost));
         
         // startTime을 수정해줘야 하는 entityList를 부를 조건을 설정
         int dayNum = thisTaskEntity.getDateN(); // 해당 일자의 여행만

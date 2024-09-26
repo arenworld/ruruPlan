@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -60,11 +58,39 @@ public class GptResultController {
     public String getGptResultPage(HttpSession session, Model model) {
         // 세션에서 PlanDTO를 가져옴
         PlanDTO planDTO = (PlanDTO) session.getAttribute("planDTO");
+        Integer cmdNum = planDTO.getCmdNum();
+        GptCmdDTO gptCmdDTO = gptResultService.findGptCmdDTO(cmdNum);
+
+        model.addAttribute("cmdDTO", gptCmdDTO);
+
+        // theme1, theme2, theme3을 배열로 묶기
+        List<String> themeArray = Arrays.asList(planDTO.getTheme1(), planDTO.getTheme2(), planDTO.getTheme3());
+
+        // 모델에 추가
+        model.addAttribute("themeArray", themeArray);
+
 
         LocalDate startDate = planDTO.getStartDate();
         LocalDate endDate = planDTO.getEndDate();
         long lastDay = ChronoUnit.DAYS.between(startDate, endDate) + 1;
         model.addAttribute("lastDay", lastDay);
+
+        // 일자별로 TaskDTO 리스트를 분류하기 위한 Map
+        Map<Integer, List<TaskDTO>> taskByDateMap = new HashMap<>();
+
+        // planDTO 안의 taskList를 반복하면서 dateN에 따라 리스트를 분류
+        for (TaskDTO task : planDTO.getTaskList()) {
+            Integer dateN = task.getDateN();
+
+            // 해당 dateN에 해당하는 리스트가 없으면 새로 생성
+            taskByDateMap.putIfAbsent(dateN, new ArrayList<>());
+
+            // 해당 날짜의 리스트에 task 추가
+            taskByDateMap.get(dateN).add(task);
+        }
+
+        // 일자별 taskList를 모델에 추가
+        model.addAttribute("taskByDateMap", taskByDateMap);
 
         // 모델에 PlanDTO를 추가하여 화면에서 사용할 수 있게 함
         model.addAttribute("planDTO", planDTO);

@@ -3,6 +3,7 @@ package net.datasa.ruruplan.gpt.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.ruruplan.gpt.domain.dto.GptCmdDTO;
 import net.datasa.ruruplan.gpt.domain.dto.GptResultDTO;
 import net.datasa.ruruplan.gpt.domain.entity.GptCmdEntity;
 import net.datasa.ruruplan.gpt.repository.GptCmdRepository;
@@ -223,6 +224,7 @@ public class GptResultService {
                 "서울 여행을 %s에, %d일동안 갈 예정이야. 실제 한국인들이 방문하는 구체적인 장소명을," +
                         " <%s, %s, %s>에 해당하는 장소를 포함해서 알려줘. 카페는 프랜차이즈가 아닌 곳으로 추천해줘." +
                         " 답변형식은 반드시 \"관광지-장소명:구\", \"식당-식당명:구\",\"카페-카페명:구\" 형식으로 답변해줘." +
+                        " '이태원', '여의도' 이런 주소가 아니라 '~구' 로 끝나는 주소만 알려주면 돼." +
                         " 다른 추가적인 말은 일체 하지말고 답변형식만 지켜줘.\n" +
                         "1일차\n" +
                         "%s\n\n" + // 첫날 활동 리스트를 넣는 부분
@@ -323,6 +325,7 @@ public class GptResultService {
                 "서울 여행을 %s에, %d일동안 갈 예정이야. 실제 한국인들이 방문하는 구체적인 장소명을," +
                         " <%s, %s, %s>에 해당하는 장소를 포함해서 알려줘. 카페는 프랜차이즈가 아닌 곳으로 추천해줘." +
                         " 답변형식은 반드시 \"관광지-장소명:구\", \"식당-식당명:구\",\"카페-카페명:구\" 형식으로 답변해줘." +
+                        " '이태원', '여의도' 이런 주소가 아니라 '~구' 로 끝나는 주소만 알려주면 돼." +
                         " 다른 추가적인 말은 일체 하지말고 답변형식만 지켜줘.\n" +
                         "1일차\n" +
                         "%s\n" + // 첫날 활동 리스트를 넣는 부분
@@ -366,7 +369,10 @@ public class GptResultService {
         List<String> themes = Arrays.asList(theme1, theme2, theme3);
         List<String> placeIds = placeInfoRepository.findPlaceIdsByAddressAndThemes(address, themes);
 
+
         placeIds.removeAll(existingPlaceIds);
+
+        log.debug("처음 선택된 자료 제외한 테마와 주소기준으로 선택된 관광지 개수 : {}", placeIds.size());
 
         if (!placeIds.isEmpty()) {
             // 랜덤으로 하나 선택
@@ -375,6 +381,7 @@ public class GptResultService {
         } else {
             // 일치하는 테마가 없을 경우 '식당'과 '카페'가 아닌 곳 중 랜덤으로 하나 선택
             List<String> alternativePlaceIds = placeInfoRepository.findAlternativePlaceIds(address);
+            log.debug("주소기준으로만 다시 선택된 관광지개수: {}", alternativePlaceIds.size());
             if (!alternativePlaceIds.isEmpty()) {
                 Random random = new Random();
                 return alternativePlaceIds.get(random.nextInt(alternativePlaceIds.size()));
@@ -390,6 +397,7 @@ public class GptResultService {
 
         // 기존에 추천된 장소를 제외한 리스트 생성
         placeIds.removeAll(existingPlaceIds);
+        log.debug("주소기준으로 다시 선택된 카페 또는 식당 개수: {}", placeIds.size());
 
         if (!placeIds.isEmpty()) {
             // 랜덤으로 하나 선택
@@ -399,7 +407,7 @@ public class GptResultService {
             log.debug("해당 구가 없거나 해당 구에 같은 테마를 가진 장소가 없음. : {}", address);
             // 테마로만 일치하는 랜덤 장소 가져오기
             String randomPlaceId = getRandomPlaceByTheme(placeType, existingPlaceIds);
-            log.debug("랜덤 추천된 장소 ID: {}", randomPlaceId);
+            log.debug("장소말고 타입 기준으로만 선택된 카페 또는 식당: {}", randomPlaceId);
             return randomPlaceId;
         }
     }
@@ -407,11 +415,11 @@ public class GptResultService {
     // 테마 1, 2, 3 중 하나라도 일치하는 장소 중 랜덤으로 가져오는 메서드
     private String getRandomPlaceByTheme(String placeType, List<String> existingPlaceIds) {
         List<String> allMatchingPlaceIds = placeInfoRepository.findByThemeAndExcludeExistingPlaces(placeType, existingPlaceIds);
-
+        log.debug("테마 일치여부만 확인하는 장소의 개수: {}", allMatchingPlaceIds.size());
         if (!allMatchingPlaceIds.isEmpty()) {
             Random random = new Random();
             String randomPlaceId = allMatchingPlaceIds.get(random.nextInt(allMatchingPlaceIds.size()));
-            log.debug("랜덤으로 선택된 placeId: {}", randomPlaceId);
+            log.debug("테마일치 여부만 조사해서 랜덤으로 선택된 placeId: {}", randomPlaceId);
             return randomPlaceId;
         } else {
             log.debug("일치하는 테마를 가진 장소가 없음.");
@@ -488,7 +496,7 @@ public class GptResultService {
 
         // 계획 생성 (PlanDTO)
         PlanDTO planDTO = PlanDTO.builder()
-                .planNum(cmdNum)  // cmdNum을 임시로 planNum으로 사용 나중에 저장하게되면 이 값은 빼고 저장
+                .planNum(cmdNum)  // cmdNum을 임시로 planNum으로 사용. GptResultController에서 사용할 것임.
                 .planName("Gpt_Plan")  // 임시 이름
                 .cmdNum(cmdNum)
                 .memberId(gptCmdEntity.getMember().getMemberId())
@@ -665,9 +673,33 @@ public class GptResultService {
                 .build();
 
         log.debug("task : {}", task.getTask());
+        log.debug("task비용: {}", task.getCost());
 
         // PlanDTO의 taskList에 추가
         planDTO.getTaskList().add(task);
     }
 
+    public GptCmdDTO findGptCmdDTO(Integer cmdNum) {
+        GptCmdEntity entity = gptCmdRepository.findById(cmdNum)
+                .orElseThrow(() -> new EntityNotFoundException("cmdNum으로 Entity를 불러오지 못했습니다: " + cmdNum));
+
+        GptCmdDTO dto = GptCmdDTO.builder()
+                .cmdNum(entity.getCmdNum())
+                .memberId(entity.getMember().getMemberId())
+                .firstDate(entity.getFirstDate())
+                .lastDate(entity.getLastDate())
+                .nights(entity.getNights())
+                .days(entity.getDays())
+                .arrival(entity.getArrival())
+                .depart(entity.getDepart())
+                .tripType(entity.getTripType())
+                .adult(entity.getAdult())
+                .children(entity.getChildren())
+                .theme1(entity.getTheme1())
+                .theme2(entity.getTheme2())
+                .theme3(entity.getTheme3())
+                .build();
+
+        return dto;
+    }
 }

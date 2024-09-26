@@ -5,29 +5,40 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.datasa.ruruplan.member.domain.entity.MemberEntity;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
-/*@Builder
+/**
+ * 저장(스크랩)한 플랜 Entity
+ */
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "ruru_save_plan")
-@EntityListeners(AuditingEntityListener.class)*/
+@EntityListeners(AuditingEntityListener.class)
 public class SavePlanEntity {
 
-   /* @Id
+    //저장한 플랜 번호
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="save_num")
     private Integer saveNum;
 
-    @Column(name = "board_num")
-    private Integer boardNum; //이거 아님
+    //게시판 번호
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_num", referencedColumnName = "board_num")
+    private PlanBoardEntity planBoard;
 
-    @Column(name = "member_id")
-    private Integer memberId; // 아님
+    //저장한 회원아이디
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", referencedColumnName = "member_id")
+    private MemberEntity member;
 
-    @Column(name = "save_date")
-    private LocalTime saveDate;*/
+    //저장한 일자
+    @Column(name = "save_date", columnDefinition = "timestamp default current_timestamp")
+    private LocalDateTime saveDate;
 }

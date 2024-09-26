@@ -47,7 +47,52 @@ function nowWeather() {  // Text API 호출 함수
             document.getElementById('tem').innerHTML= data.response.body.items.item[tmp].fcstValue + "°C";
             document.getElementById('hum').innerHTML= data.response.body.items.item[reh].fcstValue + "%";
 
-                // 현재 시간대 날씨 데이터 콘솔에 불러오기
+            // 날씨에 따른 이모티콘 변경
+            var icon = document.getElementById("weather"); // img 태그 선택
+            var iconSrc = "/images/home/";
+
+            /*날씨 구성 [맑음. 구름많음, 흐림, 눈, 비]*/
+            // weatherCondition에 따라 아이콘 경로를 설정
+            switch (parseInt(data.response.body.items.item[pty].fcstValue)) {
+                case 0:
+                    switch (parseInt(data.response.body.items.item[sky].fcstValue)) {
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+                            iconSrc += "맑음.png";
+                            break;
+                        case 6:
+                        case 7:
+                        case 8:
+                            iconSrc += "구름.png";
+                            break;
+                        case 9:
+                        case 10:
+                            iconSrc += "흐림.png";
+                            break;
+                        default:
+                            iconSrc += "날씨기본.png"; // 기본 이미지 설정
+                    }
+                    break;
+                case 1: //비
+                case 4: //소나기
+                    iconSrc += "비.png";
+                    break;
+                case 2:
+                    iconSrc += "눈,비.png";
+                case 3: //눈
+                    iconSrc += "눈.png";
+                    break;
+                default:
+                    iconSrc += "날씨기본.png"; // 기본 이미지 설정
+            }
+            // img 태그의 src 속성 변경
+            icon.src = iconSrc;
+
+            // 현재 시간대 날씨 데이터 콘솔에 불러오기
             console.log(data.response.body.items.item[tmp].fcstTime);   //현재 시간대 (1시간 단위)
             console.log(data.response.body.items.item[tmp].fcstValue);  //현재 온도
             console.log(data.response.body.items.item[sky].fcstValue);  //현재 하늘: [맑음 0 ～ 5][구름많음	6 ～ 8][흐림	9 ～ 10]

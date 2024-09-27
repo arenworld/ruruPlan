@@ -7,6 +7,7 @@
     <title>findPw</title>
     <!-- CSS 파일 가져오기 -->
     <link rel="stylesheet" href="/css/rurustyle.css" />
+    <link rel="stylesheet" href="/css/language.css" />
     <!-- JS 파일 가져오기 -->
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/js/member/findPw.js"></script>
@@ -17,12 +18,20 @@
     <img class="logo"/>
     <p th:text="#{logo}">ソウルに触る</p>
 
-    <!--언어 변경 버튼-->
-    <select name="lang" id="lang"
-            style="width: 70px; height:40px; font-size: 12px; text-align: left; padding: 0px">
-        <option value="ko" id="ko" th:selected="${#locale.language == 'ko'}">한국어</option>
-        <option value="ja" id="ja" th:selected="${#locale.language == 'ja'}">日本語</option>
-    </select>
+    <!-- 언어변경파트 -->
+    <div class="select-container">
+        <div class="lenge_select-toggle">
+            <div class="language-selector">
+                <img src="/images/home/지구본.png" alt="Globe Icon" />
+                <div class="languages">
+                    <span class="span_kor" th:if="${#locale.language == 'ko'}" style="font-weight: bold;">KOR</span>
+                    <span class="span_kor" th:if="${#locale.language != 'ko'}">KOR</span>
+                    <div class="separator"></div>
+                    <span class="span_jp"  th:if="${#locale.language == 'ja'}" style="font-weight: bold;">JP</span>
+                    <span class="span_jp"  th:if="${#locale.language != 'ja'}">JP</span>
+                </div>
+            </div>
+        </div>
 </div>
 
 <div id="frame">

@@ -1,0 +1,68 @@
+/* 언어 선택 토글 */
+.language-selector {
+    border: 2px solid black;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 4px 10px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    margin-left: 250px; /* 날씨 정보와 언어 선택 버튼 간격 */
+}
+
+.language-selector img {
+    width: 20px;
+    height: 20px;
+    margin-right: 3px;
+}
+
+.languages {
+    display: flex;
+    align-items: center;
+}
+
+.separator {
+    border-left: 1px solid rgb(0, 0, 0);
+    height: 16px;
+    margin: 0 5px;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    background: #ffffff;
+}
+
+.hero h1 {
+    color: #000000;
+    font-size: 60px;
+}
+
+.lenge_select {
+    position: absolute;
+    top: 30px;
+    left: 1380px !important;
+    width: 70px;
+    height: 30px;
+    font-size: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    z-index: 100;
+    display: none;
+}
+
+.lenge_select-toggle {
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    right: -120px;
+}
+
+.lenge_select-toggle img {
+    width: 20px;
+    height: 20px;
+}

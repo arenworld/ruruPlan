@@ -36,8 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // jQuery - Typed.js 애니메이션
 $(function () {
+    var string = $('.text-primary').text();
     var typed = new Typed(".typed-words", {
-        strings: ["ソウルに触る"], // 출력할 텍스트
+        strings: [string], // 출력할 텍스트
         typeSpeed: 80, // 타이핑 속도
         backSpeed: 80, // 되돌리는 속도
         backDelay: 4000, // 되돌리기 전 대기 시간

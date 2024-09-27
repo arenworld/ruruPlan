@@ -48,19 +48,25 @@
         <div class="logo-container">
             <a class="logo">
                 <img class="logo_img" src="/images/home/로고_수정.png" />
-                <span class="text-primary">ソウルに触る</span>
+                <span class="text-primary" th:text="#{logo}"></span>
             </a>
         </div>
         <!-- 네비바  로그인x 로그인,조인  로그인o 로그아웃,마이페이지-->
         <ul class="site-menu">
             <li class="has-children">
-                <a>일정공유</a>
+                <a th:text="#{community}"></a>
                 <ul class="dropdown">
-                    <li><a href="#">나만의 일정</a></li>
-                    <li><a href="#">스크랩한일정</a></li>
+                    <li><a th:href="@{planBoard/list}" th:text="#{plan_board}"></a></li>
+                    <li><a href="#" th:text="#{board}"></a></li>
                 </ul>
             </li>
-            <li><a href="#">커뮤니티</a></li>
+            <li class="has-children">
+                <a href="#" th:text="#{plan}"></a>
+                <ul class="dropdown">
+                    <li><a href="#" th:text="#{my_plan}"></a></li>
+                    <li><a href="#" th:text="#{save_plan}"></a></li>
+                </ul>
+            </li>
             <li><a th:href="@{custom}">Customizing</a></li>
 
             <li sec:authorize="not isAuthenticated()">
@@ -125,15 +131,15 @@
                 <div class="intro-wrap">
                     <h1 class="mb-5">
                         <span class="d-block">Let's Enjoy Your</span>
-                        <span class="typed-words"></span>
+                        <span class="typed-words" th:value="#{logo}"></span>
                     </h1>
                 </div>
                 <div class="home-select-button-container">
                     <button class="home-select-button" id="ai">
-                        <span class="home-button-text ai_button">ai추천</span>
+                        <span class="home-button-text ai_button" th:text="#{ai}"></span>
                     </button>
                     <button class="home-select-button" id="zero">
-                        <span class="home-button-text">zero</span>
+                        <span class="home-button-text" th:text="#{zero}"></span>
                     </button>
                 </div>
             </div>

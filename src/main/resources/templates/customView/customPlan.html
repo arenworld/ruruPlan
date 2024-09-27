@@ -187,6 +187,11 @@
 
                 <!-- 테마버튼 -->
                 <div class="theme-buttons-div">
+                    <input type="hidden" id="theme1" th:value="#{theme1}">
+                    <input type="hidden" th:value="#{theme2}">
+                    <input type="hidden" th:value="#{theme3}">
+                    <input type="hidden" th:value="#{theme4}">
+                    <input type="hidden" th:value="#{theme5}">
                     <button class="theme-button" th:each="theme : ${themeArray}"
                             th:id="|theme-${theme}-button|" th:text="${theme}" th:data-theme="${theme}"></button>
                 </div>

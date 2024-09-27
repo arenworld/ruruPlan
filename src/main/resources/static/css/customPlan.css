@@ -23,7 +23,7 @@
     padding: 5px 10px;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 20px;
     cursor: pointer;
     text-align: center;
 }/* 데이버튼 */
@@ -34,7 +34,7 @@
 
 .theme-button {
     padding: 5px;
-    border-radius: 5px;
+    border-radius: 20px;
 } /* 테마버튼 */
 
 .theme-button:hover {
@@ -252,32 +252,39 @@ tr.selected input {
     top: 10px;
     left: 140px;
     position: absolute;
+    text-shadow:
+            0.5px 0.5px 0px #000; /* 첫 번째 그림자 */
+           /* 1px 1px 0px rgba(0, 0, 0, 0.1); /* 두 번째 그림자 */
 }
 
-.place-info-address {
-    top : 50px;
+.info-section-more {
+    top: 7px;
+    right : 10px;
+    width : 30px;
+    height : 30px;
+    cursor : pointer;
+    position: absolute;
+
+}
+
+
+
+
+.info-section-address {
+    top : 45px;
     left: 140px;
     position: absolute;
 }
 
-.place-info-more {
-    top: 10px;
-    right : 10px;
-    width : 25px;
-    height : 25px;
-    cursor : pointer;
-    position: absolute;
-}
-
-.place-info-contentsType {
-    top : 85px;
+.info-section-contentsType {
+    top : 80px;
     left : 140px;
     color : #666666;
     position: absolute;
 }
 
-.place-info-infocenterImg {
-    top: 87px;
+.info-section-infocenterImg {
+    top: 82px;
     left: 200px;
     width: 15px;
     height: 15px;
@@ -285,12 +292,27 @@ tr.selected input {
     position: absolute;
 }
 
-.place-info-infocenter {
-    top: 85px;
-    left: 220px;
+.info-section-add-task-button {
+    top: 7px;
+    right: 40px;
+    width : 25px;
+    height : 25px;
+    cursor : pointer;
+    position: absolute;
+    z-index: 10;
+}
+
+
+
+.info-section-infocenter {
+    top: 82px;
+    left: 223px;
     color: #666666;
     position: absolute;
 }
+
+
+
 
 /**************** 장소정보 상세페이지 - 모달 **************/
 .placeInfo-Modal {
@@ -350,14 +372,22 @@ tr.selected input {
     border-radius: 10px;
     padding-left: 5px;
 }
-.add-task-button {
-    width: 50px;
-    padding-right: 10px;
-    cursor: pointer;
+
+.info-table-add-task-button {
+    width : 25px;
+    height : 25px;
+    cursor : pointer;
 }
-.info-table-add-task-image {
-    width: 25px;
+
+.info-table-back-td {
+    width: 80px;
     height: 30px;
+}
+
+.info-table-back-button {
+    width: 30px;
+    height: 45px;
+    cursor: pointer;
 }
 
 /* Style for .info-table-heritageBadge */

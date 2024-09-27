@@ -30,6 +30,8 @@ let mapOptions = {};
 // 테마클릭 번호(다른 테마 누르면 초기화 해야하므로, 전역)
 let clickCountThemeButton = 0;
 
+let clickCountEditPlace = 0;
+
 // 플랜번호
 let planNum;
 
@@ -68,7 +70,19 @@ $(document).ready(function () {
     });
 
     // 장소 상세정보 more 클릭시
-    $(document).on('click', '.place-info-more', placeInfoMore);
+    $(document).on('click', '.info-section-more', placeInfoMore);
+    $(document).on('click', '.info-table-back-button', function () {
+        $('.info-more-table-box').css('display', 'none');
+        console.log(clickCountThemeButton);
+        if(clickCountThemeButton === 0) {
+            $('.task-place-info-list-box').css('display', 'block');
+        }
+
+        if(clickCountThemeButton === 1) {
+            $('.theme-place-info-list-box').css('display', 'block');
+        }
+
+    });
 
     // 무장애, 문화유산, 펫 아이콘 후버시
     $(document).on('mouseover', '.info-table-badge', badgeExplain);
@@ -117,6 +131,7 @@ $(document).ready(function () {
     });
 
     // 테마별 버튼 생성 및 테마 정보 호출, 레포츠 처리 어떻게 해야 되지?
+    const theme1 = $('#theme1')
     const themes = ['쇼핑', '식당', '카페', '역사', '문화', '힐링', '랜드마크', '체험', '레포츠']
     themes.forEach(function (theme) {
         $('#theme-' + theme + '-button').click(function () {
@@ -178,7 +193,9 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                 dayNumOfButton++;
             }
 
+            let lang = 'Kr';
             for (let dayNum = dayNumOfButton; dayNum <= lastDay; dayNum++) {
+
                 let dayTable = `
                         <div id="planTable-${dayNum}day" class="planTables" data-daynum-table="${dayNum}">
                             <h4 class="day-plans-dayTitle">Day ${dayNum}</h4>
@@ -207,6 +224,7 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                         let startTimeMinute = task.startTime.substring(3, 5);
                         let startTime = startTimeHour + ':' + startTimeMinute;
 
+                        let title = lang === 'Kr' ? task.place.titleKr : task.place.titleJp;
 
                         // Start building task row
                         dayTable += `<tr class="task-list${task.taskNum}" data-tasknum="${task.taskNum}">                                        
@@ -218,7 +236,7 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                                     <td>${task.task}</td>
                                     <td class="day-table-td-place-title">
                                     <div class = "input-container">
-                                        <input type="text" value="${task.place.titleKr}" disabled data-tasknum="${task.taskNum}" class="day-table-place-title">
+                                        <input type="text" value="${title}" disabled data-tasknum="${task.taskNum}" data-place-id="${task.place.placeId}" class="day-table-place-title">
                                         <div class="click-overlay"></div>
                                         <div class="click-overlay-edit"></div>
                                     </div>    
@@ -313,12 +331,12 @@ function updateDurationCost() {
     // validation function 필요 입력값이 정수인지, 정상적인 시간범위인지 duration - h는 최대 5, 분은 < 60 + 정수일것
     // number
 
-
     let tr = $(this).closest('tr');
     let newDurationHour = tr.find('.day-table-duration-hour').val();
     let newDurationMinute = tr.find('.day-table-duration-minute').val();
     let newCost = tr.find('td.day-table-td-cost input').val();
     let taskNum = $(this).data('tasknum');
+    $('.theme-button').removeAttr('style');
 
     $.ajax({
         url: 'custom/updateDuration',
@@ -438,11 +456,11 @@ function placeInfoMore() {
         type: 'post',
         data: {placeId: placeId},
         success: function (placeDTO) {
-
+        var lang  = $('#lang').val();
             let heritageIcon = placeDTO.heritage ? '<img src="../images/customPlan/heritage.png" class="info-table-badge" data-badge="heritage">' : '';
             let barrierFreeIcon = placeDTO.barrierFree ? '<img src="../images/customPlan/barrier.png" class="info-table-badge" data-badge="barrier">' : '';
             let petFriendlyIcon = placeDTO.petFriendly ? '<img src="../images/customPlan/pet.png" class="info-table-badge" data-badge="pet">' : '';
-            let feeInfoKr = placeDTO.feeInfoKr == null ? '' : placeDTO.feeInfoKr;
+            let feeInfoKr = placeDTO.feeInfoKr == null ? '' : placeDTO.feeInfo + lang;
             let saleItemKr = placeDTO.saleItemKr == null ? '' : placeDTO.saleItemKr;
 
 
@@ -457,8 +475,9 @@ function placeInfoMore() {
                                             <span>${barrierFreeIcon}</span>
                                             <span>${petFriendlyIcon}</span>
                                         </th>
-                                        <td class="add-task-button">                                   
-                                            <img src="../images/customPlan/add-schedule.png" class="info-table-add-task-image">
+                                        <td class="info-table-back-td">   
+                                            <img src="../images/customPlan/return.png" class="info-table-back-button">                        
+                                            <img src="../images/customPlan/add-folder.png" class="info-table-add-task-button">
                                         </td>
                                     </tr>
                                 </thead>
@@ -502,11 +521,15 @@ function placeInfoMore() {
     })
 }
 
-// taskList 클릭시(마커 색 변경, 일정표 해당 tr 색 변경)
+// taskList 클릭시(마커 색 변경, 일정표 해당 tr 색 변경), input은 place.title input태그
 function selectTaskList(input) {
-    $(this).on('click', function () {
+    // $(this).on('click', function () {
         let tr = input.closest('tr');
-        let clickedTaskNum = input.data('tasknum'); // 클릭한 tr의 data-tasknum 가져오기
+        let clickedPlaceId = input.data('place-id'); // 클릭한 tr의 data-tasknum 가져오기
+        let clickedTaskNum = input.data('tasknum');
+
+        console.log(clickedTaskNum);
+        console.log(clickedPlaceId);
 
         // (1) task-list tr 배경색상 설정
         $('[class^="task-list"]').removeClass('selected');
@@ -514,7 +537,7 @@ function selectTaskList(input) {
 
         // (3) info-List 배경색상 설정
         $('[class^="place-info-section"]').removeClass('selected');
-        $('.place-info-section' + clickedTaskNum).addClass('selected');
+        $('.place-info-section'+clickedPlaceId).addClass('selected');
 
         // (4) 마커색상 설정
         planAllMarkers.forEach(function (marker) {
@@ -546,7 +569,7 @@ function selectTaskList(input) {
             map.setZoom(16); // 줌 레벨 조정 (필요에 따라)
 
         }
-    });
+
 }
 
 
@@ -759,9 +782,11 @@ function selectThemeMarker(markerKey) {
         } else {
             // 나머지 마커는 기본 색상으로 초기화
             marker.setIcon({
-                content: `<svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#7FFF00" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+                content: `<svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"
+                                                    viewBox="0 0 20 20" fill="#006400" stroke="#00000 stroke-width="0.3px" stroke-opacity="0.24">
+                                                    <circle cx="8" cy="8" r="6"/></svg>`,
                 size: new naver.maps.Size(22, 35),
-                anchor: new naver.maps.Point(11, 35)
+                anchor: new naver.maps.Point(13, 13)
             });
         }
     });
@@ -841,12 +866,12 @@ function updatePlanInfoList(visiblePlanMarkerKeyList) {
         infoList.innerHTML += `
             <div class="place-info-section${task.place.placeId}" >
                 ${img}
-                <h3 class="place-info-title">${task.place.titleKr}</h3>
-                <img src="../images/customPlan/more.png" class="place-info-more" data-place-id="${task.place.placeId}">
-                <span class="place-info-address">${task.place.addressKr}</span>
-                <span class="place-info-contentsType">${task.place.contentsType}</span>
-                <img src="../images/customPlan/infocenter.png" class="place-info-infocenterImg">
-                <span class="place-info-infocenter">${task.place.infocenter}</span>
+                <h5 class="place-info-title">${task.place.titleKr}</h5>
+                <img src="../images/customPlan/more2.png" class="info-section-more" data-place-id="${task.place.placeId}">
+                <span class="info-section-address">${task.place.addressKr}</span>
+                <span class="info-section-contentsType">${task.place.contentsType}</span>
+                <img src="../images/customPlan/infocenter.png" class="info-section-infocenterImg">
+                <span class="info-section-infocenter">${task.place.infocenter}</span>
             </div>
         `;
     }
@@ -873,13 +898,14 @@ function updateThemeInfoList(visibleThemeMarkerKeyList) {
         infoList.innerHTML += `
             <div class="place-info-section${place.placeId}" >
                 ${img}
-                <h3 class="place-info-title">${place.titleKr}</h3>
-                <img src="../images/customPlan/more.png" class="place-info-more" data-place-id="${place.placeId}">
-                <span class="place-info-address">${place.addressKr}</span>
-                <span class="place-info-contentsType">${place.contentsType}</span>
-                <img src="../images/customPlan/infocenter.png" class="place-info-infocenterImg">
-                <span class="place-info-infocenter">${place.infocenter}</span>
-            </div>
+                <h5 class="place-info-title">${place.titleKr}</h5>
+                <img src="../images/customPlan/add-folder.png" class="info-section-add-task-button" data-place-id="${place.placeId}">
+                <img src="../images/customPlan/more2.png" class="info-section-more" data-place-id="${place.placeId}"></img>
+                <span class="info-section-address">${place.addressKr}</span>
+                <span class="info-section-contentsType">${place.contentsType}</span>
+                <img src="../images/customPlan/infocenter.png" class="info-section-infocenterImg">
+                <span class="info-section-infocenter">${place.infocenter}</span>   
+           </div>
         `;
     }
 }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>GPT 결과</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/gptResult.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script th:src="@{/js/gptResult.js}"></script>
 
@@ -11,14 +12,36 @@
     <script th:inline="javascript">
         /*<![CDATA[*/
         var taskByDateMap = /*[[${taskByDateMap}]]*/ {};
+        var planDTO = /*[[${planDTO}]]*/ {}; // planDTO를 JavaScript 변수로 전달
         /*]]>*/
     </script>
 </head>
 <body>
 
 <div class="container">
-    <h2 th:text="'GPT 추천 여행 일정'"></h2>
-    <h3 th:text="'여행 기간: ' + ${planDTO.startDate} + ' ~ ' + ${planDTO.endDate}"></h3>
+    <!-- 헤더 섹션: 제목과 버튼 그룹 -->
+    <div class="header">
+        <h1 th:text="'GPT 추천 여행 일정'"></h1>
+        <div class="button-group">
+            <button id="save-button" aria-label="내 일정으로 담기">
+                <span class="main-text">내 일정으로 담기<br>(더 많은 정보)</span>
+            </button>
+            <button id="button2" aria-label="다시 추천받기">
+                다시 추천받기
+            </button>
+            <button id="print-button" aria-label="인쇄">
+                인쇄
+            </button>
+        </div>
+    </div>
+
+    <!-- 여행 기간과 추가 텍스트를 같은 라인에 배치하는 컨테이너 -->
+    <div class="travel-period-container">
+        <div class="period-info">
+            <h3 th:text="'여행 기간: ' + ${planDTO.startDate} + ' ~ ' + ${planDTO.endDate}"></h3>
+        </div>
+        <span class="note">이 형식은 간단한 버전으로 이 페이지를 벗어나면 다시 확인할 수 없습니다.</span>
+    </div>
 
     <div th:each="dateEntry : ${taskByDateMap}">
         <h3 th:text="'Day ' + ${dateEntry.key}"></h3>
@@ -36,13 +59,13 @@
             <tbody>
             <!-- 매일 첫 번째 task부터 카운트하는 변수 선언 -->
             <tr th:each="task, stat : ${dateEntry.value}">
-
-<!--                이동을 제외한 나머지 task만 No을 붙여줌-->
+                <!-- 이동을 제외한 나머지 task만 No을 붙여줌-->
                 <td th:if="${stat.count % 2 == 1}" th:text="${(stat.count + 1) / 2}"></td>
-<!--                '이동'은 빈칸으로 둔다.-->
-                <td th:if="${task.task == '이동'}" th:text="''"></td>
-<!--                활동 시작시간 정보-->
-                <td th:text="${task.startTime}"></td>
+                <!-- '이동'은 빈칸으로 둔다.-->
+                <td th:if="${task.task == '이동'}" th:text="''" class="moveNo"></td>
+                <!-- 활동 시작시간 정보-->
+                <td th:if="${task.task == '이동'}" th:id="'time-' + ${stat.index}" class="moveNo"></td>
+                <td th:if="${task.task != '이동'}" th:id="'time-' + ${stat.index}"></td>
 
                 <!-- 이동과 일반 Task를 구분하여 출력 -->
                 <td th:if="${task.task != '이동'}" th:text="${task.task}"></td>
@@ -50,14 +73,13 @@
 
                 <td th:if="${task.task == '이동'}" th:attr="colspan=3" th:id="'duration-' + ${stat.index}"></td>
                 <td th:if="${task.task != '이동'}" th:id="'duration-' + ${stat.index}"></td>
-                <td th:text="|${task.cost}원|"></td>
+                <td th:if="${task.task == '이동'}" th:text="|${task.cost}원|" id="moveCost"></td>
+                <td th:if="${task.task != '이동'}" th:text="|${task.cost}원|"></td>
             </tr>
             </tbody>
         </table>
     </div>
 </div>
 
-
 </body>
 </html>
-

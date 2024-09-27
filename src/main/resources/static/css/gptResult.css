@@ -1,77 +1,97 @@
+/* gptResult.css */
+
+/* 기본 스타일 */
 body {
     font-family: 'Arial', sans-serif;
     font-size: 14px;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
     background-color: #f5f5f5;
 }
 
 .container {
-    width: 45%; /* 화면 가운데 50% 너비 */
+    width: 45%; /* 화면 가운데 45% 너비 */
     background-color: white;
     padding: 20px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    margin: 20px auto; /* 위아래 마진 추가 */
 }
 
-h2, h3 {
+/* 제목 스타일 */
+h1, h3 {
     color: #333;
-    font-size: 16px;
 }
 
-h2 {
+h1 {
+    font-size: 24px; /* h1 크기 증가 */
     margin-bottom: 10px;
 }
 
 h3 {
+    font-size: 16px;
     margin-top: 20px;
 }
 
+/* 테이블 스타일 */
 table {
-    width: 100%; /* 컨테이너의 100%만 사용 */
+    width: 100%; /* 컨테이너의 100% 사용 */
     border-collapse: collapse;
     margin-bottom: 15px;
     font-size: 12px;
+    table-layout: fixed; /* 고정 레이아웃으로 셀 높이 유지 */
 }
 
 th, td {
     border: 1px solid #ccc;
     padding: 6px;
     text-align: center;
+    white-space: nowrap; /* 셀 내용 줄바꿈 방지 */
+    overflow: hidden; /* 넘치는 내용 숨김 */
+    text-overflow: ellipsis; /* 넘칠 경우 ... 표시 */
 }
 
-th, td:nth-child(1) { /* 첫 번째 열 (No) */
-    width: 7%; /* 10% 넓이 */
+/* 테이블 열 너비 복원 */
+thead th:nth-child(1), tbody td:nth-child(1) { /* No */
+    width: 7%;
 }
 
-th, td:nth-child(2) { /* 두 번째 열 (Time) */
-    width: 12%; /* 20% 넓이 */
+thead th:nth-child(2), tbody td:nth-child(2) { /* Time */
+    width: 12%;
 }
 
-th, td:nth-child(3) { /* 세 번째 열 (Task) */
-    width: 13%; /* 20% 넓이 */
+thead th:nth-child(3), tbody td:nth-child(3) { /* Task */
+    width: 13%;
 }
 
-th, td:nth-child(4) { /* 네 번째 열 (Place) */
-    width: 30%; /* 30% 넓이 */
+thead th:nth-child(4), tbody td:nth-child(4) { /* Place */
+    width: 30%;
 }
 
-th, td:nth-child(5) { /* 다섯 번째 열 (Duration) */
-    width: 13%; /* 10% 넓이 */
+thead th:nth-child(5), tbody td:nth-child(5) { /* Duration */
+    width: 13%;
 }
 
-th, td:nth-child(6) { /* 여섯 번째 열 (Cost) */
-    width: 8%; /* 10% 넓이 */
+thead th:nth-child(6), tbody td:nth-child(6) { /* Cost */
+    width: 8%;
 }
 
 td[colspan="3"] {
     background-color: #f0f0f0;
     color: #888;
     font-style: italic;
+    text-align: right;
+    padding-right: 35px;
+}
+
+.moveNo {
+    background-color: #f0f0f0;
+    color: #888;
+    font-style: italic;
+}
+
+#moveCost {
+    background-color: #f0f0f0;
 }
 
 .placeTitle {
@@ -82,4 +102,199 @@ td[colspan="3"] {
 
 .placeTitle:hover {
     text-decoration: underline;
+}
+
+/* 버튼 관련 CSS */
+
+/* 헤더 섹션 스타일 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* 버튼 그룹 스타일 */
+.button-group {
+    display: flex;
+    gap: 10px; /* 버튼 간 간격 */
+}
+
+/* 공통 버튼 스타일 */
+.button-group button {
+    padding: 8px 16px; /* 패딩 조정 */
+    font-size: 14px; /* 폰트 크기 조정 */
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    color: #ffffff; /* 버튼 텍스트 색상 */
+    text-align: center;
+    white-space: pre-line; /* 줄바꿈 문자 인식 */
+    line-height: 1.4; /* 줄 간격 조절 */
+    height: 60px; /* 버튼 높이 일정하게 설정 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 수직 중앙 정렬 */
+    align-items: center; /* 수평 중앙 정렬 */
+    width: auto; /* 공통 너비 제거 */
+}
+
+/* 개별 버튼 너비 설정 */
+#save-button {
+    background-color: #28a745; /* 녹색 배경 */
+    width: 180px; /* 버튼 너비 180px */
+}
+
+#save-button:hover {
+    background-color: #218838; /* 호버 시 어두운 녹색 */
+    transform: scale(1.05); /* 호버 시 약간 확대 */
+}
+
+#button2 {
+    background-color: #007bff; /* 파란색 배경 */
+    width: 150px;
+    padding-bottom: 27px;
+}
+
+#button2:hover {
+    background-color: #0069d9; /* 호버 시 어두운 파란색 */
+    transform: scale(1.05);
+}
+
+#print-button {
+    background-color: #6c757d; /* 회색 배경 */
+    width: 100px; /* 버튼 너비 100px */
+    padding-bottom: 27px;
+}
+
+#print-button:hover {
+    background-color: #5a6268; /* 호버 시 어두운 회색 */
+    transform: scale(1.05);
+}
+
+/* 여행 기간 및 추가 텍스트 컨테이너 스타일 */
+.travel-period-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px; /* 필요에 따라 조정 */
+}
+
+/* 여행 기간 정보 스타일 */
+.travel-period-container .period-info {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 추가 텍스트 스타일 */
+.travel-period-container .note {
+    font-size: 0.8em; /* 작은 글씨 크기 */
+    color: #999999; /* 흐린 색상 */
+    text-align: right;
+    max-width: 60%; /* 필요에 따라 조정 */
+    margin-top: 5px; /* 약간의 위쪽 마진 */
+}
+
+
+/* 접근성 향상: 버튼 포커스 스타일 */
+.button-group button:focus {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+/* 버튼 내부 텍스트 스타일 */
+#save-button .main-text {
+    font-size: 16px; /* 큰 글씨 */
+}
+
+#save-button .main-text br {
+    content: "";
+    display: block;
+    margin-top: 2px;
+}
+
+
+
+/* 인쇄 전용 스타일 */
+@media print {
+    /* 페이지 여백 설정 */
+    @page {
+        margin: 10mm; /* 필요에 따라 조정 */
+        size: A4 portrait; /* 또는 landscape */
+    }
+
+    /* 컨테이너 전체 너비로 설정 */
+    .container {
+        width: 88% !important; /* 전체 너비 사용 */
+        box-shadow: none; /* 그림자 제거 */
+        border-radius: 0; /* 테두리 반경 제거 */
+        margin: 0; /* 자동 마진 제거 */
+        padding: 10mm; /* 패딩 조정 */
+    }
+
+    /* 버튼 숨기기 */
+    .button-group {
+        display: none;
+    }
+
+    h1 {
+        display: none;
+    }
+
+    /* 추가 텍스트 숨기기 */
+    .travel-period-container .note {
+        display: none;
+    }
+
+    /* 테이블 스타일 조정 */
+    table {
+        page-break-inside: avoid; /* 페이지 중단 방지 */
+        font-size: 12pt; /* 폰트 크기 조정 */
+        table-layout: auto; /* 테이블 레이아웃 자동 조정 */
+        width: 100%; /* 테이블 너비 100% 사용 */
+    }
+
+    th, td {
+        padding: 8px; /* 패딩 조정 */
+    }
+
+    /* 테이블 열 너비 조정 */
+    thead th:nth-child(1), tbody td:nth-child(1) { /* No */
+        width: 5%;
+    }
+
+    thead th:nth-child(2), tbody td:nth-child(2) { /* Time */
+        width: 15%;
+    }
+
+    thead th:nth-child(3), tbody td:nth-child(3) { /* Task */
+        width: 12%;
+    }
+
+    thead th:nth-child(4), tbody td:nth-child(4) { /* Place */
+        width: 30%;
+    }
+
+    thead th:nth-child(5), tbody td:nth-child(5) { /* Duration */
+        width: 16%;
+    }
+
+    thead th:nth-child(6), tbody td:nth-child(6) { /* Cost */
+        width: 10%; /* 'Cost' 열을 충분히 확보 */
+    }
+
+    /* 배경 색상 인쇄 */
+    body {
+        -webkit-print-color-adjust: exact; /* Chrome, Safari */
+        color-adjust: exact; /* Firefox */
+        background-color: white; /* 인쇄 시 배경색 흰색으로 설정 */
+    }
+
+    /* 링크 스타일 제거 */
+    a {
+        text-decoration: none;
+        color: black;
+    }
 }

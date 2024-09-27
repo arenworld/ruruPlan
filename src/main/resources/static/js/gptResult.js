@@ -1,12 +1,20 @@
 $(document).ready(async function(){
     console.log("Document is ready");
 
+    // 인쇄 버튼 클릭 이벤트 핸들러
+    $('#print-button').click(function(){
+        window.print();
+    });
+
     var startX;
     var startY;
     var endX;
     var endY;
     var taskElements = $('td[id^="duration-"]');
     var totalIndex = 0; // 누적 인덱스 초기화
+
+    // Duration 값을 저장할 배열 선언
+    var durationsList = [];
 
     for (var date in taskByDateMap) {
         if (taskByDateMap.hasOwnProperty(date)) {
@@ -65,8 +73,18 @@ $(document).ready(async function(){
                             else if(routeInfo.subPaths[1].trafficType == 2) trafficType = "버스";
                             else trafficType = "도보";
                             taskElements.eq(currentIndex - 1).html(trafficType + " " + routeInfo.totalTime + "분");
+
+                            durationsList.push({
+                                taskNum: task.taskNum,
+                                duration: routeInfo.totalTime
+                            });
                         } else {
                             taskElements.eq(currentIndex - 1).html("도보 " + duration1 + "분");
+
+                            durationsList.push({
+                                taskNum: task.taskNum,
+                                duration: duration1
+                            });
                         }
                     } catch (error) {
                         console.error("오류 발생:", error);
@@ -79,6 +97,7 @@ $(document).ready(async function(){
             }
         }
     }
+    console.log("duration 정보: " + durationsList);
 
     async function walking(startX, startY, endX, endY) {
         return new Promise(function(resolve, reject) {
@@ -172,123 +191,3 @@ $(document).ready(async function(){
     }
 });
 
-
-
-
-// $(document).ready(function(){
-//     console.log("Document is ready");
-//
-//     var startX;
-//     var startY;
-//     var endX;
-//     var endY;
-//     var durationNum;
-//     var taskElements = $('td[id^="duration-"]');
-//
-//     for (var date in taskByDateMap) {
-//         if (taskByDateMap.hasOwnProperty(date)) {
-//             var tasksForDate = taskByDateMap[date]; // 날짜에 해당하는 task 리스트
-//             tasksForDate.forEach(function(task, index) {
-//                 if(task.task == '이동') return;
-//                 if(index == 0 && task.task != '이동') {
-//                     startX = task.mapX;
-//                     startY = task.mapY;
-//                     return;
-//                 }else {
-//                     endX = task.mapX;
-//                     endY = task.mapY;
-//
-//                     walking(startX, startY, endX, endY, function(duration1) {
-//                         console.log("도보시간: " + duration1);
-//                         if(duration1 > 20) {
-//                             busSubway(startX, startY, endX, endY, function(duration2) {
-//                                 console.log("대중교통 종류: " + duration2.trafficType);
-//                                 taskElements.eq(index - 1).html(duration2.totalTime + "분");
-//                             });
-//                         } else {
-//                             taskElements.eq(index - 1).html("도보" + duration1 + "분");
-//                         }
-//                     });
-//                     startX = task.mapX;
-//                     startY = task.mapY;
-//
-//                 }
-//             });
-//         }
-//     }
-//
-//     function busSubway(startX, startY, endX, endY, callback) {
-//         let sx = startX;
-//         let sy = startY;
-//         let ex = endX;
-//         let ey = endY;
-//
-//         var xhr = new XMLHttpRequest();
-//         var url = "https://api.odsay.com/v1/api/searchPubTransPathT?SX=" + sx + "&SY=" + sy +
-//             "&EX=" + ex + "&EY=" + ey + "&apiKey=AbfWDSywAKWcKBRv/ClpFQ";
-//
-//         xhr.open("GET", url, true);
-//         xhr.send();
-//
-//         xhr.onreadystatechange = function() {
-//             if (xhr.readyState == 4 && xhr.status == 200) {
-//                 var responseText = xhr.responseText;
-//                 var data = JSON.parse(responseText);
-//
-//                 // 가장 빠른 경로 찾기
-//                 const fastestRoute = data.result.path.reduce((min, current) => {
-//                     return current.info.totalTime < min.info.totalTime ? current : min;
-//                 });
-//
-//                 // 필요한 정보 추출
-//                 const routeInfo = {
-//                     totalTime: fastestRoute.info.totalTime,
-//                     subPaths: fastestRoute.subPath.map(subPath => {
-//                         return {
-//                             trafficType: subPath.trafficType,  // 교통수단 타입 (1: 지하철, 2: 버스, 3: 도보)
-//                             startName: subPath.startName || '', // 시작역 또는 정류장 이름
-//                             endName: subPath.endName || ''      // 종료역 또는 정류장 이름
-//                         };
-//                     })
-//                 };
-//
-//                 // callback 함수를 호출하여 totalTime과 subPaths를 전달
-//                 callback(routeInfo);
-//             }
-//         };
-//     }
-//
-//     function walking(startX, startY, endX, endY, callback) {
-//         var headers = {};
-//         headers["appKey"] = "7ejrjQSxsM8Vp5U8WbLArOuHpOwQNnJ31hqE3Pt7";
-//
-//         $.ajax({
-//             method: "POST",
-//             headers: headers,
-//             url: "https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1&format=json&callback=result",
-//             async: true,
-//             data: {
-//                 "startX": startX,
-//                 "startY": startY,
-//                 "endX": endX,
-//                 "endY": endY,
-//                 "reqCoordType": "WGS84GEO",
-//                 "resCoordType": "EPSG3857",
-//                 "startName": "출발지",
-//                 "endName": "도착지"
-//             },
-//             success: function (response) {
-//                 var resultData = response.features;
-//
-//                 // 결과 출력
-//                 var tTime = ((resultData[0].properties.totalTime) / 60).toFixed(0);
-//
-//                 // callback 함수를 호출하여 도보 시간을 전달
-//                 callback(tTime);
-//             },
-//             error: function() {
-//                 alert("뭔가 이상있음");
-//             }
-//         });
-//     }
-// });

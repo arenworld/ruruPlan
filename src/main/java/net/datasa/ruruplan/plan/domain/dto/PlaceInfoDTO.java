@@ -31,7 +31,10 @@ public class PlaceInfoDTO {
     private String siGunGu;
     
     // 일정대분류 (관광 식당 카페 등)
-    private String contentsType;
+    private String contentsTypeKr;
+
+    // 일정대분류 (관광 식당 카페 등)
+    private String contentsTypeJp;
     
     // 테마1(힐링 등등)
     private String theme1;

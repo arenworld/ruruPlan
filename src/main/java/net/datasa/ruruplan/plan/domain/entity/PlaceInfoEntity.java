@@ -56,9 +56,12 @@ public class PlaceInfoEntity {
     @Column(name = "si_gun_gu", length = 20)
     private String siGunGu;
 
-    // 여행 타입
-    @Column(name = "contents_type", length = 20)
-    private String contentsType;
+    // 여행 타입(한국어)
+    @Column(name = "contents_type_kr", length = 20)
+    private String contentsTypeKr;
+
+    @Column(name = "contents_type_jp", length = 20)
+    private String contentsTypeJp;
 
     // 테마1(힐링 등등)
     @Column(name = "theme1", length = 20)

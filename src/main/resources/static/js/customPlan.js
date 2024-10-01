@@ -30,13 +30,26 @@ let mapOptions = {};
 // 테마클릭 번호(다른 테마 누르면 초기화 해야하므로, 전역)
 let clickCountThemeButton = 0;
 
-let clickCountEditPlace = 0;
+let clickCountEditTaskPlace = 0;
 
 // 플랜번호
 let planNum;
 
+let targetTaskNum;
+let targetTr;
+let walkTime;
+let transportTime;
+let preTransDuration;
+let nextTransDuration;
+
+
+// language 옵션 선택사항
+let lang;
+
+
 $(document).ready(function () {
     planNum = $('#planNum').val();
+    // lang = $();
 
     // 일정표 출력함수
     dayPlansPrint(dayNumOfButton, planNum);
@@ -54,10 +67,40 @@ $(document).ready(function () {
     $(document).on('click', '.editImgButton', activateDayTableInputs);
 
     // 일정표 플레이스 타이틀 클릭
-    $(document).on('click', '.click-overlay-edit', updateTaskPlace);
+    $(document).on('click', '.click-overlay-edit', clickUpdateTaskPlace);
     $(document).on('mouseover', '.click-overlay-edit', function () {
 
     });
+
+    // 일정표 플레이스 활성화 된 후 = targetTaskNum 채워진 후, theme-info-section에서 add-task-button 클릭시
+    $(document).on('click', '.info-section-add-task-button', function () {
+        let indexTr = targetTr.index();
+        console.log(indexTr);
+
+        let newPlaceId = $(this).data('place-id');
+        let preX = targetTr.prev().data('map-x');
+        let preY = targetTr.prev().data('map-y');
+
+        let nextX = targetTr.next().data('map-x');
+        let nextY = targetTr.next().data('map-y');
+
+        let newX = $(this).data('map-x');
+        let newY = $(this).data('map-y');
+
+        calPreTransDuration(preX, preY, newX, newY)
+            .then(() => {
+                console.log('Pre duration calculated, moving to next duration...');
+                return calNextTransDuration(newX, newY, nextX, nextY);
+            })
+            .then(() => {
+                console.log('Next duration calculated, updating task place...');
+                updateTaskPlace(newPlaceId);
+            })
+            .catch((error) => {
+                console.error("Error occurred in sequence: ", error);
+            });
+    });
+
 
     // 확인버튼 클릭시 변경내용 저장
     $(document).on('click', '.saveImgButton', updateDurationCost);
@@ -71,14 +114,14 @@ $(document).ready(function () {
 
     // 장소 상세정보 more 클릭시
     $(document).on('click', '.info-section-more', placeInfoMore);
-    $(document).on('click', '.info-table-back-button', function () {
+    $(document).on('click', '.info-table-return-button', function () {
         $('.info-more-table-box').css('display', 'none');
         console.log(clickCountThemeButton);
-        if(clickCountThemeButton === 0) {
+        if (clickCountThemeButton === 0) {
             $('.task-place-info-list-box').css('display', 'block');
         }
 
-        if(clickCountThemeButton === 1) {
+        if (clickCountThemeButton === 1) {
             $('.theme-place-info-list-box').css('display', 'block');
         }
 
@@ -139,7 +182,7 @@ $(document).ready(function () {
             $('.theme-button').css('animation', 'none');
 
             // 첫 클릭 때만, 여기서 currentTheme을 담음
-            if(clickCountThemeButton === 0) {
+            if (clickCountThemeButton === 0) {
                 console.log('함수호출 전 클릭수: 0');
                 currentTheme = $(this).data('theme');
             }
@@ -202,12 +245,12 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                             <table class="day-plans-table">
                                 <thead>
                                     <tr class="day-table-tr1">
-                                        <th class="day-table-th2">time</th>
-                                        <th class="day-table-th3">task</th>
-                                        <th class="day-table-th4">place</th>
-                                        <th class="day-table-th5" colspan="4">duration</th>
-                                        <th class="day-table-th6">cost</th>
-                                        <th class="day-table-th7">edit</th>
+                                        <th class="day-table-th1">time</th>
+                                        <th class="day-table-th2">task</th>
+                                        <th class="day-table-th3">place</th>
+                                        <th class="day-table-th4" colspan="4">duration</th>
+                                        <th class="day-table-th5">cost</th>
+                                        <th class="day-table-th6">edit</th>
                                     </tr>
                                 </thead>
                                 <tbody>`;
@@ -227,7 +270,7 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                         let title = lang === 'Kr' ? task.place.titleKr : task.place.titleJp;
 
                         // Start building task row
-                        dayTable += `<tr class="task-list${task.taskNum}" data-tasknum="${task.taskNum}">                                        
+                        dayTable += `<tr class="task-list${task.taskNum}" data-tasknum="${task.taskNum}" data-map-x="${task.place.mapX}" data-map-y="${task.place.mapY}">                                        
                                         <td>${startTime}</td>`;
 
                         // 이동 task가 아닐 때
@@ -238,7 +281,7 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                                     <div class = "input-container">
                                         <input type="text" value="${title}" disabled data-tasknum="${task.taskNum}" data-place-id="${task.place.placeId}" class="day-table-place-title">
                                         <div class="click-overlay"></div>
-                                        <div class="click-overlay-edit"></div>
+                                        <div class="click-overlay-edit" data-task-num="${task.taskNum}" ></div>
                                     </div>    
                                         </td>`;
 
@@ -287,17 +330,61 @@ function dayPlansPrint(dayNumOfButton, planNum) {
 }
 
 
-function updateTaskPlace() {
+/**
+ * 일정장소 변경 위해, 일정테이블에서 장소명 클릭했을 때의 css효과, thememarkerList 비우기
+ */
+function clickUpdateTaskPlace() {
     $('.theme-button').css({
         'border': 'double 2px hotpink',
         'border-radius': '20px',
         'animation': 'vibration 0.5s infinite',
-        'background-color' : '#f0f0f0'
+        'background-color': '#f0f0f0'
     });
     clearThemeMarkers();
     clickCountThemeButton = 0;
     previousTheme = '';
     currentTheme = '';
+
+    // 수정대상이 되는 태스크넘버(레포지토리 검색용)
+    targetTaskNum = $(this).data('task-num');
+
+    // 수정대상이 되는 태스크행(앞뒤붙은 다른 태스크 접근용도, 거리계산용도)
+    targetTr = $(this).closest('tr'); // 클릭한 tr값을 가져와서, 이 tr의 -2, +2에 들어있는 tr의 값을 가져와야함, 그래서 이동시간 두가지를 넣어줘야함
+    // --> 장소하나 수정하면: 새롭게 추가한 placeid, 해당 taskNum, 앞뒤로 바뀐 이동시간 2개+각각의 taskNum2개
+}
+
+function updateTaskPlace(newPlaceId) {
+
+    let preTaskNum = targetTr.prev().data('tasknum');
+    let nextTaskNum = targetTr.next().data('tasknum');
+    console.log("pre:" + preTransDuration);
+    console.log("next:" + nextTransDuration);
+    console.log("pre타입:" + typeof(preTransDuration));
+    console.log(newPlaceId);
+    console.log(targetTaskNum);
+    console.log(preTaskNum);
+    console.log(nextTaskNum);
+    $.ajax({
+        url: 'custom/updateTaskPlace',
+        type: 'post',
+        data: {
+            planNum: planNum,
+            targetTaskNum: targetTaskNum,
+            newPlaceId: newPlaceId,
+            preTaskNum: preTaskNum,
+            preTransDuration: preTransDuration,
+            nextTaskNum: nextTaskNum,
+            nextTransDuration: nextTransDuration
+        },
+        success: function () {
+            targetTaskNum = '';
+            dayPlansPrint(dayNumOfButton, planNum);
+        },
+        error: function (e) {
+            console.log(JSON.stringify(e));
+        }
+    })
+
 }
 
 
@@ -456,7 +543,7 @@ function placeInfoMore() {
         type: 'post',
         data: {placeId: placeId},
         success: function (placeDTO) {
-        var lang  = $('#lang').val();
+            var lang = $('#lang').val();
             let heritageIcon = placeDTO.heritage ? '<img src="../images/customPlan/heritage.png" class="info-table-badge" data-badge="heritage">' : '';
             let barrierFreeIcon = placeDTO.barrierFree ? '<img src="../images/customPlan/barrier.png" class="info-table-badge" data-badge="barrier">' : '';
             let petFriendlyIcon = placeDTO.petFriendly ? '<img src="../images/customPlan/pet.png" class="info-table-badge" data-badge="pet">' : '';
@@ -476,8 +563,8 @@ function placeInfoMore() {
                                             <span>${petFriendlyIcon}</span>
                                         </th>
                                         <td class="info-table-back-td">   
-                                            <img src="../images/customPlan/return.png" class="info-table-back-button">                        
-                                            <img src="../images/customPlan/add-folder.png" class="info-table-add-task-button">
+                                            <img src="../images/customPlan/add-point.png" class="info-table-add-task-button" data-place-id="${placeDTO.placeId}" data-map-x="${placeDTO.mapX}" data-map-y="${placeDTO.mapY}">                        
+                                            <img src="../images/customPlan/return2.png" class="info-table-return-button">                        
                                         </td>
                                     </tr>
                                 </thead>
@@ -524,57 +611,60 @@ function placeInfoMore() {
 // taskList 클릭시(마커 색 변경, 일정표 해당 tr 색 변경), input은 place.title input태그
 function selectTaskList(input) {
     // $(this).on('click', function () {
-        let tr = input.closest('tr');
-        let clickedPlaceId = input.data('place-id'); // 클릭한 tr의 data-tasknum 가져오기
-        let clickedTaskNum = input.data('tasknum');
+    let tr = input.closest('tr');
+    let clickedPlaceId = input.data('place-id'); // 클릭한 tr의 data-tasknum 가져오기
+    let clickedTaskNum = input.data('tasknum');
 
-        console.log(clickedTaskNum);
-        console.log(clickedPlaceId);
+    console.log(clickedTaskNum);
+    console.log(clickedPlaceId);
 
-        // (1) task-list tr 배경색상 설정
-        $('[class^="task-list"]').removeClass('selected');
-        tr.addClass('selected');
+    // (1) task-list tr 배경색상 설정
+    $('[class^="task-list"]').removeClass('selected');
+    tr.addClass('selected');
 
-        // (3) info-List 배경색상 설정
-        $('[class^="place-info-section"]').removeClass('selected');
-        $('.place-info-section'+clickedPlaceId).addClass('selected');
+    // (3) info-List 배경색상 설정
+    $('[class^="place-info-section"]').removeClass('selected');
+    $('.place-info-section' + clickedPlaceId).addClass('selected');
 
-        // (4) 마커색상 설정
-        planAllMarkers.forEach(function (marker) {
-            if (marker.taskNum === clickedTaskNum) {
-                // 클릭한 taskNum과 일치하는 마커에 대해 아이콘 변경
-                marker.setIcon({
-                    content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff0000" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
-                    anchor: new naver.maps.Point(11, 35)
-                });
-                marker.setZIndex(100); // 선택된 마커를 위에 표시
-            } else {
-                // 선택되지 않은 마커에 대해 아이콘 변경
-                marker.setIcon({
-                    content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff9999" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
-                    anchor: new naver.maps.Point(11, 35)
-                });
-                marker.setZIndex(0); // 선택되지 않은 마커를 기본 zIndex로 설정
-            }
-
-        });
-        // 클릭한 마커로 지도 중심 이동 및 줌 레벨 조정
-        let targetMarker = planAllMarkers.find(function (marker) {
-            return marker.taskNum === clickedTaskNum;
-        });
-
-        if (targetMarker) {
-            let position = targetMarker.getPosition(); // 마커의 위치 가져오기
-            map.setCenter(position); // 지도의 중심을 해당 마커 위치로 이동
-            map.setZoom(16); // 줌 레벨 조정 (필요에 따라)
-
+    // (4) 마커색상 설정
+    planAllMarkers.forEach(function (marker) {
+        if (marker.taskNum === clickedTaskNum) {
+            // 클릭한 taskNum과 일치하는 마커에 대해 아이콘 변경
+            marker.setIcon({
+                content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff0000" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+                anchor: new naver.maps.Point(11, 35)
+            });
+            marker.setZIndex(100); // 선택된 마커를 위에 표시
+        } else {
+            // 선택되지 않은 마커에 대해 아이콘 변경
+            marker.setIcon({
+                content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff9999" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+                anchor: new naver.maps.Point(11, 35)
+            });
+            marker.setZIndex(0); // 선택되지 않은 마커를 기본 zIndex로 설정
         }
+
+    });
+    // 클릭한 마커로 지도 중심 이동 및 줌 레벨 조정
+    let targetMarker = planAllMarkers.find(function (marker) {
+        return marker.taskNum === clickedTaskNum;
+    });
+
+    if (targetMarker) {
+        let position = targetMarker.getPosition(); // 마커의 위치 가져오기
+        map.setCenter(position); // 지도의 중심을 해당 마커 위치로 이동
+        map.setZoom(16); // 줌 레벨 조정 (필요에 따라)
+
+    }
 
 }
 
 
 // 일정마커 클릭시, planMarkerKey = taskNum
 function selectPlanMarker(markerKey, planMarkerPlaceId) {
+    // 상세정보 후 return버튼, planmarkerinfolist 제대로 출력하기 위해 --
+    clickCountThemeButton--;
+
     // 장소정보 리스트박스 on
     $('.task-place-info-list-box').css('display', 'block');
 
@@ -611,8 +701,10 @@ function selectPlanMarker(markerKey, planMarkerPlaceId) {
     // 테마마커 색상 초기화
     themeAllMarkers.forEach(marker => {
         marker.setIcon({
-            content: `<svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#7FFF00" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
-            size: new naver.maps.Size(22, 35),
+            content: `<svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"
+                                                    viewBox="0 0 20 20" fill="#006400" stroke="#00000 stroke-width="0.3px" stroke-opacity="0.24">
+                                                    <circle cx="8" cy="8" r="6"/></svg>`,
+            size: new naver.maps.Size(13, 13),
             anchor: new naver.maps.Point(11, 35)
         });
     })
@@ -635,8 +727,8 @@ function themeMarkers() {
         console.log('현재 클릭수 : 0');
     }
     console.log('ajax 전 currentTheme:' + currentTheme);
-    console.log('ajax 전 previousTheme:'+ previousTheme);
-    
+    console.log('ajax 전 previousTheme:' + previousTheme);
+
     // 테마버튼 클릭 기본 설정 : theme 출력, task 막음
     $('.theme-place-info-list-box').css('display', 'block');
     $('.task-place-info-list-box').css('display', 'none');
@@ -722,8 +814,8 @@ function themeMarkers() {
 
                 naver.maps.Event.trigger(map, 'idle');
                 console.log('ajax 후 currentTheme:' + currentTheme);
-                console.log('ajax 후 previousTheme:'+ previousTheme);
-                
+                console.log('ajax 후 previousTheme:' + previousTheme);
+
             },
             error: function (error) {
                 console.error('에러발생:', error);
@@ -769,6 +861,9 @@ naver.maps.addEventListener(map, 'zoom_changed', function () {
 // 테마마커 선택시
 function selectThemeMarker(markerKey) {
 
+    if (clickCountThemeButton === 0) {
+        clickCountThemeButton++;
+    }
     console.log(markerKey); //
     // 마커 목록 순회
     themeAllMarkers.forEach(marker => {
@@ -859,7 +954,7 @@ function updatePlanInfoList(visiblePlanMarkerKeyList) {
     for (const key of visiblePlanMarkerKeyList) {
         const task = taskListData.find(t => t.taskNum === key); // Assuming taskList is globally accessible
         // Create the HTML structure for each visible marker
-        let img = task.place.originImgUrl === '' ?
+        let img = task.place.originImgUrl === null ?
             '<img src="../images/customPlan/nonImg.png" class="place-info-imgNone">' :
             `<img src="${task.place.originImgUrl}" class="place-info-img">`;
 
@@ -869,7 +964,7 @@ function updatePlanInfoList(visiblePlanMarkerKeyList) {
                 <h5 class="place-info-title">${task.place.titleKr}</h5>
                 <img src="../images/customPlan/more2.png" class="info-section-more" data-place-id="${task.place.placeId}">
                 <span class="info-section-address">${task.place.addressKr}</span>
-                <span class="info-section-contentsType">${task.place.contentsType}</span>
+                <span class="info-section-contentsType">${task.place.contentsTypeKr}</span>
                 <img src="../images/customPlan/infocenter.png" class="info-section-infocenterImg">
                 <span class="info-section-infocenter">${task.place.infocenter}</span>
             </div>
@@ -877,7 +972,7 @@ function updatePlanInfoList(visiblePlanMarkerKeyList) {
     }
 }
 
-// 테마마커 장소정보List 출력함수
+// 테마마커 장소정보List 출력함수, info-section
 function updateThemeInfoList(visibleThemeMarkerKeyList) {
     const infoList = document.querySelector('.theme-place-info-list-box');
 
@@ -891,7 +986,7 @@ function updateThemeInfoList(visibleThemeMarkerKeyList) {
     for (const key of visibleThemeMarkerKeyList) {
         const place = placeListData.find(p => p.placeId === key); // Assuming taskList is globally accessible
         // Create the HTML structure for each visible marker
-        let img = place.originImgUrl === '' ?
+        let img = place.originImgUrl === null ?
             '<img src="../images/customPlan/nonImg.png" class="place-info-imgNone">' :
             `<img src="${place.originImgUrl}" class="place-info-img">`;
 
@@ -899,10 +994,10 @@ function updateThemeInfoList(visibleThemeMarkerKeyList) {
             <div class="place-info-section${place.placeId}" >
                 ${img}
                 <h5 class="place-info-title">${place.titleKr}</h5>
-                <img src="../images/customPlan/add-folder.png" class="info-section-add-task-button" data-place-id="${place.placeId}">
+                <img src="../images/customPlan/add-point.png" class="info-section-add-task-button" data-place-id="${place.placeId}" data-map-x="${place.mapX}" data-map-y="${place.mapY}">
                 <img src="../images/customPlan/more2.png" class="info-section-more" data-place-id="${place.placeId}"></img>
                 <span class="info-section-address">${place.addressKr}</span>
-                <span class="info-section-contentsType">${place.contentsType}</span>
+                <span class="info-section-contentsType">${place.contentsTypeKr}</span>
                 <img src="../images/customPlan/infocenter.png" class="info-section-infocenterImg">
                 <span class="info-section-infocenter">${place.infocenter}</span>   
            </div>
@@ -1005,8 +1100,100 @@ function badgeExplainHide() {
     $('#' + badge + 'Badge-explain').css('display', 'none');
 }
 
+function searchPubTransPathAJAX(sx, sy, ex, ey) {
+    return new Promise((resolve, reject) => {
+        var xhr = new XMLHttpRequest();
+        var url = "https://api.odsay.com/v1/api/searchPubTransPathT?SX=" + sx + "&SY=" + sy +
+            "&EX=" + ex + "&EY=" + ey + "&apiKey=AbfWDSywAKWcKBRv/ClpFQ";
+
+        xhr.open("GET", url, true);
+        xhr.send();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var responseText = xhr.responseText;
+                    var data = JSON.parse(responseText);
+
+                    if (data.result && data.result.path) {
+                        // 가장 빠른 경로 찾기
+                        const fastestRoute = data.result.path.reduce((min, current) => {
+                            return current.info.totalTime < min.info.totalTime ? current : min;
+                        });
+                        transportTime = fastestRoute.info.totalTime;
+                        resolve(transportTime); // Promise resolve
+                    } else {
+                        transportTime = 10000;
+                        resolve(transportTime); // 기본값
+                    }
+                } else {
+                    reject(new Error("Request failed with status: " + xhr.status));
+                }
+            }
+        };
+    });
+}
+
+function Tmap(sx, sy, ex, ey) {
+    var headers = {};
+    headers["appKey"] = "7ejrjQSxsM8Vp5U8WbLArOuHpOwQNnJ31hqE3Pt7";
+
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: "https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1&format=json&callback=result",
+            method: "POST",
+            headers: headers,
+            contentType: 'application/json',
+            data: JSON.stringify({
+                "startX": sx,
+                "startY": sy,
+                "endX": ex,
+                "endY": ey,
+                "reqCoordType": "WGS84GEO",
+                "resCoordType": "EPSG3857",
+                "startName": "출발지",
+                "endName": "도착지"
+            }),
+            success: function (response) {
+                var resultData = response.features;
+                let walkTime = (resultData[0].properties.totalTime) / 60; //
+                resolve(walkTime); // Promise resolve
+            },
+            error: function (xhr, status, error) {
+                reject(new Error("Error in Tmap: " + status));
+            }
+        });
+    });
+}
+
+function calPreTransDuration(preX, preY, newX, newY) {
+    return Promise.all([
+        searchPubTransPathAJAX(preX, preY, newX, newY),
+        Tmap(preX, preY, newX, newY),
+    ]).then(([transportTime, walkTime]) => {
+        console.log("pre 대중교통:", transportTime);
+        console.log("Pre 도보:", walkTime);
+        preTransDuration = transportTime > walkTime ? walkTime : transportTime;
+        console.log("Pre transportation duration:", preTransDuration);
+        return preTransDuration; // Return preTransDuration
+    }).catch(error => {
+        console.error("Error in calPreTransDuration:", error);
+        throw error; // Rethrow to propagate error
+    });
+}
 
 
+function calNextTransDuration(newX, newY, nextX, nextY) {
+    return Promise.all([
+        searchPubTransPathAJAX(newX, newY, nextX, nextY),
+        Tmap(newX, newY, nextX, nextY)
+    ]).then(([transportTime, walkTime]) => {
+        // Compare transportTime and walkTime
+        nextTransDuration = transportTime > walkTime ? walkTime : transportTime;
+        console.log("Next transportation duration:", nextTransDuration);
+        return nextTransDuration;
+    });
 
+}
 
 

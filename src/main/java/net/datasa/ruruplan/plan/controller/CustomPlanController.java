@@ -114,4 +114,13 @@ public class CustomPlanController {
         log.debug("장솢어보 : {}", customPlanService.getPlaceInfo(placeId));
         return customPlanService.getPlaceInfo(placeId);
     }
+
+    @ResponseBody
+    @PostMapping("updateTaskPlace")
+    public void updateTaskPlace(@RequestParam("planNum") Integer planNum, @RequestParam("targetTaskNum") Integer targetTaskNum, @RequestParam("newPlaceId") String newPlaceId
+                    ,@RequestParam("preTaskNum") Integer preTaskNum, @RequestParam("preTransDuration") double preTransDuration
+                    ,@RequestParam("nextTaskNum") Integer nextTaskNum, @RequestParam("nextTransDuration") double nextTransDuration) {
+
+    customPlanService.updateTaskPlace(planNum, targetTaskNum, newPlaceId, preTaskNum, preTransDuration, nextTaskNum, nextTransDuration);
+    }
 }

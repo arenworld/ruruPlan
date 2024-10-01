@@ -83,11 +83,15 @@ tr.selected input {
 
 .day-table-tr1 {
     border-bottom: 1px solid grey;
+}
 
+.day-table-th2 {
+    width: 35
+    px;
 }
 
 .day-table-place-title {
-    width: 200px;
+    width: 170px;
     background-color: transparent;
 }
 
@@ -292,8 +296,9 @@ tr.selected input {
     position: absolute;
 }
 
+
 .info-section-add-task-button {
-    top: 7px;
+    top: 10px;
     right: 40px;
     width : 25px;
     height : 25px;
@@ -345,6 +350,7 @@ tr.selected input {
 /* Style for .info-table-box */
 .info-more-table-box {
     width: 100%;
+    position: relative;
     padding-right: 10px;
     padding-bottom: 5px;
     border-top: 2px solid #efefef;
@@ -363,7 +369,7 @@ tr.selected input {
 .info-table-title {
     border-radius: 10px;
     padding-top: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 10 px;
 }
 
 /* Style for .in-title */
@@ -374,8 +380,11 @@ tr.selected input {
 }
 
 .info-table-add-task-button {
-    width : 25px;
-    height : 25px;
+    position: absolute;
+    top: 13px;
+    right: 50px;
+    width : 30px;
+    height : 30px;
     cursor : pointer;
 }
 
@@ -384,10 +393,13 @@ tr.selected input {
     height: 30px;
 }
 
-.info-table-back-button {
-    width: 30px;
-    height: 45px;
+.info-table-return-button {
+    width: 25px;
+    height: 25px;
     cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 15px;
 }
 
 /* Style for .info-table-heritageBadge */

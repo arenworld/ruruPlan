@@ -9,6 +9,8 @@ import net.datasa.ruruplan.gpt.domain.dto.GptResultDTO;
 import net.datasa.ruruplan.gpt.service.GptResultService;
 import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
 import net.datasa.ruruplan.plan.domain.dto.TaskDTO;
+import net.datasa.ruruplan.security.AuthenticatedUser;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -123,5 +125,12 @@ public class GptResultController {
 //    public String reGptPlan(Model model) {
 //
 //    }
+
+
+    @PostMapping("/saveGptPlan")
+    @ResponseBody
+    public void saveGptPlan(@RequestBody PlanDTO planDTO, @AuthenticationPrincipal AuthenticatedUser user) {     // Json 데이터 받을때는 RequestBody 사용해야함
+        gptResultService.saveGptPlan(planDTO, user.getId());
+    }
 }
 

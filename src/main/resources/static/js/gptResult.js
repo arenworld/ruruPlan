@@ -1,103 +1,253 @@
-$(document).ready(async function(){
+$(document).ready(async function() {
     console.log("Document is ready");
 
-    // 인쇄 버튼 클릭 이벤트 핸들러
-    $('#print-button').click(function(){
+    $('#print-button').click(function() {
         window.print();
     });
 
-    var startX;
-    var startY;
-    var endX;
-    var endY;
-    var taskElements = $('td[id^="duration-"]');
-    var totalIndex = 0; // 누적 인덱스 초기화
+    var totalCost = 0;
+    var allTasks = []; // 모든 TaskDTO를 저장할 배열
 
-    // Duration 값을 저장할 배열 선언
-    var durationsList = [];
-
+    // 모든 날짜에 대해 처리
     for (var date in taskByDateMap) {
         if (taskByDateMap.hasOwnProperty(date)) {
             var tasksForDate = taskByDateMap[date]; // 날짜에 해당하는 task 리스트
+
+            var prevStartTime = null;
+            var prevDuration = null;
+            var startX = null;
+            var startY = null;
+
             for (let index = 0; index < tasksForDate.length; index++) {
                 var task = tasksForDate[index];
 
-                if(task.task == '이동') {
-                    totalIndex++;
-                    continue;
-                }
+                // 첫 번째 task 처리
+                if (index == 0) {
+                    if (task.startTime) {
+                        prevStartTime = task.startTime;
+                    } else {
+                        prevStartTime = (date == '1') ? '14:00' : '10:00';
+                        task.startTime = prevStartTime;
+                    }
 
-                if(index == 0 && task.task != '이동') {
-                    startX = task.place.mapX;
-                    console.log("출발지 X좌표: ", startX);
-                    startY = task.place.mapY;
-                    console.log("출발지 Y좌표: ", startY);
-                    totalIndex++;
-                    continue;
+                    $('#time-' + task.taskNum).html(formatTime(prevStartTime));
+
+                    var taskDuration = parseDuration(task.duration); // 분 단위로 변환
+                    prevDuration = taskDuration;
+
+                    $('#duration-' + task.taskNum).html(formatDuration(taskDuration));
+
+                    if (task.task != '이동') {
+                        startX = task.place.mapX;
+                        startY = task.place.mapY;
+                    }
                 } else {
-                    endX = task.place.mapX;
-                    console.log("도착지 X좌표: ", endX);
-                    endY = task.place.mapY;
-                    console.log("도착지 Y좌표: ", endY);
+                    var currentStartTime = addMinutesToTime(prevStartTime, prevDuration);
+                    task.startTime = currentStartTime;
 
-                    // 좌표 값이 유효한지 확인
-                    if (!startX || !startY || !endX || !endY) {
-                        console.error('좌표 값이 유효하지 않습니다:', {
-                            startX, startY, endX, endY
-                        });
-                        totalIndex++;
-                        continue;
-                    }
+                    $('#time-' + task.taskNum).html(formatTime(currentStartTime));
 
-                    // 변수 값 캡처
-                    let currentIndex = totalIndex;
-                    let sx = startX;
-                    let sy = startY;
-                    let ex = endX;
-                    let ey = endY;
+                    if (task.task == '이동') {
+                        var prevTask = tasksForDate[index - 1];
+                        var nextTask = tasksForDate[index + 1];
 
-                    totalIndex++; // 다음 인덱스를 위해 증가
+                        if (prevTask && nextTask) {
+                            var sx = prevTask.place.mapX;
+                            var sy = prevTask.place.mapY;
+                            var ex = nextTask.place.mapX;
+                            var ey = nextTask.place.mapY;
 
-                    try {
-                        // 도보 시간 가져오기
-                        let duration1 = await walking(sx, sy, ex, ey);
-                        console.log("도보시간: " + duration1);
-                        let durationFloat = parseFloat(duration1);
+                            if (!sx || !sy || !ex || !ey) {
+                                $('#duration-' + task.taskNum).html('0분');
+                                prevDuration = 0;
+                                continue;
+                            }
 
-                        if(durationFloat > 20) {
-                            // 대중교통 정보 가져오기
-                            let routeInfo = await busSubway(sx, sy, ex, ey);
-                            console.log("대중교통 종류: " + routeInfo.subPaths[1].trafficType);
-                            let trafficType;
-                            if(routeInfo.subPaths[1].trafficType == 1) trafficType = "지하철";
-                            else if(routeInfo.subPaths[1].trafficType == 2) trafficType = "버스";
-                            else trafficType = "도보";
-                            taskElements.eq(currentIndex - 1).html(trafficType + " " + routeInfo.totalTime + "분");
+                            if (sx === ex && sy === ey) {
+                                // 출발지와 도착지가 동일한 경우
+                                $('#duration-' + task.taskNum).html('0분');
+                                $('#cost-' + task.taskNum).html('0원');
 
-                            durationsList.push({
-                                taskNum: task.taskNum,
-                                duration: routeInfo.totalTime
-                            });
+                                prevDuration = 0;
+                                task.duration = 0;
+                                task.cost = 0;
+                                task.task = '이동 없음'; // 필요에 따라 task명을 변경
+
+                            } else {
+                                try {
+                                    let duration;
+                                    let transitType;
+                                    let cost = 0;
+
+                                    let walkingDuration = await walking(sx, sy, ex, ey);
+                                    let durationFloat = parseFloat(walkingDuration);
+
+                                    if (durationFloat > 22) {
+                                        let routeInfo = await busSubway(sx, sy, ex, ey);
+                                        duration = routeInfo.totalTime;
+                                        cost = parseInt(routeInfo.payment);
+
+                                        if (routeInfo.subPaths[1]) {
+                                            if (routeInfo.subPaths[1].trafficType == 1) transitType = "지하철";
+                                            else if (routeInfo.subPaths[1].trafficType == 2) transitType = "버스";
+                                            else transitType = "도보";
+                                        } else {
+                                            transitType = "도보";
+                                        }
+
+                                        $('#duration-' + task.taskNum).html(transitType + " " + duration + "분");
+                                        $('#cost-' + task.taskNum).html(routeInfo.payment + '원');
+
+                                        totalCost += cost;
+
+                                        task.duration = duration; // 분 단위로 설정
+                                        prevDuration = parseInt(duration);
+
+                                        task.task = transitType;
+                                        task.cost = cost;
+
+                                    } else {
+                                        duration = durationFloat;
+                                        transitType = "도보";
+                                        $('#duration-' + task.taskNum).html(transitType + " " + duration + "분");
+
+                                        $('#cost-' + task.taskNum).html('0원');
+
+                                        task.duration = duration;
+                                        prevDuration = parseInt(duration);
+
+                                        task.task = transitType;
+                                        task.cost = 0;
+                                    }
+
+                                } catch (error) {
+                                    $('#duration-' + task.taskNum).html('0분');
+                                    $('#cost-' + task.taskNum).html('0원');
+                                    prevDuration = 0;
+                                    task.duration = 0;
+                                    task.cost = 0;
+                                }
+                            }
                         } else {
-                            taskElements.eq(currentIndex - 1).html("도보 " + duration1 + "분");
-
-                            durationsList.push({
-                                taskNum: task.taskNum,
-                                duration: duration1
-                            });
+                            $('#duration-' + task.taskNum).html('0분');
+                            $('#cost-' + task.taskNum).html('0원');
+                            prevDuration = 0;
+                            task.duration = 0;
+                            task.cost = 0;
                         }
-                    } catch (error) {
-                        console.error("오류 발생:", error);
+
+                    } else {
+                        var taskDuration = parseDuration(task.duration);
+                        prevDuration = taskDuration;
+
+                        $('#duration-' + task.taskNum).html(formatDuration(taskDuration));
+
+                        startX = task.place.mapX;
+                        startY = task.place.mapY;
+
+                        var costText = $('#cost-' + task.taskNum).text();
+                        var costNumber = parseInt(costText.replace('원', '').replace(/,/g, ''));
+                        if (!isNaN(costNumber)) {
+                            totalCost += costNumber;
+                            task.cost = costNumber;
+                        } else {
+                            task.cost = 0;
+                        }
                     }
 
-                    // 다음 출발지 좌표 설정
-                    startX = endX;
-                    startY = endY;
+                    prevStartTime = currentStartTime;
+                    task.startTime = currentStartTime;
                 }
+
+                task.dateN = parseInt(date);
+                task.duration = parseDuration(task.duration); // 분 단위로 변환
+
+                var taskDTO = {
+                    taskNum: task.taskNum,
+                    planNum: null,
+                    place: task.place,
+                    memberId: planDTO.memberId,
+                    dateN: task.dateN,
+                    startTime: task.startTime,
+                    duration: formatDurationToLocalTime(task.duration),  // 변환된 duration 사용
+                    endTime: addMinutesToTime(task.startTime, task.duration),
+                    task: task.task,
+                    cost: task.cost || 0,
+                    memo: null
+                };
+
+                allTasks.push(taskDTO);
             }
         }
     }
-    console.log("duration 정보: " + durationsList);
+    $('#total-cost').html('예상 최소비용: ' + totalCost.toLocaleString() + '원');
+
+    $('#save-button').click(function() {
+        savePlan(allTasks);
+    });
+
+    // 시간 형식을 "HH:mm"으로 포맷팅하는 함수
+    function formatTime(timeStr) {
+        if (timeStr.includes(':')) {
+            var parts = timeStr.split(':');
+            var hours = parts[0].padStart(2, '0');
+            var minutes = parts[1].padStart(2, '0');
+            return hours + ':' + minutes;
+        }
+        return timeStr;
+    }
+
+    // Duration 문자열을 분으로 변환하는 함수
+    function parseDuration(durationStr) {
+        if (typeof durationStr === 'number') {
+            return durationStr;
+        } else if (durationStr.includes(':')) {
+            var parts = durationStr.split(':');
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        } else if (durationStr.includes('시간')) {
+            var parts = durationStr.split('시간');
+            var hours = parseInt(parts[0]);
+            var mins = parseInt(parts[1].replace('분', '').trim());
+            return hours * 60 + mins;
+        } else if (durationStr.includes('분')) {
+            return parseInt(durationStr.replace('분', '').trim());
+        } else {
+            return parseInt(durationStr);
+        }
+    }
+
+    // 분을 "X시간 Y분" 형식의 문자열로 변환하는 함수
+    function formatDuration(duration) {
+        if (typeof duration === 'number') {
+            var hours = Math.floor(duration / 60);
+            var mins = duration % 60;
+            return (hours > 0 ? hours + '시간 ' : '') + mins + '분';
+        } else {
+            return duration;
+        }
+    }
+
+    // 시간에 분을 더하는 함수
+    function addMinutesToTime(timeStr, minutesToAdd) {
+        var parts = timeStr.split(':');
+        var hours = parseInt(parts[0]);
+        var minutes = parseInt(parts[1]) + minutesToAdd;
+
+        while (minutes >= 60) {
+            hours += 1;
+            minutes -= 60;
+        }
+
+        if (hours >= 24) {
+            hours -= 24;
+        }
+
+        var formattedHours = hours < 10 ? '0' + hours : hours;
+        var formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+
+        return formattedHours + ':' + formattedMinutes;
+    }
+
 
     async function walking(startX, startY, endX, endY) {
         return new Promise(function(resolve, reject) {
@@ -170,6 +320,7 @@ $(document).ready(async function(){
 
                         // 필요한 정보 추출
                         const routeInfo = {
+                            payment: fastestRoute.info.payment,
                             totalTime: fastestRoute.info.totalTime,
                             subPaths: fastestRoute.subPath.map(subPath => {
                                 return {
@@ -189,5 +340,56 @@ $(document).ready(async function(){
             };
         });
     }
+
+    function savePlan(allTasks) {
+        // PlanDTO 생성
+        var newPlanDTO = {
+            planNum: null, // 새로운 계획이므로 null 또는 서버에서 생성된 값
+            planName: 'GPT 추천 여행 일정', // 필요에 따라 변경
+            cmdNum: planDTO.cmdNum,
+            memberId: planDTO.memberId, // 로그인된 사용자 ID로 대체
+            startDate: planDTO.startDate, // 기존 planDTO의 startDate 사용
+            endDate: planDTO.endDate,     // 기존 planDTO의 endDate 사용
+            theme1: planDTO.theme1,       // 기존 planDTO의 theme1 사용
+            theme2: planDTO.theme2,       // 기존 planDTO의 theme2 사용
+            theme3: planDTO.theme3,       // 기존 planDTO의 theme3 사용
+            planCreateDate: null, // 서버에서 설정
+            planUpdateDate: null, // 서버에서 설정
+            coverImageUrl: null, // 필요 시 설정
+            taskList: allTasks   // 계산된 모든 TaskDTO 배열
+        };
+
+        // 서버로 전송
+        sendPlanToServer(newPlanDTO);
+    }
+
+    function sendPlanToServer(planDTO) {
+        $.ajax({
+            url: '/saveGptPlan',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(planDTO),
+            success: function(response) {
+                alert('일정이 성공적으로 저장되었습니다.');
+                window.location.href = "/";
+            },
+            error: function(error) {
+                alert('일정 저장에 실패하였습니다.');
+                console.error(error);
+            }
+        });
+    }
+
+    // duration을 HH:mm 형식으로 변환
+    function formatDurationToLocalTime(duration) {
+        var hours = Math.floor(duration / 60);
+        var minutes = duration % 60;
+
+        var formattedHours = hours < 10 ? '0' + hours : hours;
+        var formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+
+        return formattedHours + ':' + formattedMinutes;
+    }
+
 });
 

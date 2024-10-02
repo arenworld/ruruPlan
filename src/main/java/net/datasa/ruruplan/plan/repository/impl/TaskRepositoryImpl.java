@@ -90,7 +90,16 @@ public class TaskRepositoryImpl implements TaskRepository {
                 .fetch();
     }
 
-
+    @Override
+    public void save(TaskEntity taskEntity) {
+        if (taskEntity.getTaskNum() == null) {
+            // 새로운 TaskEntity인 경우
+            em.persist(taskEntity);
+        } else {
+            // 기존 TaskEntity인 경우
+            em.merge(taskEntity);
+        }
+    }
 
 
 }

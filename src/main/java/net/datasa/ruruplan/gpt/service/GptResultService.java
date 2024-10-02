@@ -698,6 +698,7 @@ public class GptResultService {
 //        }
 
 
+
         // TaskDTO 생성
         TaskDTO task = TaskDTO.builder()
                 .taskNum(index + 1)  // 활동 번호 (단순 인덱스)
@@ -709,6 +710,7 @@ public class GptResultService {
                 .cost(0)  // 비용은 일단 0으로 설정
                 .memo("")
                 .build();
+
 
 
         // 각 날짜의 첫 번째 Task에만 StartTime 설정
@@ -730,7 +732,8 @@ public class GptResultService {
         else if (task.getTask().equals("관광지")) task.setDuration(tourDuration);
         else if (task.getTask().equals("카페")) task.setDuration(cafeDuration);
 
-
+        // 반드시 duration 설정이 끝나고 나서 바꿔줘야함.
+        if(!taskType.equals("이동")) task.setTask(Objects.requireNonNull(placeInfoDTO, "placeInfoDTO가 null입니다.").getContentsTypeKr());
 
         log.debug("task : {}", task.getTask());
         log.debug("taskDuration : {}", task.getDuration());

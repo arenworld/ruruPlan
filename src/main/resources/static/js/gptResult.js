@@ -5,6 +5,10 @@ $(document).ready(async function() {
         window.print();
     });
 
+    $('#button2').click(function() {
+        window.location.href = '/gptView/loading';
+    });
+
     var totalCost = 0;
     var allTasks = []; // 모든 TaskDTO를 저장할 배열
 
@@ -88,8 +92,8 @@ $(document).ready(async function() {
                                         cost = parseInt(routeInfo.payment);
 
                                         if (routeInfo.subPaths[1]) {
-                                            if (routeInfo.subPaths[1].trafficType == 1) transitType = "지하철";
-                                            else if (routeInfo.subPaths[1].trafficType == 2) transitType = "버스";
+                                            if (routeInfo.subPaths[1].trafficType == 1) transitType = "대중교통";
+                                            else if (routeInfo.subPaths[1].trafficType == 2) transitType = "대중교통";
                                             else transitType = "도보";
                                         } else {
                                             transitType = "도보";
@@ -175,6 +179,17 @@ $(document).ready(async function() {
                     cost: task.cost || 0,
                     memo: null
                 };
+
+                // '이동' 작업일 경우, place를 다음 task의 place로 설정
+                if (task.task == '이동' || task.task == '대중교통' || task.task == '도보') {
+                    var nextTask = tasksForDate[index + 1];
+                    if (nextTask && nextTask.place) {
+                        taskDTO.place = nextTask.place;
+                    } else {
+                        // 다음 task가 없거나 place 정보가 없을 경우 처리
+                        taskDTO.place = null;
+                    }
+                }
 
                 allTasks.push(taskDTO);
             }
@@ -345,7 +360,7 @@ $(document).ready(async function() {
         // PlanDTO 생성
         var newPlanDTO = {
             planNum: null, // 새로운 계획이므로 null 또는 서버에서 생성된 값
-            planName: 'GPT 추천 여행 일정', // 필요에 따라 변경
+            planName: 'GPTのオススメプラン', // 필요에 따라 변경
             cmdNum: planDTO.cmdNum,
             memberId: planDTO.memberId, // 로그인된 사용자 ID로 대체
             startDate: planDTO.startDate, // 기존 planDTO의 startDate 사용

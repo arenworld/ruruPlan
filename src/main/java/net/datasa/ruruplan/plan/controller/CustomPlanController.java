@@ -14,9 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
 
 /**
  * GPT추천일정을 내 일정으로 담은 후 개별수정하는 컨트롤러
@@ -38,7 +37,7 @@ public class CustomPlanController {
      * @return
      */
     @GetMapping("")
-    public String customPlan(Model model) { //@RequestParam("planNum") Integer planNum) 지금은 테스트로 직접 넣고 나중에, planNum을 파람으로 받음
+    public String customPlan(Model model, Locale locale) { //@RequestParam("planNum") Integer planNum) 지금은 테스트로 직접 넣고 나중에, planNum을 파람으로 받음
         // custom.html로드될 때 뿌려줄 플랜정보불러오기
         PlanDTO planDTO = customPlanService.getPlan();
         log.debug("cmdNum: {}", planDTO.getCmdNum());
@@ -50,7 +49,15 @@ public class CustomPlanController {
         // start_date, end_date 활용해서 몇박 며칠인지 정의하는 기능 ChronoUnit은 날짜타입의 계산을 도와주는 객체
         long days = ChronoUnit.DAYS.between(planDTO.getStartDate(), planDTO.getEndDate()) + 1;
 
-        String[] themeArray = {"쇼핑", "식당", "카페", "역사", "문화", "힐링", "랜드마크", "체험", "레포츠"};
+        // 사용언어에 맞는 배열 설정
+
+        String[] themeArray;
+        if(locale.equals(Locale.KOREAN)) {
+            themeArray = new String[] {"쇼핑", "식당", "카페", "역사", "문화", "힐링", "랜드마크", "체험", "레포츠"};
+        } else {
+            themeArray = new String[] {"ショッピング", "食べ物", "カフェ", "歴史", "文化", "ヒーリング", "ランドマーク", "体験", "レジャー"};
+        }
+
 
         List<TaskDTO> taskList = planDTO.getTaskList();
 

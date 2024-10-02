@@ -7,56 +7,63 @@
     <link rel="shortcut icon" href="/images/favicon.png">
 
     <meta name="description" content="" />
-    <meta name="keywords" content="bootstrap, bootstrap4" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Serif+Pro:wght@400;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="/css/rurustyle.css" />
+    <!--페이지 틀-->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="/css/jquery.fancybox.min.css">
+    <!--위치 아이콘-->
     <link rel="stylesheet" href="/fonts/icomoon/style.css">
-    <link rel="stylesheet" href="/fonts/flaticon/font/flaticon.css">
-    <link rel="stylesheet" href="/css/daterangepicker.css">
-    <link rel="stylesheet" href="/css/aos.css">
+    <!--귀여운 폰트// 그러나 언어 변경 버튼에 영향을 줌-->
     <link rel="stylesheet" href="/css/style.css">
+
+    <link rel="stylesheet" href="/css/language.css" />
     <title>플랜 공유 게시판</title>
 </head>
 <body>
 <header>
     <!--로고-->
-    <!--언어 변경 버튼-->
+    <!-- 언어변경파트 -->
+    <div class="select-container">
+        <div class="lenge_select-toggle">
+            <div class="language-selector">
+                <img src="/images/home/지구본.png" alt="Globe Icon" />
+                <div class="languages">
+                    <span class="span_kor" th:if="${#locale.language == 'ko'}" style="font-weight: bold;">KOR</span>
+                    <span class="span_kor" th:if="${#locale.language != 'ko'}">KOR</span>
+                    <div class="lang-separator"></div>
+                    <span class="span_jp"  th:if="${#locale.language == 'ja'}" style="font-weight: bold;">JP</span>
+                    <span class="span_jp"  th:if="${#locale.language != 'ja'}">JP</span>
+                </div>
+            </div>
+        </div>
 </header>
 <main>
     <div class="untree_co-section">
         <div class="container">
             <div class="row justify-content-center text-center mb-5">
                 <div class="col-lg-6">
-                    <h2 class="section-title text-center mb-3" style="text-align: center;">Plan Share &amp; Talk</h2>
-                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+                    <h2 class="section-title text-center mb-3" style="text-align: center;"
+                    th:text="#{share_plan}"></h2>
+                    <p th:text="#{share_plan_mg}"></p>
                 </div>
             </div>
             <div class="row">
-                <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
+
+                <div th:each="board, status : ${boardPage}" class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                     <div class="media-1">
-                        <a href="#" class="d-block mb-3"><img src="images/hero-slider-1.jpg" alt="Image" class="img-fluid"></a>
+                        <a href="#" class="d-block mb-3"><img th:src="${board.coverImageUrl}" alt="Image" class="img-fluid"></a>
                         <span class="d-flex align-items-center loc mb-2">
 							<div>
                              <span class="icon-room mr-3"></span>    <!--위치 아이콘을 하트 아이콘으로 변경-->
-							<span>좋아요 수</span>
+							<span th:text="${board.likeCount}">좋아요 수</span>
                             </div>
                             <span class="icon-room mr-3"></span>    <!--스크랩 아이콘-->
 						</span>
                         <div class="d-flex align-items-center">
                             <div>
-                                <h3><a href="#">플랜이름</a></h3>
+                                <h3><a href="#" th:text="${board.title}"></a></h3>
                                 <div class="price ml-auto">
-                                    <span>#몇박며칠</span>
-                                    <span>#누구와</span>
-                                    <span>#테마</span>
+                                    <span th:text="${board.tag1}">#몇박며칠</span>
+                                    <span  th:text="${board.tag2}">#누구와</span>
+                                    <span  th:text="${board.tag3}">#테마</span>
                                 </div>
                             </div>
 
@@ -66,7 +73,7 @@
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                     <div class="media-1">
-                        <a href="#" class="d-block mb-3"><img src="images/hero-slider-2.jpg" alt="Image" class="img-fluid"></a>
+                        <a href="#" class="d-block mb-3"><img th:src="@{/images/plan/음식거리.jpg}" alt="Image" class="img-fluid"></a>
                         <span class="d-flex align-items-center loc mb-2">
 							<span class="icon-room mr-3"></span>
 							<span>좋아요 수</span>
@@ -87,7 +94,7 @@
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                     <div class="media-1">
-                        <a href="#" class="d-block mb-3"><img src="images/hero-slider-3.jpg" alt="Image" class="img-fluid"></a>
+                        <a href="#" class="d-block mb-3"><img th:src="@{/images/plan/단풍성곽.jpg}" alt="Image" class="img-fluid"></a>
                         <span class="d-flex align-items-center loc mb-2">
 							<span class="icon-room mr-3"></span>
 							<span>좋아요 수</span>
@@ -107,7 +114,7 @@
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                     <div class="media-1">
-                        <a href="#" class="d-block mb-3"><img src="images/hero-slider-4.jpg" alt="Image" class="img-fluid"></a>
+                        <a href="#" class="d-block mb-3"><img th:src="@{/images/plan/경복궁.jpg}" alt="Image" class="img-fluid"></a>
 
                         <span class="d-flex align-items-center loc mb-2">
 							<span class="icon-room mr-3"></span>
@@ -132,5 +139,7 @@
         </div>
     </div>
 </main>
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/member/locale.js"></script>
 </body>
 </html>

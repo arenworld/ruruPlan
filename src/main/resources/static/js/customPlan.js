@@ -49,7 +49,13 @@ let lang;
 
 $(document).ready(function () {
     planNum = $('#planNum').val();
-    // lang = $();
+    lang = $('lang').val();
+
+    $('.task-place-info-list-box').scroll(function() {
+        let scrollTop = $(this).scrollTop();
+
+        console.log('myDiv의 스크롤 위치: ', scrollTop);
+    });
 
     // 일정표 출력함수
     dayPlansPrint(dayNumOfButton, planNum);
@@ -101,6 +107,74 @@ $(document).ready(function () {
             });
     });
 
+
+    // 일정표 플레이스 활성화 된 후 = targetTaskNum 채워진 후, info-more-table 에서 add-task-button 클릭시
+    $(document).on('click', '.info-table-add-task-button', function () {
+        let indexTr = targetTr.index();
+        let table = targetTr.closest('table');
+        let lastTrIndex = table.rows.length - 1;
+        console.log(indexTr);
+
+        let newPlaceId = $(this).data('place-id');
+        let newX = $(this).data('map-x');
+        let newY = $(this).data('map-y');
+
+        // 첫번째 인덱스 요소일 때 : 이전 tr요소가 없다.
+        if(indexTr === 0) {
+            let nextX = targetTr.next().data('map-x');
+            let nextY = targetTr.next().data('map-y');
+
+            calNextTransDuration(newX, newY, nextX, nextY)
+                .then(() => {
+                    console.log('Next duration calculated, updating task place...');
+                    updateFirstTaskPlace(newPlaceId);
+                })
+                .catch((error) => {
+                    console.error("Error occurred in sequence: ", error);
+                });
+        }
+
+        // 마지막인덱스 요소: nextTr 요소가 없다.
+        if(indexTr === lastTrIndex) {
+            let preX = targetTr.prev().data('map-x');
+            let preY = targetTr.prev().data('map-y');
+            calPreTransDuration(preX, preY, newX, newY)
+                .then(() => {
+                    console.log('Next duration calculated, updating task place...');
+                    updateLastTaskPlace(newPlaceId);
+                })
+                .catch((error) => {
+                    console.error("Error occurred in sequence: ", error);
+                });
+        }
+
+        let preX = targetTr.prev().data('map-x');
+        let preY = targetTr.prev().data('map-y');
+
+        let nextX = targetTr.next().data('map-x');
+        let nextY = targetTr.next().data('map-y');
+
+        // console.log(newPlaceId);
+        // console.log(preX);
+        // console.log(preY);
+        // console.log(nextX);
+        // console.log(nextY);
+        // console.log(newX);
+        // console.log(newY);
+
+        calPreTransDuration(preX, preY, newX, newY)
+            .then(() => {
+                console.log('Pre duration calculated, moving to next duration...');
+                return calNextTransDuration(newX, newY, nextX, nextY);
+            })
+            .then(() => {
+                console.log('Next duration calculated, updating task place...');
+                updateTaskPlace(newPlaceId);
+            })
+            .catch((error) => {
+                console.error("Error occurred in sequence: ", error);
+            });
+    });
 
     // 확인버튼 클릭시 변경내용 저장
     $(document).on('click', '.saveImgButton', updateDurationCost);
@@ -378,6 +452,11 @@ function updateTaskPlace(newPlaceId) {
         },
         success: function () {
             targetTaskNum = '';
+            targetTr = '';
+            walkTime = '';
+            transportTime = '';
+            preTransDuration = '';
+            nextTransDuration = '';
             dayPlansPrint(dayNumOfButton, planNum);
         },
         error: function (e) {
@@ -386,6 +465,73 @@ function updateTaskPlace(newPlaceId) {
     })
 
 }
+
+function updateFirstTaskPlace(newPlaceId) {
+    let nextTaskNum = targetTr.next().data('tasknum');
+    console.log("next:" + nextTransDuration);
+    console.log(newPlaceId);
+    console.log(targetTaskNum);
+    console.log(nextTaskNum);
+
+    $.ajax({
+        url: 'custom/updateFirstTaskPlace',
+        type: 'post',
+        data: {
+            planNum: planNum,
+            targetTaskNum: targetTaskNum,
+            newPlaceId: newPlaceId,
+            nextTaskNum: nextTaskNum,
+            nextTransDuration: nextTransDuration
+        },
+        success: function () {
+            targetTaskNum = '';
+            targetTr = '';
+            walkTime = '';
+            transportTime = '';
+            nextTransDuration = '';
+            dayPlansPrint(dayNumOfButton, planNum);
+        },
+        error: function (e) {
+            console.log(JSON.stringify(e));
+        }
+    })
+
+}
+
+function updateLastTaskPlace(newPlaceId) {
+
+    let preTaskNum = targetTr.prev().data('tasknum');
+    console.log("pre:" + preTransDuration);
+    console.log("pre타입:" + typeof(preTransDuration));
+    console.log(newPlaceId);
+    console.log(targetTaskNum);
+    console.log(preTaskNum);
+    $.ajax({
+        url: 'custom/updateLastTaskPlace',
+        type: 'post',
+        data: {
+            planNum: planNum,
+            targetTaskNum: targetTaskNum,
+            newPlaceId: newPlaceId,
+            preTaskNum: preTaskNum,
+            preTransDuration: preTransDuration,
+        },
+        success: function () {
+            targetTaskNum = '';
+            targetTr = '';
+            walkTime = '';
+            transportTime = '';
+            preTransDuration = '';
+            nextTransDuration = '';
+            dayPlansPrint(dayNumOfButton, planNum);
+        },
+        error: function (e) {
+            console.log(JSON.stringify(e));
+        }
+    })
+
+}
+
 
 
 // 수정버튼 클릭시, (1) input태그 활성화 (2) 수정버튼 숨기고, 체크버튼 활성화
@@ -551,7 +697,7 @@ function placeInfoMore() {
             let feeInfoKr = placeDTO.feeInfoKr == null ? '' : placeDTO.feeInfo + lang;
             let saleItemKr = placeDTO.saleItemKr == null ? '' : placeDTO.saleItemKr;
             console.log(taskNum);
-            let addButton = taskNum === undefined ? '<img src="../images/customPlan/add-point.png" class="info-table-add-task-button" data-place-id="${placeDTO.placeId}" data-map-x="${placeDTO.mapX}" data-map-y="${placeDTO.mapY}">': '';
+            let addButton = taskNum === undefined ? `<img src="../images/customPlan/add-point.png" class="info-table-add-task-button" data-place-id="${placeDTO.placeId}" data-map-x="${placeDTO.mapX}" data-map-y="${placeDTO.mapY}">` : '';
             console.log(addButton);
             let infoMoreTable = `
                          <div class="info-more-table-box">

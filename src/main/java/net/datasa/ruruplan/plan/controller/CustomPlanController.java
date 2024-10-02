@@ -130,4 +130,18 @@ public class CustomPlanController {
 
     customPlanService.updateTaskPlace(planNum, targetTaskNum, newPlaceId, preTaskNum, preTransDuration, nextTaskNum, nextTransDuration);
     }
+
+    @ResponseBody
+    @PostMapping("updateFirstTaskPlace")
+    public void updateFirstTaskPlace(@RequestParam("planNum") Integer planNum, @RequestParam("targetTaskNum") Integer targetTaskNum, @RequestParam("newPlaceId") String newPlaceId
+            ,@RequestParam("nextTaskNum") Integer nextTaskNum, @RequestParam("nextTransDuration") double nextTransDuration) {
+        customPlanService.updateFirstTaskPlace(planNum, targetTaskNum, newPlaceId, nextTaskNum, nextTransDuration);
+    }
+
+    @ResponseBody
+    @PostMapping("updateLastTaskPlace")
+    public void updateLastTaskPlace(@RequestParam("planNum") Integer planNum, @RequestParam("targetTaskNum") Integer targetTaskNum, @RequestParam("newPlaceId") String newPlaceId
+            ,@RequestParam("preTaskNum") Integer preTaskNum, @RequestParam("preTransDuration") double preTransDuration) {
+        customPlanService.updateLastTaskPlace(planNum, targetTaskNum, newPlaceId, preTaskNum, preTransDuration);
+    }
 }

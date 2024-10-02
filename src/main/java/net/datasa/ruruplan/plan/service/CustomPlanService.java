@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
 
 /**
  * GPT추천일정을 내 일정으로 담기 한 후 개별수정하는 컨트롤러
- *DB에 저장된 정보를 불러오고, 수정함
+ * DB에 저장된 정보를 불러오고, 수정함
  */
 @Service
 @Slf4j
@@ -51,6 +51,7 @@ public class CustomPlanService {
 
     /**
      * plan정보 가져오기 / 전체일정 / html에 연결되어 있는 getPlan메서드
+     *
      * @return
      */
     public PlanDTO getPlan() {
@@ -73,6 +74,7 @@ public class CustomPlanService {
 
     /**
      * 전체일정 및 일정별 대한 마커정보, 첫 로드시 allDay, 일자별 클릭시 일자별 리스크
+     *
      * @param planNum
      * @return
      */
@@ -85,14 +87,12 @@ public class CustomPlanService {
             PlanEntity planEntity = planRepository.findById(planNum)
                     .orElseThrow(() -> new EntityNotFoundException("플랜없음"));
             taskEntityList = planEntity.getTaskList();
-        }
-
-        else {
+        } else {
             taskEntityList = taskRepository.dayTaskList(planNum, dayNum);
         }
 
         List<TaskDTO> dtoList = new ArrayList<>();
-        for(TaskEntity taskEntity : taskEntityList) {
+        for (TaskEntity taskEntity : taskEntityList) {
             TaskDTO dto = convertToDTO(taskEntity);
             dtoList.add(dto);
         }
@@ -102,6 +102,7 @@ public class CustomPlanService {
 
     /**
      * 테마별 장소정보(테마별 마커 및 상세정보)를 가져오는 메서드
+     *
      * @param theme
      * @return
      */
@@ -118,6 +119,7 @@ public class CustomPlanService {
 
     /**
      * planEntity DTO변환 메서드
+     *
      * @param planEntity
      * @return
      */
@@ -138,7 +140,8 @@ public class CustomPlanService {
     }
 
     /**
-     *taskEntity, DTO변환 메서드, place객체를 직접 넣음
+     * taskEntity, DTO변환 메서드, place객체를 직접 넣음
+     *
      * @param taskEntity
      * @return
      */
@@ -164,6 +167,7 @@ public class CustomPlanService {
 
     /**
      * placeEntity DTO 변환 메서드
+     *
      * @param placeInfoEntity
      * @return
      */
@@ -221,7 +225,7 @@ public class CustomPlanService {
 
     public GptCmdDTO getCmd(Integer cmdNum) {
         GptCmdEntity cmdEntity = cmdRepository.findById(cmdNum)
-                .orElseThrow(()-> new EntityNotFoundException("존재하지 않는 명령어"));
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 명령어"));
         return convertToDTO(cmdEntity);
     }
 
@@ -236,7 +240,7 @@ public class CustomPlanService {
         // 일단 바뀌어야 하는 일정의 소요시간을 바꾸고
         thisTaskEntity.setDuration(newDuration);
         thisTaskEntity.setCost(Integer.parseInt(newCost));
-        
+
         // startTime을 수정해줘야 하는 entityList를 부를 조건을 설정
         int dayNum = thisTaskEntity.getDateN(); // 해당 일자의 여행만
         LocalTime fromPoint = thisTaskEntity.getStartTime(); // 지금 소요시간을 수정한 이 태스크 뒤에 오는 애들의 첫시간을 바꿔야함
@@ -245,7 +249,7 @@ public class CustomPlanService {
 
         for (int i = 0; i < updateEntityList.size(); i++) {
             // 새로운 첫시간 = 바로 앞 일정의 첫시간 + 바로 앞 일정의 소요시간
-            
+
             // 바로 앞 일정의 첫시간            
             LocalTime previousTaskStart;
             // 바로 앞 일정의 소요시간
@@ -254,21 +258,21 @@ public class CustomPlanService {
             Duration durationCal;
 
             // 첫번째 요소 즉; 소요시간이 변경된 바로 뒷 일정
-            if(i == 0) {
+            if (i == 0) {
                 previousTaskStart = fromPoint; // 지금 이 일정에서
                 durationCal = Duration.ofHours(newDuration.getHour()).plusMinutes(newDuration.getMinute()); // 바뀐 소요시간을 더하면 지금 이일정의 끝시간 = 다음 일정의 첫시간
             }
-            
+
             // 두번째 요소부터는, 첫번째 요소들로 더해감. startTime[i] = startTime[i-1] + duration[i-1];
-            else  {
-                previousTaskStart = updateEntityList.get(i-1).getStartTime(); //
-                previousTaskDuration = updateEntityList.get(i-1).getDuration();
+            else {
+                previousTaskStart = updateEntityList.get(i - 1).getStartTime(); //
+                previousTaskDuration = updateEntityList.get(i - 1).getDuration();
                 durationCal = Duration.ofHours(previousTaskDuration.getHour()).plusMinutes(previousTaskDuration.getMinute());
             }
-            
+
             LocalTime newStartTime = previousTaskStart.plus(durationCal);
             updateEntityList.get(i).setStartTime(newStartTime);
-            
+
         }
 
     }
@@ -297,7 +301,7 @@ public class CustomPlanService {
 
         // 새로운 장소정보
         PlaceInfoEntity placeInfoEntity = placeInfoJpaRepository.findById(newPlaceId)
-                        .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 place"));
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 place"));
 
         // 앞 장소와의 새로운 이동거리
         LocalTime newPreTransDuration = convertToLocalTime(preTransDuration);
@@ -328,15 +332,15 @@ public class CustomPlanService {
             Duration durationCal;
 
             // 첫번째 요소 즉; 소요시간이 변경된 바로 뒷 일정
-            if(i == 0) {
+            if (i == 0) {
                 previousTaskStart = fromPoint; // 지금 이 일정에서
                 durationCal = Duration.ofHours(newPreTransDuration.getHour()).plusMinutes(newPreTransDuration.getMinute()); // 바뀐 소요시간을 더하면 지금 이일정의 끝시간 = 다음 일정의 첫시간
             }
 
             // 두번째 요소부터는, 첫번째 요소들로 더해감. startTime[i] = startTime[i-1] + duration[i-1];
-            else  {
-                previousTaskStart = updateEntityList.get(i-1).getStartTime(); //
-                previousTaskDuration = updateEntityList.get(i-1).getDuration();
+            else {
+                previousTaskStart = updateEntityList.get(i - 1).getStartTime(); //
+                previousTaskDuration = updateEntityList.get(i - 1).getDuration();
                 durationCal = Duration.ofHours(previousTaskDuration.getHour()).plusMinutes(previousTaskDuration.getMinute());
             }
 
@@ -351,5 +355,129 @@ public class CustomPlanService {
         int newHour = (int) Math.floor(targetDuration / 60);
         int newMinute = (int) Math.floor(targetDuration % 60);
         return LocalTime.of(newHour, newMinute);
+    }
+
+    public void updateFirstTaskPlace(Integer planNum, Integer targetTaskNum, String newPlaceId, Integer nextTaskNum, double nextTransDuration) {
+        // 일정장소 수정 대상
+        TaskEntity taskEntity = taskJpaRepository.findById(targetTaskNum)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 task"));
+
+        // 바로 뒤 이동태스크
+        TaskEntity nextTaskEntity = taskJpaRepository.findById(nextTaskNum)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 task"));
+
+        // 새로운 장소정보
+        PlaceInfoEntity placeInfoEntity = placeInfoJpaRepository.findById(newPlaceId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 place"));
+
+        // 뒤 장소와의 새로운 이동거리
+        LocalTime newNextTransDuration = convertToLocalTime(nextTransDuration);
+
+        // 정보 업데이트
+        taskEntity.setPlace(placeInfoEntity);
+        taskEntity.setCost(placeInfoEntity.getFee() == null ? 0 : placeInfoEntity.getFee());
+        taskEntity.setTask(placeInfoEntity.getContentsTypeKr());
+        nextTaskEntity.setDuration(newNextTransDuration);
+
+
+        // 바뀐 시간 table 정리, 수정하고자 하는 taskEntity가 이날의 첫시작 시간
+        LocalTime fromPoint = taskEntity.getStartTime();
+        List<TaskEntity> updateEntityList = taskRepository.updateDurationList(planNum, taskEntity.getDateN(), fromPoint);
+
+        for (int i = 0; i < updateEntityList.size(); i++) {
+            // 새로운 첫시간 = 바로 앞 일정의 첫시간 + 바로 앞 일정의 소요시간
+
+            // 바로 앞 일정의 첫시간
+            LocalTime previousTaskStart;
+            // 바로 앞 일정의 소요시간
+            LocalTime previousTaskDuration;
+            // 바로 앞 일정의 소요시간의 계산화
+            Duration durationCal;
+
+            // 첫번째 요소 즉; 소요시간이 변경된 바로 뒷 일정
+            if (i == 0) {
+                previousTaskStart = fromPoint; // 지금 이 일정에서
+                //durationCal = Duration.ofHours(newPreTransDuration.getHour()).plusMinutes(newPreTransDuration.getMinute()); // 바뀐 소요시간을 더하면 지금 이일정의 끝시간 = 다음 일정의 첫시간
+            }
+
+            // 두번째 요소부터는, 첫번째 요소들로 더해감. startTime[i] = startTime[i-1] + duration[i-1];
+            else {
+                previousTaskStart = updateEntityList.get(i - 1).getStartTime(); //
+                previousTaskDuration = updateEntityList.get(i - 1).getDuration();
+                durationCal = Duration.ofHours(previousTaskDuration.getHour()).plusMinutes(previousTaskDuration.getMinute());
+            }
+
+            //LocalTime newStartTime = previousTaskStart.plus(durationCal);
+            //updateEntityList.get(i).setStartTime(newStartTime);
+
+        }
+
+
+    }
+
+    public void updateLastTaskPlace(Integer planNum, Integer targetTaskNum, String newPlaceId, Integer preTaskNum, double preTransDuration) {
+        // 일정장소 수정 대상
+        TaskEntity taskEntity = taskJpaRepository.findById(targetTaskNum)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 task"));
+
+        // 바로 앞 이동태스크
+        TaskEntity preTaskEntity = taskJpaRepository.findById(preTaskNum)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 task"));
+
+        // 바로 뒤 이동태스크
+        //TaskEntity nextTaskEntity = taskJpaRepository.findById(nextTaskNum)
+        //        .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 task"));
+
+        // 새로운 장소정보
+        PlaceInfoEntity placeInfoEntity = placeInfoJpaRepository.findById(newPlaceId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 place"));
+
+        // 앞 장소와의 새로운 이동거리
+        LocalTime newPreTransDuration = convertToLocalTime(preTransDuration);
+
+        // 뒤 장소와의 새로운 이동거리
+        //LocalTime newNextTransDuration = convertToLocalTime(nextTransDuration);
+
+        // 정보 업데이트
+        taskEntity.setPlace(placeInfoEntity);
+        taskEntity.setCost(placeInfoEntity.getFee() == null ? 0 : placeInfoEntity.getFee());
+        taskEntity.setTask(placeInfoEntity.getContentsTypeKr());
+        preTaskEntity.setDuration(newPreTransDuration);
+        //nextTaskEntity.setDuration(newNextTransDuration);
+
+
+        // 바뀐 시간 table 정리;
+        LocalTime fromPoint = preTaskEntity.getStartTime();
+        List<TaskEntity> updateEntityList = taskRepository.updateDurationList(planNum, preTaskEntity.getDateN(), fromPoint);
+
+        for (int i = 0; i < updateEntityList.size(); i++) {
+            // 새로운 첫시간 = 바로 앞 일정의 첫시간 + 바로 앞 일정의 소요시간
+
+            // 바로 앞 일정의 첫시간
+            LocalTime previousTaskStart;
+            // 바로 앞 일정의 소요시간
+            LocalTime previousTaskDuration;
+            // 바로 앞 일정의 소요시간의 계산화
+            Duration durationCal;
+
+            // 첫번째 요소 즉; 소요시간이 변경된 바로 뒷 일정
+            if (i == 0) {
+                previousTaskStart = fromPoint; // 지금 이 일정에서
+                durationCal = Duration.ofHours(newPreTransDuration.getHour()).plusMinutes(newPreTransDuration.getMinute()); // 바뀐 소요시간을 더하면 지금 이일정의 끝시간 = 다음 일정의 첫시간
+            }
+
+            // 두번째 요소부터는, 첫번째 요소들로 더해감. startTime[i] = startTime[i-1] + duration[i-1];
+            else {
+                previousTaskStart = updateEntityList.get(i - 1).getStartTime(); //
+                previousTaskDuration = updateEntityList.get(i - 1).getDuration();
+                durationCal = Duration.ofHours(previousTaskDuration.getHour()).plusMinutes(previousTaskDuration.getMinute());
+            }
+
+            LocalTime newStartTime = previousTaskStart.plus(durationCal);
+            updateEntityList.get(i).setStartTime(newStartTime);
+
+        }
+
+
     }
 }

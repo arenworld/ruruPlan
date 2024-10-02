@@ -12,6 +12,7 @@ $(document).ready(async function() {
     var totalCost = 0;
     var allTasks = []; // 모든 TaskDTO를 저장할 배열
 
+    var contentsTypeJp = "";
 
     // 모든 날짜에 대해 처리
     for (var date in taskByDateMap) {
@@ -77,6 +78,7 @@ $(document).ready(async function() {
                                 task.duration = 0;
                                 task.cost = 0;
                                 task.contentsTypeKr = '이동 없음'; // 필요에 따라 task명을 변경
+                                task.contentsTypeJp = "移動なし";
 
                             } else {
                                 try {
@@ -93,12 +95,25 @@ $(document).ready(async function() {
                                         cost = parseInt(routeInfo.payment);
 
                                         if (routeInfo.subPaths[1]) {
-                                            if (routeInfo.subPaths[1].trafficType == 1) transitType = "대중교통";
-                                            else if (routeInfo.subPaths[1].trafficType == 2) transitType = "대중교통";
-                                            else transitType = "도보";
+                                            if (routeInfo.subPaths[1].trafficType == 1) {
+                                                transitType = "대중교통";
+                                                contentsTypeJp = "公共交通";
+                                            }
+                                            else if (routeInfo.subPaths[1].trafficType == 2) {
+                                                transitType = "대중교통";
+                                                contentsTypeJp = "公共交通";
+
+                                            }
+                                            else {
+                                                transitType = "도보";
+                                                contentsTypeJp = "移動";
+                                            }
                                         } else {
                                             transitType = "도보";
+                                            contentsTypeJp = "移動";
                                         }
+
+
 
                                         $('#duration-' + task.taskNum).html(transitType + " " + duration + "분");
                                         $('#cost-' + task.taskNum).html(routeInfo.payment + '원');
@@ -109,11 +124,13 @@ $(document).ready(async function() {
                                         prevDuration = parseInt(duration);
 
                                         task.contentsTypeKr = transitType;
+                                        task.contentsTypeJp = contentsTypeJp;
                                         task.cost = cost;
 
                                     } else {
                                         duration = durationFloat;
                                         transitType = "도보";
+                                        contentsTypeJp = "移動";
                                         $('#duration-' + task.taskNum).html(transitType + " " + duration + "분");
 
                                         $('#cost-' + task.taskNum).html('0원');
@@ -122,6 +139,7 @@ $(document).ready(async function() {
                                         prevDuration = parseInt(duration);
 
                                         task.contentsTypeKr = transitType;
+                                        task.contentsTypeJp = contentsTypeJp;
                                         task.cost = 0;
                                     }
 
@@ -177,6 +195,7 @@ $(document).ready(async function() {
                     duration: formatDurationToLocalTime(task.duration),  // 변환된 duration 사용
                     endTime: addMinutesToTime(task.startTime, task.duration),
                     contentsTypeKr: task.contentsTypeKr,
+                    contentsTypeJp: task.contentsTypeJp,
                     cost: task.cost || 0,
                     memo: null
                 };

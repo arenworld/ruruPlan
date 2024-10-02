@@ -736,7 +736,7 @@ public class GptResultService {
         else if (task.getContentsTypeKr().equals("카페")) task.setDuration(cafeDuration);
 
         // 반드시 duration 설정이 끝나고 나서 바꿔줘야함.
-        if(!taskTypeKr.equals("이동")) {
+        if(!task.getContentsTypeKr().equals("이동")) {
             task.setContentsTypeKr(Objects.requireNonNull(placeInfoDTO, "placeInfoDTO가 null입니다.").getContentsTypeKr());
             task.setContentsTypeJp(Objects.requireNonNull(placeInfoDTO).getContentsTypeJp());
         }

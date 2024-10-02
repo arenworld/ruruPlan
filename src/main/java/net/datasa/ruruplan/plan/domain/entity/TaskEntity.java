@@ -55,8 +55,12 @@ public class TaskEntity {
     private LocalTime endTime;
 
     // 활동명(택시, 도보, 대중교통, 식사, 관광, 숙소)
-    @Column(name = "task", nullable = false)
-    private String task;
+    // 여행 타입(한국어)
+    @Column(name = "contents_type_kr", length = 20)
+    private String contentsTypeKr;
+
+    @Column(name = "contents_type_jp", length = 20)
+    private String contentsTypeJp;
 
     // 활동 비용
     @Column(name = "cost", nullable = false)

@@ -226,13 +226,13 @@
 
                                 <!-- 홀수라인일 때 -->
                                 <th:block th:if="${iterStat.count % 2 != 0}">
-                                    <td th:if="${iterStat.count % 2 != 0}" th:text="${task.task}"></td>
+                                    <td th:if="${iterStat.count % 2 != 0}" th:text="${task.contentsTypeKr}"></td>
                                     <td th:text="${task.place.titleKor}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
                                 </th:block>
 
                                 <!-- 짝수라인일 때-->
                                 <th:block th:if="${iterStat.count % 2 == 0}">
-                                    <td th:attr="colspan=2" th:text="${task.task}"></td>
+                                    <td th:attr="colspan=2" th:text="${task.contentsTypeKr}"></td>
                                 </th:block>
 
                                 <th:block th:if="${task.duration.hour != 0}">

@@ -12,6 +12,7 @@ $(document).ready(async function() {
     var totalCost = 0;
     var allTasks = []; // 모든 TaskDTO를 저장할 배열
 
+
     // 모든 날짜에 대해 처리
     for (var date in taskByDateMap) {
         if (taskByDateMap.hasOwnProperty(date)) {
@@ -41,7 +42,7 @@ $(document).ready(async function() {
 
                     $('#duration-' + task.taskNum).html(formatDuration(taskDuration));
 
-                    if (task.task != '이동') {
+                    if (task.contentsTypeKr != '이동') {
                         startX = task.place.mapX;
                         startY = task.place.mapY;
                     }
@@ -51,7 +52,7 @@ $(document).ready(async function() {
 
                     $('#time-' + task.taskNum).html(formatTime(currentStartTime));
 
-                    if (task.task == '이동') {
+                    if (task.contentsTypeKr == '이동') {
                         var prevTask = tasksForDate[index - 1];
                         var nextTask = tasksForDate[index + 1];
 
@@ -75,7 +76,7 @@ $(document).ready(async function() {
                                 prevDuration = 0;
                                 task.duration = 0;
                                 task.cost = 0;
-                                task.task = '이동 없음'; // 필요에 따라 task명을 변경
+                                task.contentsTypeKr = '이동 없음'; // 필요에 따라 task명을 변경
 
                             } else {
                                 try {
@@ -107,7 +108,7 @@ $(document).ready(async function() {
                                         task.duration = duration; // 분 단위로 설정
                                         prevDuration = parseInt(duration);
 
-                                        task.task = transitType;
+                                        task.contentsTypeKr = transitType;
                                         task.cost = cost;
 
                                     } else {
@@ -120,7 +121,7 @@ $(document).ready(async function() {
                                         task.duration = duration;
                                         prevDuration = parseInt(duration);
 
-                                        task.task = transitType;
+                                        task.contentsTypeKr = transitType;
                                         task.cost = 0;
                                     }
 
@@ -175,13 +176,13 @@ $(document).ready(async function() {
                     startTime: task.startTime,
                     duration: formatDurationToLocalTime(task.duration),  // 변환된 duration 사용
                     endTime: addMinutesToTime(task.startTime, task.duration),
-                    task: task.task,
+                    contentsTypeKr: task.contentsTypeKr,
                     cost: task.cost || 0,
                     memo: null
                 };
 
                 // '이동' 작업일 경우, place를 다음 task의 place로 설정
-                if (task.task == '이동' || task.task == '대중교통' || task.task == '도보') {
+                if (task.contentsTypeKr == '이동' || task.contentsTypeKr == '대중교통' || task.contentsTypeKr == '도보') {
                     var nextTask = tasksForDate[index + 1];
                     if (nextTask && nextTask.place) {
                         taskDTO.place = nextTask.place;

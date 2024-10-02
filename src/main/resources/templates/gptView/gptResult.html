@@ -68,20 +68,20 @@
             </thead>
             <tbody>
             <tr th:each="task, stat : ${dateEntry.value}"
-                th:classappend="${task.task == '이동' or task.task == '대중교통' or task.task == '도보'} ? 'move-row' : ''">
+                th:classappend="${task.contentsTypeKr == '이동' or task.contentsTypeKr == '대중교통' or task.contentsTypeKr == '도보'} ? 'move-row' : ''">
                 <!-- No 컬럼 -->
-                <td th:if="${task.task != '이동' and task.task != '대중교통' and task.task != '도보'}" th:text="${(stat.count + 1) / 2}"></td>
-                <td th:if="${task.task == '이동' or task.task == '대중교통' or task.task == '도보'}"></td>
+                <td th:if="${task.contentsTypeKr != '이동' and task.contentsTypeKr != '대중교통' and task.contentsTypeKr != '도보'}" th:text="${(stat.count + 1) / 2}"></td>
+                <td th:if="${task.contentsTypeKr == '이동' or task.contentsTypeKr == '대중교통' or task.contentsTypeKr == '도보'}"></td>
 
                 <!-- Time 컬럼 -->
                 <td th:id="'time-' + ${task.taskNum}"></td>
 
                 <!-- Task 컬럼 -->
-                <td th:text="${task.task}"></td>
+                <td th:text="${task.contentsTypeKr}"></td>
 
                 <!-- Place 컬럼 -->
-                <td th:if="${task.task != '이동' and task.task != '대중교통' and task.task != '도보'}" th:text="${task.place.titleKr}"></td>
-                <td th:if="${task.task == '이동' or task.task == '대중교통' or task.task == '도보'}" th:text="''"></td>
+                <td th:if="${task.contentsTypeKr != '이동' and task.contentsTypeKr != '대중교통' and task.contentsTypeKr != '도보'}" th:text="${task.place.titleKr}"></td>
+                <td th:if="${task.contentsTypeKr == '이동' or task.contentsTypeKr == '대중교통' or task.contentsTypeKr == '도보'}" th:text="''"></td>
 
                 <!-- Duration 컬럼 -->
                 <td th:id="'duration-' + ${task.taskNum}"></td>
@@ -89,12 +89,12 @@
                 <!-- Cost 컬럼 -->
                 <td th:id="'cost-' + ${task.taskNum}">
                     <!-- 이동 관련 작업이 아닌 경우 -->
-                    <p th:if="${task.task != '이동' and task.task != '대중교통' and task.task != '도보'}">
+                    <p th:if="${task.contentsTypeKr != '이동' and task.contentsTypeKr != '대중교통' and task.contentsTypeKr != '도보'}">
                         <span th:if="${task.place != null and task.place.fee != null}" th:text="${task.place.fee + '원'}"></span>
                         <span th:if="${task.place == null or task.place.fee == null}">0원</span>
                     </p>
                     <!-- 이동 관련 작업인 경우 (빈 공간으로 둠, JavaScript에서 채울 예정) -->
-                    <p th:if="${task.task == '이동' or task.task == '대중교통' or task.task == '도보'}"></p>
+                    <p th:if="${task.contentsTypeKr == '이동' or task.contentsTypeKr == '대중교통' or task.contentsTypeKr == '도보'}"></p>
                 </td>
             </tr>
             </tbody>

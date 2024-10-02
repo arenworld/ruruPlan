@@ -160,7 +160,8 @@ public class CustomPlanService {
                 .startTime(taskEntity.getStartTime())
                 .duration(taskEntity.getDuration())
                 .endTime(taskEntity.getEndTime())
-                .task(taskEntity.getTask())
+                .contentsTypeKr(taskEntity.getContentsTypeKr())
+                .contentsTypeJp(taskEntity.getContentsTypeJp())
                 .cost(taskEntity.getCost())
                 .build();
     }
@@ -312,7 +313,8 @@ public class CustomPlanService {
         // 정보 업데이트
         taskEntity.setPlace(placeInfoEntity);
         taskEntity.setCost(placeInfoEntity.getFee() == null ? 0 : placeInfoEntity.getFee());
-        taskEntity.setTask(placeInfoEntity.getContentsTypeKr());
+        taskEntity.setContentsTypeKr(placeInfoEntity.getContentsTypeKr());
+        taskEntity.setContentsTypeJp(placeInfoEntity.getContentsTypeJp());
         preTaskEntity.setDuration(newPreTransDuration);
         nextTaskEntity.setDuration(newNextTransDuration);
 
@@ -376,7 +378,8 @@ public class CustomPlanService {
         // 정보 업데이트
         taskEntity.setPlace(placeInfoEntity);
         taskEntity.setCost(placeInfoEntity.getFee() == null ? 0 : placeInfoEntity.getFee());
-        taskEntity.setTask(placeInfoEntity.getContentsTypeKr());
+        taskEntity.setContentsTypeKr(placeInfoEntity.getContentsTypeKr());
+        taskEntity.setContentsTypeJp(placeInfoEntity.getContentsTypeJp());
         nextTaskEntity.setDuration(newNextTransDuration);
 
 
@@ -441,7 +444,8 @@ public class CustomPlanService {
         // 정보 업데이트
         taskEntity.setPlace(placeInfoEntity);
         taskEntity.setCost(placeInfoEntity.getFee() == null ? 0 : placeInfoEntity.getFee());
-        taskEntity.setTask(placeInfoEntity.getContentsTypeKr());
+        taskEntity.setContentsTypeKr(placeInfoEntity.getContentsTypeKr());
+        taskEntity.setContentsTypeJp(placeInfoEntity.getContentsTypeJp());
         preTaskEntity.setDuration(newPreTransDuration);
         //nextTaskEntity.setDuration(newNextTransDuration);
 

@@ -41,8 +41,11 @@ public class TaskDTO {
     @JsonFormat(pattern = "HH:mm")
     private LocalTime endTime;
 
-    // 활동명(택시, 도보, 대중교통, 식사, 관광, 숙소)
-    private String task;
+    // 일정대분류 (관광 식당 카페 등)
+    private String contentsTypeKr;
+
+    // 일정대분류 (관광 식당 카페 등)
+    private String contentsTypeJp;
 
     // 활동 비용
     private Integer cost;

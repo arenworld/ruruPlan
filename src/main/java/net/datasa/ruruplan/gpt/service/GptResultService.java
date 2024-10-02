@@ -589,10 +589,11 @@ public class GptResultService {
         for (int i = 0; i < firstDayTaskCount && placeIndex < placeIdList.size(); i++) {
             boolean isFirstTaskOfDay = (i == 0);
             createAndAddTask(planDTO, cmdNum, firstDate, 1, placeIdList.get(placeIndex++), taskNum++,
-                    firstDayOrder.get(i), density, arrival, isFirstTaskOfDay);
+                    firstDayOrder.get(i), null, density, arrival, isFirstTaskOfDay);
 
             if (i >= 0 && i < firstDayTaskCount - 1) {
-                createAndAddTask(planDTO, cmdNum, firstDate, 1, null, taskNum++, "이동", density, arrival, false);
+                createAndAddTask(planDTO, cmdNum, firstDate, 1, null, taskNum++,
+                        "이동", "移動", density, arrival, false);
             }
         }
 
@@ -601,11 +602,11 @@ public class GptResultService {
             for (int i = 0; i < middleDayTaskCount && placeIndex < placeIdList.size(); i++) {
                 boolean isFirstTaskOfDay = (i == 0);
                 createAndAddTask(planDTO, cmdNum, firstDate.plusDays(day - 1), day, placeIdList.get(placeIndex++),
-                        taskNum++, middleDayOrder.get(i), density, arrival, isFirstTaskOfDay);
+                        taskNum++, middleDayOrder.get(i), null, density, arrival, isFirstTaskOfDay);
 
                 if (i >= 0 && i < middleDayTaskCount - 1) {
-                    createAndAddTask(planDTO, cmdNum, firstDate.plusDays(day - 1), day, null, taskNum++, "이동",
-                            density, arrival, false);
+                    createAndAddTask(planDTO, cmdNum, firstDate.plusDays(day - 1), day, null, taskNum++,
+                            "이동", "移動", density, arrival, false);
                 }
             }
         }
@@ -614,10 +615,11 @@ public class GptResultService {
         for (int i = 0; i < lastDayTaskCount && placeIndex < placeIdList.size(); i++) {
             boolean isFirstTaskOfDay = (i == 0);
             createAndAddTask(planDTO, cmdNum, lastDate, totalDays, placeIdList.get(placeIndex++), taskNum++,
-                    lastDayOrder.get(i), density, arrival, isFirstTaskOfDay);
+                    lastDayOrder.get(i), null, density, arrival, isFirstTaskOfDay);
 
             if (i >= 0 && i < lastDayTaskCount - 1) {
-                createAndAddTask(planDTO, cmdNum, lastDate, totalDays, null, taskNum++, "이동", density, arrival, false);
+                createAndAddTask(planDTO, cmdNum, lastDate, totalDays, null, taskNum++,
+                        "이동", "移動", density, arrival, false);
             }
         }
 
@@ -627,7 +629,7 @@ public class GptResultService {
 
     // TaskDTO 생성 및 PlanDTO에 추가하는 함수
     private void createAndAddTask(PlanDTO planDTO, Integer planNum, LocalDate date, int dayNum,
-                                  String placeId, int index, String taskType, boolean density, LocalTime arrival, boolean isFirstTaskOfDay) {
+                                  String placeId, int index, String taskTypeKr, String taskTypeJp, boolean density, LocalTime arrival, boolean isFirstTaskOfDay) {
         // PlaceInfoDTO 생성 (기존 코드와 동일)
         // '이동'일 경우에는 PlaceInfoEntity가 필요하지 않으므로 placeId가 null이면 바로 TaskDTO를 생성
         PlaceInfoDTO placeInfoDTO = null;
@@ -706,7 +708,8 @@ public class GptResultService {
                 .place(placeInfoDTO)  // '이동'일 경우에는 placeInfoDTO가 null
                 .memberId(planDTO.getMemberId())
                 .dateN(dayNum)
-                .task(taskType)  // 활동 유형 (식당, 관광지, 카페, 이동)
+                .contentsTypeKr(taskTypeKr)  // 활동 유형 (식당, 관광지, 카페, 이동)
+                .contentsTypeJp(taskTypeJp)
                 .cost(0)  // 비용은 일단 0으로 설정
                 .memo("")
                 .build();
@@ -728,14 +731,17 @@ public class GptResultService {
         log.debug("StartTime : {}", task.getStartTime());
 
         // Duration 설정 (조건과 상관없이)
-        if (task.getTask().equals("식당")) task.setDuration(foodDuration);
-        else if (task.getTask().equals("관광지")) task.setDuration(tourDuration);
-        else if (task.getTask().equals("카페")) task.setDuration(cafeDuration);
+        if (task.getContentsTypeKr().equals("식당")) task.setDuration(foodDuration);
+        else if (task.getContentsTypeKr().equals("관광지")) task.setDuration(tourDuration);
+        else if (task.getContentsTypeKr().equals("카페")) task.setDuration(cafeDuration);
 
         // 반드시 duration 설정이 끝나고 나서 바꿔줘야함.
-        if(!taskType.equals("이동")) task.setTask(Objects.requireNonNull(placeInfoDTO, "placeInfoDTO가 null입니다.").getContentsTypeKr());
+        if(!taskTypeKr.equals("이동")) {
+            task.setContentsTypeKr(Objects.requireNonNull(placeInfoDTO, "placeInfoDTO가 null입니다.").getContentsTypeKr());
+            task.setContentsTypeJp(Objects.requireNonNull(placeInfoDTO).getContentsTypeJp());
+        }
 
-        log.debug("task : {}", task.getTask());
+        log.debug("task : {}", task.getContentsTypeKr());
         log.debug("taskDuration : {}", task.getDuration());
 
         // PlanDTO의 taskList에 추가
@@ -810,7 +816,8 @@ public class GptResultService {
                     .startTime(taskDTO.getStartTime())
                     .duration(taskDTO.getDuration())
                     .endTime(taskDTO.getEndTime())
-                    .task(taskDTO.getTask())
+                    .contentsTypeKr(taskDTO.getContentsTypeKr())
+                    .contentsTypeJp(taskDTO.getContentsTypeJp())
                     .cost(taskDTO.getCost())
                     .memo(taskDTO.getMemo())
                     .place(placeEntity) // 연관된 PlaceInfoEntity 설정

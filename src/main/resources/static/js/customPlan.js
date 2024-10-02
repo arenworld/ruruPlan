@@ -348,9 +348,9 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                                         <td>${startTime}</td>`;
 
                         // 이동 task가 아닐 때
-                        if (task.task !== '이동') {
+                        if (task.contentsTypeKr !== '이동') {
                             dayTable += `
-                                    <td>${task.task}</td>
+                                    <td>${task.contentsTypeKr}</td>
                                     <td class="day-table-td-place-title">
                                     <div class = "input-container">
                                         <input type="text" value="${title}" disabled data-tasknum="${task.taskNum}" data-place-id="${task.place.placeId}" class="day-table-place-title">
@@ -363,7 +363,7 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                         // 이동 task 일때
                         else {
                             dayTable += `
-                                    <td colspan="2">${task.task}</td>`;
+                                    <td colspan="2">${task.contentsTypeKr}</td>`;
                         }
 
                         // Add duration and cost columns
@@ -375,7 +375,7 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                                 <td class="day-table-td-cost"><input type="text" class="day-table-cost" data-daynum-cost="${task.dateN}" value="${task.cost}" disabled></td>
                                 <td>원</td>`;
 
-                        if (task.task !== '이동')
+                        if (task.contentsTypeKr !== '이동')
                             dayTable += `    
                                 <td class="day-table-td-editImgButton">
                                     <img src="/images/customPlan/edit-circle.png" alt="Button Image" class="editImgButton" data-tasknum="${task.taskNum}">
@@ -635,7 +635,7 @@ function planMarkers(dayNumOfButton) {
             //List<TaskDTO>
             $.each(taskList, function (index, task) {
 
-                if (task.task !== '이동') {
+                if (task.contentsTypeKr !== '이동') {
                     const marker = new naver.maps.Marker({
                         map: map,
                         position: new naver.maps.LatLng(task.place.mapY, task.place.mapX),

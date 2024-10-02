@@ -14,4 +14,6 @@ public interface TaskRepository {
     List<TaskEntity> dayTaskList(Integer planNum, Integer dayNum);
 
     List<TaskEntity> updateDurationList(Integer planNum, int dayNum, LocalTime fromPoint);
+
+    void save(TaskEntity taskEntity);
 }

@@ -5,6 +5,11 @@
     <title>GPT 결과</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/gptResult.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&family=Single+Day&display=swap" rel="stylesheet">
+
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script th:src="@{/js/gptResult.js}"></script>
 
@@ -40,6 +45,11 @@
         <div class="period-info">
             <h3 th:text="'여행 기간: ' + ${planDTO.startDate} + ' ~ ' + ${planDTO.endDate}"></h3>
         </div>
+        <h3 id="total-cost" style="margin-top: 10px; font-weight: bold;">예상 최소비용: 0원</h3>
+    </div>
+
+    <!-- 별도의 노트 컨테이너 추가 -->
+    <div class="note-container">
         <span class="note">이 형식은 간단한 버전으로 이 페이지를 벗어나면 다시 확인할 수 없습니다.</span>
     </div>
 
@@ -57,24 +67,35 @@
             </tr>
             </thead>
             <tbody>
-            <!-- 매일 첫 번째 task부터 카운트하는 변수 선언 -->
-            <tr th:each="task, stat : ${dateEntry.value}">
-                <!-- 이동을 제외한 나머지 task만 No을 붙여줌-->
-                <td th:if="${stat.count % 2 == 1}" th:text="${(stat.count + 1) / 2}"></td>
-                <!-- '이동'은 빈칸으로 둔다.-->
-                <td th:if="${task.task == '이동'}" th:text="''" class="moveNo"></td>
-                <!-- 활동 시작시간 정보-->
-                <td th:if="${task.task == '이동'}" th:id="'time-' + ${stat.index}" class="moveNo"></td>
-                <td th:if="${task.task != '이동'}" th:id="'time-' + ${stat.index}"></td>
+            <tr th:each="task, stat : ${dateEntry.value}"
+                th:classappend="${task.task == '이동' or task.task == '지하철' or task.task == '버스' or task.task == '도보'} ? 'move-row' : ''">
+                <!-- No 컬럼 -->
+                <td th:if="${task.task != '이동' and task.task != '지하철' and task.task != '버스' and task.task != '도보'}" th:text="${(stat.count + 1) / 2}"></td>
+                <td th:if="${task.task == '이동' or task.task == '지하철' or task.task == '버스' or task.task == '도보'}"></td>
 
-                <!-- 이동과 일반 Task를 구분하여 출력 -->
-                <td th:if="${task.task != '이동'}" th:text="${task.task}"></td>
-                <td th:if="${task.task != '이동'}" th:text="${task.place.titleKr}" th:data-tasknum="${task.taskNum}" class="placeTitle"></td>
+                <!-- Time 컬럼 -->
+                <td th:id="'time-' + ${task.taskNum}"></td>
 
-                <td th:if="${task.task == '이동'}" th:attr="colspan=3" th:id="'duration-' + ${stat.index}"></td>
-                <td th:if="${task.task != '이동'}" th:id="'duration-' + ${stat.index}"></td>
-                <td th:if="${task.task == '이동'}" th:text="|${task.cost}원|" id="moveCost"></td>
-                <td th:if="${task.task != '이동'}" th:text="|${task.cost}원|"></td>
+                <!-- Task 컬럼 -->
+                <td th:text="${task.task}"></td>
+
+                <!-- Place 컬럼 -->
+                <td th:if="${task.task != '이동' and task.task != '지하철' and task.task != '버스' and task.task != '도보'}" th:text="${task.place.titleKr}"></td>
+                <td th:if="${task.task == '이동' or task.task == '지하철' or task.task == '버스' or task.task == '도보'}" th:text="''"></td>
+
+                <!-- Duration 컬럼 -->
+                <td th:id="'duration-' + ${task.taskNum}"></td>
+
+                <!-- Cost 컬럼 -->
+                <td th:id="'cost-' + ${task.taskNum}">
+                    <!-- 이동 관련 작업이 아닌 경우 -->
+                    <p th:if="${task.task != '이동' and task.task != '지하철' and task.task != '버스' and task.task != '도보'}">
+                        <span th:if="${task.place != null and task.place.fee != null}" th:text="${task.place.fee + '원'}"></span>
+                        <span th:if="${task.place == null or task.place.fee == null}">0원</span>
+                    </p>
+                    <!-- 이동 관련 작업인 경우 (빈 공간으로 둠, JavaScript에서 채울 예정) -->
+                    <p th:if="${task.task == '이동' or task.task == '지하철' or task.task == '버스' or task.task == '도보'}"></p>
+                </td>
             </tr>
             </tbody>
         </table>

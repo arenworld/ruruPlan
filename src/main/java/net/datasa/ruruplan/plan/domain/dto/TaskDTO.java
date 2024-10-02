@@ -1,5 +1,6 @@
 package net.datasa.ruruplan.plan.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,12 +30,15 @@ public class TaskDTO {
     private Integer dateN;
 
     // 활동 시작 시간
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime startTime;
 
-    // 활동 시간
+    // 활동 시간 (Duration)
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime duration;
 
     // 활동 끝나는 시간
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime endTime;
 
     // 활동명(택시, 도보, 대중교통, 식사, 관광, 숙소)

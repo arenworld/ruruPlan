@@ -7,14 +7,19 @@ import net.datasa.ruruplan.gpt.domain.dto.GptCmdDTO;
 import net.datasa.ruruplan.gpt.domain.dto.GptResultDTO;
 import net.datasa.ruruplan.gpt.domain.entity.GptCmdEntity;
 import net.datasa.ruruplan.gpt.repository.GptCmdRepository;
+import net.datasa.ruruplan.member.domain.entity.MemberEntity;
+import net.datasa.ruruplan.member.repository.MemberRepository;
 import net.datasa.ruruplan.plan.domain.dto.PlaceInfoDTO;
 import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
 import net.datasa.ruruplan.plan.domain.dto.TaskDTO;
 import net.datasa.ruruplan.plan.domain.entity.PlaceInfoEntity;
+import net.datasa.ruruplan.plan.domain.entity.PlanEntity;
+import net.datasa.ruruplan.plan.domain.entity.TaskEntity;
 import net.datasa.ruruplan.plan.repository.PlaceInfoRepository;
 import net.datasa.ruruplan.plan.repository.PlanRepository;
 import net.datasa.ruruplan.plan.repository.TaskRepository;
 import net.datasa.ruruplan.plan.repository.impl.PlaceInfoRepositoryImpl;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +42,8 @@ public class GptResultService {
 
     @Autowired
     private PlaceInfoRepository placeInfoRepository;
-
+    @Autowired
+    private MemberRepository memberRepository;
 
 
     public GptResultDTO gptApi(Integer cmdNum) throws IOException {
@@ -80,11 +86,11 @@ public class GptResultService {
             float totalLastDayTime;
 
             if (density) { // 빽빽한 일정일 경우
-                totalFirstDayTime = 22 - floatArrival - 3;
-                totalLastDayTime = floatDepart - 10 - 3;
+                totalFirstDayTime = 22 - floatArrival - 2;
+                totalLastDayTime = floatDepart - 10 - 2;
             } else { // 널널한 일정일 경우
-                totalFirstDayTime = 21 - floatArrival - 3;
-                totalLastDayTime = floatDepart - 10 - 3;
+                totalFirstDayTime = 21 - floatArrival - 2;
+                totalLastDayTime = floatDepart - 10 - 2;
             }
             // GPT에게 질문할 문구 생성
             argument = gptQuestion2(density, firstDate, lastDate, theme1, theme2, theme3, totalFirstDayTime, totalLastDayTime);
@@ -534,8 +540,8 @@ public class GptResultService {
             float floatDepart = depart.getHour() + depart.getMinute() / 60.0f;
 
             if (density) {
-                totalFirstDayTime = 22 - floatArrival - 3;
-                totalLastDayTime = floatDepart - 10 - 3;
+                totalFirstDayTime = 22 - floatArrival - 2;
+                totalLastDayTime = floatDepart - 10 - 2;
                 firstDayTaskCount = calculateTaskCount(totalFirstDayTime, true);  // 첫 날 활동 개수
                 lastDayTaskCount = calculateTaskCount(totalLastDayTime, true);    // 마지막 날 활동 개수
 
@@ -544,8 +550,8 @@ public class GptResultService {
                 middleDayOrder = Arrays.asList("관광지", "식당", "관광지", "카페", "관광지", "식당", "관광지");
                 lastDayOrder = Arrays.asList("관광지", "식당", "카페", "관광지", "식당", "관광지", "카페");
             } else {
-                totalFirstDayTime = 21 - floatArrival - 3;
-                totalLastDayTime = floatDepart - 10 - 3;
+                totalFirstDayTime = 21 - floatArrival - 2;
+                totalLastDayTime = floatDepart - 10 - 2;
                 firstDayTaskCount = calculateTaskCount(totalFirstDayTime, false); // 첫 날 활동 개수
                 lastDayTaskCount = calculateTaskCount(totalLastDayTime, false);   // 마지막 날 활동 개수
                 middleDayTaskCount = 5;  // 중간 날 활동 수는 5개로 변경 (density=false인 경우)
@@ -572,52 +578,57 @@ public class GptResultService {
                 lastDayTaskCount = 3;  // 마지막 날 3개
 
                 // 첫날, 중간날, 마지막날 활동 순서 설정 (arrival=null, depart=null, density=false)
-                firstDayOrder = Arrays.asList("식당", "관광지", "카페", "관광지");
+                firstDayOrder = Arrays.asList("식당", "관광지", "식당", "관광지");
                 middleDayOrder = Arrays.asList("관광지", "식당", "관광지", "카페", "식당");
-                lastDayOrder = Arrays.asList("관광지", "식당", "카페", "관광지", "식당");
+                lastDayOrder = Arrays.asList("관광지", "식당", "카페");
             }
         }
 
+
 // 첫 날 TaskDTO 생성 (이동 Task 포함)
         for (int i = 0; i < firstDayTaskCount && placeIndex < placeIdList.size(); i++) {
-            // 일반 활동 추가
-            createAndAddTask(planDTO, cmdNum, firstDate, 1, placeIdList.get(placeIndex++), taskNum++, firstDayOrder.get(i));
+            boolean isFirstTaskOfDay = (i == 0);
+            createAndAddTask(planDTO, cmdNum, firstDate, 1, placeIdList.get(placeIndex++), taskNum++,
+                    firstDayOrder.get(i), density, arrival, isFirstTaskOfDay);
 
-            // 첫 번째 활동이 아니고 마지막 활동이 아닌 경우에만 '이동' 추가
             if (i >= 0 && i < firstDayTaskCount - 1) {
-                createAndAddTask(planDTO, cmdNum, firstDate, 1, null, taskNum++, "이동");
+                createAndAddTask(planDTO, cmdNum, firstDate, 1, null, taskNum++, "이동", density, arrival, false);
             }
         }
 
 // 중간 날 TaskDTO 생성 (이동 Task 포함)
         for (int day = 2; day < totalDays && placeIndex < placeIdList.size(); day++) {
             for (int i = 0; i < middleDayTaskCount && placeIndex < placeIdList.size(); i++) {
-                // 일반 활동 추가
-                createAndAddTask(planDTO, cmdNum, firstDate.plusDays(day - 1), day, placeIdList.get(placeIndex++), taskNum++, middleDayOrder.get(i));
+                boolean isFirstTaskOfDay = (i == 0);
+                createAndAddTask(planDTO, cmdNum, firstDate.plusDays(day - 1), day, placeIdList.get(placeIndex++),
+                        taskNum++, middleDayOrder.get(i), density, arrival, isFirstTaskOfDay);
 
-                // 첫 번째 활동이 아니고 마지막 활동이 아닌 경우에만 '이동' 추가
                 if (i >= 0 && i < middleDayTaskCount - 1) {
-                    createAndAddTask(planDTO, cmdNum, firstDate.plusDays(day - 1), day, null, taskNum++, "이동");
+                    createAndAddTask(planDTO, cmdNum, firstDate.plusDays(day - 1), day, null, taskNum++, "이동",
+                            density, arrival, false);
                 }
             }
         }
 
 // 마지막 날 TaskDTO 생성 (이동 Task 포함)
         for (int i = 0; i < lastDayTaskCount && placeIndex < placeIdList.size(); i++) {
-            // 일반 활동 추가
-            createAndAddTask(planDTO, cmdNum, lastDate, totalDays, placeIdList.get(placeIndex++), taskNum++, lastDayOrder.get(i));
+            boolean isFirstTaskOfDay = (i == 0);
+            createAndAddTask(planDTO, cmdNum, lastDate, totalDays, placeIdList.get(placeIndex++), taskNum++,
+                    lastDayOrder.get(i), density, arrival, isFirstTaskOfDay);
 
-            // 첫 번째 활동이 아니고 마지막 활동이 아닌 경우에만 '이동' 추가
             if (i >= 0 && i < lastDayTaskCount - 1) {
-                createAndAddTask(planDTO, cmdNum, lastDate, totalDays, null, taskNum++, "이동");
+                createAndAddTask(planDTO, cmdNum, lastDate, totalDays, null, taskNum++, "이동", density, arrival, false);
             }
         }
+
 
         return planDTO;  // 생성된 PlanDTO 반환
     }
 
     // TaskDTO 생성 및 PlanDTO에 추가하는 함수
-    private void createAndAddTask(PlanDTO planDTO, Integer planNum, LocalDate date, int dayNum, String placeId, int index, String taskType) {
+    private void createAndAddTask(PlanDTO planDTO, Integer planNum, LocalDate date, int dayNum,
+                                  String placeId, int index, String taskType, boolean density, LocalTime arrival, boolean isFirstTaskOfDay) {
+        // PlaceInfoDTO 생성 (기존 코드와 동일)
         // '이동'일 경우에는 PlaceInfoEntity가 필요하지 않으므로 placeId가 null이면 바로 TaskDTO를 생성
         PlaceInfoDTO placeInfoDTO = null;
 
@@ -661,6 +672,32 @@ public class GptResultService {
             log.debug("placeInfoDTO : {}", placeInfoDTO);
         }
 
+
+
+        LocalTime tourDuration;
+        LocalTime foodDuration = LocalTime.of(1, 30);
+        LocalTime cafeDuration = LocalTime.of(1, 30);
+
+        if(density) {
+            tourDuration = LocalTime.of(1, 0);
+        } else {
+            tourDuration = LocalTime.of(2, 0);
+        }
+
+        // TaskContentType 결정
+//        String taskContentType;
+//        if ("이동".equals(taskType)) {
+//            taskContentType = "이동";
+//        } else {
+//            if (placeInfoDTO != null && placeInfoDTO.getContentsTypeKr() != null) {
+//                taskContentType = placeInfoDTO.getContentsTypeKr();
+//            } else {
+//                log.warn("placeInfoDTO가 null이거나 contentsTypeKr가 null입니다. taskType: {}", taskType);
+//                taskContentType = taskType; // 기본값 설정
+//            }
+//        }
+
+
         // TaskDTO 생성
         TaskDTO task = TaskDTO.builder()
                 .taskNum(index + 1)  // 활동 번호 (단순 인덱스)
@@ -673,8 +710,30 @@ public class GptResultService {
                 .memo("")
                 .build();
 
+
+        // 각 날짜의 첫 번째 Task에만 StartTime 설정
+        if (isFirstTaskOfDay) {
+            if (dayNum == 1) { // 첫째 날
+                if (arrival == null) {
+                    task.setStartTime(LocalTime.of(14, 0));
+                } else {
+                    task.setStartTime(arrival.plusHours(2));
+                }
+            } else { // 다른 날들
+                task.setStartTime(LocalTime.of(10, 0));
+            }
+        }
+        log.debug("StartTime : {}", task.getStartTime());
+
+        // Duration 설정 (조건과 상관없이)
+        if (task.getTask().equals("식당")) task.setDuration(foodDuration);
+        else if (task.getTask().equals("관광지")) task.setDuration(tourDuration);
+        else if (task.getTask().equals("카페")) task.setDuration(cafeDuration);
+
+
+
         log.debug("task : {}", task.getTask());
-        log.debug("task비용: {}", task.getCost());
+        log.debug("taskDuration : {}", task.getDuration());
 
         // PlanDTO의 taskList에 추가
         planDTO.getTaskList().add(task);
@@ -702,5 +761,60 @@ public class GptResultService {
                 .build();
 
         return dto;
+    }
+
+    public void saveGptPlan(PlanDTO planDTO, String user) {
+        GptCmdEntity gptCmdEntity = gptCmdRepository.findById(planDTO.getCmdNum())
+                .orElseThrow(() -> new EntityNotFoundException("cmdNum으로 Entity를 불러오지 못했습니다: " + planDTO.getCmdNum()));
+        MemberEntity memberEntity = memberRepository.findById(user)
+                .orElseThrow(() -> new EntityNotFoundException("user정보로 memeberEntity를 불러올 수 없습니다: " + user));
+
+        // PlanDTO를 PlanEntity로 변환
+        PlanEntity planEntity = PlanEntity.builder()
+                // planNum은 자동 증가이므로 설정하지 않습니다.
+                .planName(planDTO.getPlanName())
+                .cmd(gptCmdEntity)
+                .member(memberEntity)
+                .startDate(planDTO.getStartDate())
+                .endDate(planDTO.getEndDate())
+                .theme1(planDTO.getTheme1())
+                .theme2(planDTO.getTheme2())
+                .theme3(planDTO.getTheme3())
+                .planCreateDate(LocalDateTime.now()) // 생성 시간은 현재 시간으로 설정
+                .planUpdateDate(LocalDateTime.now()) // 업데이트 시간도 현재 시간으로 설정
+                .coverImageUrl(planDTO.getCoverImageUrl())
+                .build();
+
+        // PlanEntity 저장 (planNum 자동 생성)
+        PlanEntity savedPlanEntity = planRepository.save(planEntity);
+        log.debug("저장된 planEntity: " + savedPlanEntity);
+
+        // 각 TaskDTO를 TaskEntity로 변환하여 저장
+        for (TaskDTO taskDTO : planDTO.getTaskList()) {
+            // PlaceInfoEntity를 가져오기 (PlaceInfoRepository를 통해)
+            PlaceInfoEntity placeEntity = null;
+            if (taskDTO.getPlace() != null && taskDTO.getPlace().getPlaceId() != null) {
+                placeEntity = placeInfoRepository.findById(taskDTO.getPlace().getPlaceId())
+                        .orElseThrow(() -> new RuntimeException("해당하는 장소 정보를 찾을 수 없습니다: " + taskDTO.getPlace().getPlaceId()));
+            }
+
+            // TaskDTO를 TaskEntity로 변환
+            TaskEntity taskEntity = TaskEntity.builder()
+                    // taskNum은 자동 증가이므로 설정 X
+                    .plan(planEntity) // 연관된 PlanEntity 설정
+                    .member(memberEntity)
+                    .dateN(taskDTO.getDateN())
+                    .startTime(taskDTO.getStartTime())
+                    .duration(taskDTO.getDuration())
+                    .endTime(taskDTO.getEndTime())
+                    .task(taskDTO.getTask())
+                    .cost(taskDTO.getCost())
+                    .memo(taskDTO.getMemo())
+                    .place(placeEntity) // 연관된 PlaceInfoEntity 설정
+                    .build();
+
+            // TaskEntity 저장
+            taskRepository.save(taskEntity);
+        }
     }
 }

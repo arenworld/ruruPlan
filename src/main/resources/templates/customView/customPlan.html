@@ -36,6 +36,8 @@
     <link rel="stylesheet" th:href="@{css/aos.css}">
     <link rel="stylesheet" th:href="@{css/style.css}">
     <link rel="stylesheet" th:href="@{css/customPlan.css}">
+    <link rel="stylesheet" href="/css/language.css" />
+
 
     <title>custom</title>
 
@@ -45,6 +47,9 @@
 
     <!-- 티맵api -->
     <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=7ejrjQSxsM8Vp5U8WbLArOuHpOwQNnJ31hqE3Pt7"></script>
+
+    <!-- 국제화 적용 위한 js-->
+    <script src="/js/member/locale.js"></script>
 </head>
 
 <body>
@@ -118,6 +123,33 @@
 
 <!--본문 내용 ( 맨아래 푸터 제외, 가운데 + our Team 소개 /전체 3분할 중 가운데-->
 <div class="untree_co-section">
+    <div class="lenge_select-toggle">
+        <div class="language-selector">
+            <img src="/images/home/지구본.png" alt="Globe Icon" />
+            <div class="languages">
+                <input type="hidden" id="lang" value="${#locale.language}">
+              <span
+                      class="span_kor"
+                      th:if="${#locale.language == 'ko'}"
+                      style="font-weight: bold"
+              >KOR</span
+              >
+                <span class="span_kor" th:if="${#locale.language != 'ko'}"
+                >KOR</span
+                >
+                <div class="separator"></div>
+                <span
+                        class="span_jp"
+                        th:if="${#locale.language == 'ja'}"
+                        style="font-weight: bold"
+                >JP</span
+                >
+                <span class="span_jp" th:if="${#locale.language != 'ja'}"
+                >JP</span
+                >
+            </div>
+        </div>
+    </div>
 
     <!--본문 내용 -->
     <div class="container my-5">
@@ -130,13 +162,6 @@
                     <span th:text="|『${planDTO.planName}』|" id="head-planName"> </span> [[#{plan}]]
                 </h1>
 
-                <form th:action="@{locale/}" method="get">
-                    <select name="lang" onchange="this.form.submit()"
-                            style="width: 70px; height:40px; font-size: 12px; text-align: left; padding: 0px">
-                        <option value="ko" th:selected="${#locale.language == 'ko'}">한국어</option>
-                        <option value="ja" th:selected="${#locale.language == 'ja'}">日本語</option>
-                    </select>
-                </form>
             </div>
 
 <!--            <div class ="plan-options">-->

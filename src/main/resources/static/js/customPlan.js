@@ -537,6 +537,7 @@ function planMarkers(dayNumOfButton) {
 // placeInfoList 에서 More을 클릭하면 출력되는 상세페이지
 function placeInfoMore() {
     let placeId = $(this).data('place-id');
+    let taskNum = $(this).data('task-num');
 
     $.ajax({
         url: 'custom/placeInfoMore',
@@ -549,8 +550,9 @@ function placeInfoMore() {
             let petFriendlyIcon = placeDTO.petFriendly ? '<img src="../images/customPlan/pet.png" class="info-table-badge" data-badge="pet">' : '';
             let feeInfoKr = placeDTO.feeInfoKr == null ? '' : placeDTO.feeInfo + lang;
             let saleItemKr = placeDTO.saleItemKr == null ? '' : placeDTO.saleItemKr;
-
-
+            console.log(taskNum);
+            let addButton = taskNum === undefined ? '<img src="../images/customPlan/add-point.png" class="info-table-add-task-button" data-place-id="${placeDTO.placeId}" data-map-x="${placeDTO.mapX}" data-map-y="${placeDTO.mapY}">': '';
+            console.log(addButton);
             let infoMoreTable = `
                          <div class="info-more-table-box">
                             <table class="info-table">
@@ -563,7 +565,7 @@ function placeInfoMore() {
                                             <span>${petFriendlyIcon}</span>
                                         </th>
                                         <td class="info-table-back-td">   
-                                            <img src="../images/customPlan/add-point.png" class="info-table-add-task-button" data-place-id="${placeDTO.placeId}" data-map-x="${placeDTO.mapX}" data-map-y="${placeDTO.mapY}">                        
+                                            ${addButton}                        
                                             <img src="../images/customPlan/return2.png" class="info-table-return-button">                        
                                         </td>
                                     </tr>
@@ -962,7 +964,7 @@ function updatePlanInfoList(visiblePlanMarkerKeyList) {
             <div class="place-info-section${task.place.placeId}" >
                 ${img}
                 <h5 class="place-info-title">${task.place.titleKr}</h5>
-                <img src="../images/customPlan/more2.png" class="info-section-more" data-place-id="${task.place.placeId}">
+                <img src="../images/customPlan/more2.png" class="info-section-more" data-place-id="${task.place.placeId}" data-task-num="${task.taskNum}">
                 <span class="info-section-address">${task.place.addressKr}</span>
                 <span class="info-section-contentsType">${task.place.contentsTypeKr}</span>
                 <img src="../images/customPlan/infocenter.png" class="info-section-infocenterImg">
@@ -1156,7 +1158,7 @@ function Tmap(sx, sy, ex, ey) {
             }),
             success: function (response) {
                 var resultData = response.features;
-                let walkTime = (resultData[0].properties.totalTime) / 60; //
+                walkTime = (resultData[0].properties.totalTime) / 60; //
                 resolve(walkTime); // Promise resolve
             },
             error: function (xhr, status, error) {

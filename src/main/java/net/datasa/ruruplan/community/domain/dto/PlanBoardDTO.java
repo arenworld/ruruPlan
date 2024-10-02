@@ -39,10 +39,10 @@ public class PlanBoardDTO {
     private Integer likeCount;
 
     //작성일
-    private LocalDateTime createTime;
+    private LocalDateTime createDate;
 
     //수정일
-    private LocalDateTime updateTime;
+    private LocalDateTime updateDate;
 
     //태그1
     private String tag1;

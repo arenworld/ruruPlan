@@ -39,29 +39,31 @@ public class PlanBoardService {
         switch (searchType1) {
             case "theme5" :
                 entityPage = boardRepo.findByTag1ContainingOrTag2ContainingOrTag3ContainingOrTag4ContainingOrTag5Containing(searchType1,
-                        searchType1, searchType1, searchType1, searchType1, pageable);            default :
-                entityPage = boardRepo.findAll(pageable);     break;
+                        searchType1, searchType1, searchType1, searchType1, pageable);
+            default :
+                entityPage = boardRepo.findAll(pageable); break;
         }
 
-/*
         log.debug("조회된 결과 엔티티페이지 : {}", entityPage.getContent());
-*/
 
         //entityPage의 각 요소들을 순회하면서 convertToDTO() 메소드로 전달하여 DTO로 변환하고
         //이를 다시 새로운 Page객체로 만든다.
         Page<PlanBoardDTO> planboardDTOPage = entityPage.map(this::convertToDTO);
         return planboardDTOPage;
     }
+
     /**
      * DB에서 조회한 게시글 정보인 BoardEntity 객체를 BoardDTO 객체로 변환
      * @param entity    게시글 정보 Entity 객체
      * @return          게시글 정보 DTO 개체
      */
     private PlanBoardDTO convertToDTO(PlanBoardEntity entity) {
-        return PlanBoardDTO.builder()
+        PlanBoardDTO dto = new PlanBoardDTO().builder()
                 .boardNum(entity.getBoardNum())
                 .memberId(entity.getMember() != null ? entity.getMember().getMemberId() : null)
-                .planName(entity.getPlanName())
+                .nickName(entity.getMember() != null ? entity.getMember().getNickname() : null)
+                .planNum(entity.getPlan() != null ? entity.getPlan().getPlanNum() : null)
+                .planName(entity.getPlan() != null ? entity.getPlan().getPlanName() : null)
                 .contents(entity.getContents())
                 .coverImageUrl(entity.getPlan().getCoverImageUrl())
                 .viewCount(entity.getViewCount())
@@ -74,6 +76,9 @@ public class PlanBoardService {
                 .tag4(entity.getTag4())
                 .tag5(entity.getTag5())
                 .build();
+
+        return dto;
+
     }
 
 

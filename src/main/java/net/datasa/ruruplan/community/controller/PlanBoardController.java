@@ -13,17 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Value;
 
-
-import java.util.List;
-
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("planBoard")
 public class PlanBoardController {
 
-    final PlanBoardService boardSer;
-    final PlanBoardReplyService ReplySer;
+    private final PlanBoardService boardSer;
+    private final PlanBoardReplyService ReplySer;
 
     //application.properties 파일의 게시판 관련 설정값
     @Value("${board.pageSize}")
@@ -44,8 +41,12 @@ public class PlanBoardController {
         Page<PlanBoardDTO> boardPage = boardSer.getList(page, pageSize, searchType1, searchType2);
 
         model.addAttribute("boardPage", boardPage);
+        model.addAttribute("page", page);
+        model.addAttribute("searchType", searchType1);
+        model.addAttribute("searchType", searchType1);
+        model.addAttribute("linkSize", linkSize);
 
-        return "communityView/board";
+        return "communityView/planBoard";
     }
 
     @Controller("share")

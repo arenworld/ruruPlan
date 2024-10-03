@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+    <link rel="shortcut icon" href="/images/favicon.png">
+
+    <meta name="description" content="" />
+    <!--페이지 틀-->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!--위치 아이콘-->
+    <link rel="stylesheet" href="/fonts/icomoon/style.css">
+    <!--귀여운 폰트// 그러나 언어 변경 버튼에 영향을 줌-->
+    <link rel="stylesheet" href="/css/style.css">
+    <!--태그버튼-->
+    <link rel="stylesheet" href="/css/button.css">
+
+    <link rel="stylesheet" href="/css/language.css" />
+    <title>플랜 공유 게시판</title>
+    <style>
+        /* 한국어일 때 폰트 */
+        html[lang="ko"] {
+            font-family: 'NanumSquareRound', sans-serif;
+        }
+        /* 일본어일 때 폰트 */
+        html[lang="ja"] {
+            font-family: 'korur', sans-serif;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <!--로고-->
+    <!-- 언어변경파트 -->
+    <div class="select-container">
+        <div class="lenge_select-toggle">
+            <div class="language-selector">
+                <img src="/images/home/지구본.png" alt="Globe Icon" />
+                <div class="languages">
+                    <span class="span_kor" th:if="${#locale.language == 'ko'}" style="font-weight: bold;">KOR</span>
+                    <span class="span_kor" th:if="${#locale.language != 'ko'}">KOR</span>
+                    <div class="lang-separator"></div>
+                    <span class="span_jp"  th:if="${#locale.language == 'ja'}" style="font-weight: bold;">JP</span>
+                    <span class="span_jp"  th:if="${#locale.language != 'ja'}">JP</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--제목-->
+    <div class="row justify-content-center text-center mb-5">
+        <div class="col-lg-6">
+            <h2 class="section-title text-center mb-3" style="text-align: center;"
+                th:text="#{share_plan}"></h2>
+            <p th:text="#{share_plan_mg}"></p>
+        </div>
+    </div>
+    <!--버튼-->
+    <table>
+        <tr >
+            <td class="button-container">
+                <div class='button -regular center' th:text="#{spring}" value="spring"></div>
+                <div class='button -regular center' th:text="#{summer}" value="summer"></div>
+                <div class='button -regular center' th:text="#{fall}" value="fall"></div>
+                <div class='button -regular center'  th:text="#{winter}" value="winter"></div>
+            </td>
+            <td  class="button-container">
+                <div class='button -regular center' value="2days" th:text="#{2days}"></div>
+                <div class='button -regular center' value="3days" th:text="#{3days}"></div>
+                <div class='button -regular center' value="4days" th:text="#{4days}"></div>
+                <div class='button -regular center' value="5days" th:text="#{5days}"></div>
+                <div class='button -regular center' value="6days" th:text="#{6days}"></div>
+            </td>
+        </tr>
+        <tr>
+
+        </tr>
+    </table>
+    <div class="button-container">
+
+    </div>
+    <div class="button-container">
+        <div class='button -regular center' th:text="#{spring}"></div>
+        <div class='button -regular center' th:text="#{summer}"></div>
+        <div class='button -regular center' th:text="#{fall}"></div>
+        <div class='button -regular center'  th:text="#{winter}"></div>
+    </div>
+    <div class="button-container">
+        <div class='button -regular center' th:text="#{theme1}"></div>
+        <div class='button -regular center' th:text="#{theme2}"></div>
+        <div class='button -regular center' th:text="#{theme3}"></div>
+        <div class='button -regular center' th:text="#{theme4}"></div>
+        <div class='button -regular center' th:text="#{theme5}"></div>
+        <div class='button -regular center' th:text="#{theme6}"></div>
+        <div class='button -regular center' th:text="#{theme7}"></div>
+        <div class='button -regular center' th:text="#{theme8}"></div>
+        <div class='button -regular center' th:text="#{theme9}"></div>
+    </div>
+</header>
+<main>
+    <div class="untree_co-section">
+        <div class="container">
+            <!--플랜 불러오기-->
+            <div class="row">
+                <div th:each="board, status : ${boardPage}" class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
+                    <!--플랜 커버-->
+                    <div class="media-1">
+                        <a href="#" class="d-block mb-3">
+                            <img th:src="${board.coverImageUrl}" alt="Image" class="img-fluid">
+                        </a>
+                    </div>
+                    <!--하트, 북마크-->
+                    <span class="d-flex align-items-center loc mb-2">
+					    <div>
+                            <img id="like" th:src="@{/images/plan/하트.png}" style="width: 25px; height: 25px;">
+							<span th:text="${board.likeCount}">좋아요 수</span>
+                            <img id="save" th:src="@{/images/plan/북마크.png}" style="width: 30px; height: 30px;">
+                        </div>
+					</span>
+                    <!--태그-->
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <h3><a href="#" th:text="${board.planName}"></a></h3>
+                            <div class="price ml-auto" style="border-bottom: 100px">
+                              <span>#<span th:text="#{${board.tag1}}">계절</span></span>
+                              <span>#<span  th:text="#{${board.tag2}}">몇박며칠</span></span>
+                              <span>#<span  th:text="#{${board.tag3}}">누구랑</span></span>
+                              <span>#<span  th:text="#{${board.tag4}}">테마1</span></span>
+                              <span  th:if="${board.tag5} != null" >#<span th:text="#{${board.tag5}}">테마2</span></span>
+                            </div>
+                            <br><br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/member/locale.js"></script>
+</body>
+</html>

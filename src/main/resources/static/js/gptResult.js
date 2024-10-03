@@ -217,9 +217,89 @@ $(document).ready(async function() {
     }
     $('#total-cost').html('예상 최소비용: ' + totalCost.toLocaleString() + '원');
 
+    // 저장버튼 클릭 시 모달 창 작업 및 저장
+    // 모달 창 열기
     $('#save-button').click(function() {
-        savePlan(allTasks);
+        $('#savePlanModal').css('display', 'block');
     });
+
+    // 모달 창 닫기
+    $('.close').click(function() {
+        $('#savePlanModal').css('display', 'none');
+    });
+
+    // 모달 외부 클릭 시 닫기
+    $(window).click(function(event) {
+        if ($(event.target).is('#savePlanModal')) {
+            $('#savePlanModal').css('display', 'none');
+        }
+    });
+
+    // 이미지 미리보기
+    $('#coverImageUrl').change(function() {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#previewImage').attr('src', e.target.result);
+            $('#previewImage').css('display', 'block'); // 이미지를 보여줍니다.
+        };
+        reader.readAsDataURL(this.files[0]); // 파일을 읽어서 미리보기 이미지를 표시합니다.
+    });
+
+    // 최종 저장 버튼 클릭
+    $('#save-plan-button').click(function() {
+        var planName = $('#planName').val();
+        var coverImageUrl = $('#coverImageUrl')[0].files[0]; // 파일 정보 가져오기
+
+        if (!planName) {
+            alert('일정 이름을 입력하세요.');
+            return;
+        }
+
+
+        // var newPlanDTO = {
+        //     ...planDTO,
+        //     planNum: null,
+        //     planName: planName,
+        //     coverImageUrl: coverImageUrl ? coverImageUrl.name : null,
+        //     taskList: allTasks
+        // };
+
+        var newPlanDTO = {
+            planNum: null, // 새로운 계획이므로 null 또는 서버에서 생성된 값
+            planName: planName ? planName : null, // 필요에 따라 변경
+            cmdNum: planDTO.cmdNum,
+            memberId: planDTO.memberId, // 로그인된 사용자 ID로 대체
+            startDate: planDTO.startDate, // 기존 planDTO의 startDate 사용
+            endDate: planDTO.endDate,     // 기존 planDTO의 endDate 사용
+            theme1: planDTO.theme1,       // 기존 planDTO의 theme1 사용
+            theme2: planDTO.theme2,       // 기존 planDTO의 theme2 사용
+            theme3: planDTO.theme3,       // 기존 planDTO의 theme3 사용
+            planCreateDate: null, // 서버에서 설정
+            planUpdateDate: null, // 서버에서 설정
+            coverImageUrl: coverImageUrl ? coverImageUrl.name : null,
+            taskList: allTasks   // 계산된 모든 TaskDTO 배열
+        };
+
+        // 서버로 전송
+        sendPlanToServer(newPlanDTO);
+    });
+
+    function sendPlanToServer(planDTO) {
+        $.ajax({
+            url: '/saveGptPlan',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(planDTO),
+            success: function(response) {
+                alert('일정이 성공적으로 저장되었습니다.');
+                window.location.href = "/";
+            },
+            error: function(error) {
+                alert('일정 저장에 실패하였습니다.');
+                console.error(error);
+            }
+        });
+    }
 
     // 시간 형식을 "HH:mm"으로 포맷팅하는 함수
     function formatTime(timeStr) {
@@ -376,44 +456,28 @@ $(document).ready(async function() {
         });
     }
 
-    function savePlan(allTasks) {
-        // PlanDTO 생성
-        var newPlanDTO = {
-            planNum: null, // 새로운 계획이므로 null 또는 서버에서 생성된 값
-            planName: 'GPTのオススメプラン', // 필요에 따라 변경
-            cmdNum: planDTO.cmdNum,
-            memberId: planDTO.memberId, // 로그인된 사용자 ID로 대체
-            startDate: planDTO.startDate, // 기존 planDTO의 startDate 사용
-            endDate: planDTO.endDate,     // 기존 planDTO의 endDate 사용
-            theme1: planDTO.theme1,       // 기존 planDTO의 theme1 사용
-            theme2: planDTO.theme2,       // 기존 planDTO의 theme2 사용
-            theme3: planDTO.theme3,       // 기존 planDTO의 theme3 사용
-            planCreateDate: null, // 서버에서 설정
-            planUpdateDate: null, // 서버에서 설정
-            coverImageUrl: null, // 필요 시 설정
-            taskList: allTasks   // 계산된 모든 TaskDTO 배열
-        };
+    // function savePlan(allTasks) {
+    //     // PlanDTO 생성
+    //     var newPlanDTO = {
+    //         planNum: null, // 새로운 계획이므로 null 또는 서버에서 생성된 값
+    //         planName: 'GPTのオススメプラン', // 필요에 따라 변경
+    //         cmdNum: planDTO.cmdNum,
+    //         memberId: planDTO.memberId, // 로그인된 사용자 ID로 대체
+    //         startDate: planDTO.startDate, // 기존 planDTO의 startDate 사용
+    //         endDate: planDTO.endDate,     // 기존 planDTO의 endDate 사용
+    //         theme1: planDTO.theme1,       // 기존 planDTO의 theme1 사용
+    //         theme2: planDTO.theme2,       // 기존 planDTO의 theme2 사용
+    //         theme3: planDTO.theme3,       // 기존 planDTO의 theme3 사용
+    //         planCreateDate: null, // 서버에서 설정
+    //         planUpdateDate: null, // 서버에서 설정
+    //         coverImageUrl: null, // 필요 시 설정
+    //         taskList: allTasks   // 계산된 모든 TaskDTO 배열
+    //     };
+    //
+    //     // 서버로 전송
+    //     sendPlanToServer(newPlanDTO);
+    // }
 
-        // 서버로 전송
-        sendPlanToServer(newPlanDTO);
-    }
-
-    function sendPlanToServer(planDTO) {
-        $.ajax({
-            url: '/saveGptPlan',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(planDTO),
-            success: function(response) {
-                alert('일정이 성공적으로 저장되었습니다.');
-                window.location.href = "/";
-            },
-            error: function(error) {
-                alert('일정 저장에 실패하였습니다.');
-                console.error(error);
-            }
-        });
-    }
 
     // duration을 HH:mm 형식으로 변환
     function formatDurationToLocalTime(duration) {

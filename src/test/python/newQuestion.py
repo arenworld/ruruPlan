@@ -30,7 +30,7 @@ my_assistant = client.beta.assistants.create(
     instructions="당신은 서울여행 가이드의 모든 정보를 알고있는 로봇입니다. 질문자가 원하는 답변 형식에 맞춰서 답변합니다.",
     name="SeoulGuide1",
     tools=[{"type": "code_interpreter"}],
-    model="gpt-4o",
+    model="gpt-4",
 )
 # print(my_assistant)
 

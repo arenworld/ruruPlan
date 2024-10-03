@@ -9,6 +9,9 @@ import net.datasa.ruruplan.plan.domain.dto.PlanAndThemeMarkers;
 import net.datasa.ruruplan.plan.domain.dto.TaskDTO;
 import net.datasa.ruruplan.plan.service.CustomPlanService;
 import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
+import net.datasa.ruruplan.security.AuthenticatedUser;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -50,15 +53,12 @@ public class CustomPlanController {
         long days = ChronoUnit.DAYS.between(planDTO.getStartDate(), planDTO.getEndDate()) + 1;
 
         // 사용언어에 맞는 배열 설정
-
         String[] themeArray;
         if(locale.equals(Locale.KOREAN)) {
-            themeArray = new String[] {"쇼핑", "식당", "카페", "역사", "문화", "힐링", "랜드마크", "체험", "레포츠"};
+            themeArray = new String[] {"쇼핑", "식당", "카페", "역사", "문화", "힐링", "랜드마크", "체험", "레포츠", "아이"};
         } else {
-            themeArray = new String[] {"ショッピング", "食べ物", "カフェ", "歴史", "文化", "ヒーリング", "ランドマーク", "体験", "レジャー"};
+            themeArray = new String[] {"ショッピング", "食べ物", "カフェ", "歴史", "文化", "ヒーリング", "ランドマーク", "体験", "レジャー", "子供"};
         }
-
-
         List<TaskDTO> taskList = planDTO.getTaskList();
 
         TaskDTO lastTaskDTO = planDTO.getTaskList().get(taskList.size()-1);
@@ -83,6 +83,7 @@ public class CustomPlanController {
     @ResponseBody
     @PostMapping("getPlan")
     public List<TaskDTO> getPlan(@RequestParam("planNum") Integer planNum, @RequestParam("dayNumOfButton") Integer dayNum) {
+        log.debug("taskDTO:{}", customPlanService.getTaskList(planNum, dayNum));
         return  customPlanService.getTaskList(planNum, dayNum);
     }
 
@@ -126,9 +127,9 @@ public class CustomPlanController {
     @PostMapping("updateTaskPlace")
     public void updateTaskPlace(@RequestParam("planNum") Integer planNum, @RequestParam("targetTaskNum") Integer targetTaskNum, @RequestParam("newPlaceId") String newPlaceId
                     ,@RequestParam("preTaskNum") Integer preTaskNum, @RequestParam("preTransDuration") double preTransDuration
-                    ,@RequestParam("nextTaskNum") Integer nextTaskNum, @RequestParam("nextTransDuration") double nextTransDuration) {
-
-    customPlanService.updateTaskPlace(planNum, targetTaskNum, newPlaceId, preTaskNum, preTransDuration, nextTaskNum, nextTransDuration);
+                    ,@RequestParam("nextTaskNum") Integer nextTaskNum, @RequestParam("nextTransDuration") double nextTransDuration
+                    ,@RequestParam("preTransType") String preTransType, @RequestParam("nextTransType") String nextTransType) {
+    customPlanService.updateTaskPlace(planNum, targetTaskNum, newPlaceId, preTaskNum, preTransDuration, preTransType, nextTaskNum, nextTransDuration, nextTransType);
     }
 
     @ResponseBody
@@ -143,5 +144,13 @@ public class CustomPlanController {
     public void updateLastTaskPlace(@RequestParam("planNum") Integer planNum, @RequestParam("targetTaskNum") Integer targetTaskNum, @RequestParam("newPlaceId") String newPlaceId
             ,@RequestParam("preTaskNum") Integer preTaskNum, @RequestParam("preTransDuration") double preTransDuration) {
         customPlanService.updateLastTaskPlace(planNum, targetTaskNum, newPlaceId, preTaskNum, preTransDuration);
+    }
+
+    @ResponseBody
+    @PostMapping("addNewTask")
+    public void addNewTask(@RequestParam("newPlaceId") String newPlaceId, @RequestParam("preTransDuration") double preTransDuration, @RequestParam("preTransType") String preTransType
+    , @RequestParam("planNum") Integer planNum, @RequestParam("dayNum") Integer dayNum, @RequestParam("lastTaskNum") Integer lastTaskNum
+    , @AuthenticationPrincipal AuthenticatedUser user) {
+        customPlanService.addNewTask(newPlaceId, preTransDuration, preTransType, planNum, dayNum, lastTaskNum, user.getUsername());
     }
 }

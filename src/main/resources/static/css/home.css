@@ -1,10 +1,18 @@
+@font-face {
+    font-family: 'MangoDdobak-B';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405-3@1.1/MangoDdobak-B.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* overflow 설정시 custom페이지에서 스크롤 삭제되는 현상 발견되어 일단 묶어둠*/
 body {
     /* 기본 글꼴, 줄 높이, 배경 색상, 오버플로우 설정 */
-    font-family: "Inter", sans-serif;
+    font-family: 'MangoDdobak-B', serif;
     line-height: 1.5;
     background: #ffffff;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    /*overflow-x: hidden;*/
+    /*overflow-y: hidden;*/
     font-size: 14px;
 }
 
@@ -45,7 +53,7 @@ h2,
 h3,
 h4 {
     /* 제목 폰트 설정 */
-    font-family: "Source Serif Pro", serif;
+    font-family: 'MangoDdobak-B', serif;
 }
 
 .btn {

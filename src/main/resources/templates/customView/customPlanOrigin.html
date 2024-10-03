@@ -205,7 +205,7 @@
                     <!-- 일자별로 테이블을 생성 -->
                     <div th:each="dayNum : ${#numbers.sequence(1, lastDay)}" th:id="|planTable-${dayNum}day|" th:data-daynum-table="${dayNum}" th:class="planTables">
                         <!-- 날짜 제목 -->
-                        <h4 th:text="|Day ${dayNum}|" class="day-plans-dayTitle"></h4>
+                        <h4 th:text="|Day ${dayNum}|" class="day-table-dayTitle"></h4>
 
                         <table class="day-plans-table">
                             <thead>

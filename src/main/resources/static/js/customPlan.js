@@ -31,27 +31,36 @@ let mapOptions = {};
 let clickCountThemeButton = 0;
 
 let clickCountEditTaskPlace = 0;
+let clickCountAddNewTask = 0;
 
 // 플랜번호
 let planNum;
 
+let targetTable;
+let targetDayNum;
 let targetTaskNum;
 let targetTr;
+
+
 let walkTime;
 let transportTime;
 let preTransDuration;
 let nextTransDuration;
+let preTransType;
+let nextTransType;
 
 
 // language 옵션 선택사항
 let lang;
+let themes = [];
 
 
 $(document).ready(function () {
     planNum = $('#planNum').val();
-    lang = $('lang').val();
+    lang = $('#lang').val();
+    console.log(lang);
 
-    $('.task-place-info-list-box').scroll(function() {
+    $('.task-place-info-list-box').scroll(function () {
         let scrollTop = $(this).scrollTop();
 
         console.log('myDiv의 스크롤 위치: ', scrollTop);
@@ -68,112 +77,191 @@ $(document).ready(function () {
         calculateTotalCost(dayNumOfButton);
     }, 100);
 
-    /** ajax로 그린 DOM요소에 이벤트 걸기 **/
+    /************************** ajax로 그린 DOM요소에 이벤트 걸기 ************************/
+    // 새로운 일정추가 위해 일정+ 버튼 클릭시
+    $(document).on('click', '.day-table-add-new-task', function () {
+        targetTable = $(this).closest('table');
+        targetDayNum = $(this).data('table-num');
+        clickCountAddNewTask++;
+
+        // 테마버튼 애니메이션 효과 활성화
+        clickUpdateTaskPlace();
+    });
+
     // 수정버튼 클릭시, 수정가능요소 활성화
     $(document).on('click', '.editImgButton', activateDayTableInputs);
 
     // 일정표 플레이스 타이틀 클릭
-    $(document).on('click', '.click-overlay-edit', clickUpdateTaskPlace);
+    $(document).on('click', '.click-overlay-edit', function () {
+        clickCountEditTaskPlace++;
+        targetTr = $(this).closest('tr');
+        targetTaskNum = $(this).data('task-num');
+        clickUpdateTaskPlace();
+    });
+
     $(document).on('mouseover', '.click-overlay-edit', function () {
 
     });
 
-    // 일정표 플레이스 활성화 된 후 = targetTaskNum 채워진 후, theme-info-section에서 add-task-button 클릭시
+    // 인포리스트에서 일정추가버튼, theme-info-section에서 add-task-button 클릭시
     $(document).on('click', '.info-section-add-task-button', function () {
-        let indexTr = targetTr.index();
-        console.log(indexTr);
 
-        let newPlaceId = $(this).data('place-id');
-        let preX = targetTr.prev().data('map-x');
-        let preY = targetTr.prev().data('map-y');
+        // 기존에 있는 일정정보를 수정할 때
+        if (clickCountEditTaskPlace === 1) {
+            let indexTr = targetTr.index();
+            let table = targetTr.closest('table');
+            let lastTrIndex = table.find('tr').length - 3;
 
-        let nextX = targetTr.next().data('map-x');
-        let nextY = targetTr.next().data('map-y');
+            let newPlaceId = $(this).data('place-id');
+            let newX = $(this).data('map-x');
+            let newY = $(this).data('map-y');
 
-        let newX = $(this).data('map-x');
-        let newY = $(this).data('map-y');
+            // 첫번째 인덱스 요소일 때 : 이전 tr요소가 없다.
+            if (indexTr === 0) {
+                let nextX = targetTr.next().data('map-x');
+                let nextY = targetTr.next().data('map-y');
 
-        calPreTransDuration(preX, preY, newX, newY)
-            .then(() => {
-                console.log('Pre duration calculated, moving to next duration...');
-                return calNextTransDuration(newX, newY, nextX, nextY);
-            })
-            .then(() => {
-                console.log('Next duration calculated, updating task place...');
-                updateTaskPlace(newPlaceId);
-            })
-            .catch((error) => {
-                console.error("Error occurred in sequence: ", error);
-            });
+                calNextTransDuration(newX, newY, nextX, nextY)
+                    .then(() => {
+                        console.log('Next duration calculated, updating task place...');
+                        updateFirstTaskPlace(newPlaceId);
+                    })
+                    .catch((error) => {
+                        console.error("Error occurred in sequence: ", error);
+                    });
+            }
+
+            // 마지막인덱스 요소: nextTr 요소가 없다.
+            if (indexTr === lastTrIndex) {
+                let preX = targetTr.prev().data('map-x');
+                let preY = targetTr.prev().data('map-y');
+                calPreTransDuration(preX, preY, newX, newY)
+                    .then(() => {
+                        console.log('Next duration calculated, updating task place...');
+                        updateLastTaskPlace(newPlaceId);
+                    })
+                    .catch((error) => {
+                        console.error("Error occurred in sequence: ", error);
+                    });
+            }
+
+            if (indexTr !== 0 && indexTr !== lastTrIndex) {
+                let preX = targetTr.prev().data('map-x');
+                let preY = targetTr.prev().data('map-y');
+
+                let nextX = targetTr.next().data('map-x');
+                let nextY = targetTr.next().data('map-y');
+
+                calPreTransDuration(preX, preY, newX, newY)
+                    .then(() => {
+                        console.log('Pre duration calculated, moving to next duration...');
+                        return calNextTransDuration(newX, newY, nextX, nextY);
+                    })
+                    .then(() => {
+                        console.log('Next duration calculated, updating task place...');
+                        updateTaskPlace(newPlaceId);
+                    })
+                    .catch((error) => {
+                        console.error("Error occurred in sequence: ", error);
+                    });
+            }
+        }
+
+        if (clickCountAddNewTask === 1) {
+            let newPlaceId = $(this).data('place-id');
+            let newX = $(this).data('map-x');
+            let newY = $(this).data('map-y');
+
+            console.log(clickCountAddNewTask);
+
+            // 마지막 일정의 장소정보 가져오기 --> 이동시간 계산용
+            let currentLastTask = targetTable.find('tr:last-child .day-table-place-title');
+            let lastTaskNum = currentLastTask.data('tasknum');
+            let lastMapX = currentLastTask.data('map-x');
+            let lastMapY = currentLastTask.data('map-y');
+
+            calPreTransDuration(lastMapX, lastMapY, newX, newY)
+                .then(() => {
+                    console.log('Next duration calculated, updating task place...');
+                    addNewTask(newPlaceId, lastTaskNum);
+                })
+                .catch((error) => {
+                    console.error("Error occurred in sequence: ", error);
+                });
+        }
     });
 
 
-    // 일정표 플레이스 활성화 된 후 = targetTaskNum 채워진 후, info-more-table 에서 add-task-button 클릭시
+    // 장소정보 더보기란에서 일정추가버튼, info-more-table 에서 add-task-button 클릭시
     $(document).on('click', '.info-table-add-task-button', function () {
-        let indexTr = targetTr.index();
-        let table = targetTr.closest('table');
-        let lastTrIndex = table.rows.length - 1;
-        console.log(indexTr);
 
-        let newPlaceId = $(this).data('place-id');
-        let newX = $(this).data('map-x');
-        let newY = $(this).data('map-y');
+        // 기존에 있는 일정정보를 수정할 때
+        if (clickCountEditTaskPlace === 1) {
+            let indexTr = targetTr.index();
+            let table = targetTr.closest('table');
+            let lastTrIndex = table.find('tr').length - 3;
 
-        // 첫번째 인덱스 요소일 때 : 이전 tr요소가 없다.
-        if(indexTr === 0) {
-            let nextX = targetTr.next().data('map-x');
-            let nextY = targetTr.next().data('map-y');
+            let newPlaceId = $(this).data('place-id');
+            let newX = $(this).data('map-x');
+            let newY = $(this).data('map-y');
 
-            calNextTransDuration(newX, newY, nextX, nextY)
-                .then(() => {
-                    console.log('Next duration calculated, updating task place...');
-                    updateFirstTaskPlace(newPlaceId);
-                })
-                .catch((error) => {
-                    console.error("Error occurred in sequence: ", error);
-                });
+            // 첫번째 인덱스 요소일 때 : 이전 tr요소가 없다.
+            if (indexTr === 0) {
+                let nextX = targetTr.next().data('map-x');
+                let nextY = targetTr.next().data('map-y');
+
+                calNextTransDuration(newX, newY, nextX, nextY)
+                    .then(() => {
+                        console.log('Next duration calculated, updating task place...');
+                        updateFirstTaskPlace(newPlaceId);
+                    })
+                    .catch((error) => {
+                        console.error("Error occurred in sequence: ", error);
+                    });
+            }
+
+            // 마지막인덱스 요소: nextTr 요소가 없다.
+            if (indexTr === lastTrIndex) {
+                let preX = targetTr.prev().data('map-x');
+                let preY = targetTr.prev().data('map-y');
+                calPreTransDuration(preX, preY, newX, newY)
+                    .then(() => {
+                        console.log('Next duration calculated, updating task place...');
+                        updateLastTaskPlace(newPlaceId);
+                    })
+                    .catch((error) => {
+                        console.error("Error occurred in sequence: ", error);
+                    });
+            }
+
+            if (indexTr !== 0 && indexTr !== lastTrIndex) {
+                let preX = targetTr.prev().data('map-x');
+                let preY = targetTr.prev().data('map-y');
+
+                let nextX = targetTr.next().data('map-x');
+                let nextY = targetTr.next().data('map-y');
+
+                updatetaskplace(preX, preY, newX, newY)
+                    .then(() => {
+                        console.log('Pre duration calculated, moving to next duration...');
+                        return calNextTransDuration(newX, newY, nextX, nextY);
+                    })
+                    .then(() => {
+                        console.log('Next duration calculated, updating task place...');
+                        updateTaskPlace(newPlaceId);
+                    })
+                    .catch((error) => {
+                        console.error("Error occurred in sequence: ", error);
+                    });
+            }
         }
 
-        // 마지막인덱스 요소: nextTr 요소가 없다.
-        if(indexTr === lastTrIndex) {
-            let preX = targetTr.prev().data('map-x');
-            let preY = targetTr.prev().data('map-y');
-            calPreTransDuration(preX, preY, newX, newY)
-                .then(() => {
-                    console.log('Next duration calculated, updating task place...');
-                    updateLastTaskPlace(newPlaceId);
-                })
-                .catch((error) => {
-                    console.error("Error occurred in sequence: ", error);
-                });
+        if (clickCountAddNewTask === 1) {
+            let newPlaceId = $(this).data('place-id');
+            let newX = $(this).data('map-x');
+            let newY = $(this).data('map-y');
+            addNewTask(newPlaceId, newX, newY);
         }
-
-        let preX = targetTr.prev().data('map-x');
-        let preY = targetTr.prev().data('map-y');
-
-        let nextX = targetTr.next().data('map-x');
-        let nextY = targetTr.next().data('map-y');
-
-        // console.log(newPlaceId);
-        // console.log(preX);
-        // console.log(preY);
-        // console.log(nextX);
-        // console.log(nextY);
-        // console.log(newX);
-        // console.log(newY);
-
-        calPreTransDuration(preX, preY, newX, newY)
-            .then(() => {
-                console.log('Pre duration calculated, moving to next duration...');
-                return calNextTransDuration(newX, newY, nextX, nextY);
-            })
-            .then(() => {
-                console.log('Next duration calculated, updating task place...');
-                updateTaskPlace(newPlaceId);
-            })
-            .catch((error) => {
-                console.error("Error occurred in sequence: ", error);
-            });
     });
 
     // 확인버튼 클릭시 변경내용 저장
@@ -247,13 +335,21 @@ $(document).ready(function () {
         });
     });
 
+
     // 테마별 버튼 생성 및 테마 정보 호출, 레포츠 처리 어떻게 해야 되지?
-    const theme1 = $('#theme1')
-    const themes = ['쇼핑', '식당', '카페', '역사', '문화', '힐링', '랜드마크', '체험', '레포츠']
+    if (lang === 'ko') {
+        themes = ['쇼핑', '식당', '카페', '역사', '문화', '힐링', '랜드마크', '체험', '레포츠', '아이'];
+    } else {
+        themes = ['ショッピング', '食べ物', 'カフェ', '歴史', '文化', 'ヒーリング', 'ランドマーク', '体験', 'レジャー', '子供'];
+    }
     themes.forEach(function (theme) {
         $('#theme-' + theme + '-button').click(function () {
-
             $('.theme-button').css('animation', 'none');
+
+            if (clickCountAddNewTask === 1) {
+                $('.notice-click-theme').css('display', 'none');
+                $('.notice-click-add-button').css('display', 'block');
+            }
 
             // 첫 클릭 때만, 여기서 currentTheme을 담음
             if (clickCountThemeButton === 0) {
@@ -282,11 +378,8 @@ $(document).ready(function () {
             if (previousTheme === '' || previousTheme !== currentTheme) {
                 $(this).css('background-color', 'pink');
             }
-
-
         });
     });
-
 });
 
 
@@ -310,14 +403,20 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                 dayNumOfButton++;
             }
 
-            let lang = 'Kr';
             for (let dayNum = dayNumOfButton; dayNum <= lastDay; dayNum++) {
 
                 let dayTable = `
                         <div id="planTable-${dayNum}day" class="planTables" data-daynum-table="${dayNum}">
-                            <h4 class="day-plans-dayTitle">Day ${dayNum}</h4>
                             <table class="day-plans-table">
                                 <thead>
+                                    <tr class="day-table-tr-basics">
+                                        <th class="day-table-th-dayTitle" colspan="9">
+                                            <h4 class="day-table-dayTitle">Day ${dayNum}</h4>
+                                        </th>
+                                        <th class="day-table-th-add-new-task" colspan="2">
+                                            <img class="day-table-add-new-task" src="/images/customPlan/add-schedule.png" data-table-num="${dayNum}">
+                                        </th>
+                                    </tr>
                                     <tr class="day-table-tr1">
                                         <th class="day-table-th1">time</th>
                                         <th class="day-table-th2">task</th>
@@ -341,41 +440,44 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                         let startTimeMinute = task.startTime.substring(3, 5);
                         let startTime = startTimeHour + ':' + startTimeMinute;
 
-                        let title = lang === 'Kr' ? task.place.titleKr : task.place.titleJp;
+                        let title = lang === 'ko' ? task.place.titleKr : task.place.titleJp;
+                        let contentsType = lang === 'ko' ? task.contentsTypeKr : task.contentsTypeJp;
+                        let contentsTypeMove = lang === 'ko' ? `이동(${task.contentsTypeKr})` : `移動${task.contentsTypeJp})`;
 
                         // Start building task row
                         dayTable += `<tr class="task-list${task.taskNum}" data-tasknum="${task.taskNum}" data-map-x="${task.place.mapX}" data-map-y="${task.place.mapY}">                                        
                                         <td>${startTime}</td>`;
 
                         // 이동 task가 아닐 때
-                        if (task.contentsTypeKr !== '이동') {
+                        if (task.contentsTypeKr !== '도보' && task.contentsTypeKr !== '대중교통') {
+
                             dayTable += `
-                                    <td>${task.contentsTypeKr}</td>
+                                    <td>${contentsType}</td>
                                     <td class="day-table-td-place-title">
-                                    <div class = "input-container">
-                                        <input type="text" value="${title}" disabled data-tasknum="${task.taskNum}" data-place-id="${task.place.placeId}" class="day-table-place-title">
-                                        <div class="click-overlay"></div>
-                                        <div class="click-overlay-edit" data-task-num="${task.taskNum}" ></div>
-                                    </div>    
-                                        </td>`;
+                                        <div class = "input-container">
+                                            <input type="text" value="${title}" disabled data-tasknum="${task.taskNum}" data-place-id="${task.place.placeId}" data-map-x="${task.place.mapX}" data-map-y="${task.place.mapY}" class="day-table-place-title">
+                                            <div class="click-overlay"></div>
+                                            <div class="click-overlay-edit" data-task-num="${task.taskNum}" ></div>
+                                        </div>    
+                                    </td>`;
 
                         }
                         // 이동 task 일때
                         else {
                             dayTable += `
-                                    <td colspan="2">${task.contentsTypeKr}</td>`;
+                                    <td colspan="2" class="day-table-contentTypeMove">${contentsTypeMove}</td>`;
                         }
 
                         // Add duration and cost columns
                         dayTable += `
                                 <td class="day-table-td-duration"><input type="text" value="${durationHour}" disabled class="day-table-duration-hour"></td>
-                                <td>시간</td>
+                                <td class="day-table-duration-h">h</td>
                                 <td class="day-table-td-duration"><input type="text" value="${durationMinute}" disabled class="day-table-duration-minute"></td>
-                                <td>분</td>
+                                <td class="day-table-duration-minute">m</td>
                                 <td class="day-table-td-cost"><input type="text" class="day-table-cost" data-daynum-cost="${task.dateN}" value="${task.cost}" disabled></td>
-                                <td>원</td>`;
+                                <td class="day-table-cost" >₩</td>`;
 
-                        if (task.contentsTypeKr !== '이동')
+                        if (task.contentsTypeKr !== '도보' && task.contentsTypeKr !== '대중교통')
                             dayTable += `    
                                 <td class="day-table-td-editImgButton">
                                     <img src="/images/customPlan/edit-circle.png" alt="Button Image" class="editImgButton" data-tasknum="${task.taskNum}">
@@ -403,6 +505,33 @@ function dayPlansPrint(dayNumOfButton, planNum) {
 
 }
 
+function addNewTask(newPlaceId, lastTaskNum) {
+
+    $.ajax({
+        url: 'custom/addNewTask',
+        type: 'post',
+        data: {
+            newPlaceId: newPlaceId
+            , planNum: planNum
+            , dayNum: targetDayNum
+            , lastTaskNum: lastTaskNum
+            , preTransDuration: preTransDuration
+            , preTransType: preTransType
+        },
+        success: function () {
+            console.log("왔다!");
+            clickCountAddNewTask--;
+            dayPlansPrint(dayNumOfButton, planNum);
+            targetDayNum = '';
+            preTransDuration = '';
+            preTransType = '';
+        },
+        error: function () {
+
+        }
+    })
+}
+
 
 /**
  * 일정장소 변경 위해, 일정테이블에서 장소명 클릭했을 때의 css효과, thememarkerList 비우기
@@ -414,30 +543,21 @@ function clickUpdateTaskPlace() {
         'animation': 'vibration 0.5s infinite',
         'background-color': '#f0f0f0'
     });
+
+    $('.notice-click-theme').css('display', 'block');
     clearThemeMarkers();
     clickCountThemeButton = 0;
     previousTheme = '';
     currentTheme = '';
-
-    // 수정대상이 되는 태스크넘버(레포지토리 검색용)
-    targetTaskNum = $(this).data('task-num');
-
-    // 수정대상이 되는 태스크행(앞뒤붙은 다른 태스크 접근용도, 거리계산용도)
-    targetTr = $(this).closest('tr'); // 클릭한 tr값을 가져와서, 이 tr의 -2, +2에 들어있는 tr의 값을 가져와야함, 그래서 이동시간 두가지를 넣어줘야함
-    // --> 장소하나 수정하면: 새롭게 추가한 placeid, 해당 taskNum, 앞뒤로 바뀐 이동시간 2개+각각의 taskNum2개
 }
 
+
+// 중간일정(첫번째, 마지막제외) 장소정보 수정
 function updateTaskPlace(newPlaceId) {
 
     let preTaskNum = targetTr.prev().data('tasknum');
     let nextTaskNum = targetTr.next().data('tasknum');
-    console.log("pre:" + preTransDuration);
-    console.log("next:" + nextTransDuration);
-    console.log("pre타입:" + typeof(preTransDuration));
-    console.log(newPlaceId);
-    console.log(targetTaskNum);
-    console.log(preTaskNum);
-    console.log(nextTaskNum);
+
     $.ajax({
         url: 'custom/updateTaskPlace',
         type: 'post',
@@ -447,8 +567,10 @@ function updateTaskPlace(newPlaceId) {
             newPlaceId: newPlaceId,
             preTaskNum: preTaskNum,
             preTransDuration: preTransDuration,
+            preTransType: preTransType,
             nextTaskNum: nextTaskNum,
-            nextTransDuration: nextTransDuration
+            nextTransDuration: nextTransDuration,
+            nextTransType: nextTransType
         },
         success: function () {
             targetTaskNum = '';
@@ -458,6 +580,9 @@ function updateTaskPlace(newPlaceId) {
             preTransDuration = '';
             nextTransDuration = '';
             dayPlansPrint(dayNumOfButton, planNum);
+            $('.task-place-info-list-box').css('display', 'block');
+            $('.theme-place-info-list-box').css('display', 'none');
+            clickCountEditTaskPlace--;
         },
         error: function (e) {
             console.log(JSON.stringify(e));
@@ -466,12 +591,9 @@ function updateTaskPlace(newPlaceId) {
 
 }
 
+// 첫번째 이정 장소정보 수정
 function updateFirstTaskPlace(newPlaceId) {
     let nextTaskNum = targetTr.next().data('tasknum');
-    console.log("next:" + nextTransDuration);
-    console.log(newPlaceId);
-    console.log(targetTaskNum);
-    console.log(nextTaskNum);
 
     $.ajax({
         url: 'custom/updateFirstTaskPlace',
@@ -490,6 +612,9 @@ function updateFirstTaskPlace(newPlaceId) {
             transportTime = '';
             nextTransDuration = '';
             dayPlansPrint(dayNumOfButton, planNum);
+            $('.task-place-info-list-box').css('display', 'block');
+            $('.theme-place-info-list-box').css('display', 'none');
+            clickCountEditTaskPlace--;
         },
         error: function (e) {
             console.log(JSON.stringify(e));
@@ -498,14 +623,12 @@ function updateFirstTaskPlace(newPlaceId) {
 
 }
 
+
+// 마지막 일정 장소정보 수정
 function updateLastTaskPlace(newPlaceId) {
 
     let preTaskNum = targetTr.prev().data('tasknum');
-    console.log("pre:" + preTransDuration);
-    console.log("pre타입:" + typeof(preTransDuration));
-    console.log(newPlaceId);
-    console.log(targetTaskNum);
-    console.log(preTaskNum);
+
     $.ajax({
         url: 'custom/updateLastTaskPlace',
         type: 'post',
@@ -524,6 +647,9 @@ function updateLastTaskPlace(newPlaceId) {
             preTransDuration = '';
             nextTransDuration = '';
             dayPlansPrint(dayNumOfButton, planNum);
+            $('.task-place-info-list-box').css('display', 'block');
+            $('.theme-place-info-list-box').css('display', 'none');
+            clickCountEditTaskPlace--;
         },
         error: function (e) {
             console.log(JSON.stringify(e));
@@ -531,7 +657,6 @@ function updateLastTaskPlace(newPlaceId) {
     })
 
 }
-
 
 
 // 수정버튼 클릭시, (1) input태그 활성화 (2) 수정버튼 숨기고, 체크버튼 활성화
@@ -634,12 +759,13 @@ function planMarkers(dayNumOfButton) {
 
             //List<TaskDTO>
             $.each(taskList, function (index, task) {
+                let title = lang === 'ko' ? task.place.titleKr : task.place.titleJp;
 
-                if (task.contentsTypeKr !== '이동') {
+                if (task.contentsTypeKr !== '도보' && task.contentsTypeKr !== '대중교통') {
                     const marker = new naver.maps.Marker({
                         map: map,
                         position: new naver.maps.LatLng(task.place.mapY, task.place.mapX),
-                        title: task.place.titleKr,
+                        title: title,
                         taskNum: task.taskNum,
                         placeId: task.place.placeId,
                         icon: {
@@ -690,22 +816,26 @@ function placeInfoMore() {
         type: 'post',
         data: {placeId: placeId},
         success: function (placeDTO) {
-            var lang = $('#lang').val();
             let heritageIcon = placeDTO.heritage ? '<img src="../images/customPlan/heritage.png" class="info-table-badge" data-badge="heritage">' : '';
             let barrierFreeIcon = placeDTO.barrierFree ? '<img src="../images/customPlan/barrier.png" class="info-table-badge" data-badge="barrier">' : '';
             let petFriendlyIcon = placeDTO.petFriendly ? '<img src="../images/customPlan/pet.png" class="info-table-badge" data-badge="pet">' : '';
             let feeInfoKr = placeDTO.feeInfoKr == null ? '' : placeDTO.feeInfo + lang;
-            let saleItemKr = placeDTO.saleItemKr == null ? '' : placeDTO.saleItemKr;
-            console.log(taskNum);
+            let saleItemKr = placeDTO.saleItemKr == null ? '' : placeDTO.saleItem + lang;
+
+            let title = lang === 'ko' ? placeDTO.titleKr : placeDTO.titleJp;
+            let usetime = lang === 'ko' ? placeDTO.usetimeKr : placeDTO.usetimeJp;
+            let restdate = lang === 'ko' ? placeDTO.restdateKr : placeDTO.restdateJp;
+            let overview = lang === 'ko' ? placeDTO.overviewKr : placeDTO.overviewJp;
+
             let addButton = taskNum === undefined ? `<img src="../images/customPlan/add-point.png" class="info-table-add-task-button" data-place-id="${placeDTO.placeId}" data-map-x="${placeDTO.mapX}" data-map-y="${placeDTO.mapY}">` : '';
-            console.log(addButton);
+
             let infoMoreTable = `
                          <div class="info-more-table-box">
                             <table class="info-table">
                                 <thead>     
                                     <tr class="info-table-basic">
                                         <th class="info-table-title" colspan="2">
-                                            <h4 class="in-title">${placeDTO.titleKr}</h4>
+                                            <h4 class="in-title">${title}</h4>
                                             <span>${heritageIcon}</span>
                                             <span>${barrierFreeIcon}</span>
                                             <span>${petFriendlyIcon}</span>
@@ -719,11 +849,11 @@ function placeInfoMore() {
                                 <tbody>
                                     <tr>    
                                         <th class="info-table-th"><img src="../images/customPlan/clock.png" class="info-table-images"></th>
-                                        <td class="info-table-usetime">${placeDTO.usetimeKr}</td>
+                                        <td class="info-table-usetime">${usetime}</td>
                                     </tr>
                                     <tr>    
                                         <th class="info-table-th"><img src="../images/customPlan/restday.png" class="info-table-images"></th>
-                                        <td class="info-table-restday">${placeDTO.restdateKr}</td>
+                                        <td class="info-table-restday">${restdate}</td>
                                     </tr>
                                     <tr>    
                                         <th class="info-table-th"><img src="../images/customPlan/fee-Info-won.png" class="info-table-images"></th>
@@ -735,7 +865,7 @@ function placeInfoMore() {
                                     </tr>
                                     <tr>
                                         <th class="info-table-th"><img src="../images/customPlan/description.png" class="info-table-images"></th>
-                                        <td class="info-table-description" rowspan="2">${placeDTO.overviewKr}</td>
+                                        <td class="info-table-description" rowspan="2">${overview}</td>
                                     </tr>
                                         <th class="info-table-th"></th>
                                 </tbody>    
@@ -912,15 +1042,17 @@ function themeMarkers() {
                 // 여기까지 오면 일단 +1
                 clickCountThemeButton++;
 
-
                 // 테마 마커배열 채우기 & 상세정보
                 $.each(placeListByTheme, function (index, placeByTheme) {
                     // 플랜마커에 포함되어 있는 건 테마 마커로 표시하지 않음
                     if (!planPlaceIdArray.includes(placeByTheme.placeId)) {
+                        let title = lang === 'ko' ? placeByTheme.titleKr : placeByTheme.titleJp;
+                        let address = lang === 'ko' ? placeByTheme.addressKr : placeByTheme.addressJp;
+
                         let marker = new naver.maps.Marker({
                             map: map,
                             position: new naver.maps.LatLng(placeByTheme.mapY, placeByTheme.mapX),
-                            title: placeByTheme.titleKr,
+                            title: title,
                             placeId: placeByTheme.placeId,
                             icon: {
                                 content: `<svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"
@@ -934,8 +1066,8 @@ function themeMarkers() {
                         let contents = [
                             '<div class="marker-place-info">',
                             `<img src="${placeByTheme.originImgUrl}">`,
-                            `   <h4>${placeByTheme.titleKr}</h4>`,
-                            `   <p>${placeByTheme.addressKr}<br />`,
+                            `   <h4>${title}</h4>`,
+                            `   <p>${address}<br />`,
                             '       <br />',
                             '   </p>',
                             '</div>'
@@ -1091,8 +1223,6 @@ function idleEvent(map, planAllMarkers, themeAllMarkers) {
 function updatePlanInfoList(visiblePlanMarkerKeyList) {
     const infoList = document.querySelector('.task-place-info-list-box');
 
-    // console.log(visiblePlanMarkerKeyList);
-
     // Clear existing list
     while (infoList.firstChild) {
         infoList.removeChild(infoList.firstChild);
@@ -1106,13 +1236,17 @@ function updatePlanInfoList(visiblePlanMarkerKeyList) {
             '<img src="../images/customPlan/nonImg.png" class="place-info-imgNone">' :
             `<img src="${task.place.originImgUrl}" class="place-info-img">`;
 
+        let title = lang === 'ko' ? task.place.titleKr : task.place.titleJp;
+        let address = lang === 'ko' ? task.place.addressKr : task.place.addressJp;
+        let contentsType = lang === 'ko' ? task.place.contentsTypeKr : task.place.contentsTypeJp;
+
         infoList.innerHTML += `
             <div class="place-info-section${task.place.placeId}" >
                 ${img}
-                <h5 class="place-info-title">${task.place.titleKr}</h5>
+                <h5 class="place-info-title">${title}</h5>
                 <img src="../images/customPlan/more2.png" class="info-section-more" data-place-id="${task.place.placeId}" data-task-num="${task.taskNum}">
-                <span class="info-section-address">${task.place.addressKr}</span>
-                <span class="info-section-contentsType">${task.place.contentsTypeKr}</span>
+                <span class="info-section-address">${address}</span>
+                <span class="info-section-contentsType">${contentsType}</span>
                 <img src="../images/customPlan/infocenter.png" class="info-section-infocenterImg">
                 <span class="info-section-infocenter">${task.place.infocenter}</span>
             </div>
@@ -1138,14 +1272,18 @@ function updateThemeInfoList(visibleThemeMarkerKeyList) {
             '<img src="../images/customPlan/nonImg.png" class="place-info-imgNone">' :
             `<img src="${place.originImgUrl}" class="place-info-img">`;
 
+        let title = lang === 'ko' ? place.titleKr : place.titleJp;
+        let address = lang === 'ko' ? place.addressKr : place.addressJp;
+        let contentsType = lang === 'ko' ? place.contentsTypeKr : place.contentsTypeJp;
+
         infoList.innerHTML += `
             <div class="place-info-section${place.placeId}" >
                 ${img}
-                <h5 class="place-info-title">${place.titleKr}</h5>
+                <h5 class="place-info-title">${title}</h5>
                 <img src="../images/customPlan/add-point.png" class="info-section-add-task-button" data-place-id="${place.placeId}" data-map-x="${place.mapX}" data-map-y="${place.mapY}">
                 <img src="../images/customPlan/more2.png" class="info-section-more" data-place-id="${place.placeId}"></img>
-                <span class="info-section-address">${place.addressKr}</span>
-                <span class="info-section-contentsType">${place.contentsTypeKr}</span>
+                <span class="info-section-address">${address}</span>
+                <span class="info-section-contentsType">${contentsType}</span>
                 <img src="../images/customPlan/infocenter.png" class="info-section-infocenterImg">
                 <span class="info-section-infocenter">${place.infocenter}</span>   
            </div>
@@ -1322,10 +1460,12 @@ function calPreTransDuration(preX, preY, newX, newY) {
         console.log("pre 대중교통:", transportTime);
         console.log("Pre 도보:", walkTime);
         preTransDuration = transportTime > walkTime ? walkTime : transportTime;
-        console.log("Pre transportation duration:", preTransDuration);
+        preTransType = transportTime > walkTime ? '도보' : '대중교통';
+        console.log("앞수단:", preTransType);
+        console.log("앞이동시간:", preTransDuration);
         return preTransDuration; // Return preTransDuration
     }).catch(error => {
-        console.error("Error in calPreTransDuration:", error);
+        console.error("Error in updatetaskplace:", error);
         throw error; // Rethrow to propagate error
     });
 }
@@ -1336,9 +1476,12 @@ function calNextTransDuration(newX, newY, nextX, nextY) {
         searchPubTransPathAJAX(newX, newY, nextX, nextY),
         Tmap(newX, newY, nextX, nextY)
     ]).then(([transportTime, walkTime]) => {
-        // Compare transportTime and walkTime
+        console.log("next 대중교통:", transportTime);
+        console.log("next 도보:", walkTime);
         nextTransDuration = transportTime > walkTime ? walkTime : transportTime;
-        console.log("Next transportation duration:", nextTransDuration);
+        nextTransType = transportTime > walkTime ? '도보' : '대중교통';
+        console.log("뒤수단:", nextTransType);
+        console.log("뒤이동시간:", nextTransDuration);
         return nextTransDuration;
     });
 

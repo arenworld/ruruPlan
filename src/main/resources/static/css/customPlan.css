@@ -1,4 +1,12 @@
-/******** 플랜명 + 국제화선택 ********/
+@font-face {
+    font-family: 'MangoDdobak-B';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405-3@1.1/MangoDdobak-B.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+
+/******** 플랜명 ********/
 .plan-head {
     display: flex;
     justify-content: center;
@@ -15,11 +23,14 @@
     gap: 10px;
     margin-bottom: 20px;
     margin-top: 20px;
-    flex-direction: row;
+    /*flex-direction: row;*/
+    flex-wrap: wrap;
     text-align: center;
 }/* 데이버튼, 테마버튼 박스 */
 
 .days-button {
+    display: inline-block;
+    width: auto;
     padding: 5px 10px;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
@@ -33,7 +44,7 @@
 }
 
 .theme-button {
-    padding: 5px;
+    padding: 5px 10px;
     border-radius: 20px;
 } /* 테마버튼 */
 
@@ -41,6 +52,19 @@
     background-color: pink;
 }/* 테마버튼 후버효과 */
 
+.notice-click-theme {
+    display: none;
+    flex-grow: 1;
+    padding-top: 11px;
+    text-align: center;
+}
+
+.notice-click-add-button {
+    display: none;
+    flex-grow: 1;
+    padding-top: 11px;
+    text-align: center;
+}
 
 @keyframes vibration {
     0% { transform: translate(0); }
@@ -61,6 +85,9 @@
     position: relative;
 } /* 데이 일정 테이블  */
 
+.day-plans-table tr {
+    text-align: center;
+}
 
 .day-plans-table input {
     border: none;
@@ -68,17 +95,36 @@
 
 tr.selected {
     background-color: #ffe6e6;
-
 } /* tr에 selected 인자 추가되었을 때의 효과*/
 
-tr.selected input {
+.day-table-tr-basics {
+    border-bottom: double 2px black;
 }
 
-.day-plans-dayTitle {
+
+.day-table-th-dayTitle {
     background-color: pink;
+}
+
+.day-table-dayTitle {
     padding-left: 20px;
     padding-top: 5px;
     padding-bottom: 5px;
+    margin: 0px;
+    display: inline-block;
+    background-color: pink;
+    width: 100%;
+}
+
+.day-table-th-add-new-task {
+    background: pink;
+}
+
+.day-table-add-new-task {
+    width: 35px;
+    height: 35px;
+    padding-top: 2px;
+    cursor : pointer;
 }
 
 .day-table-tr1 {
@@ -86,7 +132,8 @@ tr.selected input {
 }
 
 .day-table-th2 {
-    width: 35px;
+    width: 60px;
+    text-align: center;
 }
 
 .day-table-place-title {
@@ -121,12 +168,22 @@ tr.selected input {
     z-index: 5; /* Ensure it's on top of the input */
 }
 
+.day-table-td-duration {
+    padding: 0px;
+}
 
 .day-table-td-duration input {
     width : 30px;
     text-align: right;
     background-color: transparent;
+    padding: 0px;
+    margin: 0px;
 }
+
+.day-table-duration-h {
+    margin-right: -5px;
+}
+
 
 .day-table-td-cost {
     text-align: right;
@@ -146,6 +203,11 @@ tr.selected input {
     outline: none;
     box-shadow: 0 0 10px rgba(192, 192, 192, 0.5), 0 0 15px rgba(255, 255, 255, 0.8);
 }
+
+.day-table-contentTypeMove {
+    text-align: right;
+}
+
 
 .editImgButton {
     width: 20px;
@@ -192,7 +254,7 @@ tr.selected input {
 /* 일정마커 정보리스트 박스 */
 .task-place-info-list-box {
     width: 100%;
-    height: 400px;
+    height: 500px;
     overflow-y:auto;
     border-top : 2px solid #efefef;
     border-bottom : 2px solid #efefef;
@@ -205,7 +267,7 @@ tr.selected input {
 /* 테마마커 정보리스트 박스 */
 .theme-place-info-list-box {
     display: none;
-    height: 400px;
+    height: 500px;
     overflow-y:auto;
     border-top : 2px solid #efefef;
     border-bottom : 2px solid #efefef;

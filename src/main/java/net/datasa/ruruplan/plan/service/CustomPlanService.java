@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.datasa.ruruplan.gpt.domain.dto.GptCmdDTO;
 import net.datasa.ruruplan.gpt.domain.entity.GptCmdEntity;
 import net.datasa.ruruplan.gpt.repository.GptCmdRepository;
+import net.datasa.ruruplan.member.domain.entity.MemberEntity;
+import net.datasa.ruruplan.member.repository.MemberRepository;
 import net.datasa.ruruplan.plan.domain.dto.PlaceInfoDTO;
 import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
 import net.datasa.ruruplan.plan.domain.dto.TaskDTO;
@@ -47,6 +49,7 @@ public class CustomPlanService {
     private final TaskRepository taskRepository;
     private final PlaceInfoRepository placeInfoRepository;
     private final PlaceInfoJpaRepository placeInfoJpaRepository;
+    private final MemberRepository memberRepository;
 
 
     /**
@@ -107,6 +110,20 @@ public class CustomPlanService {
      * @return
      */
     public List<PlaceInfoDTO> getThemeLocations(String theme) {
+
+        switch (theme) {
+            case "ショッピング" -> theme = "쇼핑";
+            case "食べ物" -> theme = "식당";
+            case "カフェ" -> theme = "카페";
+            case "歴史" -> theme = "역사";
+            case "文化" -> theme = "문화";
+            case "ヒーリング" -> theme = "힐링";
+            case "ランドマーク" -> theme = "랜드마크";
+            case "体験" -> theme = "체험";
+            case "レジャー" -> theme = "레포츠";
+            case "子供" -> theme = "아이";
+        }
+
         List<PlaceInfoEntity> placeInfoEntityList = placeInfoRepository.findByTheme(theme);
         List<PlaceInfoDTO> placeInfoDTOList = new ArrayList<>();
         for (PlaceInfoEntity placeInfoEntity : placeInfoEntityList) {
@@ -287,7 +304,7 @@ public class CustomPlanService {
     }
 
     public void updateTaskPlace(Integer planNum, Integer targetTaskNum, String newPlaceId, Integer preTaskNum
-            , double preTransDuration, Integer nextTaskNum, double nextTransDuration) {
+            , double preTransDuration, String preTransType, Integer nextTaskNum, double nextTransDuration, String nextTransType) {
         // 일정장소 수정 대상
         TaskEntity taskEntity = taskJpaRepository.findById(targetTaskNum)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 task"));
@@ -316,8 +333,10 @@ public class CustomPlanService {
         taskEntity.setContentsTypeKr(placeInfoEntity.getContentsTypeKr());
         taskEntity.setContentsTypeJp(placeInfoEntity.getContentsTypeJp());
         preTaskEntity.setDuration(newPreTransDuration);
-        nextTaskEntity.setDuration(newNextTransDuration);
+        preTaskEntity.setContentsTypeKr(preTransType);
+        preTaskEntity.setContentsTypeJp(preTransType.equals("도보") ? "徒歩" : "大衆交通");
 
+        nextTaskEntity.setDuration(newNextTransDuration);
 
         // 바뀐 시간 table 정리;
         LocalTime fromPoint = preTaskEntity.getStartTime();
@@ -410,8 +429,6 @@ public class CustomPlanService {
                 durationCal = Duration.ofHours(previousTaskDuration.getHour()).plusMinutes(previousTaskDuration.getMinute());
             }
 
-            //LocalTime newStartTime = previousTaskStart.plus(durationCal);
-            //updateEntityList.get(i).setStartTime(newStartTime);
 
         }
 
@@ -427,9 +444,6 @@ public class CustomPlanService {
         TaskEntity preTaskEntity = taskJpaRepository.findById(preTaskNum)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 task"));
 
-        // 바로 뒤 이동태스크
-        //TaskEntity nextTaskEntity = taskJpaRepository.findById(nextTaskNum)
-        //        .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 task"));
 
         // 새로운 장소정보
         PlaceInfoEntity placeInfoEntity = placeInfoJpaRepository.findById(newPlaceId)
@@ -438,8 +452,6 @@ public class CustomPlanService {
         // 앞 장소와의 새로운 이동거리
         LocalTime newPreTransDuration = convertToLocalTime(preTransDuration);
 
-        // 뒤 장소와의 새로운 이동거리
-        //LocalTime newNextTransDuration = convertToLocalTime(nextTransDuration);
 
         // 정보 업데이트
         taskEntity.setPlace(placeInfoEntity);
@@ -482,6 +494,53 @@ public class CustomPlanService {
 
         }
 
+
+    }
+
+    public void addNewTask(String newPlaceId, double preTransDuration, String preTransType
+            , Integer planNum, Integer dayNum, Integer lastTaskNum, String username) {
+        TaskEntity lastTaskEntity = taskJpaRepository.findById(lastTaskNum)
+                .orElseThrow(() -> new EntityNotFoundException("없는 일정"));
+
+        PlanEntity planEntity = planRepository.findById(planNum)
+                .orElseThrow(() -> new EntityNotFoundException("없는 플랜"));
+
+        MemberEntity memberEntity = memberRepository.findById(username)
+                .orElseThrow(() -> new EntityNotFoundException("없는 유저"));
+
+        PlaceInfoEntity newPlaceInfoEntity = placeInfoJpaRepository.findById(newPlaceId)
+                .orElseThrow(() -> new EntityNotFoundException("없는 장소"));
+
+        PlaceInfoDTO newPlaceInfoDTO = convertToDTO(newPlaceInfoEntity);
+
+        TaskEntity newTransTaskEntity = TaskEntity.builder()
+                .plan(planEntity)
+                .place(newPlaceInfoEntity)
+                .member(memberEntity)
+                .dateN(dayNum)
+                .startTime(lastTaskEntity.getEndTime())
+                .duration(convertToLocalTime(preTransDuration))
+                .contentsTypeKr(preTransType)
+                .contentsTypeJp(preTransType.equals("도보") ? "徒歩" : "大衆交通")
+                .cost(1500)
+                .build();
+
+        taskJpaRepository.save(newTransTaskEntity);
+
+        TaskEntity newPlanTaskEntity = TaskEntity.builder()
+                .plan(planEntity)
+                .place(newPlaceInfoEntity)
+                .member(memberEntity)
+                .dateN(dayNum)
+                .startTime(lastTaskEntity.getEndTime())
+                .duration(LocalTime.of(2, 0))
+                .contentsTypeKr(newPlaceInfoDTO.getContentsTypeKr())
+                .contentsTypeJp(newPlaceInfoDTO.getContentsTypeJp())
+                .cost(newPlaceInfoDTO.getFee())
+                .build();
+        //lastTaskEntity.getEndTime() + convertToLocalTime(preTransDuration)
+
+        taskJpaRepository.save(newPlanTaskEntity);
 
     }
 }

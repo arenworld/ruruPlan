@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>게시글 상세</title>
+  <link rel="stylesheet" href="/css/comu.css" />
+</head>
+<body>
+<!-- 헤더 -->
+<div class="page-header">
+  <img src="/images/modal/calender_lefgt.png" class="back_button" onclick="history.back();" />
+  <span class="head_ment"      th:text="${post.nickname} + '님의 게시글'"></span>
+</div>
+
+<!-- 본문 콘텐츠 -->
+<div class="comment-frame">
+  <div class="community-page">
+    <div class="post-content" th:text="${post.contents}"></div>
+      <div class="comunity_text_header">
+        <img src="/images/logo.png" id="User_profile" alt="User_profile" />
+        <div class="row-1">
+          <strong class="user_name"      th:text="${post.nickname} ?: '익명'"></strong>
+
+          <span th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd')}"></span>
+
+        </div>
+      </div>
+
+
+      <!-- 첨부 이미지 표시 -->
+      <div class="post-img-local" th:if="${post.fileName != null}">
+        <img th:src="@{/uploads/{fileName}(fileName=${post.fileName})}" class="post-img" />
+      </div>
+    </div>
+
+    <!-- 좋아요 및 저장 버튼 -->
+    <div class="post-actions">
+      <form th:action="@{/board/like/{boardNum}(boardNum=${post.boardNum})}" method="post">
+        <button type="submit" class="good-button">
+          <span class="icon-small">👍</span>
+          <span class="good-num" th:text="${post.likeCount}">0</span>
+        </button>
+      </form>
+      <!-- 저장 버튼 추가 가능 -->
+    </div>
+
+    <!-- 댓글 표시 영역 -->
+    <!-- 댓글 표시 영역 -->
+    <div class="comment-area">
+      <ul>
+        <li th:each="reply : ${post.replyList}">
+          <strong      th:text="${post.nickname} ?: '익명'"></strong>:
+          <span th:text="${reply.contents}"></span>
+          <span class="reply-date" th:text="${#temporals.format(reply.createDate, 'yyyy-MM-dd HH:mm')}"></span>
+        </li>
+      </ul>
+    </div>
+    <!-- 댓글 작성 폼 -->
+    <div class="comment-section">
+      <form th:action="@{/board/replyWrite}" method="post">
+        <input type="hidden" name="boardNum" th:value="${post.boardNum}" />
+        <input type="text" name="contents" class="comment-input" placeholder="댓글을 작성해보세요..." required />
+        <button type="submit" class="submit-comment-button">댓글 작성</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="/js/free_board/post_detail.js"></script>
+</body>
+</html>

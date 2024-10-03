@@ -1,0 +1,500 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.back_button {
+    width: 30px;
+    height: 30px;
+}
+
+.head_ment {
+    text-align: center;
+}
+
+.comunity_text_header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* 프레임과 같은 너비와 중앙 정렬 */
+.comment-frame,
+.comment-footer {
+    max-width: 700px;
+    margin: 0 auto; /* 중앙 정렬 */
+    background-color: #fff;
+}
+
+.comment-frame {
+    margin: 80px auto; /* 화면 위에서 80px 떨어지게 */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* 댓글 영역 스타일 */
+.comment-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 0;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.comment-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.comment-input {
+    width: 500px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.comment-actions {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.action-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #007bff;
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+.action-button span {
+    margin-right: 5px;
+}
+
+.post-box {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.post-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.post-content {
+    width: 600px; /* 텍스트 부분의 너비 설정 */
+    overflow: hidden;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.post-img {
+    width: 100px;
+    height: 100px;
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between; /* 버튼을 양 끝에 균등하게 배치 */
+    align-items: center;
+    width: 100%; /* 부모의 전체 너비를 차지 */
+}
+
+.post-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #007bff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1; /* 버튼이 동일한 공간을 차지 */
+}
+
+.post-actions button:not(:first-child) {
+    border-left: 1px solid #ccc; /* 첫 번째 버튼 제외하고 나머지에 세로선 추가 */
+}
+
+.icon-small {
+    font-size: 1.5rem; /* 아이콘 크기를 더 명확하게 */
+    margin-right: 5px;
+}
+
+#post {
+    margin-left: 20px; /* 버튼 간 간격을 설정 */
+}
+
+#good {
+    margin-right: 20px;
+}
+
+#save {
+    margin-right: 20px;
+}
+
+
+
+.community-page {
+    padding: 20px;
+    max-width: 700px;
+    margin: auto;
+}
+
+.post-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.frame {
+    max-width: 800px; /* 너비 설정 */
+    margin: 1.25rem auto; /* 가로 중앙 정렬을 위해 auto 추가 */
+    height: auto;
+    background-color: #fff;
+    display: flex; /* 중앙 정렬을 위해 flexbox 사용 */
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+}
+
+.page-header a {
+    text-align: center;
+    color: #6c757d;
+    text-decoration: none;
+    flex: 1;
+}
+
+.page-header a.active {
+    color: #28a745; /* 선택된 아이콘 색상 */
+}
+
+.page-header a i {
+    display: block;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.page-header span {
+    font-size: 12px;
+}
+
+/* 화면 하단 고정된 내비게이션 바 스타일 */
+.page-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    z-index: 1000;
+}
+
+.page-footer a {
+    text-align: center;
+    color: #6c757d;
+    text-decoration: none;
+    flex: 1;
+}
+
+.page-footer a.active {
+    color: #28a745; /* 선택된 아이콘 색상 */
+}
+
+.page-footer a i {
+    display: block;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.page-footer a span {
+    font-size: 12px;
+}
+
+/* 화면 상단 고정된 내비게이션 바 스타일 */
+.page-header {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    background-color: #fff;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between; /* 양 끝으로 공간을 분배 */
+    align-items: center; /* 세로로 중앙 정렬 */
+    padding: 10px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.serch-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.logo_img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.logo span {
+    font-size: 12px;
+    color: #000000;
+    font-weight: 700;
+}
+
+.serch {
+    height: 30px; /* 검색창 높이 설정 */
+    width: 400px; /* 검색창 너비 설정 */
+    margin-left: 20px !important;
+    border: 1px solid black;
+}
+
+.serch_button,
+.home_button {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.text-primary {
+    font-size: 12px !important;
+    margin-left: -5px !important;
+}
+
+.left_bar {
+    position: fixed; /* 요소를 화면에 고정 */
+    top: 0; /* 상단에서 0으로 설정 */
+    left: 0; /* 왼쪽에 붙도록 설정 */
+    width: 320px; /* 너비 설정 */
+    height: 100%; /* 화면 전체 높이 */
+    background-color: white; /* 배경색 */
+    z-index: 1000; /* 다른 요소 위에 표시되도록 설정 (필요에 따라 조정 가능) */
+}
+
+.right_upbar {
+    position: fixed; /* 화면에 고정 */
+    top: 0; /* 상단에 고정 */
+    right: 0; /* 오른쪽에 고정 */
+    width: 320px; /* 바의 너비 */
+    height: 50%; /* 상단 바의 높이를 50%로 설정 */
+    background-color: white; /* 배경색 */
+    z-index: 1000; /* 다른 요소 위에 표시 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 가벼운 그림자 추가 */
+}
+
+.right_downbar {
+    position: fixed; /* 화면에 고정 */
+    bottom: 0; /* 하단에 고정 */
+    right: 0; /* 오른쪽에 고정 */
+    width: 320px; /* 바의 너비 */
+    height: 44%; /* 하단 바의 높이를 50%로 설정 */
+    background-color: white; /* 배경색 */
+    z-index: 1000; /* 다른 요소 위에 표시 */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* 가벼운 그림자 추가 */
+}
+
+.main_user_profil {
+    width: 100px;
+    height: 100px;
+}
+
+.post-img-local {
+    width: 100px; /* 이미지 부분의 너비 설정 */
+    text-align: right;
+}
+
+.profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px; /* 이미지와 텍스트 사이에 여백 추가 */
+}
+
+.row-1 {
+    display: flex;
+    align-items: center;
+}
+
+.post-body {
+    display: flex;
+    justify-content: space-between; /* 텍스트와 이미지 사이 공간 분배 */
+    border-bottom: 1px solid black;
+    padding-bottom: 20px !important; /* 보더라인과 내용 사이에 간격 추가 */
+}
+
+/* 모달 */
+.writeModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    width: 700px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    display: none;
+}
+
+
+.writeForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.writeForm-head {
+    display: flex;
+    justify-content: center; /* 요소를 가운데로 정렬 */
+    align-items: center;
+    padding-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto; /* 좌우 마진을 자동으로 설정 */
+    width: 100%;
+    box-sizing: border-box; /* 패딩과 마진을 포함한 박스 크기 계산 */
+}
+
+.writeForm-head-row2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto; /* 좌우 마진을 자동으로 설정 */
+    margin-top: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    height: 30px; /* 원하는 높이로 설정 */
+}
+
+writeForm-row3{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto; /* 좌우 마진을 자동으로 설정 */
+
+    width: 100%;
+    box-sizing: border-box;
+
+}
+
+
+
+.count {
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
+}
+
+.modal-text {
+    font-size: 15px;
+}
+
+.cancel-button {
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+
+.modal-titel-text {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    position: relative;
+}
+
+.writeForm-main {
+    margin: 0 10px;
+}
+
+.writeForm-buttom {
+    background-color: #3b82f6;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; /* 버튼을 가득 채울 수 있게 설정 */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.writeForm-buttom:hover {
+    background-color: #2563eb;
+}
+
+.content-area {
+    border: 1px solid black;
+    width: 100%;
+    height: 130px;
+    overflow: hidden; /* 넘치는 내용 숨김 */
+    word-wrap: break-word; /* 긴 단어가 있을 때 줄바꿈 처리 */
+    word-break: break-all; /* 모든 글자에서 줄바꿈 */
+    resize: none !important; /* 사용자가 크기 변경을 하지 못하도록 설정 */
+    padding: 10px; /* 텍스트 필드 내 여백 */
+}
+
+/* 모달 오버레이 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 999;
+}
+
+
+.add_button {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 10px;
+    background-image: url("/static/images/customPlan/add-button.png");
+    background-size: cover; /* 이미지가 버튼 크기에 맞게 조정되도록 설정 */
+    background-position: center; /* 이미지가 가운데에 위치하도록 설정 */
+    background-color: transparent; /* 배경색을 투명하게 설정 */
+    border: none; /* 필요에 따라 버튼 테두리를 제거 */
+}
+.writeForm-button{
+    width: 120px;
+    height: 80px;
+    margin-left: 40px;
+}

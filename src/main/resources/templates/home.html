@@ -58,7 +58,7 @@
                 <a th:text="#{community}"></a>
                 <ul class="dropdown">
                     <li><a th:href="@{planBoard/list}" th:text="#{plan_board}"></a></li>
-                    <li><a href="#" th:text="#{board}"></a></li>
+                    <li><a th:href="@{board/list}" th:text="#{board}"></a></li>
                 </ul>
             </li>
             <li class="has-children">
@@ -77,7 +77,7 @@
 
             <li sec:authorize="isAuthenticated()">
                 <a th:href="@{member/logout}">Logout</a>
-                <a href="#">mypage</a>
+                <a th:href="@{/myPage}">mypage</a>
             </li>
 
         </ul>

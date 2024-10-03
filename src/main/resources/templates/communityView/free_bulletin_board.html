@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>게시글 목록</title>
+  <link rel="stylesheet" href="/css/comu.css" />
+</head>
+<body>
+<div class="frame">
+  <div class="page-header">
+    <!-- 로고 -->
+    <div class="logo-container">
+      <a class="logo">
+        <img class="logo_img" src="/images/home/로고_수정.png" />
+        <span class="text-primary">ソウルに触る</span>
+      </a>
+    </div>
+    <!-- 검색창 및 버튼 -->
+    <div class="serch-container">
+      <input type="text" id="serch" class="serch" />
+      <img src="/images/community/돋보기.png" class="serch_button" />
+    </div>
+  </div>
+
+  <div class="community-page">
+    <!-- 게시글 목록 반복 -->
+    <div th:each="post : ${boardList}">
+      <div
+              class="post-box"
+              th:onclick="|location.href='@{/board/read/{boardNum}(boardNum=${post.boardNum})}'|"
+      >
+        <div class="post-header">
+          <img th:src="${post.profileImageUrl != null ? post.profileImageUrl : '/images/mypage/기본프사.jpg'}"
+               class="profile-image" />
+
+          <div class="row-1">
+            <strong
+                    class="user_name"
+                    th:text="${post.nickname} ?: '익명'"
+            ></strong>
+            <span class="write_day">
+                  ·
+                  <span
+                          th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd') ?: ''}"
+                  ></span
+                  ></span>
+          </div>
+        </div>
+        <div class="post-body">
+          <div class="post-content" th:text="${post.contents}"></div>
+          <div class="post-img-local" th:if="${post.fileName != null}">
+            <img th:src="@{/uploads/{fileName}(fileName=${post.fileName})}" class="post-img" />
+          </div>
+        </div>
+        <!-- 좋아요 및 댓글 버튼을 여기로 이동 -->
+        <div class="post-footer">
+          <div class="post-actions">
+            <form
+                    th:action="@{/board/like/{boardNum}(boardNum=${post.boardNum})}"
+                    method="post"
+            >
+              <button type="submit" class="good-button">
+                <span class="icon-small"></span>
+                <span class="good-num" th:text="${post.likeCount}">0</span>
+              </button>
+            </form>
+            <a
+                    th:href="@{/board/read/{boardNum}(boardNum=${post.boardNum})#{comments}}"
+                    class="comment-button"
+            >
+              <span class="icon-small">💬</span>
+              <span class="comment-num" th:text="${post.replyList.size()}"
+              >0</span
+              >
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 페이지 푸터 (고정 내비게이션 바) -->
+  <div class="page-footer">
+    <a href="#" class="active">
+      <i class="fas fa-users"></i>
+      <span>스크랩한 글</span>
+    </a>
+    <a href="#">
+      <i class="fas fa-map-signs"></i>
+      <span>마이페이지</span>
+    </a>
+    <img class="home_button" src="/images/community/집이모지.png" />
+    <a href="#">
+      <i class="fas fa-user"></i>
+      <span>내 여행</span>
+    </a>
+    <a class="write-link">
+      <i class="fas fa-paper-plane"></i>
+      <span>글쓰기</span>
+    </a>
+  </div>
+
+  <!-- 모달 오버레이 -->
+  <div class="modal-overlay" style="display: none"></div>
+
+  <!-- 글작성 모달 -->
+  <div class="writeModal" style="display: none">
+    <div class="writeForm">
+      <div class="writeForm-head">
+        <span class="modal-titel-text">포스트 작성</span>
+        <img class="cancel-button" src="/images/community/엑스.png" />
+      </div>
+
+      <div class="writeForm-head-row2">
+        <span class="modal-text">내용</span>
+        <div class="count">0/1000자</div>
+      </div>
+      <form
+              id="uploadForm"
+              th:action="@{/board/write}"
+              method="POST"
+              enctype="multipart/form-data"
+      >
+        <!-- 글 입력 -->
+        <div class="writeForm-main">
+              <textarea
+                      name="contents"
+                      class="content-area"
+                      placeholder="내용을 입력하세요."
+                      required
+              ></textarea>
+        </div>
+<div class="writeForm-row3">
+        <!-- 파일 입력 필드는 숨김 -->
+        <input
+                type="file"
+                id="imageInput"
+                name="upload"
+                style="display: none"
+        />
+
+        <!-- 이미지 저장 버튼 -->
+        <button class="add_button" type="button" id="uploadButton">
+          <img
+                  id="previewImage"
+                  style="display: block; width: 100%; height: 100%"
+          />
+        </button>
+        <!-- 글 저장 버튼 -->
+        <button type="submit" class="writeForm-button" disabled>
+          저장
+        </button>
+</div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script src="/js/free_board/list.js"></script>
+</body>
+</html>

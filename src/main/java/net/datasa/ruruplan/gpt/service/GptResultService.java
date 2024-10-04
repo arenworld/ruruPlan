@@ -66,6 +66,56 @@ public class GptResultService {
         String theme3 = gptCmdEntity.getTheme3();
         boolean density = gptCmdEntity.getDensity();
 
+
+        String[] themes = {theme1, theme2, theme3};
+
+
+        for (int i = 0; i < themes.length; i++) {
+            switch (themes[i]) {
+                case "쇼핑":
+                    themes[i] = "theme1";
+                    break;
+                case "음식":
+                    themes[i] = "theme2";
+                    break;
+                case "카페":
+                    themes[i] = "theme3";
+                    break;
+                case "역사":
+                    themes[i] = "theme4";
+                    break;
+                case "문화":
+                    themes[i] = "theme5";
+                    break;
+                case "힐링":
+                    themes[i] = "theme6";
+                    break;
+                case "체험":
+                    themes[i] = "theme7";
+                    break;
+                case "랜드마크":
+                    themes[i] = "theme8";
+                    break;
+                case "레포츠":
+                    themes[i] = "theme9";
+                    break;
+                case "수상레저":
+                    themes[i] = "theme9_1";
+                    break;
+                case "아이스링크":
+                    themes[i] = "theme9_2";
+                    break;
+                case "자전거":
+                    themes[i] = "theme9_3";
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+
+
         log.debug("firstDate: " + firstDate);
         log.debug("lastDate: " + lastDate);
         log.debug("arrival: " + arrival);
@@ -157,6 +207,15 @@ public class GptResultService {
             log.error("IOException 발생", e);
         }
         log.debug("place_id: {}", placeIdList);
+
+
+        // gptCmdEntity의 테마 값을 수정
+        gptCmdEntity.setTheme1(themes[0]);
+        gptCmdEntity.setTheme2(themes[1]);
+        gptCmdEntity.setTheme3(themes[2]);
+
+// 수정된 엔티티를 데이터베이스에 저장
+        gptCmdRepository.save(gptCmdEntity);
 
         GptResultDTO dto = new GptResultDTO();
         dto.setCmdNum(cmdNum);

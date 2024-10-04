@@ -342,11 +342,11 @@ $(document).ready(async function() {
             contentType: 'application/json',
             data: JSON.stringify(planDTO),
             success: function(response) {
-                alert('일정이 성공적으로 저장되었습니다.');
+                alert(lang === 'ko' ? '플랜이 저장되었습니다!😄' : 'プランが保存されました！😄');
                 window.location.href = "/";
             },
             error: function(error) {
-                alert('일정 저장에 실패하였습니다.');
+                alert(lang === 'ko' ? '플랜 저장에 실패하였습니다.😭' : 'プランの保存中に問題が発生しました。😭');
                 console.error(error);
             }
         });

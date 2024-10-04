@@ -13,12 +13,14 @@ import java.io.IOException;
         public String home(Model model) throws IOException {
 
             // 환율 값 불러오는 java 메소드 호출
-            double exchangeValue = Math.round(exchangeTest.exchangeValue()*100) / 100.0 * 100;
+            String value = exchangeTest.exchangeValue();
+            double exchange = Double.parseDouble(value);
+            double exchangeValue = Math.round(exchange*100) / 100.0 * 100;
 
             String exchangeValue2 = Double.toString(exchangeValue);
-            String exchange = exchangeValue2 + "₩/100￥";
+            String text = exchangeValue2 + "₩/100￥";
 
-            model.addAttribute("exchange", exchange);
+            model.addAttribute("exchange", text);
 
             return "home";
         }

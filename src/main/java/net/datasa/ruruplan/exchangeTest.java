@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class exchangeTest {
-    public static double exchangeValue() throws IOException {
+    public static String exchangeValue() throws IOException {
         String firstPythonScriptPath = "src/test/python/exchange.py";
         String pythonInterpreter = "python";
 
@@ -15,7 +15,10 @@ public class exchangeTest {
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line;
         line = reader.readLine();
+        if(line == null){
+            line = "0";
+        }
 
-        return Double.parseDouble(line);
+        return line;
     }
 }

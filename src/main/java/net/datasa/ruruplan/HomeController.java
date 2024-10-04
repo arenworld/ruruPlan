@@ -13,11 +13,9 @@ import java.io.IOException;
         public String home(Model model) throws IOException {
 
             // 환율 값 불러오는 java 메소드 호출
-            double exchangeValue = exchangeTest.exchangeValue();
-            double exchangeValue2 = Math.round(exchangeValue * 100) / 100.0;
+            double exchangeValue = Math.round(exchangeTest.exchangeValue()*100) / 100.0 * 100;
 
-            exchangeValue2 *= 100;
-
+            String exchangeValue2 = Double.toString(exchangeValue);
             String exchange = exchangeValue2 + "₩/100￥";
 
             model.addAttribute("exchange", exchange);

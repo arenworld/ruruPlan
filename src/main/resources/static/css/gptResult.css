@@ -181,6 +181,40 @@ h1, h3, button {
 }
 
 
+/* 하단 버튼 그룹을 가운데 정렬 */
+.button-group.bottom-buttons {
+    justify-content: center; /* 버튼들을 가로로 가운데 정렬 */
+    margin-top: 40px; /* 상단과 하단 버튼 간 여백 */
+    margin-bottom: 40px; /* 버튼 하단에 80px 여백 추가 */
+}
+
+/* 각 버튼의 공통 스타일은 기존과 동일 */
+.button-group.bottom-buttons button {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    color: #ffffff;
+    text-align: center;
+    background-color: #d88bbd;
+}
+
+.button-group.bottom-buttons button:hover {
+    background-color: #c278aa;
+}
+
+#print-button-bottom {
+    background-color: #b58d9f; /* 약간의 진한 분홍색 */
+}
+
+#print-button-bottom:hover {
+    background-color: #9e7486; /* 호버 시 더 진한 분홍색 */
+}
+
+
 /* 인쇄 전용 스타일 */
 @media print {
     /* 브라우저에서 인쇄할 때 색상 유지 */

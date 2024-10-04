@@ -10,12 +10,19 @@ import net.datasa.ruruplan.gpt.service.GptResultService;
 import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
 import net.datasa.ruruplan.plan.domain.dto.TaskDTO;
 import net.datasa.ruruplan.security.AuthenticatedUser;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -132,5 +139,35 @@ public class GptResultController {
     public void saveGptPlan(@RequestBody PlanDTO planDTO, @AuthenticationPrincipal AuthenticatedUser user) {     // Json 데이터 받을때는 RequestBody 사용해야함
         gptResultService.saveGptPlan(planDTO, user.getId());
     }
+
+    @PostMapping("/uploadCoverImage")
+    public ResponseEntity<String> uploadCoverImage(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("파일이 비어 있습니다.");
+        }
+
+        try {
+            // 원하는 경로 설정 (예: "/uploads/coverImages/")
+            String uploadDir = "src/main/resources/static/images/planCoverImage/";
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path uploadPath = Paths.get(uploadDir);
+
+            // 디렉토리가 없으면 생성
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            // 파일 저장
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            // 파일 경로 반환 (웹에서 접근 가능한 경로)
+            String fileAccessPath = "/images/planCoverImage/" + fileName;
+            return ResponseEntity.ok(fileAccessPath);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 저장 중 오류 발생");
+        }
+    }
+
 }
 

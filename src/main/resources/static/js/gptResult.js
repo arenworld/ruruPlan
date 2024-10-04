@@ -248,41 +248,86 @@ $(document).ready(async function() {
     // 최종 저장 버튼 클릭
     $('#save-plan-button').click(function() {
         var planName = $('#planName').val();
-        var coverImageUrl = $('#coverImageUrl')[0].files[0]; // 파일 정보 가져오기
+        var coverImageFile = $('#coverImageUrl')[0].files[0]; // 파일 정보 가져오기
 
         if (!planName) {
             alert('일정 이름을 입력하세요.');
             return;
         }
 
+        // 파일이 있으면 파일을 서버에 업로드
+        if (coverImageFile) {
+            var formData = new FormData();
+            formData.append("file", coverImageFile);
 
-        // var newPlanDTO = {
-        //     ...planDTO,
-        //     planNum: null,
-        //     planName: planName,
-        //     coverImageUrl: coverImageUrl ? coverImageUrl.name : null,
-        //     taskList: allTasks
-        // };
+            // 파일을 서버에 전송
+            $.ajax({
+                url: '/uploadCoverImage', // 파일 업로드 경로
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(filePath) {
+                    // 업로드 성공 후 반환받은 파일 경로로 newPlanDTO 생성
+                    var newPlanDTO = {
+                        planNum: null, // 새로운 계획이므로 null 또는 서버에서 생성된 값
+                        planName: planName ? planName : null,
+                        cmdNum: planDTO.cmdNum,
+                        memberId: planDTO.memberId,
+                        startDate: planDTO.startDate,
+                        endDate: planDTO.endDate,
+                        theme1: planDTO.theme1,
+                        theme2: planDTO.theme2,
+                        theme3: planDTO.theme3,
+                        planCreateDate: null,
+                        planUpdateDate: null,
+                        coverImageUrl: filePath, // 파일 경로로 설정
+                        taskList: allTasks
+                    };
 
-        var newPlanDTO = {
-            planNum: null, // 새로운 계획이므로 null 또는 서버에서 생성된 값
-            planName: planName ? planName : null, // 필요에 따라 변경
-            cmdNum: planDTO.cmdNum,
-            memberId: planDTO.memberId, // 로그인된 사용자 ID로 대체
-            startDate: planDTO.startDate, // 기존 planDTO의 startDate 사용
-            endDate: planDTO.endDate,     // 기존 planDTO의 endDate 사용
-            theme1: planDTO.theme1,       // 기존 planDTO의 theme1 사용
-            theme2: planDTO.theme2,       // 기존 planDTO의 theme2 사용
-            theme3: planDTO.theme3,       // 기존 planDTO의 theme3 사용
-            planCreateDate: null, // 서버에서 설정
-            planUpdateDate: null, // 서버에서 설정
-            coverImageUrl: coverImageUrl ? coverImageUrl.name : null,
-            taskList: allTasks   // 계산된 모든 TaskDTO 배열
-        };
+                    // 서버로 플랜 데이터 전송
+                    sendPlanToServer(newPlanDTO);
+                },
+                error: function(error) {
+                    alert('이미지 업로드에 실패하였습니다.');
+                    console.error(error);
+                }
+            });
+        } else {
+            // 파일이 없을 경우 처리
+            var newPlanDTO = {
+                planNum: null,
+                planName: planName ? planName : null,
+                cmdNum: planDTO.cmdNum,
+                memberId: planDTO.memberId,
+                startDate: planDTO.startDate,
+                endDate: planDTO.endDate,
+                theme1: planDTO.theme1,
+                theme2: planDTO.theme2,
+                theme3: planDTO.theme3,
+                planCreateDate: null,
+                planUpdateDate: null,
+                coverImageUrl: null, // 이미지가 없을 경우 null 처리
+                taskList: allTasks
+            };
 
-        // 서버로 전송
-        sendPlanToServer(newPlanDTO);
+            sendPlanToServer(newPlanDTO);
+        }
     });
+
+    // 하단 버튼 클릭 이벤트 추가
+    $('#save-button-bottom').click(function() {
+        $('#save-button').click(); // 상단의 save-button과 동일한 동작 수행
+    });
+
+    $('#button2-bottom').click(function() {
+        $('#button2').click(); // 상단의 button2와 동일한 동작 수행
+    });
+
+    $('#print-button-bottom').click(function() {
+        $('#print-button').click(); // 상단의 print-button과 동일한 동작 수행
+    });
+
 
     function sendPlanToServer(planDTO) {
         $.ajax({

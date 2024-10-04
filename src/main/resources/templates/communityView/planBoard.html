@@ -41,13 +41,7 @@
             </div>
             <!-- 네비바  로그인x 로그인,조인  로그인o 로그아웃,마이페이지-->
             <ul class="site-menu">
-                <li class="has-children">
-                    <a th:text="#{community}"></a>
-                    <ul class="dropdown">
-                        <li><a th:href="@{planBoard/list}" th:text="#{plan_board}"></a></li>
-                        <li><a th:href="@{board/list}" th:text="#{board}"></a></li>
-                    </ul>
-                </li>
+
                 <li class="has-children">
                     <a href="#" th:text="#{plan}"></a>
                     <ul class="dropdown">
@@ -55,7 +49,14 @@
                         <li><a href="#" th:text="#{save_plan}"></a></li>
                     </ul>
                 </li>
-                <li><a th:href="@{custom}">Customizing</a></li>
+
+                <li class="has-children">
+                    <a th:text="#{community}"></a>
+                    <ul class="dropdown">
+                        <li><a th:href="@{planBoard/list}" th:text="#{plan_board}"></a></li>
+                        <li><a th:href="@{board/list}" th:text="#{board}"></a></li>
+                    </ul>
+                </li>
 
                 <li sec:authorize="not isAuthenticated()">
                     <a th:href="@{login/loginForm}" th:text="#{login.bt}">Login</a>

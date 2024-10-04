@@ -48,7 +48,7 @@
         <!-- 로고 -->
         <div class="logo-container">
             <a class="logo">
-                <img class="logo_img" src="/images/home/로고_수정.png" />
+                <img class="logo_img" src="/images/home/로고_수정.png">
                 <span class="text-primary" th:text="#{logo}"></span>
             </a>
         </div>
@@ -72,7 +72,7 @@
 
             <li sec:authorize="not isAuthenticated()">
                 <a th:href="@{login/loginForm}" th:text="#{login.bt}">Login</a>
-                <a href="#">join</a>
+                <a id="join" th:href="@{/join/joinForm}" th:text="#{join}">Join</a>
             </li>
 
             <li sec:authorize="isAuthenticated()">
@@ -135,13 +135,12 @@
                         <span class="typed-words" th:value="#{logo}"></span>
                     </h1>
                 </div>
+            <!--추천 버튼-->
                 <div class="home-select-button-container">
                     <button class="home-select-button" id="ai">
                         <span class="home-button-text ai_button" th:text="#{ai}"></span>
                     </button>
-                    <button class="home-select-button" id="zero">
-                        <span class="home-button-text" th:text="#{zero}"></span>
-                    </button>
+
                 </div>
             </div>
             <div class="col-lg-5">

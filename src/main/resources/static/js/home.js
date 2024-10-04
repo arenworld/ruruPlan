@@ -1,8 +1,10 @@
 // AI 추천 버튼 클릭 시 링크로 이동
-const aiButton = document.querySelector(".ai_button");
-aiButton.onclick = () => {
-    window.location.href = "/gptView/question";
-};
+document.addEventListener("DOMContentLoaded", () => {
+    const aiButton = document.getElementById("ai")
+    aiButton.onclick = () => {
+        window.location.href = "/gptView/question";
+    };
+});
 
 // 슬라이더 기능
 document.addEventListener("DOMContentLoaded", () => {

@@ -12,7 +12,49 @@
     />
     <link rel="stylesheet" th:href="@{/css/modal.bootstring.css}" />
     <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}" />
+    <link rel="stylesheet" href="/css/language.css" />
 </head>
+
+
+<!-- 페이지 로고 -->
+<div class="pagelogo-container">
+    <a class="pagelogo" href="/">
+        <img class="pagelogo_img" src="/images/home/로고_수정.png">
+        <span class="text-primary" th:text="#{logo}"></span>
+    </a>
+</div>
+
+<!-- 언어변경파트 -->
+
+<div class="new_language-toggle">
+    <div class="language-selector">
+        <img src="/images/home/지구본.png" alt="Globe Icon" />
+        <div class="languages">
+              <span
+                      class="span_kor"
+                      th:if="${#locale.language == 'ko'}"
+                      style="font-weight: bold"
+              >KOR</span
+              >
+            <span class="span_kor" th:if="${#locale.language != 'ko'}"
+            >KOR</span
+            >
+            <div class="lang-separator"></div>
+            <span
+                    class="span_jp"
+                    th:if="${#locale.language == 'ja'}"
+                    style="font-weight: bold"
+            >JP</span
+            >
+            <span class="span_jp" th:if="${#locale.language != 'ja'}"
+            >JP</span
+            >
+        </div>
+    </div>
+</div>
+
+
+
 
 <body class="modal-body">
 <!-- 일정저장을 위한 히든 -->
@@ -48,17 +90,8 @@
 <!-- 여행 유형 -->
 <input type="hidden" id="trip_type" />
 
-<div class="logo-title">
-    <img class="logo" src="/images/logo.png" />
-    <p th:text="#{logo}">ソウルに触る</p>
 
-    <!--언어 변경 버튼-->
-    <select name="lang" id="lang"
-            style="width: 70px; height:40px; font-size: 12px; text-align: left; padding: 0px">
-        <option value="ko" id="ko" th:selected="${#locale.language == 'ko'}">한국어</option>
-        <option value="ja" id="ja" th:selected="${#locale.language == 'ja'}">日本語</option>
-    </select>
-</div>
+
 <div hidden="hidden">
     <span id="yearT" th:text="#{year}"></span>
     <span id="monthT" th:text="#{month}"></span>

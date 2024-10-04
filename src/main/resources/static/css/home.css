@@ -364,17 +364,26 @@ h4 {
     z-index: 1;
 }
 
+
+
+.show-select {
+    display: block !important;
+}
+.site-menu li:first-child {
+    margin-left: 110px; /* 첫 번째 메뉴 항목과 로고 사이의 간격 추가 */
+}
+
 .home-select-button-container {
     display: flex;
     top: 300px !important;
     position: absolute;
-    right: 400px !important;
-    gap: 30px;
+    right: 420px !important;
+
 }
 
 .home-select-button {
-    width: 200px;
-    height: 80px;
+    width: 390px;
+    height: 120px;
     background-color: rgb(0, 0, 0, 0.72);
 }
 
@@ -383,9 +392,44 @@ h4 {
     color: rgb(255, 255, 255);
 }
 
+
 .show-select {
     display: block !important;
 }
 .site-menu li:first-child {
     margin-left: 110px; /* 첫 번째 메뉴 항목과 로고 사이의 간격 추가 */
+}
+
+
+/* 페이지 로고 컨테이너 */
+.pagelogo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem; /* 10px */
+    position: absolute;
+    top: 1.25rem; /* 20px */
+    left: 0.625rem; /* 10px -> 오른쪽 끝에 가까운 위치 */
+    z-index: 10000; /* 다른 요소보다 위에 표시 */
+}
+
+.pagelogo_img {
+    width: 60px;
+    height: 60px;
+}
+
+.pagelogo span {
+    font-size: 30px;
+    color: #000000;
+    font-weight: 700;
+}
+
+/* 언어 변경 컨테이너 */
+.new_language-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem; /* 10px */
+    position: absolute;
+    top: 1.25rem; /* 20px */
+    right: 0.625rem; /* 10px -> 오른쪽 끝에 가까운 위치 */
+    z-index: 10000; /* 다른 요소보다 위에 표시 */
 }

@@ -14,24 +14,42 @@
     <script src="/js/member/locale.js"></script>
 </head>
 <body class="login-page">
-<div class="logo-title">
-    <img class="logo"/>
-    <p th:text="#{logo}">ソウルに触る</p>
 
-    <!-- 언어변경파트 -->
-    <div class="select-container">
-        <div class="lenge_select-toggle">
-            <div class="language-selector">
-                <img src="/images/home/지구본.png" alt="Globe Icon" />
-                <div class="languages">
-                    <span class="span_kor" th:if="${#locale.language == 'ko'}" style="font-weight: bold;">KOR</span>
-                    <span class="span_kor" th:if="${#locale.language != 'ko'}">KOR</span>
-                    <div class="lang-separator"></div>
-                    <span class="span_jp"  th:if="${#locale.language == 'ja'}" style="font-weight: bold;">JP</span>
-                    <span class="span_jp"  th:if="${#locale.language != 'ja'}">JP</span>
-                </div>
-            </div>
+
+<!-- 페이지 로고 -->
+<div class="pagelogo-container_find">
+    <a class="pagelogo_find" href="/">
+        <img class="pagelogo_img_find" src="/images/home/로고_수정.png">
+        <span class="text-primary" th:text="#{logo}"></span>
+    </a>
+</div>
+<!-- 언어변경파트 -->
+
+<div class="new_language-toggle">
+    <div class="language-selector">
+        <img src="/images/home/지구본.png" alt="Globe Icon" />
+        <div class="languages">
+              <span
+                      class="span_kor"
+                      th:if="${#locale.language == 'ko'}"
+                      style="font-weight: bold"
+              >KOR</span
+              >
+            <span class="span_kor" th:if="${#locale.language != 'ko'}"
+            >KOR</span
+            >
+            <div class="lang-separator"></div>
+            <span
+                    class="span_jp"
+                    th:if="${#locale.language == 'ja'}"
+                    style="font-weight: bold"
+            >JP</span
+            >
+            <span class="span_jp" th:if="${#locale.language != 'ja'}"
+            >JP</span
+            >
         </div>
+    </div>
 </div>
 
 <div id="frame">
@@ -77,6 +95,7 @@
             </p>
         </div>
     </footer>
+
 </div>
 </body>
 </html>

@@ -57,9 +57,9 @@ public class CustomPlanService {
      *
      * @return
      */
-    public PlanDTO getPlan() {
+    public PlanDTO getPlan(Integer planNum) {
         //서버로부터 전달 받은 planNum으로 플랜 조회 (지금은 없으니까, 임의로 2를 넣음)
-        PlanEntity planEntity = planRepository.findById(2)
+        PlanEntity planEntity = planRepository.findById(planNum)
                 .orElseThrow(() -> new EntityNotFoundException("플랜이 존재하지 않음"));
 
         //위에서 조회한 planEntity를 dto로 변환
@@ -527,18 +527,21 @@ public class CustomPlanService {
 
         taskJpaRepository.save(newTransTaskEntity);
 
+        LocalTime newPlanTaskStartTime = newTransTaskEntity.getStartTime()
+                .plusHours(convertToLocalTime(preTransDuration).getHour())
+                .plusMinutes(convertToLocalTime(preTransDuration).getMinute());
+
         TaskEntity newPlanTaskEntity = TaskEntity.builder()
                 .plan(planEntity)
                 .place(newPlaceInfoEntity)
                 .member(memberEntity)
                 .dateN(dayNum)
-                .startTime(lastTaskEntity.getEndTime())
-                .duration(LocalTime.of(2, 0))
+                .startTime(newPlanTaskStartTime)
+                .duration(LocalTime.of(0, 0))
                 .contentsTypeKr(newPlaceInfoDTO.getContentsTypeKr())
                 .contentsTypeJp(newPlaceInfoDTO.getContentsTypeJp())
                 .cost(newPlaceInfoDTO.getFee())
                 .build();
-        //lastTaskEntity.getEndTime() + convertToLocalTime(preTransDuration)
 
         taskJpaRepository.save(newPlanTaskEntity);
 

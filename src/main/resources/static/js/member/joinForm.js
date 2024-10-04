@@ -126,13 +126,13 @@ function finalId() {
 
 // 닉네임 유효성 검사
 function nicknameConfirm(){
-    //정규식 (영문/항글/숫자 2~10자, 대소문자 구분)
-    nickname_regex = /^[A-Za-z가-힣0-9]{2,10}$/;
+    //정규식 (영문/한글/일본어/숫자 2~10자, 대소문자 구분)
+    nickname_regex = /^[A-Za-z가-힣ぁ-ゔァ-ヴ一-龥0-9]{2,10}$/;
     let nickname = $('#nickname').val();
 
     if (!nickname_regex.test(nickname)) {
         $('#nicknamemsg').css('color', 'red');
-        $('#nicknamemsg').html('닉네임은 영문,한글,숫자로 2~10 입력해 주세요');
+        $('#nicknamemsg').html('닉네임은 영문,한글,일어 숫자로 2~10 입력해 주세요');
         return false;
     } else {
         $('#nicknamemsg').css('color', 'blue');

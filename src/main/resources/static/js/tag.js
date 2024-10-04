@@ -17,5 +17,5 @@ function search(btn){
 
 function cancel(btn){
     const text = btn.text();
-    alert(text);
+    btn.css('background-color', '#f2f2f2');
 }

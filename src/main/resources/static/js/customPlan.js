@@ -816,7 +816,7 @@ function placeInfoMore() {
         type: 'post',
         data: {placeId: placeId},
         success: function (placeDTO) {
-            let heritageIcon = placeDTO.heritage ? '<img src="../images/customPlan/heritage.png" class="info-table-badge" data-badge="heritage">' : '';
+            let heritageIcon = placeDTO.heritage ? `<img th:src="@{/images/customPlan/heritage.png}" class="info-table-badge" data-badge="heritage">` : '';
             let barrierFreeIcon = placeDTO.barrierFree ? '<img src="../images/customPlan/barrier.png" class="info-table-badge" data-badge="barrier">' : '';
             let petFriendlyIcon = placeDTO.petFriendly ? '<img src="../images/customPlan/pet.png" class="info-table-badge" data-badge="pet">' : '';
             let feeInfoKr = placeDTO.feeInfoKr == null ? '' : placeDTO.feeInfo + lang;
@@ -827,7 +827,7 @@ function placeInfoMore() {
             let restdate = lang === 'ko' ? placeDTO.restdateKr : placeDTO.restdateJp;
             let overview = lang === 'ko' ? placeDTO.overviewKr : placeDTO.overviewJp;
 
-            let addButton = taskNum === undefined ? `<img src="../images/customPlan/add-point.png" class="info-table-add-task-button" data-place-id="${placeDTO.placeId}" data-map-x="${placeDTO.mapX}" data-map-y="${placeDTO.mapY}">` : '';
+            let addButton = taskNum === undefined ? `<img th:src="@{/images/customPlan/add-point.png}" class="info-table-add-task-button" data-place-id="${placeDTO.placeId}" data-map-x="${placeDTO.mapX}" data-map-y="${placeDTO.mapY}">` : '';
 
             let infoMoreTable = `
                          <div class="info-more-table-box">
@@ -1244,10 +1244,10 @@ function updatePlanInfoList(visiblePlanMarkerKeyList) {
             <div class="place-info-section${task.place.placeId}" >
                 ${img}
                 <h5 class="place-info-title">${title}</h5>
-                <img src="../images/customPlan/more2.png" class="info-section-more" data-place-id="${task.place.placeId}" data-task-num="${task.taskNum}">
+                <img src="/images/customPlan/more2.png" class="info-section-more" data-place-id="${task.place.placeId}" data-task-num="${task.taskNum}">
                 <span class="info-section-address">${address}</span>
                 <span class="info-section-contentsType">${contentsType}</span>
-                <img src="../images/customPlan/infocenter.png" class="info-section-infocenterImg">
+                <img src="/images/customPlan/infocenter.png" class="info-section-infocenterImg">
                 <span class="info-section-infocenter">${task.place.infocenter}</span>
             </div>
         `;

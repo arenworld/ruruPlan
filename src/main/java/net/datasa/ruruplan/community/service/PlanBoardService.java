@@ -1,11 +1,17 @@
 package net.datasa.ruruplan.community.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.ruruplan.community.domain.dto.PlanBoardDTO;
 import net.datasa.ruruplan.community.domain.entity.PlanBoardEntity;
 import net.datasa.ruruplan.community.repository.PlanBoardRepository;
+import net.datasa.ruruplan.member.domain.entity.MemberEntity;
+import net.datasa.ruruplan.member.repository.MemberRepository;
+import net.datasa.ruruplan.plan.domain.entity.PlanEntity;
+import net.datasa.ruruplan.plan.repository.impl.PlanRepositoryImpl;
+import net.datasa.ruruplan.plan.repository.jpa.PlanJpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,12 +24,14 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class PlanBoardService {
     final PlanBoardRepository boardRepo;
+    final PlanJpaRepository planRepo;
+    final MemberRepository memberRepo;
 
     /**
-     * 검색 후 지정한 한페이지 분량의 글 목록 조회
+     * 플랜 공유 게시판 목록
      * @param page        현재 페이지
      * @param pageSize    한 페이지당 글 수
-     * @param searchType1  검색 대상 (title, contents, id)
+     * @param searchType1  검색 대상
      * @param searchType2  검색어
      * @return 한페이지의 글 목록
      */
@@ -53,7 +61,7 @@ public class PlanBoardService {
     }
 
     /**
-     * DB에서 조회한 게시글 정보인 BoardEntity 객체를 BoardDTO 객체로 변환
+     * DB에서 조회한 게시글 정보인 PlanBoardEntity 객체를 BoardDTO 객체로 변환
      * @param entity    게시글 정보 Entity 객체
      * @return          게시글 정보 DTO 개체
      */
@@ -78,8 +86,36 @@ public class PlanBoardService {
                 .build();
 
         return dto;
-
     }
 
+    public void save(PlanBoardDTO dto) {
+        PlanEntity plan = planRepo.findById(dto.getPlanNum())  // planNum으로 PlanEntity 조회
+                .orElseThrow(() -> new EntityNotFoundException("Plan not found"));
+
+        MemberEntity member = memberRepo.findById(dto.getMemberId())  // memberId로 MemberEntity 조회
+                .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+
+        PlanBoardEntity entity = PlanBoardEntity.builder()
+                .plan(plan)
+                .member(member)
+                .planName(dto.getPlanName())
+                .contents(dto.getContents())
+                .viewCount(0)
+                .likeCount(0)
+                .tag1(dto.getTag1())
+                .tag2(dto.getTag2())
+                .tag3(dto.getTag3())
+                .tag4(dto.getTag4())
+                .tag5(dto.getTag5())
+                .build();
+
+        // 플랜 제목과 커버사진이 변경되었다면 적용.
+        plan.setPlanName(dto.getPlanName());
+        plan.setCoverImageUrl(dto.getCoverImageUrl());
+
+        planRepo.save(plan);
+
+        boardRepo.save(entity);
+    }
 
 }

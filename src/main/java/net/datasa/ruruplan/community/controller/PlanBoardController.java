@@ -48,14 +48,4 @@ public class PlanBoardController {
 
         return "communityView/planBoard";
     }
-
-    @Controller("share")
-    public static class ShareController {
-
-    }
-
-    @Controller("save")
-    public static class SaveController {
-
-    }
 }

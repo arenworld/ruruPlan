@@ -111,4 +111,16 @@ public class LocaleController {
             localeResolver.setLocale(request, response, locale); // 로케일을 변경
         }
     }
+
+    @GetMapping("myPage/locale")
+    public void myPage(@RequestParam(value = "lang", required = false) String lang,
+                             HttpServletRequest request,
+                             HttpServletResponse response,
+                             Model model) {
+        log.debug("locale: {}", lang);
+        if (lang != null) {
+            Locale locale = new Locale(lang);
+            localeResolver.setLocale(request, response, locale); // 로케일을 변경
+        }
+    }
 }

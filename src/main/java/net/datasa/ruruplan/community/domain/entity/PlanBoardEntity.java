@@ -39,7 +39,7 @@ public class PlanBoardEntity {
     private PlanEntity plan;
 
     //공유 플랜 이름
-    @JoinColumn(name="plan_num", referencedColumnName = "plan_num", nullable = false)
+    @JoinColumn(name="plan_name", referencedColumnName = "plan_name", nullable = false)
     private String planName;
 
     //글내용

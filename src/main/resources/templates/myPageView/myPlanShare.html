@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>플랜 공유 글쓰기</title>
 
-    <link rel="stylesheet" href="/css/language.css" />
-</head>
-
-<body class="modal-body">
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -17,6 +7,8 @@
     <title>플랜 공유 글쓰기</title>
     <link rel="stylesheet" href="css/bootstring.css" />
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
     <!-- Bootstrap CSS 링크 -->
     <link
             href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
@@ -25,63 +17,131 @@
     <link rel="stylesheet" th:href="@{/css/modal.bootstring.css}" />
     <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}" />
     <link rel="stylesheet" href="/css/language.css" />
-
-    <!-- 파비콘 -->
-    <link rel="icon" href="/images/home/logo_favicon_512.png">
-    <link rel="apple-touch-icon" href="/images/home/logo_favicon_512.png">
+    <!--태그 검색 버튼-->
+    <link rel="stylesheet" href="/css/button.css">
 </head>
 
 <body>
-<!-- 페이지 로고 -->
-<div class="pagelogo-container">
-    <a class="pagelogo" href="/">
+    <!-- 페이지 로고 -->
+    <div class="pagelogo-container">
+      <a class="pagelogo" href="/">
         <img class="pagelogo_img" src="/images/home/로고_수정.png">
         <span class="text-primary" th:text="#{logo}"></span>
-    </a>
-</div>
+      </a>
+    </div>
 
-<!-- 해드 -->
-<div class="new_language-toggle">
-    <div class="language-selector">
-        <img src="/images/home/지구본.png" alt="Globe Icon" />
-        <div class="languages">
-              <span
-                      class="span_kor"
-                      th:if="${#locale.language == 'ko'}"
-                      style="font-weight: bold"
-              >KOR</span
-              >
-            <span class="span_kor" th:if="${#locale.language != 'ko'}"
-            >KOR</span
-            >
-            <div class="lang-separator"></div>
-            <span
-                    class="span_jp"
-                    th:if="${#locale.language == 'ja'}"
-                    style="font-weight: bold"
-            >JP</span
-            >
-            <span class="span_jp" th:if="${#locale.language != 'ja'}"
-            >JP</span
-            >
-        </div>
+    <!-- 해드 -->
+    <div class="new_language-toggle">
+        <div class="language-selector">
+            <img src="/images/home/지구본.png" alt="Globe Icon" />
+            <div class="languages">
+                <span class="span_kor" th:if="${#locale.language == 'ko'}" style="font-weight: bold">KOR</span>
+                <span class="span_kor" th:if="${#locale.language != 'ko'}">KOR</span>
+                <div class="lang-separator"></div>
+                <span class="span_jp" th:if="${#locale.language == 'ja'}" style="font-weight: bold">JP</span>
+                <span class="span_jp" th:if="${#locale.language != 'ja'}">JP</span>
+            </div>
+         </div>
     </div>
-</div>
-<br>
-<br>
-<br>
-<br>
-<div style="width: 80%; height: 80%; background-color: white; margin: auto;">
-    <div class="media-1">
-        <div class="d-block mb-3">
-            <img th:src="${dto.coverImageUrl}" alt="Image" class="img-fluid">
-        </div>
-    </div>
-    <form>
+    <br>
+    <br>
+    <br>
+    <br>
+    <form th:action="@{/myPage/myPlanShare}" th:method="post">
+        <input type="hidden" th:value="${dto.planNum}" name="planNum">
+        <input type="hidden" th:value="${dto.memberId}" name="memberId">
+        <input type="hidden"th:value="${dto.coverImageUrl}" name="coverImageUrl">
+        <table style="width: 80%; margin: auto;">
+          <tr>
+              <td style="width: 500px; height: 500px; padding: 100px;">
+                 <input type="image" th:src="${dto.coverImageUrl}" alt="Image" class="img-fluid"
+                       style="width: 252.5px; height: 345.33px;">
+              </td>
+              <td>
+                 <input type="text" th:value="${dto.planName}" name="planName">
+              </td>
+          </tr>
+         <tr>
+            <td>
+                <p style="color: darkorange">*모두 골라 주세요</p>
+                <div class="button-container">
+                    <!--tag1 계절-->
+                    <div class="select">
+                        <input type="radio" id="selectS1" value="spring" name="tag1" required>
+                        <label for="selectS1" th:text="#{spring}"></label>
+                        <input type="radio" value="summer" id="selectS2" name="tag1">
+                        <label for="selectS2" th:text="#{summer}" ></label>
+                        <input type="radio" value="fall" id="selectS3" name="tag1">
+                        <label for="selectS3" th:text="#{fall}" ></label>
+                        <input type="radio" value="winter" id="selectS4" name="tag1">
+                        <label for="selectS4" th:text="#{winter}" ></label>
+                    </div>
+                    <!--tag2 몇박며칠-->
+                    <div class="select">
+                        <input type="radio" id="selectD1" value="2days" name="tag2" required>
+                        <label for="selectD1" th:text="#{2days}"></label>
+                        <input type="radio" value="3days" id="selectD2" name="tag2">
+                        <label for="selectD2" th:text="#{3days}" ></label>
+                        <input type="radio" value="4days" id="selectD3" name="tag2">
+                        <label for="selectD3" th:text="#{4days}" ></label>
+                        <input type="radio" value="5days" id="selectD4" name="tag2">
+                        <label for="selectD4" th:text="#{5days}" ></label>
+                        <input type="radio" value="6days" id="selectD5" name="tag2">
+                        <label for="selectD5" th:text="#{6days}" ></label>
+                    </div>
+                    <!--tag3 누구랑-->
+                    <div class="select">
+                        <input type="radio" id="selectW1" value="trip_type1" name="tag3" required>
+                        <label for="selectW1" th:text="#{trip_type1}"></label>
+                        <input type="radio" id="selectW2" value="trip_type2" name="tag3">
+                        <label for="selectW2" th:text="#{trip_type2}"></label>
+                        <input type="radio" id="selectW3" value="trip_type3" name="tag3">
+                        <label for="selectW3" th:text="#{trip_type3}"></label>
+                        <input type="radio" id="selectW4" value="trip_type4" name="tag3">
+                        <label for="selectW4" th:text="#{trip_type4}"></label>
+                        <input type="radio" id="selectW5" value="kids" name="tag3">
+                        <label for="selectW5" th:text="#{kids}"></label>
+                    </div>
+                    <!-- tag4 태마-->
+                    <div class="select">
+                        <input type="radio" id="selectT1" value="theme1" name="tag4" required>
+                        <label for="selectT1" th:text="#{theme1}"></label>
+                        <input type="radio" id="selectT2" value="theme2" name="tag4">
+                        <label for="selectT2" th:text="#{theme2}"></label>
+                        <input type="radio" id="selectT4" value="theme3" name="tag4">
+                        <label for="selectT4" th:text="#{theme3}"></label>
+                        <input type="radio" id="selectT5" value="theme5" name="tag4">
+                        <label for="selectT5" th:text="#{theme5}"></label>
+                        <input type="radio" id="selectT6" value="theme6" name="tag4">
+                        <label for="selectT6" th:text="#{theme6}"></label>
+                        <input type="radio" id="selectT7" value="theme7" name="tag4">
+                        <label for="selectT7" th:text="#{theme7}"></label>
+                        <input type="radio" id="selectT8" value="theme8" name="tag4">
+                        <label for="selectT8" th:text="#{theme8}"></label>
+                        <input type="radio" id="selectT9" value="theme9" name="tag4">
+                        <label for="selectT9" th:text="#{theme9}"></label>
+                        <input type="radio" id="selectT91" value="theme9_1" name="tag4">
+                        <label for="selectT91" th:text="#{theme9_1}"></label>
+                        <input type="radio" id="selectT92" value="theme9_2" name="tag4">
+                        <label for="selectT92" th:text="#{theme9_2}"></label>
+                        <input type="radio" id="selectT93" value="theme9_3" name="tag4">
+                        <label for="selectT93" th:text="#{theme9_3}"></label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <textarea name="contents"> </textarea>
+            </td>
+         </tr>
+            <tr>
+                <td rowspan="2">
+                    <input type="submit" style="margin: auto;" th:value="#{share}">
+                </td>
+            </tr>
+     </table>
     </form>
-</div>
-
-</body>
-</html>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/member/locale.js"></script>
+    <script src="/js/tag.js"></script>
 </body>
 </html>

@@ -58,12 +58,9 @@ let themes = [];
 $(document).ready(function () {
     planNum = $('#planNum').val();
     lang = $('#lang').val();
-    console.log(lang);
 
     $('.task-place-info-list-box').scroll(function () {
         let scrollTop = $(this).scrollTop();
-
-        console.log('myDiv의 스크롤 위치: ', scrollTop);
     });
 
     // 일정표 출력함수
@@ -267,10 +264,9 @@ $(document).ready(function () {
     // 확인버튼 클릭시 변경내용 저장
     $(document).on('click', '.saveImgButton', updateDurationCost);
 
-    // task-List 선택
+    // 일정테이블에서 task-List 선택
     $(document).on('click', '.click-overlay', function () {
         let input = $(this).siblings('input');
-        console.log('Clicked overlay, related input:', input);
         selectTaskList(input);
     });
 
@@ -296,6 +292,9 @@ $(document).ready(function () {
     $(document).on('mouseleave', '.info-table-badge', badgeExplainHide);
 
 
+
+
+
     // 일자별 버튼 생성 및 데이 플랜 호출
     const days = ['allday', '1day', '2day', '3day', '4day', '5day', '6day'];
     days.forEach(function (day) {
@@ -308,7 +307,8 @@ $(document).ready(function () {
             });
 
 
-            $(this).css('background-color', 'pink');
+            $(this).css('background-color', '#FAFFAF');
+            $(this).css('border', 'solid 1px grey');
             // dayNum 저장
             dayNumOfButton = $(this).data('daynum-button');
 
@@ -376,7 +376,7 @@ $(document).ready(function () {
                 $(this).css('background-color', '#f0f0f0');
             }
             if (previousTheme === '' || previousTheme !== currentTheme) {
-                $(this).css('background-color', 'pink');
+                $(this).css('background-color', '#FAFFAF');
             }
         });
     });
@@ -434,6 +434,7 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                         // 소요시간 변환
                         let durationHour = task.duration.substring(1, 2);
                         let durationMinute = task.duration.substring(3, 5);
+                        let totalDurationInMinutes = Math.floor((durationHour * 60 + durationMinute) / 30);
 
                         // 타임라인 변환
                         let startTimeHour = task.startTime.substring(0, 2);
@@ -445,7 +446,8 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                         let contentsTypeMove = lang === 'ko' ? `이동(${task.contentsTypeKr})` : `移動(${task.contentsTypeJp})`;
 
                         // Start building task row
-                        dayTable += `<tr class="task-list${task.taskNum}" data-tasknum="${task.taskNum}" data-map-x="${task.place.mapX}" data-map-y="${task.place.mapY}">                                        
+                        let rowHeight = totalDurationInMinutes * 0.2;
+                        dayTable += `<tr class="task-list${task.taskNum}" data-tasknum="${task.taskNum}" data-map-x="${task.place.mapX}" data-map-y="${task.place.mapY}"  style="height:${rowHeight}px">                                        
                                         <td>${startTime}</td>`;
 
                         // 이동 task가 아닐 때
@@ -544,7 +546,7 @@ function addNewTask(newPlaceId, lastTaskNum) {
  */
 function clickUpdateTaskPlace() {
     $('.theme-button').css({
-        'border': 'double 2px hotpink',
+        'border': 'double 2px #FEFF9F',
         'border-radius': '20px',
         'animation': 'vibration 0.5s infinite',
         'background-color': '#f0f0f0'
@@ -775,7 +777,7 @@ function planMarkers(dayNumOfButton) {
                         taskNum: task.taskNum,
                         placeId: task.place.placeId,
                         icon: {
-                            content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff9999" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+                            content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#96C9F4" stroke="#000000" stroke-width="10px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
                             anchor: new naver.maps.Point(11, 35)
                         },
                         zIndex: 100
@@ -792,6 +794,38 @@ function planMarkers(dayNumOfButton) {
             });
 
             naver.maps.Event.trigger(map, 'idle');
+
+            // 줌레벨에 따른 테마마커 모양 변화
+            naver.maps.Event.addListener(map, 'zoom_changed', function () {
+                let currentZoom = map.getZoom();
+                console.log('줌레벨');
+                // Conditional logic based on zoom level
+                $.each(themeAllMarkers, function (index, themeMarker) {
+                    if (currentZoom > 15) {
+                        // Use a larger circle for higher zoom levels
+                        themeMarker.setIcon({
+                            content: `<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="35px" fill="#092a2a" stroke="white" stroke-width="10px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+                            anchor: new naver.maps.Point(15, 15) // Adjust anchor accordingly
+                        });
+                    } else if (currentZoom > 8) {
+                        // Medium-sized circle for mid zoom levels
+                        themeMarker.setIcon({
+                            content: `<svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"
+                                viewBox="0 0 20 20" fill="#092a2a" stroke="white" stroke-width="1px" stroke-opacity="0.24">
+                                <circle cx="10" cy="10" r="6"/></svg>`,
+                            anchor: new naver.maps.Point(10, 10) // Adjust anchor accordingly
+                        });
+                    } else {
+                        // Small circle for lower zoom levels
+                        themeMarker.setIcon({
+                            content: `<svg xmlns="http://www.w3.org/2000/svg" width="10px" height="10px"
+                                viewBox="0 0 10 10" fill="#006400" stroke="white" stroke-width="1px" stroke-opacity="0.24">
+                                <circle cx="5" cy="5" r="4"/></svg>`,
+                            anchor: new naver.maps.Point(5, 5) // Adjust anchor accordingly
+                        });
+                    }
+                });
+            });
 
             // 일정마커 클릭이벤트 설정 : 여기에 달아둬야, 아래에서 호출가능
             for (const marker of planAllMarkers) {
@@ -825,13 +859,33 @@ function placeInfoMore() {
             let heritageIcon = placeDTO.heritage ? `<img th:src="@{/images/customPlan/heritage.png}" class="info-table-badge" data-badge="heritage">` : '';
             let barrierFreeIcon = placeDTO.barrierFree ? '<img src="/images/customPlan/barrier.png" class="info-table-badge" data-badge="barrier">' : '';
             let petFriendlyIcon = placeDTO.petFriendly ? '<img src="/images/customPlan/pet.png" class="info-table-badge" data-badge="pet">' : '';
-            let feeInfoKr = placeDTO.feeInfoKr == null ? '' : placeDTO.feeInfo + lang;
-            let saleItemKr = placeDTO.saleItemKr == null ? '' : placeDTO.saleItem + lang;
+            let feeInfo = '';
+            let saleItem = '';
+            let usetime = '';
+            let restdate = '';
+            let overview = '';
+
+            if (placeDTO.feeInfoKr !== null && placeDTO.feeInfoKr !== undefined) {
+                feeInfo = lang === 'ko' ? placeDTO.feeInfoKr : placeDTO.feeInfoJp;
+            }
+
+            if (placeDTO.saleItemKr !== null && placeDTO.saleItemKr !== undefined) {
+                saleItem = lang === 'ko' ? placeDTO.saleItemKr : placeDTO.saleItemJp;
+            }
+
+            if (placeDTO.usetimeKr !== null && placeDTO.usetimeKr !== undefined) {
+                usetime = lang === 'ko' ? placeDTO.usetimeKr : placeDTO.usetimeJp;
+            }
+
+            if (placeDTO.restdateKr !== null && placeDTO.restdateKr !== undefined) {
+                restdate = lang === 'ko' ? placeDTO.restdateKr : placeDTO.restdateJp;
+            }
+
+            if (placeDTO.overviewKr !== null && placeDTO.overviewKr !== undefined) {
+                overview = lang === 'ko' ? placeDTO.overviewKr : placeDTO.overviewJp;
+            }
 
             let title = lang === 'ko' ? placeDTO.titleKr : placeDTO.titleJp;
-            let usetime = lang === 'ko' ? placeDTO.usetimeKr : placeDTO.usetimeJp;
-            let restdate = lang === 'ko' ? placeDTO.restdateKr : placeDTO.restdateJp;
-            let overview = lang === 'ko' ? placeDTO.overviewKr : placeDTO.overviewJp;
 
             let addButton = taskNum === undefined ? '<img src="/images/customPlan/add-point.png" class="info-table-add-task-button" data-place-id="${placeDTO.placeId}" data-map-x="${placeDTO.mapX}" data-map-y="${placeDTO.mapY}">' : '';
 
@@ -863,11 +917,11 @@ function placeInfoMore() {
                                     </tr>
                                     <tr>    
                                         <th class="info-table-th"><img src="/images/customPlan/fee-Info-won.png" class="info-table-images"></th>
-                                        <td class="info-table-fee-info">${feeInfoKr}</td>
+                                        <td class="info-table-fee-info">${feeInfo}</td>
                                     </tr>
                                     <tr>    
                                         <th class="info-table-th"><img src="/images/customPlan/thumbup.png" class="info-table-images"></th>
-                                        <td class="info-table-sale-item">${saleItemKr}</td>
+                                        <td class="info-table-sale-item">${saleItem}</td>
                                     </tr>
                                     <tr>
                                         <th class="info-table-th"><img src="/images/customPlan/description.png" class="info-table-images"></th>
@@ -894,19 +948,16 @@ function placeInfoMore() {
 
 // taskList 클릭시(마커 색 변경, 일정표 해당 tr 색 변경), input은 place.title input태그
 function selectTaskList(input) {
-    // $(this).on('click', function () {
     let tr = input.closest('tr');
     let clickedPlaceId = input.data('place-id'); // 클릭한 tr의 data-tasknum 가져오기
     let clickedTaskNum = input.data('tasknum');
-
-    console.log(clickedTaskNum);
-    console.log(clickedPlaceId);
 
     // (1) task-list tr 배경색상 설정
     $('[class^="task-list"]').removeClass('selected');
     tr.addClass('selected');
 
-    // (3) info-List 배경색상 설정
+    console.log(clickedPlaceId);
+    // (2) place-info-list 배경색상 설정
     $('[class^="place-info-section"]').removeClass('selected');
     $('.place-info-section' + clickedPlaceId).addClass('selected');
 
@@ -915,14 +966,14 @@ function selectTaskList(input) {
         if (marker.taskNum === clickedTaskNum) {
             // 클릭한 taskNum과 일치하는 마커에 대해 아이콘 변경
             marker.setIcon({
-                content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff0000" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+                content: `<svg xmlns="http://www.w3.org/2000/svg" height="60px" viewBox="0 -960 960 960" width="60px" fill="#0F67B1" stroke="#000000" stroke-width="10px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
                 anchor: new naver.maps.Point(11, 35)
             });
             marker.setZIndex(100); // 선택된 마커를 위에 표시
         } else {
             // 선택되지 않은 마커에 대해 아이콘 변경
             marker.setIcon({
-                content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff9999" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+                content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#96C9F4" stroke="#000000" stroke-width="10px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
                 anchor: new naver.maps.Point(11, 35)
             });
             marker.setZIndex(0); // 선택되지 않은 마커를 기본 zIndex로 설정
@@ -968,17 +1019,19 @@ function selectPlanMarker(markerKey, planMarkerPlaceId) {
         if (marker.taskNum === markerKey) {
             // 선택된 마커 강조
             marker.setIcon({
-                content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff0000" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+                content: `<svg xmlns="http://www.w3.org/2000/svg" height="60px" viewBox="0 -960 960 960" width="60px" fill="#0F67B1" stroke="#000000" stroke-width="10px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
                 size: new naver.maps.Size(22, 35),
                 anchor: new naver.maps.Point(11, 35)
             });
+            marker.setZIndex(100);
         } else {
             // 나머지 일정마커 색상 초기화
             marker.setIcon({
-                content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff9999" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+                content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#96C9F4" stroke="#000000" stroke-width="10px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
                 size: new naver.maps.Size(22, 35),
                 anchor: new naver.maps.Point(11, 35)
             });
+            marker.setZIndex(0);
         }
     });
 
@@ -986,7 +1039,7 @@ function selectPlanMarker(markerKey, planMarkerPlaceId) {
     themeAllMarkers.forEach(marker => {
         marker.setIcon({
             content: `<svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"
-                                                    viewBox="0 0 20 20" fill="#006400" stroke="#00000 stroke-width="0.3px" stroke-opacity="0.24">
+                                                    viewBox="0 0 20 20" fill="#002379" stroke="#00000 stroke-width="0.3px" stroke-opacity="0.24">
                                                     <circle cx="8" cy="8" r="6"/></svg>`,
             size: new naver.maps.Size(13, 13),
             anchor: new naver.maps.Point(11, 35)
@@ -1061,9 +1114,9 @@ function themeMarkers() {
                             title: title,
                             placeId: placeByTheme.placeId,
                             icon: {
-                                content: `<svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"
-                                                    viewBox="0 0 20 20" fill="#006400" stroke="#00000 stroke-width="0.3px" stroke-opacity="0.24">
-                                                    <circle cx="8" cy="8" r="6"/></svg>`,
+                                content: `<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                                    viewBox="0 0 16 16" fill="#092a2a" stroke="white" stroke-width="5px" stroke-opacity="0.24">
+                                                    <circle cx="8" cy="8" r="4"/></svg>`,
                                 anchor: new naver.maps.Point(13, 13)
                             },
                             zIndex: 100
@@ -1111,38 +1164,6 @@ function themeMarkers() {
     } // previousTheme !== currentTheme if문
 }
 
-// 줌레벨에 따른 테마마커 모양 변화
-naver.maps.addEventListener(map, 'zoom_changed', function () {
-    let currentZoom = map.getZoom();
-    console.log('줌레벨');
-    // Conditional logic based on zoom level
-    $.each(themeAllMarkers, function (index, themeMarker) {
-        if (currentZoom > 15) {
-            // Use a larger circle for higher zoom levels
-            themeMarker.setIcon({
-                content: `<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="35px" fill="#006400" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
-                anchor: new naver.maps.Point(15, 15) // Adjust anchor accordingly
-            });
-        } else if (currentZoom > 8) {
-            // Medium-sized circle for mid zoom levels
-            themeMarker.setIcon({
-                content: `<svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"
-                                viewBox="0 0 20 20" fill="#006400" stroke="#000000" stroke-width="0.3px" stroke-opacity="0.24">
-                                <circle cx="10" cy="10" r="8"/></svg>`,
-                anchor: new naver.maps.Point(10, 10) // Adjust anchor accordingly
-            });
-        } else {
-            // Small circle for lower zoom levels
-            themeMarker.setIcon({
-                content: `<svg xmlns="http://www.w3.org/2000/svg" width="10px" height="10px"
-                                viewBox="0 0 10 10" fill="#006400" stroke="#000000" stroke-width="0.3px" stroke-opacity="0.24">
-                                <circle cx="5" cy="5" r="4"/></svg>`,
-                anchor: new naver.maps.Point(5, 5) // Adjust anchor accordingly
-            });
-        }
-    });
-});
-
 
 // 테마마커 선택시
 function selectThemeMarker(markerKey) {
@@ -1156,16 +1177,16 @@ function selectThemeMarker(markerKey) {
         if (marker.placeId === markerKey) {
             // 선택된 마커 강조
             marker.setIcon({
-                content: `<svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#228B22" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+                content: `<svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#092a2a" stroke="white" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
                 size: new naver.maps.Size(22, 35),
                 anchor: new naver.maps.Point(11, 35)
             });
         } else {
             // 나머지 마커는 기본 색상으로 초기화
             marker.setIcon({
-                content: `<svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"
-                                                    viewBox="0 0 20 20" fill="#006400" stroke="#00000 stroke-width="0.3px" stroke-opacity="0.24">
-                                                    <circle cx="8" cy="8" r="6"/></svg>`,
+                content: `<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
+                                                    viewBox="0 0 16 16" fill="#092a2a" stroke=white stroke-width="3px" stroke-opacity="0.24">
+                                                    <circle cx="8" cy="8" r="4"/></svg>`,
                 size: new naver.maps.Size(22, 35),
                 anchor: new naver.maps.Point(13, 13)
             });
@@ -1173,7 +1194,7 @@ function selectThemeMarker(markerKey) {
     });
     planAllMarkers.forEach(marker => {
         marker.setIcon({
-            content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ff9999" stroke="#000000" stroke-width="5px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
+            content: `<svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#96C9F4"  stroke="#000000" stroke-width="10px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
             size: new naver.maps.Size(22, 35),
             anchor: new naver.maps.Point(11, 35)
         });

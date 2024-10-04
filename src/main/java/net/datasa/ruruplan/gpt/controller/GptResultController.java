@@ -20,7 +20,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -162,8 +166,8 @@ public class GptResultController {
             // 고유한 파일 이름 생성
             String fileName = UUID.randomUUID().toString() + "_" + originalFilename;
 
-            // 저장할 디렉토리 설정
-            String uploadDir = "src/main/resources/static/images/planCoverImage/";
+            // 저장할 디렉토리 설정 (애플리케이션 외부 디렉토리)
+            String uploadDir = "uploads/images/planCoverImage/";
 
             // 디렉토리가 없으면 생성
             File uploadDirFile = new File(uploadDir);
@@ -181,9 +185,9 @@ public class GptResultController {
             // 이미지 리사이즈 및 크롭
             BufferedImage processedImage = resizeAndCropImage(originalImage, targetWidth, targetHeight);
 
-            // 이미지 저장
+            // 이미지 저장 (압축 품질 설정)
             File outputFile = new File(uploadDir + fileName);
-            ImageIO.write(processedImage, "jpg", outputFile);
+            saveCompressedImage(processedImage, outputFile, 0.75f); // 품질을 75%로 설정
 
             // 저장된 이미지의 경로 반환
             String filePath = "/images/planCoverImage/" + fileName; // 클라이언트에서 접근 가능한 경로
@@ -225,6 +229,33 @@ public class GptResultController {
         BufferedImage croppedImage = bufferedResizedImage.getSubimage(x, y, targetWidth, targetHeight);
 
         return croppedImage;
+    }
+
+    // 이미지 압축하여 저장하는 메서드
+    private void saveCompressedImage(BufferedImage image, File file, float quality) throws IOException {
+        // 이미지 쓰기 위한 ImageWriter 가져오기
+        Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
+        if (!writers.hasNext()) {
+            throw new IllegalStateException("JPEG 지원하는 ImageWriter가 없습니다.");
+        }
+        ImageWriter writer = writers.next();
+
+        // 출력 파일 설정
+        try (ImageOutputStream ios = ImageIO.createImageOutputStream(file)) {
+            writer.setOutput(ios);
+
+            // 압축 품질 설정
+            ImageWriteParam param = writer.getDefaultWriteParam();
+            if (param.canWriteCompressed()) {
+                param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                param.setCompressionQuality(quality); // 0.0f ~ 1.0f 사이의 값 (낮을수록 압축률 증가)
+            }
+
+            // 이미지 쓰기
+            writer.write(null, new IIOImage(image, null, null), param);
+        } finally {
+            writer.dispose();
+        }
     }
 
 }

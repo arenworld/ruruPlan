@@ -31,17 +31,27 @@ public class MyPageService {
         this.planRepository = planRepository;
     }
 
-    public List<MemberDTO> getMemberInfo() {
-        List<MemberEntity> members = memberRepository.findAll();
+    public MemberDTO getMemberInfo(String username) {
+        MemberEntity member = memberRepository.findById(username)
+                .orElseThrow(() -> new UsernameNotFoundException("user가 존재하지 않음"));
         // MemberEntity -> MemberDTO로 변환 (빌더 패턴 사용)
-        return members.stream()
-                .map(member -> MemberDTO.builder()
-                        .memberId(member.getMemberId())
-                        .nickname(member.getNickname())
-                        .email(member.getEmail())
-                        .profileImageUrl(member.getProfileImageUrl())
-                        .build())
-                .collect(Collectors.toList());
+        MemberDTO dto = MemberDTO.builder()
+                .memberId(member.getMemberId())
+                .memberPw(member.getMemberPw())
+                .email(member.getEmail())
+                .age(member.getAge())
+                .nickname(member.getNickname())
+                .joinDate(member.getJoinDate())
+                .updateDate(member.getUpdateDate())
+                .deactivationDate(member.getDeactivationDate())
+                .enabled(member.getEnabled())
+                .roleName(member.getRoleName())
+                .profileImageUrl(member.getProfileImageUrl())
+                .memberStatus(member.getMemberStatus())
+                .lastLogin(member.getLastLogin())
+                .build();
+
+        return dto;
     }
 
     public void updateProfileImage(String username, String profileImageUrl) {

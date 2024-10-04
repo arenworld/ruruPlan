@@ -28,8 +28,8 @@ public class MyPageController {
         }
 
         String username = userDetails.getUsername();  // 인증된 사용자의 username 가져오기
-        List<MemberDTO> memberList = myPageService.getMemberInfo();
-        model.addAttribute("member", memberList);
+        MemberDTO member = myPageService.getMemberInfo(username);
+        model.addAttribute("member", member);
 
         // CSRF 토큰은 Thymeleaf에서 자동으로 처리되므로 명시적으로 가져오지 않아도 됩니다.
 

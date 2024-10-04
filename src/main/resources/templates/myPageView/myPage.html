@@ -26,7 +26,7 @@
 <main class="main_mypage">
     <!-- 왼쪽 사이드바 -->
     <aside class="mypage-left">
-        <div class="userinfo" th:each="member : ${member}">
+        <div class="userinfo">
             <div class="profile-img-container">
                 <img th:src="${member.profileImageUrl != null ? member.profileImageUrl : '/images/mypage/기본프사.jpg'}"
                      class="profile-img" alt="Profile Image" />
@@ -49,17 +49,9 @@
     <div class="info area">
         <div class="profile-grid">
             <!-- 첫 번째 줄 -->
-            <div class="profile-item">내일정</div>
-            <div class="profile-item">스크랩한 일정</div>
-            <div class="profile-item">개인정보수정</div>
-            <!-- 두 번째 줄 -->
-            <div class="profile-item">내일정</div>
-            <div class="profile-item">내 활동이력</div>
-            <div class="profile-item">내일정</div>
-            <!-- 세 번째 줄 -->
+            <div class="profile-item">내 일정</div>
             <div class="profile-item">공유한 일정</div>
-            <div class="profile-item">내 활동이력</div>
-            <div class="profile-item">내 활동이력</div>
+            <div class="profile-item">개인정보 수정</div>
         </div>
     </div>
 </main>

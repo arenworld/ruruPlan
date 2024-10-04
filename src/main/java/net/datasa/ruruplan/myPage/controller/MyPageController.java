@@ -43,10 +43,10 @@ public class MyPageController {
     @GetMapping("myPlanList")
     public String myPlanList(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
         String userId = user.getId();
-        List<PlanDTO> MyPlanList = myPageService.getMyPlanList(userId);
+        List<PlanDTO> myPlanList = myPageService.getMyPlanList(userId);
 
         model.addAttribute("userId", userId);
-        model.addAttribute("MyPlanList", MyPlanList);
+        model.addAttribute("myPlanList", myPlanList);
 
         return "myPageView/myPlanList";
     }

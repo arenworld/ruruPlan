@@ -8,12 +8,10 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <script src="js/jquery-3.4.1.min.js"></script>
-    <script src="js/customPlan.js"></script>
+    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{/js/customPlan.js}"></script>
 
     <meta charset="UTF-8">
-
-    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Untree.co">
 
@@ -51,9 +49,9 @@
     <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=7ejrjQSxsM8Vp5U8WbLArOuHpOwQNnJ31hqE3Pt7"></script>
 
     <!-- 국제화 적용 위한 js-->
-    <script src="/js/member/locale.js"></script>
-    <script src="/js/weather/nowWeather.js"></script>
-    <script src="/js/typed.js"></script>
+    <script th:src="@{/js/member/locale.js}"></script>
+    <script th:src="@{/js/weather/nowWeather.js}"></script>
+    <script th:src="@{/js/typed.js}"></script>
 
     <style>
         .li a {
@@ -351,19 +349,19 @@
     </div>
 
 
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/jquery.animateNumber.min.js"></script>
-    <script src="js/jquery.waypoints.min.js"></script>
-    <script src="js/jquery.fancybox.min.js"></script>
-    <script src="js/aos.js"></script>
-    <script src="js/moment.min.js"></script>
-    <script src="js/daterangepicker.js"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/owl.carousel.min.js}"></script>
+    <script th:src="@{/js/jquery.animateNumber.min.js}"></script>
+    <script th:src="@{/js/jquery.waypoints.min.js}"></script>
+    <script th:src="@{/js/jquery.fancybox.min.js}"></script>
+    <script th:src="@{/js/aos.js}"></script>
+    <script th:src="@{/js/moment.min.js}"></script>
+    <script th:src="@{/js/daterangepicker.js}"></script>
 
-    <script src="js/typed.js"></script>
+    <script th:src="@{/js/typed.js}"></script>
 
-    <script src="js/custom.js"></script>
+    <script th:src="@{/js/custom.js}"></script>
 
     <!-- untree 디브, 가장 바깥그릇-->
 </div>

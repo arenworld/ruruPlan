@@ -39,8 +39,8 @@ public class CustomPlanController {
      * @param model
      * @return
      */
-    @GetMapping("")
-    public String customPlan(Model model, Locale locale) { //@RequestParam("planNum") Integer planNum) 지금은 테스트로 직접 넣고 나중에, planNum을 파람으로 받음
+    @GetMapping("/myPlan/{planNum}")
+    public String customPlan(Model model, Locale locale, @PathVariable("planNum") Integer planNum) { //@RequestParam("planNum") Integer planNum) 지금은 테스트로 직접 넣고 나중에, planNum을 파람으로 받음
         // custom.html로드될 때 뿌려줄 플랜정보불러오기
         PlanDTO planDTO = customPlanService.getPlan();
         log.debug("cmdNum: {}", planDTO.getCmdNum());

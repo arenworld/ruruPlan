@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -10,22 +11,106 @@
 
     <!-- CSS 파일 가져오기 -->
     <link rel="stylesheet" href="/css/mypage.css" />
+    <link rel="stylesheet" href="/css/home.css" />
+    <link rel="stylesheet" href="/css/language.css" />
 </head>
 
 <body>
-<!-- 헤더 -->
-<header class="header-container">
-    <div class="mypag-main-title">마이 페이지</div>
-    <div class="mypage_sidemenu">
-        <a href="#" th:text="#{logout}"></a>
-        <a href="#" th:text="#{community}"></a>
+<nav class="site-nav">
+    <div class="site-navigation">
+        <!-- 로고 -->
+        <div class="logo-container">
+            <a class="logo">
+                <img class="logo_img" src="/images/home/로고_수정.png" />
+                <span class="text-primary" th:text="#{logo}"></span>
+            </a>
+        </div>
+        <!-- 네비바  로그인x 로그인,조인  로그인o 로그아웃,마이페이지-->
+        <ul class="site-menu">
+            <li class="has-children">
+                <a th:text="#{community}"></a>
+                <ul class="dropdown">
+                    <li><a th:href="@{planBoard/list}" th:text="#{plan_board}"></a></li>
+                    <li><a th:href="@{board/list}" th:text="#{board}"></a></li>
+                </ul>
+            </li>
+            <li class="has-children">
+                <a href="#" th:text="#{plan}"></a>
+                <ul class="dropdown">
+                    <li><a href="#" th:text="#{my_plan}"></a></li>
+                    <li><a href="#" th:text="#{save_plan}"></a></li>
+                </ul>
+            </li>
+            <li><a th:href="@{custom}">Customizing</a></li>
+
+            <li sec:authorize="not isAuthenticated()">
+                <a th:href="@{login/loginForm}" th:text="#{login.bt}">Login</a>
+                <a href="#">join</a>
+            </li>
+
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{member/logout}">Logout</a>
+                <a th:href="@{/myPage}">mypage</a>
+            </li>
+
+        </ul>
+
+        <!-- 날씨정보 박스 -->
+        <div class="weather_box">
+            <div id="weather_icon">
+                <!-- 이모티콘자리 -->
+                <img class="weather_icon_set" id="weather" src="/images/home/날씨기본.png" />
+            </div>
+            <!-- 온도 -->
+            <span class="temperature" id="tem"> -°C</span>
+            <!-- 습도 -->
+            <span class="humidity" id="hum"> -%</span>
+        </div>
+
+        <!-- 언어변경파트 -->
+        <div class="lenge_select-toggle">
+            <div class="language-selector">
+                <img src="/images/home/지구본.png" alt="Globe Icon" />
+                <div class="languages">
+              <span
+                      class="span_kor"
+                      th:if="${#locale.language == 'ko'}"
+                      style="font-weight: bold"
+              >KOR</span
+              >
+                    <span class="span_kor" th:if="${#locale.language != 'ko'}"
+                    >KOR</span
+                    >
+                    <div class="lang-separator"></div>
+                    <span
+                            class="span_jp"
+                            th:if="${#locale.language == 'ja'}"
+                            style="font-weight: bold"
+                    >JP</span
+                    >
+                    <span class="span_jp" th:if="${#locale.language != 'ja'}"
+                    >JP</span
+                    >
+                </div>
+            </div>
+        </div>
     </div>
-</header>
+</nav>
+
+
+<!--&lt;!&ndash; 헤더 &ndash;&gt;-->
+<!--<header class="header-container">-->
+<!--    <div class="mypag-main-title">마이 페이지</div>-->
+<!--    <div class="mypage_sidemenu">-->
+<!--        <a href="#" th:text="#{logout}"></a>-->
+<!--        <a href="#" th:text="#{community}"></a>-->
+<!--    </div>-->
+<!--</header>-->
 
 <!-- 메인 컨테이너 -->
 <main class="main_mypage">
     <!-- 왼쪽 사이드바 -->
-    <aside class="mypage-left">
+    <aside class="mypage-profile">
         <div class="userinfo">
             <div class="profile-img-container">
                 <img th:src="${member.profileImageUrl != null ? member.profileImageUrl : '/images/mypage/기본프사.jpg'}"
@@ -43,16 +128,14 @@
         </div>
     </aside>
 
-
-
     <!-- 메인 프로필 정보 -->
     <div class="info area">
-        <div class="profile-grid">
-            <!-- 첫 번째 줄 -->
-            <div class="profile-item"> <a th:href="@{/myPage/myPlanList}">내 일정</a></div>
-            <div class="profile-item">공유한 일정</div>
-            <div class="profile-item">개인정보 수정</div>
-        </div>
+            <div class="myPage-main-area">
+                <!-- 첫 번째 줄 -->
+                <div class="myPage-main-item"><a th:href="@{/myPage/myPlanList}"><h3 class="myPage-main-item-myPlan">내 일정</h3></a></div>
+                <div class="myPage-main-item">공유한 일정</div>
+                <div class="myPage-main-item">개인정보 수정</div>
+            </div>
     </div>
 </main>
 <script src="/js/mypage.js"></script>

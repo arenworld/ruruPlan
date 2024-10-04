@@ -387,7 +387,7 @@ $(document).ready(function () {
 function dayPlansPrint(dayNumOfButton, planNum) {
 
     $.ajax({
-        url: '/custom/getPlan',
+        url: '/myPage/myPlan/getPlan',
         type: 'post',
         data: {
             planNum: planNum,
@@ -508,7 +508,7 @@ function dayPlansPrint(dayNumOfButton, planNum) {
 function addNewTask(newPlaceId, lastTaskNum) {
 
     $.ajax({
-        url: 'custom/addNewTask',
+        url: '/myPage/myPlan/addNewTask',
         type: 'post',
         data: {
             newPlaceId: newPlaceId
@@ -559,7 +559,7 @@ function updateTaskPlace(newPlaceId) {
     let nextTaskNum = targetTr.next().data('tasknum');
 
     $.ajax({
-        url: 'custom/updateTaskPlace',
+        url: '/myPage/myPlan/updateTaskPlace',
         type: 'post',
         data: {
             planNum: planNum,
@@ -596,7 +596,7 @@ function updateFirstTaskPlace(newPlaceId) {
     let nextTaskNum = targetTr.next().data('tasknum');
 
     $.ajax({
-        url: 'custom/updateFirstTaskPlace',
+        url: '/myPage/myPlan/updateFirstTaskPlace',
         type: 'post',
         data: {
             planNum: planNum,
@@ -630,7 +630,7 @@ function updateLastTaskPlace(newPlaceId) {
     let preTaskNum = targetTr.prev().data('tasknum');
 
     $.ajax({
-        url: 'custom/updateLastTaskPlace',
+        url: '/myPage/myPlan/updateLastTaskPlace',
         type: 'post',
         data: {
             planNum: planNum,
@@ -697,7 +697,7 @@ function updateDurationCost() {
     $('.theme-button').removeAttr('style');
 
     $.ajax({
-        url: 'custom/updateDuration',
+        url: '/myPage/myPlan/updateDuration',
         type: 'post',
         data: {
             newDurationHour: newDurationHour,
@@ -733,7 +733,7 @@ function planMarkers(dayNumOfButton) {
     clearThemeMarkers();
 
     $.ajax({
-        url: '/custom/getPlan',
+        url: '/myPage/myPlan/getPlan',
         type: 'post',
         data: {
             planNum: planNum,
@@ -812,7 +812,7 @@ function placeInfoMore() {
     let taskNum = $(this).data('task-num');
 
     $.ajax({
-        url: 'custom/placeInfoMore',
+        url: '/myPage/myPlan/placeInfoMore',
         type: 'post',
         data: {placeId: placeId},
         success: function (placeDTO) {
@@ -1027,7 +1027,7 @@ function themeMarkers() {
     // 다른 테마를 눌렀을 때만, 다시 출력
     if (previousTheme !== currentTheme) {
         $.ajax({
-            url: '/custom/themeMarkers',
+            url: '/myPage/myPlan/themeMarkers',
             type: 'post',
             data: {
                 theme: currentTheme
@@ -1233,7 +1233,7 @@ function updatePlanInfoList(visiblePlanMarkerKeyList) {
         const task = taskListData.find(t => t.taskNum === key); // Assuming taskList is globally accessible
         // Create the HTML structure for each visible marker
         let img = task.place.originImgUrl === null ?
-            '<img src="../images/customPlan/nonImg.png" class="place-info-imgNone">' :
+            '<img src="/images/customPlan/nonImg.png" class="place-info-imgNone">' :
             `<img src="${task.place.originImgUrl}" class="place-info-img">`;
 
         let title = lang === 'ko' ? task.place.titleKr : task.place.titleJp;

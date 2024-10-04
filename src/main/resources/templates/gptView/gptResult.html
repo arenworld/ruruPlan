@@ -10,6 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&family=Single+Day&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="/css/language.css" />
+
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script th:src="@{/js/gptResult.js}"></script>
 
@@ -21,37 +23,73 @@
         /*]]>*/
     </script>
 </head>
+<!-- 페이지 로고 -->
+<div class="pagelogo-container_find">
+    <a class="pagelogo_find" href="/">
+        <img class="pagelogo_img_find" src="/images/home/로고_수정.png">
+        <span class="text-primary" th:text="#{logo}"></span>
+    </a>
+</div>
+
+<!-- 언어변경파트 -->
+
+<link rel="stylesheet" href="/css/language.css" />
+
+<div class="new_language-toggle">
+    <div class="language-selector">
+        <img src="/images/home/지구본.png" alt="Globe Icon" />
+        <div class="languages">
+              <span
+                      class="span_kor"
+                      th:if="${#locale.language == 'ko'}"
+                      style="font-weight: bold"
+              >KOR</span
+              >
+            <span class="span_kor" th:if="${#locale.language != 'ko'}"
+            >KOR</span
+            >
+            <div class="lang-separator"></div>
+            <span
+                    class="span_jp"
+                    th:if="${#locale.language == 'ja'}"
+                    style="font-weight: bold"
+            >JP</span
+            >
+            <span class="span_jp" th:if="${#locale.language != 'ja'}"
+            >JP</span
+            >
+        </div>
+    </div>
+</div>
 <body>
 
 <div class="container">
     <!-- 헤더 섹션: 제목과 버튼 그룹 -->
     <div class="header">
-        <h1 th:text="'GPT 추천 여행 일정'"></h1>
+        <div>
+            <h1 th:if="${#locale.language == 'ko'}">GPT 추천 여행 일정</h1>
+        </div>
+        <div>
+            <h1 th:if="${#locale.language != 'ko'}">GPTおすすめの<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;旅行プラン</h1>
+        </div>
         <div class="button-group">
             <button id="save-button" aria-label="내 일정으로 담기">
-                <span class="main-text">내 일정으로 담기<br>(더 많은 정보)</span>
+                <span class="main-text" th:text="#{saveButton}">내 일정으로 담기</span><br>
+                <span class="main-text" th:text="#{saveButton_}">(더 많은 정보)</span>
             </button>
-            <button id="button2" aria-label="다시 추천받기">
-                다시 추천받기
-            </button>
-            <button id="print-button" aria-label="인쇄">
-                인쇄
-            </button>
+            <button id="button2" aria-label="다시 추천받기" th:text="#{reQuestion}">다시 추천받기</button>
+            <button id="print-button" aria-label="인쇄" th:text="#{print}">인쇄</button>
         </div>
     </div>
 
     <!-- 여행 기간과 추가 텍스트를 같은 라인에 배치하는 컨테이너 -->
     <div class="travel-period-container">
         <div class="period-info">
-            <h3 th:text="'여행 기간: ' + ${planDTO.startDate} + ' ~ ' + ${planDTO.endDate}"></h3>
+            <h3 th:text="#{tripPeriod} + ': ' + ${planDTO.startDate} + ' ~ ' + ${planDTO.endDate}"></h3>
         </div>
-        <h3 id="total-cost" style="margin-top: 10px; font-weight: bold;">예상 최소비용: 0원</h3>
+        <h3 id="total-cost" style="margin-top: 10px; font-weight: bold;"></h3>
     </div>
 
-    <!-- 별도의 노트 컨테이너 추가 -->
-    <div class="note-container">
-        <span class="note">이 형식은 간단한 버전으로 이 페이지를 벗어나면 다시 확인할 수 없습니다.</span>
-    </div>
 
     <div th:each="dateEntry : ${taskByDateMap}">
         <h3 th:text="'Day ' + ${dateEntry.key}"></h3>
@@ -77,10 +115,14 @@
                 <td th:id="'time-' + ${task.taskNum}"></td>
 
                 <!-- Task 컬럼 -->
-                <td th:text="${task.contentsTypeKr}"></td>
+                <td th:if="${#locale.language == 'ko'}" th:text="${task.contentsTypeKr}"></td>
+                <td th:if="${#locale.language != 'ko'}" th:text="${task.contentsTypeJp}"></td>
 
                 <!-- Place 컬럼 -->
-                <td th:if="${task.contentsTypeKr != '이동' and task.contentsTypeKr != '대중교통' and task.contentsTypeKr != '도보'}" th:text="${task.place.titleKr}"></td>
+                <td th:if="${task.contentsTypeKr != '이동' and task.contentsTypeKr != '대중교통' and task.contentsTypeKr != '도보'
+                    and #locale.language == 'ko'}" th:text="${task.place.titleKr}"></td>
+                <td th:if="${task.contentsTypeKr != '이동' and task.contentsTypeKr != '대중교통' and task.contentsTypeKr != '도보'
+                    and #locale.language != 'ko'}" th:text="${task.place.titleJp}"></td>
                 <td th:if="${task.contentsTypeKr == '이동' or task.contentsTypeKr == '대중교통' or task.contentsTypeKr == '도보'}" th:text="''"></td>
 
                 <!-- Duration 컬럼 -->
@@ -90,8 +132,7 @@
                 <td th:id="'cost-' + ${task.taskNum}">
                     <!-- 이동 관련 작업이 아닌 경우 -->
                     <p th:if="${task.contentsTypeKr != '이동' and task.contentsTypeKr != '대중교통' and task.contentsTypeKr != '도보'}">
-                        <span th:if="${task.place != null and task.place.fee != null}" th:text="${task.place.fee + '원'}"></span>
-                        <span th:if="${task.place == null or task.place.fee == null}">0원</span>
+                        <span th:text="${task.place != null and task.place.fee != null ? task.place.fee : 0} + #{unit}"></span>
                     </p>
                     <!-- 이동 관련 작업인 경우 (빈 공간으로 둠, JavaScript에서 채울 예정) -->
                     <p th:if="${task.contentsTypeKr == '이동' or task.contentsTypeKr == '대중교통' or task.contentsTypeKr == '도보'}"></p>
@@ -104,15 +145,13 @@
     <!-- 새로운 버튼 그룹을 맨 아래에 추가 -->
     <div class="button-group bottom-buttons">
         <button id="save-button-bottom" aria-label="내 일정으로 담기">
-            <span class="main-text">내 일정으로 담기<br>(더 많은 정보)</span>
+            <span class="main-text" th:text="#{saveButton}">내 일정으로 담기</span><br>
+            <span class="main-text" th:text="#{saveButton_}">(더 많은 정보)</span>
         </button>
-        <button id="button2-bottom" aria-label="다시 추천받기">
-            다시 추천받기
-        </button>
-        <button id="print-button-bottom" aria-label="인쇄">
-            인쇄
-        </button>
+        <button id="button2-bottom" aria-label="다시 추천받기" th:text="#{reQuestion}">다시 추천받기</button>
+        <button id="print-button-bottom" aria-label="인쇄" th:text="#{print}">인쇄</button>
     </div>
+
 </div>
 
 
@@ -121,30 +160,30 @@
 <div id="savePlanModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <h2>여행 계획 저장</h2>
+        <h2 th:text="#{modalInfo}">여행 계획 저장</h2>
 
         <!-- 사진 등록 섹션 -->
         <div class="image-upload-section">
             <div class="image-box">
                 <img id="previewImage" src="#" alt="대표 사진 미리보기" style="display: none;" />
             </div>
-            <label for="coverImageUrl" class="file-label">파일 선택</label>
+            <label for="coverImageUrl" class="file-label" th:text="#{fileUpload}">파일 선택</label>
             <input type="file" id="coverImageUrl" name="coverImageUrl" accept="image/*" style="display:none;">
         </div>
 
         <!-- 일정 이름 입력 필드 -->
         <div class="plan-name-section">
-            <label for="planName">일정 이름</label>
-            <input type="text" id="planName" name="planName" placeholder="여행 일정 이름을 입력하세요" required>
+            <label for="planName" th:text="#{modalPlanName}">일정 이름</label>
+            <input type="text" id="planName" name="planName" th:placeholder="#{modalPlaceholder}" required>
         </div>
 
         <!-- 저장 버튼 -->
         <div class="modal-buttons">
-            <button type="button" id="save-plan-button" class="save-button">저장</button>
+            <button type="button" id="save-plan-button" class="save-button" th:text="#{modalSave}">저장</button>
         </div>
     </div>
 </div>
 
-
+<input type="hidden" id="lang" th:value="${#locale.language}">
 </body>
 </html>

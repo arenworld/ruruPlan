@@ -3,6 +3,7 @@ package net.datasa.ruruplan.gpt.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
 import net.datasa.ruruplan.gpt.domain.dto.GptCmdDTO;
 //import net.datasa.ruruplan.gpt.service.GptResultService;
 import net.datasa.ruruplan.gpt.domain.dto.GptResultDTO;
@@ -15,9 +16,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,6 +32,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -141,32 +148,83 @@ public class GptResultController {
     }
 
     @PostMapping("/uploadCoverImage")
-    public ResponseEntity<String> uploadCoverImage(@RequestParam("file") MultipartFile file) {
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("파일이 비어 있습니다.");
-        }
-
+    @ResponseBody
+    public String uploadCoverImage(@RequestParam("file") MultipartFile file) {
         try {
-            // 원하는 경로 설정 (예: "/uploads/coverImages/")
-            String uploadDir = "src/main/resources/static/images/planCoverImage/";
-            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-            Path uploadPath = Paths.get(uploadDir);
-
-            // 디렉토리가 없으면 생성
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
+            // 파일이 비어있는지 확인
+            if (file.isEmpty()) {
+                return "파일이 비어 있습니다.";
             }
 
-            // 파일 저장
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            // 원본 파일 이름 가져오기
+            String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
 
-            // 파일 경로 반환 (웹에서 접근 가능한 경로)
-            String fileAccessPath = "/images/planCoverImage/" + fileName;
-            return ResponseEntity.ok(fileAccessPath);
+            // 고유한 파일 이름 생성
+            String fileName = UUID.randomUUID().toString() + "_" + originalFilename;
+
+            // 저장할 디렉토리 설정
+            String uploadDir = "src/main/resources/static/images/planCoverImage/";
+
+            // 디렉토리가 없으면 생성
+            File uploadDirFile = new File(uploadDir);
+            if (!uploadDirFile.exists()) {
+                uploadDirFile.mkdirs();
+            }
+
+            // 이미지 읽기
+            BufferedImage originalImage = ImageIO.read(file.getInputStream());
+
+            // 목표 크기 설정
+            int targetWidth = 748;
+            int targetHeight = 1023;
+
+            // 이미지 리사이즈 및 크롭
+            BufferedImage processedImage = resizeAndCropImage(originalImage, targetWidth, targetHeight);
+
+            // 이미지 저장
+            File outputFile = new File(uploadDir + fileName);
+            ImageIO.write(processedImage, "jpg", outputFile);
+
+            // 저장된 이미지의 경로 반환
+            String filePath = "/images/planCoverImage/" + fileName; // 클라이언트에서 접근 가능한 경로
+
+            return filePath;
+
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 저장 중 오류 발생");
+            e.printStackTrace();
+            return "이미지 처리 중 오류가 발생했습니다.";
         }
+    }
+
+    // 이미지 리사이즈 및 크롭을 위한 헬퍼 메서드
+    private BufferedImage resizeAndCropImage(BufferedImage originalImage, int targetWidth, int targetHeight) {
+        int width = originalImage.getWidth();
+        int height = originalImage.getHeight();
+
+        // 리사이즈를 위한 스케일 계산
+        double widthScale = (double) targetWidth / width;
+        double heightScale = (double) targetHeight / height;
+        double scale = Math.max(widthScale, heightScale); // 이미지가 목표 영역을 덮도록 스케일 설정
+
+        // 새로운 크기 계산
+        int newWidth = (int) (scale * width);
+        int newHeight = (int) (scale * height);
+
+        // 이미지 리사이즈
+        Image resizedImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+
+        // 리사이즈된 이미지를 BufferedImage로 변환
+        BufferedImage bufferedResizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = bufferedResizedImage.createGraphics();
+        g2d.drawImage(resizedImage, 0, 0, null);
+        g2d.dispose();
+
+        // 이미지 크롭
+        int x = (newWidth - targetWidth) / 2;
+        int y = (newHeight - targetHeight) / 2;
+        BufferedImage croppedImage = bufferedResizedImage.getSubimage(x, y, targetWidth, targetHeight);
+
+        return croppedImage;
     }
 
 }

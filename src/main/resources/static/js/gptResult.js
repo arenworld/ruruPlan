@@ -1,6 +1,9 @@
 $(document).ready(async function() {
     console.log("Document is ready");
 
+    // 국제화
+    lang = $('#lang').val();
+
     $('#print-button').click(function() {
         window.print();
     });
@@ -41,7 +44,7 @@ $(document).ready(async function() {
                     var taskDuration = parseDuration(task.duration); // 분 단위로 변환
                     prevDuration = taskDuration;
 
-                    $('#duration-' + task.taskNum).html(formatDuration(taskDuration));
+                    $('#duration-' + task.taskNum).html(formatDuration(taskDuration, lang));
 
                     if (task.contentsTypeKr != '이동') {
                         startX = task.place.mapX;
@@ -64,15 +67,15 @@ $(document).ready(async function() {
                             var ey = nextTask.place.mapY;
 
                             if (!sx || !sy || !ex || !ey) {
-                                $('#duration-' + task.taskNum).html('0분');
+                                $('#duration-' + task.taskNum).html(lang === 'ko' ? '0분' : '0ウォン');
                                 prevDuration = 0;
                                 continue;
                             }
 
                             if (sx === ex && sy === ey) {
                                 // 출발지와 도착지가 동일한 경우
-                                $('#duration-' + task.taskNum).html('0분');
-                                $('#cost-' + task.taskNum).html('0원');
+                                $('#duration-' + task.taskNum).html(lang === 'ko' ? '이동 없음' : '移動なし');
+                                $('#cost-' + task.taskNum).html(lang === 'ko' ? '0원' : '0ウォン');
 
                                 prevDuration = 0;
                                 task.duration = 0;
@@ -106,17 +109,17 @@ $(document).ready(async function() {
                                             }
                                             else {
                                                 transitType = "도보";
-                                                contentsTypeJp = "移動";
+                                                contentsTypeJp = "徒歩";
                                             }
                                         } else {
                                             transitType = "도보";
-                                            contentsTypeJp = "移動";
+                                            contentsTypeJp = "徒歩";
                                         }
 
 
 
-                                        $('#duration-' + task.taskNum).html(transitType + " " + duration + "분");
-                                        $('#cost-' + task.taskNum).html(routeInfo.payment + '원');
+                                        $('#duration-' + task.taskNum).html(lang === 'ko' ? transitType + " " + duration + "분" : contentsTypeJp + " " + duration + "分");
+                                        $('#cost-' + task.taskNum).html(lang === 'ko' ? routeInfo.payment + '원' : routeInfo.payment + 'ウォン');
 
                                         totalCost += cost;
 
@@ -130,10 +133,10 @@ $(document).ready(async function() {
                                     } else {
                                         duration = durationFloat;
                                         transitType = "도보";
-                                        contentsTypeJp = "移動";
-                                        $('#duration-' + task.taskNum).html(transitType + " " + duration + "분");
+                                        contentsTypeJp = "徒歩";
+                                        $('#duration-' + task.taskNum).html(lang === 'ko' ? transitType + " " + duration + "분" : contentsTypeJp + " " + duration + "分");
 
-                                        $('#cost-' + task.taskNum).html('0원');
+                                        $('#cost-' + task.taskNum).html(lang === 'ko' ?　'0원' : "0ウォン");
 
                                         task.duration = duration;
                                         prevDuration = parseInt(duration);
@@ -144,16 +147,16 @@ $(document).ready(async function() {
                                     }
 
                                 } catch (error) {
-                                    $('#duration-' + task.taskNum).html('0분');
-                                    $('#cost-' + task.taskNum).html('0원');
+                                    $('#duration-' + task.taskNum).html(lang === 'ko' ? '0분' : '0分');
+                                    $('#cost-' + task.taskNum).html(lang === 'ko' ? '0원' : '0ウォン');
                                     prevDuration = 0;
                                     task.duration = 0;
                                     task.cost = 0;
                                 }
                             }
                         } else {
-                            $('#duration-' + task.taskNum).html('0분');
-                            $('#cost-' + task.taskNum).html('0원');
+                            $('#duration-' + task.taskNum).html(lang === 'ko' ? '0분' : '0分');
+                            $('#cost-' + task.taskNum).html(lang === 'ko' ? '0원' : '0ウォン');
                             prevDuration = 0;
                             task.duration = 0;
                             task.cost = 0;
@@ -163,7 +166,7 @@ $(document).ready(async function() {
                         var taskDuration = parseDuration(task.duration);
                         prevDuration = taskDuration;
 
-                        $('#duration-' + task.taskNum).html(formatDuration(taskDuration));
+                        $('#duration-' + task.taskNum).html(formatDuration(taskDuration, lang));
 
                         startX = task.place.mapX;
                         startY = task.place.mapY;
@@ -215,7 +218,7 @@ $(document).ready(async function() {
             }
         }
     }
-    $('#total-cost').html('예상 최소비용: ' + totalCost.toLocaleString() + '원');
+    $('#total-cost').html(lang === 'ko' ? '예상 1인당 최소비용: ' + totalCost.toLocaleString() + '원' : '予想1人当たりの最小費用: ' + totalCost.toLocaleString() + 'ウォン');
 
     // 저장버튼 클릭 시 모달 창 작업 및 저장
     // 모달 창 열기
@@ -251,9 +254,12 @@ $(document).ready(async function() {
         var coverImageFile = $('#coverImageUrl')[0].files[0]; // 파일 정보 가져오기
 
         if (!planName) {
-            alert('일정 이름을 입력하세요.');
+            alert(lang === 'ko' ? '일정 이름을 입력하세요.' : 'プラン名を入力してください。');
             return;
         }
+
+        // 기본 이미지 경로 설정
+        var defaultImagePath = "/images/plan/basic_cover_img.png";
 
         // 파일이 있으면 파일을 서버에 업로드
         if (coverImageFile) {
@@ -289,12 +295,12 @@ $(document).ready(async function() {
                     sendPlanToServer(newPlanDTO);
                 },
                 error: function(error) {
-                    alert('이미지 업로드에 실패하였습니다.');
+                    alert(lang === 'ko' ? '이미지 업로드에 실패하였습니다.' : 'アップロードに失敗しました。');
                     console.error(error);
                 }
             });
         } else {
-            // 파일이 없을 경우 처리
+            // 파일이 없을 경우 기본 이미지 경로 사용
             var newPlanDTO = {
                 planNum: null,
                 planName: planName ? planName : null,
@@ -307,7 +313,7 @@ $(document).ready(async function() {
                 theme3: planDTO.theme3,
                 planCreateDate: null,
                 planUpdateDate: null,
-                coverImageUrl: null, // 이미지가 없을 경우 null 처리
+                coverImageUrl: defaultImagePath, // 기본 이미지 경로
                 taskList: allTasks
             };
 
@@ -377,11 +383,17 @@ $(document).ready(async function() {
     }
 
     // 분을 "X시간 Y분" 형식의 문자열로 변환하는 함수
-    function formatDuration(duration) {
+    function formatDuration(duration, lang) {
         if (typeof duration === 'number') {
             var hours = Math.floor(duration / 60);
             var mins = duration % 60;
-            return (hours > 0 ? hours + '시간 ' : '') + mins + '분';
+            var time = '시간';
+            var minutes = '분';
+            if(lang !== 'ko'){
+                time = '時間';
+                minutes = '分';
+            }
+            return (hours > 0 ? hours + time : '') + " " + mins + minutes;
         } else {
             return duration;
         }

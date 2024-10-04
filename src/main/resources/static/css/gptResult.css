@@ -136,15 +136,6 @@ tbody tr {
     margin: 0;
 }
 
-.note-container {
-    text-align: right;
-    margin-top: 10px;
-}
-
-.note-container .note {
-    font-size: 0.9em;
-    color: #6c757d; /* 회색 */
-}
 
 
 /* 테이블 열 너비 설정 */
@@ -242,10 +233,6 @@ h1, h3, button {
         display: none;
     }
 
-    /* 추가 텍스트 숨기기 */
-    .note-container {
-        display: none;
-    }
 
     /* 테이블 스타일 조정 */
     table {

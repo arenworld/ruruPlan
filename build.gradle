@@ -51,3 +51,7 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+dependencies {
+    implementation 'net.coobird:thumbnailator:0.4.14'
+}

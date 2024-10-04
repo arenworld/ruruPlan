@@ -2,19 +2,19 @@ package net.datasa.ruruplan.myPage.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.ruruplan.community.domain.dto.PlanBoardDTO;
+import net.datasa.ruruplan.community.service.PlanBoardService;
 import net.datasa.ruruplan.member.domain.dto.MemberDTO;
 import net.datasa.ruruplan.myPage.service.MyPageService;
 import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
 import net.datasa.ruruplan.security.AuthenticatedUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.List;
 import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.WebUtils;
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,7 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/myPage")
 public class MyPageController {
 
-    private final MyPageService myPageService;  // 서비스 의존성 주입
+    final MyPageService myPageService;  // 서비스 의존성 주입
+    final PlanBoardService planBoardService;
 
     @GetMapping("")
     public String myPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
@@ -65,6 +66,14 @@ public class MyPageController {
         model.addAttribute("dto", dto);
 
         return "myPageView/myPlanShare";
+    }
+
+    @PostMapping("myPlanShare")
+    public String myPlanShare(@ModelAttribute PlanBoardDTO dto) {
+
+        planBoardService.save(dto);
+
+        return "redirect:/";
     }
 
 }

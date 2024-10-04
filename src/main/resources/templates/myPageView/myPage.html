@@ -48,7 +48,7 @@
             </li>
 
             <li sec:authorize="isAuthenticated()">
-                <a th:href="@{/member/logout}">Logout</a>
+                <a th:href="@{/member/logout}" th:text="#{logout}">Logout</a>
             </li>
 
         </ul>

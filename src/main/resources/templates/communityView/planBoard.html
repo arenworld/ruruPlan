@@ -2,20 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Untree.co">
-    <link rel="shortcut icon" href="/images/favicon.png">
 
     <meta name="description" content="" />
+
+    <link rel="stylesheet" href="/css/home.css" />
     <!--페이지 틀-->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <!--위치 아이콘-->
     <link rel="stylesheet" href="/fonts/icomoon/style.css">
     <!--귀여운 폰트// 그러나 언어 변경 버튼에 영향을 줌-->
     <link rel="stylesheet" href="/css/style.css">
-    <!--태그버튼-->
+    <!--태그 검색 버튼-->
     <link rel="stylesheet" href="/css/button.css">
-
+    <!--언어버튼-->
     <link rel="stylesheet" href="/css/language.css" />
     <title>플랜 공유 게시판</title>
     <style>
@@ -31,61 +30,116 @@
 </head>
 <body>
 <header>
-    <!--로고-->
-    <!-- 언어변경파트 -->
-    <div class="select-container">
-        <div class="lenge_select-toggle">
-            <div class="language-selector">
-                <img src="/images/home/지구본.png" alt="Globe Icon" />
-                <div class="languages">
-                    <span class="span_kor" th:if="${#locale.language == 'ko'}" style="font-weight: bold;">KOR</span>
-                    <span class="span_kor" th:if="${#locale.language != 'ko'}">KOR</span>
-                    <div class="lang-separator"></div>
-                    <span class="span_jp"  th:if="${#locale.language == 'ja'}" style="font-weight: bold;">JP</span>
-                    <span class="span_jp"  th:if="${#locale.language != 'ja'}">JP</span>
+    <nav class="site-nav">
+        <div class="site-navigation">
+            <!-- 로고 -->
+            <div class="logo-container">
+                <a class="logo">
+                    <img class="logo_img" src="/images/home/로고_수정.png" />
+                    <span class="text-primary" th:text="#{logo}"></span>
+                </a>
+            </div>
+            <!-- 네비바  로그인x 로그인,조인  로그인o 로그아웃,마이페이지-->
+            <ul class="site-menu">
+                <li class="has-children">
+                    <a th:text="#{community}"></a>
+                    <ul class="dropdown">
+                        <li><a th:href="@{planBoard/list}" th:text="#{plan_board}"></a></li>
+                        <li><a th:href="@{board/list}" th:text="#{board}"></a></li>
+                    </ul>
+                </li>
+                <li class="has-children">
+                    <a href="#" th:text="#{plan}"></a>
+                    <ul class="dropdown">
+                        <li><a href="#" th:text="#{my_plan}"></a></li>
+                        <li><a href="#" th:text="#{save_plan}"></a></li>
+                    </ul>
+                </li>
+                <li><a th:href="@{custom}">Customizing</a></li>
+
+                <li sec:authorize="not isAuthenticated()">
+                    <a th:href="@{login/loginForm}" th:text="#{login.bt}">Login</a>
+                    <a href="#">join</a>
+                </li>
+
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{member/logout}">Logout</a>
+                    <a th:href="@{/myPage}">mypage</a>
+                </li>
+
+            </ul>
+
+            <!-- 날씨정보 박스 -->
+            <div class="weather_box">
+                <div id="weather_icon">
+                    <!-- 이모티콘자리 -->
+                    <img class="weather_icon_set" id="weather" src="/images/home/날씨기본.png" />
+                </div>
+                <!-- 온도 -->
+                <span class="temperature" id="tem"> -°C</span>
+                <!-- 습도 -->
+                <span class="humidity" id="hum"> -%</span>
+            </div>
+
+            <!-- 언어변경파트 -->
+
+            <div class="lenge_select-toggle">
+                <div class="language-selector">
+                    <img src="/images/home/지구본.png" alt="Globe Icon" />
+                    <div class="languages">
+              <span
+                      class="span_kor"
+                      th:if="${#locale.language == 'ko'}"
+                      style="font-weight: bold"
+              >KOR</span
+              >
+                        <span class="span_kor" th:if="${#locale.language != 'ko'}"
+                        >KOR</span
+                        >
+                        <div class="lang-separator"></div>
+                        <span
+                                class="span_jp"
+                                th:if="${#locale.language == 'ja'}"
+                                style="font-weight: bold"
+                        >JP</span
+                        >
+                        <span class="span_jp" th:if="${#locale.language != 'ja'}"
+                        >JP</span
+                        >
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </nav>
+</header>
+<main>
     <!--제목-->
     <div class="row justify-content-center text-center mb-5">
-        <div class="col-lg-6">
+        <div class="title">
             <h2 class="section-title text-center mb-3" style="text-align: center;"
                 th:text="#{share_plan}"></h2>
             <p th:text="#{share_plan_mg}"></p>
         </div>
     </div>
     <!--버튼-->
-    <table>
-        <tr >
-            <td class="button-container">
-                <div class='button -regular center' th:text="#{spring}" value="spring"></div>
-                <div class='button -regular center' th:text="#{summer}" value="summer"></div>
-                <div class='button -regular center' th:text="#{fall}" value="fall"></div>
-                <div class='button -regular center'  th:text="#{winter}" value="winter"></div>
-            </td>
-            <td  class="button-container">
-                <div class='button -regular center' value="2days" th:text="#{2days}"></div>
-                <div class='button -regular center' value="3days" th:text="#{3days}"></div>
-                <div class='button -regular center' value="4days" th:text="#{4days}"></div>
-                <div class='button -regular center' value="5days" th:text="#{5days}"></div>
-                <div class='button -regular center' value="6days" th:text="#{6days}"></div>
-            </td>
-        </tr>
-        <tr>
-
-        </tr>
-    </table>
-    <div class="button-container">
-
-    </div>
     <div class="button-container">
         <div class='button -regular center' th:text="#{spring}"></div>
         <div class='button -regular center' th:text="#{summer}"></div>
         <div class='button -regular center' th:text="#{fall}"></div>
         <div class='button -regular center'  th:text="#{winter}"></div>
-    </div>
-    <div class="button-container">
+
+        <div class='button -regular center' value="2days" th:text="#{2days}"></div>
+        <div class='button -regular center' value="3days" th:text="#{3days}"></div>
+        <div class='button -regular center' value="4days" th:text="#{4days}"></div>
+        <div class='button -regular center' value="5days" th:text="#{5days}"></div>
+        <div class='button -regular center' value="6days" th:text="#{6days}"></div>
+
+        <div class='button -regular center' value="2days" th:text="#{trip_type1}"></div>
+        <div class='button -regular center' value="3days" th:text="#{trip_type2}"></div>
+        <div class='button -regular center' value="4days" th:text="#{trip_type3}"></div>
+        <div class='button -regular center' value="6days" th:text="#{trip_type4}"></div>
+        <div class='button -regular center' value="6days" th:text="#{kids}"></div>
+
         <div class='button -regular center' th:text="#{theme1}"></div>
         <div class='button -regular center' th:text="#{theme2}"></div>
         <div class='button -regular center' th:text="#{theme3}"></div>
@@ -95,9 +149,11 @@
         <div class='button -regular center' th:text="#{theme7}"></div>
         <div class='button -regular center' th:text="#{theme8}"></div>
         <div class='button -regular center' th:text="#{theme9}"></div>
+        <div class='button -regular center' th:text="#{theme9_1}"></div>
+        <div class='button -regular center' th:text="#{theme9_2}"></div>
+        <div class='button -regular center' th:text="#{theme9_3}"></div>
     </div>
-</header>
-<main>
+
     <div class="untree_co-section">
         <div class="container">
             <!--플랜 불러오기-->
@@ -138,5 +194,6 @@
 </main>
 <script src="/js/jquery-3.4.1.min.js"></script>
 <script src="/js/member/locale.js"></script>
+<script src="/js/tag.js"></script>
 </body>
 </html>

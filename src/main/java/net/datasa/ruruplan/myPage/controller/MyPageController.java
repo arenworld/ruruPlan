@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.ruruplan.member.domain.dto.MemberDTO;
 import net.datasa.ruruplan.myPage.service.MyPageService;
+import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
+import net.datasa.ruruplan.security.AuthenticatedUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,17 +13,19 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.List;
 import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.WebUtils;
 import javax.servlet.http.HttpServletRequest;
 
 @RequiredArgsConstructor  // 생성자 주입을 자동으로 생성
 @Slf4j  // 로깅 기능을 사용
 @Controller  // 이 클래스를 Spring 컨트롤러로 지정
+@RequestMapping("/myPage")
 public class MyPageController {
 
     private final MyPageService myPageService;  // 서비스 의존성 주입
 
-    @GetMapping("/myPage")
+    @GetMapping("")
     public String myPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         if (userDetails == null) {
             return "redirect:/login";
@@ -35,4 +39,21 @@ public class MyPageController {
 
         return "myPageView/myPage";  // Thymeleaf 템플릿으로 렌더링
     }
+
+    @GetMapping("myPlanList")
+    public String myPlanList(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
+        String userId = user.getId();
+        List<PlanDTO> MyPlanList = myPageService.getMyPlanList(userId);
+
+        model.addAttribute("userId", userId);
+        model.addAttribute("MyPlanList", MyPlanList);
+
+        return "myPageView/myPlanList";
+    }
+
+    @GetMapping("myPlan")
+    public String myPlan() {
+        return "myPageView/myPlan";
+    }
+
 }

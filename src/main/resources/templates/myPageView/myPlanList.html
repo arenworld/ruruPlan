@@ -27,7 +27,7 @@
 <header class="header-container">
     <div class="mypag-main-title">마이 페이지</div>
     <div class="mypage_sidemenu">
-        <a href="#">로그아웃</a>
+        <a th:href="@{/member/logout}">로그아웃</a>
         <a href="#">커뮤니티</a>
     </div>
 </header>
@@ -62,7 +62,7 @@
             <div th:each="plan, status : ${MyPlanList}" class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                 <!--플랜 커버-->
                 <div class="media-1">
-                    <a href="#" class="d-block mb-3">
+                    <a th:href="@{/myPage/myPlan/{planNum}(planNum=${plan.planNum})}" class="d-block mb-3">
                         <img th:src="${plan.coverImageUrl}" alt="Image" class="img-fluid">
                     </a>
                 </div>
@@ -70,7 +70,7 @@
 					    <div>
                             <span th:text="${plan.startDate}"></span>
                             <span>  ~  </span>
-							<span th:text="${plan.endDate}">좋아요 수</span>
+							<span th:text="${plan.endDate}"></span>
                         </div>
 					</span>
                 <!--플랜 명, 태그-->

@@ -73,7 +73,7 @@
                     <div>
                         <div class="d-flex align-items-center loc mb-2">
                             <!--플랜명-->
-                            <h3><a href="#" th:text="${plan.planName}"></a></h3>
+                            <h3><a th:href="@{/myPage/myPlan/{planNum}(planNum=${plan.planNum})}" th:text="${plan.planName}"></a></h3>
                             <!--플랜 공유 이미지-->
                             <a th:href="|myPlanShare?planNum=${plan.planNum}|">
                                 <img th:src="@{/images/upload.png}"

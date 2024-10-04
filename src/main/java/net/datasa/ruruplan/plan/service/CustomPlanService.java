@@ -16,22 +16,18 @@ import net.datasa.ruruplan.plan.domain.entity.PlanEntity;
 import net.datasa.ruruplan.plan.domain.entity.TaskEntity;
 import net.datasa.ruruplan.plan.repository.*;
 import net.datasa.ruruplan.plan.repository.jpa.PlaceInfoJpaRepository;
+import net.datasa.ruruplan.plan.repository.jpa.PlanJpaRepository;
 import net.datasa.ruruplan.plan.repository.jpa.TaskJpaRepository;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 /**
  * GPT추천일정을 내 일정으로 담기 한 후 개별수정하는 컨트롤러
@@ -44,7 +40,7 @@ import java.util.regex.Pattern;
 public class CustomPlanService {
 
     private final GptCmdRepository cmdRepository;
-    private final PlanRepository planRepository;
+    private final PlanJpaRepository planJpaRepository;
     private final TaskJpaRepository taskJpaRepository;
     private final TaskRepository taskRepository;
     private final PlaceInfoRepository placeInfoRepository;
@@ -59,19 +55,24 @@ public class CustomPlanService {
      */
     public PlanDTO getPlan(Integer planNum) {
         //서버로부터 전달 받은 planNum으로 플랜 조회 (지금은 없으니까, 임의로 2를 넣음)
-        PlanEntity planEntity = planRepository.findById(planNum)
+        PlanEntity planEntity = planJpaRepository.findById(planNum)
                 .orElseThrow(() -> new EntityNotFoundException("플랜이 존재하지 않음"));
 
         //위에서 조회한 planEntity를 dto로 변환
         PlanDTO planDTO = convertToDTO(planEntity);
 
+        Sort sort = Sort.by(Sort.Order.asc("dateN"), Sort.Order.asc("taskNum"));
+
         //taskList 처리
+        List<TaskEntity> taskEntityList = taskJpaRepository.findByPlanPlanNum(planNum, sort);
         List<TaskDTO> taskDTOList = new ArrayList<>();
-        for (TaskEntity taskEntity : planEntity.getTaskList()) {
+
+        for (TaskEntity taskEntity : taskEntityList) {
             TaskDTO taskDTO = convertToDTO(taskEntity);
             taskDTOList.add(taskDTO);
         }
         planDTO.setTaskList(taskDTOList);
+        log.debug("taskList:{}", taskDTOList);
         return planDTO;
     }
 
@@ -82,14 +83,15 @@ public class CustomPlanService {
      * @return
      */
     public List<TaskDTO> getTaskList(Integer planNum, Integer dayNum) {
+        Sort sort = Sort.by(Sort.Order.asc("dateN"), Sort.Order.asc("taskNum"));
+
         List<TaskEntity> taskEntityList = new ArrayList<>();
 
         // 전체일정 불러오기
         if (dayNum == 0) {
-            Sort sort = Sort.by(Sort.Direction.ASC, "taskNum");
-            PlanEntity planEntity = planRepository.findById(planNum)
-                    .orElseThrow(() -> new EntityNotFoundException("플랜없음"));
-            taskEntityList = planEntity.getTaskList();
+//            PlanEntity planEntity = planJpaRepository.findById(planNum)
+//                    .orElseThrow(() -> new EntityNotFoundException("플랜없음"));
+            taskEntityList = taskJpaRepository.findByPlanPlanNum(planNum, sort);
         } else {
             taskEntityList = taskRepository.dayTaskList(planNum, dayNum);
         }
@@ -502,7 +504,7 @@ public class CustomPlanService {
         TaskEntity lastTaskEntity = taskJpaRepository.findById(lastTaskNum)
                 .orElseThrow(() -> new EntityNotFoundException("없는 일정"));
 
-        PlanEntity planEntity = planRepository.findById(planNum)
+        PlanEntity planEntity = planJpaRepository.findById(planNum)
                 .orElseThrow(() -> new EntityNotFoundException("없는 플랜"));
 
         MemberEntity memberEntity = memberRepository.findById(username)

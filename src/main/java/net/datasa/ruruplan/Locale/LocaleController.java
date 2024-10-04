@@ -76,8 +76,20 @@ public class LocaleController {
         }
     }
 
-    @GetMapping("custom/locale")
-    public void customlocale(@RequestParam(value = "lang", required = false) String lang,
+//    @GetMapping("custom/locale")
+//    public void customlocale(@RequestParam(value = "lang", required = false) String lang,
+//                        HttpServletRequest request,
+//                        HttpServletResponse response,
+//                        Model model) {
+//        log.debug("locale: {}", lang);
+//        if (lang != null) {
+//            Locale locale = new Locale(lang);
+//            localeResolver.setLocale(request, response, locale); // 로케일을 변경
+//        }
+//    }
+
+    @GetMapping("planBoard/locale")
+    public void planBoard(@RequestParam(value = "lang", required = false) String lang,
                         HttpServletRequest request,
                         HttpServletResponse response,
                         Model model) {
@@ -88,11 +100,11 @@ public class LocaleController {
         }
     }
 
-    @GetMapping("planBoard/locale")
-    public void planBoard(@RequestParam(value = "lang", required = false) String lang,
-                        HttpServletRequest request,
-                        HttpServletResponse response,
-                        Model model) {
+    @GetMapping("myPage/myPlan/locale")
+    public void myPageMyPlan(@RequestParam(value = "lang", required = false) String lang,
+                          HttpServletRequest request,
+                          HttpServletResponse response,
+                          Model model) {
         log.debug("locale: {}", lang);
         if (lang != null) {
             Locale locale = new Locale(lang);

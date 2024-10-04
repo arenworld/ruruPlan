@@ -442,7 +442,7 @@ function dayPlansPrint(dayNumOfButton, planNum) {
 
                         let title = lang === 'ko' ? task.place.titleKr : task.place.titleJp;
                         let contentsType = lang === 'ko' ? task.contentsTypeKr : task.contentsTypeJp;
-                        let contentsTypeMove = lang === 'ko' ? `이동(${task.contentsTypeKr})` : `移動${task.contentsTypeJp})`;
+                        let contentsTypeMove = lang === 'ko' ? `이동(${task.contentsTypeKr})` : `移動(${task.contentsTypeJp})`;
 
                         // Start building task row
                         dayTable += `<tr class="task-list${task.taskNum}" data-tasknum="${task.taskNum}" data-map-x="${task.place.mapX}" data-map-y="${task.place.mapY}">                                        
@@ -505,6 +505,11 @@ function dayPlansPrint(dayNumOfButton, planNum) {
 
 }
 
+/**
+ * 새로운 일정 추가
+ * @param newPlaceId
+ * @param lastTaskNum
+ */
 function addNewTask(newPlaceId, lastTaskNum) {
 
     $.ajax({
@@ -521,13 +526,14 @@ function addNewTask(newPlaceId, lastTaskNum) {
         success: function () {
             console.log("왔다!");
             clickCountAddNewTask--;
-            dayPlansPrint(dayNumOfButton, planNum);
             targetDayNum = '';
             preTransDuration = '';
             preTransType = '';
+            dayPlansPrint(dayNumOfButton, planNum);
+            $('.task-place-info-list-box').css('display', 'block');
+            $('.theme-place-info-list-box').css('display', 'none');
         },
         error: function () {
-
         }
     })
 }
@@ -817,8 +823,8 @@ function placeInfoMore() {
         data: {placeId: placeId},
         success: function (placeDTO) {
             let heritageIcon = placeDTO.heritage ? `<img th:src="@{/images/customPlan/heritage.png}" class="info-table-badge" data-badge="heritage">` : '';
-            let barrierFreeIcon = placeDTO.barrierFree ? '<img src="../images/customPlan/barrier.png" class="info-table-badge" data-badge="barrier">' : '';
-            let petFriendlyIcon = placeDTO.petFriendly ? '<img src="../images/customPlan/pet.png" class="info-table-badge" data-badge="pet">' : '';
+            let barrierFreeIcon = placeDTO.barrierFree ? '<img src="/images/customPlan/barrier.png" class="info-table-badge" data-badge="barrier">' : '';
+            let petFriendlyIcon = placeDTO.petFriendly ? '<img src="/images/customPlan/pet.png" class="info-table-badge" data-badge="pet">' : '';
             let feeInfoKr = placeDTO.feeInfoKr == null ? '' : placeDTO.feeInfo + lang;
             let saleItemKr = placeDTO.saleItemKr == null ? '' : placeDTO.saleItem + lang;
 
@@ -827,7 +833,7 @@ function placeInfoMore() {
             let restdate = lang === 'ko' ? placeDTO.restdateKr : placeDTO.restdateJp;
             let overview = lang === 'ko' ? placeDTO.overviewKr : placeDTO.overviewJp;
 
-            let addButton = taskNum === undefined ? `<img th:src="@{/images/customPlan/add-point.png}" class="info-table-add-task-button" data-place-id="${placeDTO.placeId}" data-map-x="${placeDTO.mapX}" data-map-y="${placeDTO.mapY}">` : '';
+            let addButton = taskNum === undefined ? '<img src="/images/customPlan/add-point.png" class="info-table-add-task-button" data-place-id="${placeDTO.placeId}" data-map-x="${placeDTO.mapX}" data-map-y="${placeDTO.mapY}">' : '';
 
             let infoMoreTable = `
                          <div class="info-more-table-box">
@@ -842,29 +848,29 @@ function placeInfoMore() {
                                         </th>
                                         <td class="info-table-back-td">   
                                             ${addButton}                        
-                                            <img src="../images/customPlan/return2.png" class="info-table-return-button">                        
+                                            <img src="/images/customPlan/return2.png" class="info-table-return-button">                        
                                         </td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>    
-                                        <th class="info-table-th"><img src="../images/customPlan/clock.png" class="info-table-images"></th>
+                                        <th class="info-table-th"><img src="/images/customPlan/clock.png" class="info-table-images"></th>
                                         <td class="info-table-usetime">${usetime}</td>
                                     </tr>
                                     <tr>    
-                                        <th class="info-table-th"><img src="../images/customPlan/restday.png" class="info-table-images"></th>
+                                        <th class="info-table-th"><img src="/images/customPlan/restday.png" class="info-table-images"></th>
                                         <td class="info-table-restday">${restdate}</td>
                                     </tr>
                                     <tr>    
-                                        <th class="info-table-th"><img src="../images/customPlan/fee-Info-won.png" class="info-table-images"></th>
+                                        <th class="info-table-th"><img src="/images/customPlan/fee-Info-won.png" class="info-table-images"></th>
                                         <td class="info-table-fee-info">${feeInfoKr}</td>
                                     </tr>
                                     <tr>    
-                                        <th class="info-table-th"><img src="../images/customPlan/thumbup.png" class="info-table-images"></th>
+                                        <th class="info-table-th"><img src="/images/customPlan/thumbup.png" class="info-table-images"></th>
                                         <td class="info-table-sale-item">${saleItemKr}</td>
                                     </tr>
                                     <tr>
-                                        <th class="info-table-th"><img src="../images/customPlan/description.png" class="info-table-images"></th>
+                                        <th class="info-table-th"><img src="/images/customPlan/description.png" class="info-table-images"></th>
                                         <td class="info-table-description" rowspan="2">${overview}</td>
                                     </tr>
                                         <th class="info-table-th"></th>
@@ -1269,7 +1275,7 @@ function updateThemeInfoList(visibleThemeMarkerKeyList) {
         const place = placeListData.find(p => p.placeId === key); // Assuming taskList is globally accessible
         // Create the HTML structure for each visible marker
         let img = place.originImgUrl === null ?
-            '<img src="../images/customPlan/nonImg.png" class="place-info-imgNone">' :
+            '<img src="/images/customPlan/nonImg.png" class="place-info-imgNone">' :
             `<img src="${place.originImgUrl}" class="place-info-img">`;
 
         let title = lang === 'ko' ? place.titleKr : place.titleJp;
@@ -1280,11 +1286,11 @@ function updateThemeInfoList(visibleThemeMarkerKeyList) {
             <div class="place-info-section${place.placeId}" >
                 ${img}
                 <h5 class="place-info-title">${title}</h5>
-                <img src="../images/customPlan/add-point.png" class="info-section-add-task-button" data-place-id="${place.placeId}" data-map-x="${place.mapX}" data-map-y="${place.mapY}">
-                <img src="../images/customPlan/more2.png" class="info-section-more" data-place-id="${place.placeId}"></img>
+                <img src="/images/customPlan/add-point.png" class="info-section-add-task-button" data-place-id="${place.placeId}" data-map-x="${place.mapX}" data-map-y="${place.mapY}">
+                <img src="/images/customPlan/more2.png" class="info-section-more" data-place-id="${place.placeId}"></img>
                 <span class="info-section-address">${address}</span>
                 <span class="info-section-contentsType">${contentsType}</span>
-                <img src="../images/customPlan/infocenter.png" class="info-section-infocenterImg">
+                <img src="/images/customPlan/infocenter.png" class="info-section-infocenterImg">
                 <span class="info-section-infocenter">${place.infocenter}</span>   
            </div>
         `;

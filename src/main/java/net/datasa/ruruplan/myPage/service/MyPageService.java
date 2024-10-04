@@ -1,21 +1,19 @@
 package net.datasa.ruruplan.myPage.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.ruruplan.member.domain.dto.MemberDTO;
 import net.datasa.ruruplan.member.domain.entity.MemberEntity;
 import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
 import net.datasa.ruruplan.plan.domain.entity.PlanEntity;
-import net.datasa.ruruplan.plan.repository.PlanRepository;
-import net.datasa.ruruplan.security.AuthenticatedUser;
+import net.datasa.ruruplan.plan.repository.jpa.PlanJpaRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import net.datasa.ruruplan.member.repository.MemberRepository;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -25,11 +23,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public class MyPageService {
 
     private final MemberRepository memberRepository;
-    private final PlanRepository planRepository;
+    private final PlanJpaRepository planJpaRepository;
 
-    public MyPageService(MemberRepository memberRepository, PlanRepository planRepository) {
+    public MyPageService(MemberRepository memberRepository, PlanJpaRepository planJpaRepository) {
         this.memberRepository = memberRepository;
-        this.planRepository = planRepository;
+        this.planJpaRepository = planJpaRepository;
     }
 
     public MemberDTO getMemberInfo(String username) {
@@ -70,7 +68,7 @@ public class MyPageService {
         //정렬
         Sort sort = Sort.by(Sort.Direction.DESC, "planNum");
         //나의 플랜 리스트
-        List<PlanEntity> entityList = planRepository.findAllByMember_MemberId(userId, sort);
+        List<PlanEntity> entityList = planJpaRepository.findAllByMember_MemberId(userId, sort);
 
         log.debug("플랜목록 조회 : {}", entityList);
 
@@ -97,7 +95,7 @@ public class MyPageService {
 
     public PlanDTO getPlanShare(int planNum){
 
-        PlanEntity entity = planRepository.findById(planNum)
+        PlanEntity entity = planJpaRepository.findById(planNum)
                 .orElseThrow(() -> new EntityNotFoundException("해당 플랜이 없습니다."));
 
         PlanDTO dto = PlanDTO.builder()

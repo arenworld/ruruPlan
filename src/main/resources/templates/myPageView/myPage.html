@@ -41,7 +41,6 @@
                     <li><a href="#" th:text="#{save_plan}"></a></li>
                 </ul>
             </li>
-            <li><a th:href="@{custom}">Customizing</a></li>
 
             <li sec:authorize="not isAuthenticated()">
                 <a th:href="@{login/loginForm}" th:text="#{login.bt}">Login</a>
@@ -49,8 +48,7 @@
             </li>
 
             <li sec:authorize="isAuthenticated()">
-                <a th:href="@{member/logout}">Logout</a>
-                <a th:href="@{/myPage}">mypage</a>
+                <a th:href="@{/member/logout}">Logout</a>
             </li>
 
         </ul>
@@ -98,15 +96,6 @@
 </nav>
 
 
-<!--&lt;!&ndash; 헤더 &ndash;&gt;-->
-<!--<header class="header-container">-->
-<!--    <div class="mypag-main-title">마이 페이지</div>-->
-<!--    <div class="mypage_sidemenu">-->
-<!--        <a href="#" th:text="#{logout}"></a>-->
-<!--        <a href="#" th:text="#{community}"></a>-->
-<!--    </div>-->
-<!--</header>-->
-
 <!-- 메인 컨테이너 -->
 <main class="main_mypage">
     <!-- 왼쪽 사이드바 -->
@@ -120,7 +109,7 @@
                 <input type="file" id="imageInput" style="display:none" accept="image/*" />
 
                 <!-- 프로필 수정 버튼 -->
-                <button class="profile-edit-button">변경</button>
+                <img class="profile-edit-button" th:src="@{/images/mypage/edit-button-pen.png}">
             </div>
 
             <div class="profile-name" th:text="${member.nickname}"></div>
@@ -132,12 +121,24 @@
     <div class="info area">
             <div class="myPage-main-area">
                 <!-- 첫 번째 줄 -->
-                <div class="myPage-main-item"><a th:href="@{/myPage/myPlanList}"><h3 class="myPage-main-item-myPlan">내 일정</h3></a></div>
-                <div class="myPage-main-item">공유한 일정</div>
-                <div class="myPage-main-item">개인정보 수정</div>
+                <div class="myPage-main-item"><a th:href="@{/myPage/myPlanList}">
+                        <h3 class="myPage-main-item-myPlan">내 일정</h3></a>
+                </div>
+                <div class="myPage-main-item"><a href="#">
+                        <h3 class="myPage-main-item-myPlan">스크랩한 일정</h3></a>
+                </div>
+                <div class="myPage-main-item"><a href="#">
+                        <h3 class="myPage-main-item-myPlan">개인정보 수정</h3></a>
+                </div>
             </div>
     </div>
+
 </main>
+
+
+<div class="modal-picture-example">
+    <span class="letters-in-modal-picture">아이</span>
+</div>
 <script src="/js/mypage.js"></script>
 </body>
 </html>

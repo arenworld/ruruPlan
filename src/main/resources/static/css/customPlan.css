@@ -476,7 +476,7 @@ tr.selected {
 .info-table-title {
     border-radius: 10px;
     padding-top: 10px;
-    padding-bottom: 10 px;
+    padding-bottom: 10px;
 }
 
 /* Style for .in-title */
@@ -529,3 +529,17 @@ tr.selected {
     width: 20px;
     height: 20px;
 }
+
+.custom-plan-end-line {
+    background-color: #767bae;
+    z-index: 100;
+}
+
+/**
+#b8ddea(연하늘)
+#e5deeb(연보라)
+#80c2d8 (진한소라색)
+#767bae(중보라)
+#4a4a90 (진청색)
+#543181(진보라)
+ */

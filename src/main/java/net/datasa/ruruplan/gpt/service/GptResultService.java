@@ -16,10 +16,8 @@ import net.datasa.ruruplan.plan.domain.entity.PlaceInfoEntity;
 import net.datasa.ruruplan.plan.domain.entity.PlanEntity;
 import net.datasa.ruruplan.plan.domain.entity.TaskEntity;
 import net.datasa.ruruplan.plan.repository.PlaceInfoRepository;
-import net.datasa.ruruplan.plan.repository.PlanRepository;
+import net.datasa.ruruplan.plan.repository.jpa.PlanJpaRepository;
 import net.datasa.ruruplan.plan.repository.TaskRepository;
-import net.datasa.ruruplan.plan.repository.impl.PlaceInfoRepositoryImpl;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +35,7 @@ import java.util.*;
 public class GptResultService {
 
     private final GptCmdRepository gptCmdRepository;
-    private final PlanRepository planRepository;
+    private final PlanJpaRepository planJpaRepository;
     private final TaskRepository taskRepository;
 
     @Autowired
@@ -854,7 +852,7 @@ public class GptResultService {
                 .build();
 
         // PlanEntity 저장 (planNum 자동 생성)
-        PlanEntity savedPlanEntity = planRepository.save(planEntity);
+        PlanEntity savedPlanEntity = planJpaRepository.save(planEntity);
         log.debug("저장된 planEntity: " + savedPlanEntity);
 
         // 각 TaskDTO를 TaskEntity로 변환하여 저장

@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.List;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.WebUtils;
 import javax.servlet.http.HttpServletRequest;
 
@@ -54,6 +55,16 @@ public class MyPageController {
     @GetMapping("myPlan")
     public String myPlan() {
         return "myPageView/myPlan";
+    }
+
+    @GetMapping("myPlanShare")
+    public String myPlanShare(Model model, @RequestParam("planNum") int planNum) {
+
+        PlanDTO dto = myPageService.getPlanShare(planNum);
+
+        model.addAttribute("dto", dto);
+
+        return "myPageView/myPlanShare";
     }
 
 }

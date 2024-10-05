@@ -679,7 +679,7 @@ function activateDayTableInputs() {
     tr.find('.day-table-duration-minute').prop('disabled', false);
     tr.find('.day-table-cost').prop('disabled', false);
 
-    tr.find('input').css('background-color', 'lightgrey');
+    tr.find('input').css('background-color', 'grey');
 
     tr.find('.click-overlay').css({
         'cursor': 'default',

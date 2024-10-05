@@ -486,7 +486,9 @@ public class GptResultService {
             return randomPlaceId;
         } else {
             log.debug("일치하는 테마를 가진 장소가 없음.");
-            return "자료 없음"; // 만약 장소가 없으면 이 값을 반환
+            List<String> themePlaceIds = placeInfoRepository.findByThemePlaces(placeType);
+            Random random = new Random();
+            return themePlaceIds.get(random.nextInt(themePlaceIds.size())); // 만약 장소가 없으면 이 값을 반환
         }
     }
 
@@ -514,19 +516,19 @@ public class GptResultService {
                 return 0; // 0.5 미만일 경우 활동 없음
             }
         } else {
-            if (totalTime / 3 >= 6.5) {
+            if (totalTime / 2.5 >= 6.5) {
                 return 7;
-            } else if (totalTime / 3 >= 5.5) {
+            } else if (totalTime / 2.5 >= 5.5) {
                 return 6;
-            } else if (totalTime / 3 >= 4.5) {
+            } else if (totalTime / 2.5 >= 4.5) {
                 return 5;
-            } else if (totalTime / 3 >= 3.5) {
+            } else if (totalTime / 2.5 >= 3.5) {
                 return 4;
-            } else if (totalTime / 3 >= 2.5) {
+            } else if (totalTime / 2.5 >= 2.5) {
                 return 3;
-            } else if (totalTime / 3 >= 1.5) {
+            } else if (totalTime / 2.5 >= 1.5) {
                 return 2;
-            } else if (totalTime / 3 >= 0.5) {
+            } else if (totalTime / 2.5 >= 0.5) {
                 return 1;
             } else {
                 return 0; // 0.5 미만일 경우 활동 없음

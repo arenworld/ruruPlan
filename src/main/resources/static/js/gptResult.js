@@ -50,6 +50,16 @@ $(document).ready(async function() {
                         startX = task.place.mapX;
                         startY = task.place.mapY;
                     }
+
+                    // 비용 처리 코드 추가
+                    var costText = $('#cost-' + task.taskNum).text();
+                    var costNumber = parseInt(costText.replace('원', '').replace(/,/g, ''));
+                    if (!isNaN(costNumber)) {
+                        totalCost += costNumber;
+                        task.cost = costNumber;
+                    } else {
+                        task.cost = 0;
+                    }
                 } else {
                     var currentStartTime = addMinutesToTime(prevStartTime, prevDuration);
                     task.startTime = currentStartTime;
@@ -343,7 +353,7 @@ $(document).ready(async function() {
             data: JSON.stringify(planDTO),
             success: function(response) {
                 alert(lang === 'ko' ? '플랜이 저장되었습니다!😄' : 'プランが保存されました！😄');
-                window.location.href = "/";
+                window.location.href = "/";    // /myPage/myPlanList
             },
             error: function(error) {
                 alert(lang === 'ko' ? '플랜 저장에 실패하였습니다.😭' : 'プランの保存中に問題が発生しました。😭');
@@ -548,4 +558,3 @@ $(document).ready(async function() {
     }
 
 });
-

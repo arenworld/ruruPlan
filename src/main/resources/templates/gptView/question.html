@@ -185,12 +185,12 @@
             <!-- 예약함 -->
             <div class="reservation-navigater">
                 <button type="button" class="button-reservation">
-                    <i class="icon-flight"></i>
+                    <img class="icon-flight" src="/images/modal/찐비행.png">
                     <div class="question-selct1-text" th:text="#{book_ticket}"></div>
                 </button>
                 <!-- 예약안함 -->
                 <button type="button" class="button-notreservation">
-                    <i class="icon-airplanemode_inactive"></i>
+                    <img class="icon-airplanemode_inactive" src="/images/modal/예약안함.png">
                     <div class="question-selct2-text" th:text="#{no_ticket}"></div>
                 </button>
             </div>
@@ -241,48 +241,70 @@
         <!-- 인원수 선택버튼 -->
         <div class="button-coustom-who">
             <div class="button-who-row1">
-                <button type="button" id="button-alone">
-                    <img
-                            src="/images/modal/혼자_수정.png"
-                            class="who-icon"
-                            alt="혼자 아이콘"
-                    />
-                    <span class="who-text" th:text="#{trip_type1}"></span>
-                </button>
-                <button type="button" id="button-couple">
-                    <img
-                            src="/images/modal/커플이모티콘.png"
-                            class="who-icon"
-                            alt="커플 아이콘"
-                    />
-                    <span class="who-text" th:text="#{trip_type2}"></span>
-                </button>
+                <div class="who-container">
+                    <button type="button" id="button-alone" class="who-button">
+                        <img
+                                class="who-img"
+                                src="/images/modal/찐찐혼자.png"
+                                alt="혼자 아이콘"
+                        />
+                        <div class="who_text_box">
+                            <span class="who-text" th:text="#{trip_type1}"></span>
+                        </div>
+                    </button>
+
+                </div>
+
+                <div class="who-container">
+                    <button type="button" id="button-couple" class="who-button">
+                        <img
+                                class="who-img"
+                                src="/images/modal/찐찐커플.jpg"
+                                alt="카플 아이콘"
+                        />
+                        <div class="who_text_box">
+                            <span class="who-text" th:text="#{trip_type2}"></span>
+                        </div>
+                    </button>
+                </div>
             </div>
             <div class="button-who-row2">
-                <button type="button" id="button-parents">
-                    <img
-                            src="/images/modal/부모님_수정.png"
-                            class="who-icon"
-                            alt="부모님 아이콘"
-                    />
-                    <span class="who-text" th:text="#{trip_type3}"></span>
-                </button>
-                <button type="button" id="button-friend">
-                    <img
-                            src="/images/modal/친구이모티콘.png"
-                            class="who-icon"
-                            alt="친구 아이콘"
-                    />
-                    <span class="who-text" th:text="#{trip_type4}"></span>
-                </button>
-                <button type="button" id="button-kids">
-                    <img
-                            src="/images/modal/가족이모티콘.png"
-                            class="who-icon"
-                            alt="아이 아이콘"
-                    />
-                    <span class="who-text" th:text="#{kids}"></span>
-                </button>
+                <div class="who-container">
+                    <button type="button" id="button-parents" class="who-button">
+                        <img
+                                class="who-img"
+                                src="/images/modal/찐찐노인.jpg"
+                                alt="노인 아이콘"
+                        />
+                        <div class="who_text_box">
+                            <span class="who-text" th:text="#{trip_type3}"></span>
+                        </div>
+                    </button>
+                </div>
+                <div class="who-container">
+                    <button type="button" id="button-friend" class="who-button">
+                        <img
+                                class="who-img"
+                                src="/images/modal/찐찐친구.jpg"
+                                alt="친구 아이콘"
+                        />
+                        <div class="who_text_box">
+                            <span class="who-text" th:text="#{trip_type4}"></span>
+                        </div>
+                    </button>
+                </div>
+                <div class="who-container">
+                    <button type="button" id="button-kids" class="who-button">
+                        <img
+                                class="who-img"
+                                src="/images/modal/찐찐가족.png"
+                                alt="혼자 아이콘"
+                        />
+                        <div class="who_text_box">
+                            <span class="who-text" th:text="#{kids}"></span>
+                        </div>
+                    </button>
+                </div>
             </div>
         </div>
 

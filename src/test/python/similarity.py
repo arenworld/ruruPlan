@@ -1,8 +1,8 @@
 import sys
 import mysql.connector
-from rapidfuzz import fuzz
-import io
-import re
+from rapidfuzz import fuzz      # 문자열 유사도를 비교하는 라이브러리(두 문자열 간의 유사도 비교할 때 사용)
+import io   # 입출력 제어 모듈, 여기서는 기본 출력 스트림을 UTF-8로 설정하기 위해 사용
+import re   # 정규 표현식 사용하기위해 문자열 처리하는 모듈. 여기서는 특수문자와 공백 제거 위해 사용
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
@@ -18,14 +18,14 @@ conn = mysql.connector.connect(
     database="ruru"          # 연결할 데이터베이스 이름
 )
 
-# 커서 생성
+# 커서 생성( SQL쿼리 결과를 가져오는 객체 생성)
 cursor = conn.cursor()
 
 # si_gun_gu에 맞는 데이터 가져오기 (LIKE 사용)
 query = "SELECT place_id, title_kr, address_kr, si_gun_gu FROM ruru_place_info WHERE si_gun_gu LIKE %s"
 cursor.execute(query, (si_gun_gu,))
 
-# 쿼리 결과 가져오기
+# 쿼리 결과 가져오기 (쿼리 결과의 모든 행을 리스트로 가져옴)
 rows = cursor.fetchall()
 
 # 문자열 전처리 함수 (특수문자 및 공백 제거)
@@ -37,11 +37,11 @@ def preprocess_text(text):
 
 # 입력된 title과 DB title을 비교하는 유사도 비교 함수
 def calculate_similarity(input_title, db_title):
-    # 문자열 전처리
+    # 먼저 공백 제거(preprocess_text)
     input_title_clean = preprocess_text(input_title)
     db_title_clean = preprocess_text(db_title)
     
-    # 유사도 계산 (token_set_ratio 사용)
+    # 유사도 계산 (token_set_ratio 사용 -> 퍼센트로 결과값 도출)
     return fuzz.token_set_ratio(input_title_clean, db_title_clean)
 
 # 정확한 일치 우선 처리

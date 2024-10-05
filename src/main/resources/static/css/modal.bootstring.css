@@ -101,33 +101,6 @@ body.responsive-login-page {
     height: auto;
 }
 
-/* 로고와 타이틀 부분 스타일 설정 */
-.logo-title {
-    display: flex;
-    align-items: center;
-    gap: 0.625rem; /* 10px -> 0.625rem */
-    position: absolute;
-    top: 1.25rem; /* 20px -> 1.25rem */
-    left: 0.625rem; /* 10px -> 0.625rem */
-    z-index: 10000;
-}
-
-/* 로고 이미지 스타일 */
-.logo {
-    width: 1.875rem; /* 30px -> 1.875rem */
-    height: 1.875rem; /* 30px -> 1.875rem */
-    z-index: 10000;
-    background-image: url("images/임시로.png");
-}
-
-/* 로고 텍스트 스타일 */
-.logo-title p {
-    font-size: 1.0625rem; /* 17px -> 1.0625rem */
-    margin: 0;
-    color: #27c5b8;
-    z-index: 10000;
-}
-
 /* 메인 타이틀 스타일 설정 */
 .main-title {
     font-size: 3.75rem; /* 60px -> 3.75rem */
@@ -232,20 +205,7 @@ select,
     white-space: nowrap;
 }
 
-/* 이미지 배경이 있는 body의 스타일 - 특정 페이지에서만 사용 */
-.img-body {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    min-height: 100vh;
-    background-image: url("/tour-1.0.0/tour-1.0.0/images/11311.png");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    padding-left: 10%;
-}
+
 
 /* 배경 이미지 위에 오버레이 추가 */
 .img-body::before {
@@ -656,7 +616,7 @@ footer a {
     background-color: #3b5998;
     position: absolute;
     top: 1.8125rem; /* 29px -> 1.8125rem */
-    left: 50%;
+    left: 40%;
 
     border-radius: 50%;
 }
@@ -676,7 +636,7 @@ footer a {
     background-color: #ffeb3b;
     position: absolute;
     top: 2rem; /* 29px -> 1.8125rem */
-    left: 10%;
+    left: 35%;
 
     border-radius: 50%;
 }
@@ -734,9 +694,11 @@ footer a {
 
 /* 결과 박스 스타일 설정 */
 .box-result-round {
-    border: 0.125rem solid rgb(0, 0, 0); /* 2px -> 0.125rem */
+    border-radius: 0.625rem;
+    border: 0.0625rem solid #ddd;
+    box-shadow: 0px 0.125rem 0.625rem rgba(0, 0, 0, 0.1);
     padding: 1rem; /* 30px -> 1.875rem */
-    border-radius: 0.625rem; /* 10px -> 0.625rem */
+
     width: 77%;
     position: absolute;
     top: 82%;
@@ -755,11 +717,11 @@ footer a {
 }
 
 .colorinfo {
-    width: 37.5rem; /* 600px -> 37.5rem */
+    width: 15rem; /* 600px -> 37.5rem */
     height: auto;
     position: absolute;
     top: 15%;
-    right: 15%;
+    right: 34%;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -801,23 +763,25 @@ footer a {
     gap: 1.875rem; /* 30px -> 1.875rem */
 }
 
+
 /* 예매버튼 스타일 */
 .button-reservation,
 .button-notreservation {
     width: 18.75rem; /* 300px -> 18.75rem */
     height: 21.875rem; /* 350px -> 21.875rem */
-    background-color: #27c5b8;
-    color: white;
-    border: none;
+    background-color: white;
+    color: black;
+    border:  1px solid black;
     border-radius: 1.5625rem; /* 25px -> 1.5625rem */
     cursor: pointer;
     font-size: 1.875rem; /* 30px -> 1.875rem */
+
 }
 
 /* 예매버튼 버튼효과 */
 .button-reservation:hover,
 .button-notreservation:hover {
-    background-color: #7cb5bb;
+    background-color:#28a7c6;
 }
 
 a {
@@ -827,7 +791,7 @@ a {
 /* 2~6 상태진행도 위치 */
 .progress-custom-question-container {
     position: absolute;
-    bottom: 4.5%;
+    bottom: 2%;
     display: flex;
     justify-content: center;
     gap: 0.3125rem; /* 5px -> 0.3125rem */
@@ -837,17 +801,20 @@ a {
 
 /* 예약안했어요 이미지 */
 .icon-airplanemode_inactive {
-    font-size: 12rem; /* 150px -> 9.375rem */
+    width: 12rem;
+    height: 12rem;
     position: relative;
     align-items: center;
-    bottom: 3rem; /* 170px -> 10.625rem */
+    bottom: 2rem; /* 170px -> 10.625rem */
+
 }
 /* 예약했어요 이미지 */
 .icon-flight {
-    font-size: 12rem; /* 150px -> 9.375rem */
+    width: 11rem;
+    height: 11rem;
     position: relative;
     align-items: center;
-    bottom: 3rem; /* 170px -> 10.625rem */
+    bottom: 2rem; /* 170px ->*/
 }
 /* 예약했어요 이모티콘 */
 .flight {
@@ -885,9 +852,12 @@ a {
 
 /* 2~6 출력박스 */
 .box-reservation-result-round {
-    border: 0.125rem solid rgb(0, 0, 0); /* 2px -> 0.125rem */
+    border-radius: 0.625rem;
+    border: 0.0625rem solid #ddd;
+    box-shadow: 0px 0.125rem 0.625rem rgba(0, 0, 0, 0.1);
+
     padding: 0.5rem; /* 8px -> 0.5rem */
-    border-radius: 0.625rem; /* 10px -> 0.625rem */
+
     width: 80%;
     position: absolute;
     top: 75%;
@@ -918,13 +888,14 @@ a {
 
 /* 인원수 정보창에 대한 정의 */
 .box-who-result-round {
-    border: 0.125rem solid rgb(0, 0, 0);
-    padding: 0.5rem;
     border-radius: 0.625rem;
+    border: 0.0625rem solid #ddd;
+    box-shadow: 0px 0.125rem 0.625rem rgba(0, 0, 0, 0.1);
     width: 80%;
     position: absolute;
     top: 75%;
     text-align: center;
+    padding: 0.5rem;
     /* 기존에 있던 Flexbox 속성 제거 */
     /* display: flex; */
     /* flex-direction: column; */
@@ -1006,7 +977,7 @@ a {
 .button-notdensity {
     width: 18.75rem; /* 300px -> 18.75rem */
     height: 21.875rem; /* 350px -> 21.875rem */
-    background-color: white;
+    background-color: white !important;
     color: black !important;
     border: 1px solid black !important;
     border-radius: 1.5625rem; /* 25px -> 1.5625rem */
@@ -1017,7 +988,7 @@ a {
 /* 밀도버튼 버튼효과 */
 .button-density:hover,
 .button-notdensity:hover {
-    background-color: #7cb5bb;
+    background-color:#28a7c6 !important;
 }
 
 /* 기본 설정: 모든 요소의 간격을 좀 더 유연하게 설정 */
@@ -1127,6 +1098,7 @@ a {
 .button-move_status-row1 button:hover,
 .button-move_status-row2 button:hover,
 .button-move_status-row3 button:hover {
+
     background-color: #7cb5bb;
 }
 
@@ -1138,7 +1110,7 @@ a {
     gap: 1.875rem; /* 30px -> 1.875rem */
     position: absolute;
     top: 6.25rem; /* 100px -> 6.25rem */
-    font-size: 1.1875rem; /* 19px -> 1.1875rem */
+    font-size: 1rem; /* 19px -> 1.1875rem */
 }
 
 /* 테마 2행 */
@@ -1149,7 +1121,7 @@ a {
     gap: 1.875rem; /* 30px -> 1.875rem */
     position: absolute;
     top: 12.5rem; /* 200px -> 12.5rem */
-    font-size: 1.1875rem; /* 19px -> 1.1875rem */
+    font-size: 1rem; /* 19px -> 1.1875rem */
 }
 
 /* 테마 3행 */
@@ -1160,22 +1132,23 @@ a {
     gap: 1.875rem; /* 30px -> 1.875rem */
     position: absolute;
     bottom: 14.5rem; /* 265px -> 16.5625rem */
-    font-size: 1.1875rem; /* 19px -> 1.1875rem */
+    font-size: 1rem; /* 19px -> 1.1875rem */
 }
 .button-theme-row4 button,
 .button-theme-row1 button,
 .button-theme-row2 button,
 .button-theme-row3 button {
-    width: 12rem; /* 90px -> 5.625rem */
+    width: 13rem; /* 90px -> 5.625rem */
     height: 5.625rem; /* 90px -> 5.625rem */
     background-color: #ffffff;
     border-radius: 1.875rem; /* 30px -> 1.875rem */
 }
-
+.button-theme-row4 button:hover,
 .button-theme-row1 button:hover,
 .button-theme-row2 button:hover,
 .button-theme-row3 button:hover {
-    background-color: #7cb5bb;
+
+    background-color:#28a7c6;
 }
 
 /* 테마 4행 */
@@ -1186,7 +1159,8 @@ a {
     gap: 1.875rem; /* 30px -> 1.875rem */
     position: absolute;
     bottom: 4.5rem; /* 265px -> 16.5625rem */
-    font-size: 1.1875rem; /* 19px -> 1.1875rem */
+    font-size: 1rem; /* 19px -> 1.1875rem */
+    line-height: 1px !important; /* 줄 간격 설정 */
 }
 
 /* 테마 박스 스타일 */
@@ -1427,24 +1401,48 @@ a {
     height: 5rem; /* 아이콘의 높이 */
     margin-bottom: 0.2rem !important; /* 아이콘과 텍스트 사이의 간격 */
 }
-
-.who-text {
-    font-size: 2rem !important; /* 텍스트 크기 */
-    color: #000000; /* 텍스트 색상 */
-    margin: 0; /* 여백 초기화 */
+.who-container {
+    position: relative;
+    display: inline-block; /* 버튼과 텍스트를 감싸는 컨테이너 */
+    text-align: center; /* 텍스트를 중앙에 배치 */
 }
+
+.who-button {
+    width: 100%; /* 버튼이 컨테이너 전체 크기를 차지 */
+    height: 100%; /* 버튼이 컨테이너 전체 크기를 차지 */
+
+    padding: 0; /* 버튼의 기본 패딩 제거 */
+    cursor: pointer;
+    border-radius: 1.25rem; /* 버튼의 모서리를 둥글게 설정 */
+    overflow: hidden; /* 버튼에서 넘치는 내용은 숨기도록 설정 (이미지 둥글게) */
+z-index: 100;
+}
+
+.who-img {
+    object-fit: cover; /* 이미지가 버튼 전체를 채우되, 비율에 맞게 자르기 */
+    width: 100%;
+    height: 100%;
+    border: 1px solid black !important;
+    border-radius: inherit; /* 부모 요소의 border-radius를 상속 */
+}
+
+
+
+
+
 
 /* 테마 아이콘 속성 */
 .theme-icon {
     width: 4rem; /* 아이콘의 너비 */
     height: 4rem; /* 아이콘의 높이 */
     margin-bottom: 0.5rem; /* 아이콘과 텍스트 사이의 간격 */
+    margin-left: 0.3rem;
 }
 
 .theme-text {
     font-size: 1rem !important; /* 텍스트 크기 */
     color: #000000; /* 텍스트 색상 */
-    margin: 0; /* 여백 초기화 */
+    line-height: 2px !important; /* 줄 간격 설정 */
 }
 .button-notdensity,
 .button-density {
@@ -1508,4 +1506,28 @@ a {
 
 .unselected {
     background-color: white !important;
+}
+.who_text_box {
+    position: absolute;
+    bottom: 5px; /* 텍스트가 버튼 하단에서 약간 위로 위치하도록 설정 */
+    left: 110px!important;; /* 필요에 따라 위치 조정 */
+    padding: 10px;
+    background-color: rgb(255, 255, 255, 0.6);
+    border-radius: 30px; /* 텍스트 박스에 둥근 모서리 적용 */
+    color: black; /* 텍스트가 잘 보이도록 흰색 설정 */
+    z-index: 2;
+    pointer-events: none; /* 텍스트는 클릭되지 않도록 설정 */
+    white-space: nowrap;
+}
+
+.who-text {
+  position: relative;
+    font-size: 1rem; /* 텍스트 크기 설정 */
+    font-weight: 700; /* 굵은 글씨 */
+    z-index: 2; /* 텍스트가 이미지 위에 표시되도록 설정 */
+
+}
+/* 버튼 클릭 시 포커스 outline 제거 */
+button:focus {
+    outline: none;
 }

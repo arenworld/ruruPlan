@@ -13,11 +13,16 @@ body {
     margin: 40px auto; /* 가운데 정렬 */
 }
 
-
 h1 {
     font-size: 40px;
     margin-bottom: 20px;
-    color: #cc4a9e; /* 파스텔 톤의 분홍색으로 변경 */
+    color: #28a7c6; /* 파스텔 톤의 하늘색으로 변경 */
+    font-weight: 800 !important;
+}
+
+#gpt {
+    font-size: 50px;
+    font-weight: 900;
 }
 
 h3 {
@@ -49,7 +54,7 @@ th, td {
 
 /* 테이블 헤더 스타일 */
 thead th {
-    background-color: #f8ccd7; /* 파스텔 톤의 분홍색 계열 */
+    background-color: #b6dff1; /* 파스텔 톤의 하늘색 계열 */
     color: white; /* 헤더 글자색을 흰색으로 유지 */
     padding: 12px;
 }
@@ -61,8 +66,8 @@ tbody tr {
 
 /* '이동' 행 스타일 */
 .move-row {
-    background-color: #fce4ec; /* 더 연한 파스텔 핑크 배경 */
-    color: #8b4554; /* 약간 어두운 분홍색 텍스트 */
+    background-color: #e1f3fa; /* 더 연한 파스텔 하늘색 배경 */
+    color: #503885; /* 약간 어두운 파란색 텍스트 */
 }
 
 /* 버튼 관련 CSS */
@@ -89,36 +94,36 @@ tbody tr {
     transition: background-color 0.3s, transform 0.2s;
     color: #ffffff;
     text-align: center;
-    background-color: #d88bbd; /* 분홍색 계열로 버튼 색상 변경 */
+    background-color: #66b2e4; /* 하늘색 계열로 버튼 색상 변경 */
 }
 
 .button-group button:hover {
-    background-color: #c278aa; /* hover 시 조금 더 진한 분홍색 */
+    background-color: #28a7c6; /* hover 시 조금 더 진한 하늘색 */
 }
 
 /* 개별 버튼 스타일 */
 #save-button {
-    background-color: #d88bbd; /* 분홍색 배경 */
+    background-color: #66b2e4; /* 하늘색 배경 */
 }
 
 #save-button:hover {
-    background-color: #c278aa; /* 호버 시 더 진한 분홍색 */
+    background-color: #28a7c6; /* 호버 시 더 진한 하늘색 */
 }
 
 #button2 {
-    background-color: #d88bbd; /* 분홍색 배경 */
+    background-color: #66b2e4; /* 하늘색 배경 */
 }
 
 #button2:hover {
-    background-color: #c278aa; /* 호버 시 더 진한 분홍색 */
+    background-color: #28a7c6; /* 호버 시 더 진한 하늘색 */
 }
 
 #print-button {
-    background-color: #b58d9f; /* 약간의 진한 분홍색 */
+    background-color: #383fa9; /* 약간의 진한 하늘색 */
 }
 
 #print-button:hover {
-    background-color: #9e7486; /* 호버 시 더 진한 분홍색 */
+    background-color: #24286c; /* 호버 시 더 진한 하늘색 */
 }
 
 /* 여행 기간 및 추가 텍스트 컨테이너 스타일 */
@@ -135,8 +140,6 @@ tbody tr {
 .period-info h3 {
     margin: 0;
 }
-
-
 
 /* 테이블 열 너비 설정 */
 thead th:nth-child(1), tbody td:nth-child(1) { /* No */
@@ -163,14 +166,11 @@ thead th:nth-child(6), tbody td:nth-child(6) { /* Cost */
     width: 15%;
 }
 
-
-
 h1, h3, button {
     font-family: "Gowun Dodum", sans-serif;
     font-weight: 400;
     font-style: normal;
 }
-
 
 /* 하단 버튼 그룹을 가운데 정렬 */
 .button-group.bottom-buttons {
@@ -190,21 +190,20 @@ h1, h3, button {
     transition: background-color 0.3s, transform 0.2s;
     color: #ffffff;
     text-align: center;
-    background-color: #d88bbd;
+    background-color: #66b2e4;
 }
 
 .button-group.bottom-buttons button:hover {
-    background-color: #c278aa;
+    background-color: #28a7c6;
 }
 
 #print-button-bottom {
-    background-color: #b58d9f; /* 약간의 진한 분홍색 */
+    background-color: #383fa9; /* 약간의 진한 하늘색 */
 }
 
 #print-button-bottom:hover {
-    background-color: #9e7486; /* 호버 시 더 진한 분홍색 */
+    background-color: #24286c; /* 호버 시 더 진한 하늘색 */
 }
-
 
 /* 인쇄 전용 스타일 */
 @media print {
@@ -213,6 +212,7 @@ h1, h3, button {
         -webkit-print-color-adjust: exact;
         color-adjust: exact;
         font-size: 10pt; /* 글자 크기 작게 설정 */
+        background-color: #ffffff !important; /* 인쇄 시 배경을 흰색으로 변경 */
     }
 
     /* 전체 컨테이너 스타일 */
@@ -228,11 +228,18 @@ h1, h3, button {
         display: none;
     }
 
+    .pagelogo-container_find {
+        display: none !important;
+    }
+
+    .new_language-toggle {
+        display: none !important;
+    }
+
     /* 헤더 숨기기 */
     h1 {
         display: none;
     }
-
 
     /* 테이블 스타일 조정 */
     table {
@@ -240,7 +247,7 @@ h1, h3, button {
         font-size: 9pt; /* 테이블의 글자 크기를 더 작게 설정 */
         border-collapse: collapse;
         width: 100%;
-        background-color: #fff;
+        background-color: #ffffff; /* 화면과 동일한 배경색 */
     }
 
     /* 테이블 열 간격 및 패딩 줄이기 */
@@ -249,41 +256,38 @@ h1, h3, button {
         border: 1px solid #dee2e6;
     }
 
-    /* 컬럼 헤더의 색상 더 진한 분홍색 */
+    /* 컬럼 헤더의 색상 동일하게 */
     thead th {
-        background-color: #f8a5c2; /* 진한 파스텔 분홍색 */
-        color: #fff; /* 흰색 글자 */
+        background-color: #b6dff1; /* 화면과 동일한 파스텔 하늘색 */
+        color: #ffffff; /* 흰색 글자 */
     }
 
-    /* 기본적으로 테이블에 파스텔 분홍색 적용 */
+    /* 기본적으로 테이블에 파스텔 하늘색 적용 */
     tbody td {
-        background-color: #f8ccd7; /* 연한 파스텔 분홍색 */
+        background-color: #ffffff; /* 화면과 동일한 배경색 */
         color: #333;
     }
 
-    /* '이동' 행 인쇄 스타일 */
+    /* '이동' 행 인쇄 스타일 동일하게 */
     .move-row {
-        background-color: #fce4ec !important; /* '이동'에 연한 분홍색 적용 */
-        color: #888 !important; /* 더 연한 회색 글자색 */
+        background-color: #e1f3fa !important; /* 화면과 동일한 연한 하늘색 */
+        color: #503885 !important; /* 화면과 동일한 텍스트 색상 */
     }
 
-    /* 각 테이블 행에 배경색 차별화 */
+    /* 각 테이블 행에 배경색 차별화 동일하게 */
     tr:nth-child(even) td {
-        background-color: #fdeff3; /* 짝수 행의 연한 분홍색 */
+        background-color: #e1f3fa; /* 화면과 동일한 짝수 행 배경색 */
     }
 
     tr:nth-child(odd) td {
-        background-color: #f9e3e9; /* 홀수 행의 연한 분홍색 */
+        background-color: #ffffff; /* 화면과 동일한 홀수 행 배경색 */
     }
 
     /* 브라우저 인쇄 시 텍스트 색상 유지 */
     th, td {
         color: #333;
     }
-
 }
-
-
 
 /* 모달 창 스타일 */
 .close {
@@ -292,6 +296,7 @@ h1, h3, button {
     font-size: 28px; /* X 버튼의 크기 */
     font-weight: bold; /* X 버튼의 굵기 */
 }
+
 .close:hover,
 .close:focus {
     color: black; /* 마우스를 올렸을 때 X 버튼의 색상 */
@@ -366,7 +371,6 @@ h1, h3, button {
     margin-left: 20px; /* 이미지 박스와 20px 간격 */
 }
 
-
 .plan-name-section input {
     width: 200px; /* 일정 이름 입력 칸 너비 */
     padding: 10px;
@@ -382,10 +386,9 @@ h1, h3, button {
     justify-content: center;
 }
 
-
 /* 저장 버튼 */
 .save-button {
-    background-color: #d7489c; /* GPT 결과 페이지의 분홍색 */
+    background-color: #28a7c6; /* 하늘색 */
     color: white;
     padding: 15px 30px;
     font-size: 18px; /* 글자 크기 키우기 */
@@ -396,5 +399,5 @@ h1, h3, button {
 }
 
 .save-button:hover {
-    background-color: #a6246e; /* 저장 버튼의 hover 시 색상 */
+    background-color: #1f8aa1; /* 저장 버튼의 hover 시 색상 */
 }

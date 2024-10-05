@@ -486,7 +486,9 @@ public class GptResultService {
             return randomPlaceId;
         } else {
             log.debug("일치하는 테마를 가진 장소가 없음.");
-            return "자료 없음"; // 만약 장소가 없으면 이 값을 반환
+            List<String> themePlaceIds = placeInfoRepository.findByThemePlaces(placeType);
+            Random random = new Random();
+            return themePlaceIds.get(random.nextInt(themePlaceIds.size())); // 만약 장소가 없으면 이 값을 반환
         }
     }
 

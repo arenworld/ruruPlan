@@ -102,6 +102,18 @@ public class PlaceInfoRepositoryImpl implements PlaceInfoRepository {
                 .fetch();
     }
 
+    @Override
+    public List<String> findByThemePlaces(String theme) {
+        return queryFactory.select(placeInfoEntity.placeId)
+                .from(placeInfoEntity)
+                .where(
+                        (placeInfoEntity.theme1.in(theme)
+                                .or(placeInfoEntity.theme2.in(theme))
+                                .or(placeInfoEntity.theme3.in(theme)))
+                )
+                .fetch();
+    }
+
 
     public Optional<PlaceInfoEntity> findById(String placeId) {
         if (placeId == null) {

@@ -14,4 +14,5 @@ public interface PlaceInfoRepository {
     List<String> findRestaurantOrCafePlaceIds(String address, String placeType);
     Optional<PlaceInfoEntity> findById(String placeId);
     List<String> findByThemeAndExcludeExistingPlaces(String theme, List<String> existingPlaceIds);
+    List<String> findByThemePlaces(String theme);
 }

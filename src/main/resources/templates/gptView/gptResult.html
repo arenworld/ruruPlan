@@ -20,6 +20,14 @@
         /*<![CDATA[*/
         var taskByDateMap = /*[[${taskByDateMap}]]*/ {};
         var planDTO = /*[[${planDTO}]]*/ {}; // planDTO를 JavaScript 변수로 전달
+
+        // 세션 스토리지에 초기 데이터가 없을 때 저장
+        if (!sessionStorage.getItem('taskByDateMap')) {
+            sessionStorage.setItem('taskByDateMap', JSON.stringify(taskByDateMap));
+        }
+        if (!sessionStorage.getItem('planDTO')) {
+            sessionStorage.setItem('planDTO', JSON.stringify(planDTO));
+        }
         /*]]>*/
     </script>
 </head>
@@ -70,7 +78,7 @@
             <h1 th:if="${#locale.language == 'ko'}">GPT 추천 여행 일정</h1>
         </div>
         <div>
-            <h1 th:if="${#locale.language != 'ko'}">GPTおすすめの<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;旅行プラン</h1>
+            <h1 th:if="${#locale.language != 'ko'}"><span id="gpt">GPT</span>おすすめの<br>旅行プラン</h1>
         </div>
         <div class="button-group">
             <button id="save-button" aria-label="내 일정으로 담기">

@@ -50,6 +50,16 @@ $(document).ready(async function() {
                         startX = task.place.mapX;
                         startY = task.place.mapY;
                     }
+
+                    // 비용 처리 코드 추가
+                    var costText = $('#cost-' + task.taskNum).text();
+                    var costNumber = parseInt(costText.replace('원', '').replace(/,/g, ''));
+                    if (!isNaN(costNumber)) {
+                        totalCost += costNumber;
+                        task.cost = costNumber;
+                    } else {
+                        task.cost = 0;
+                    }
                 } else {
                     var currentStartTime = addMinutesToTime(prevStartTime, prevDuration);
                     task.startTime = currentStartTime;
@@ -548,4 +558,3 @@ $(document).ready(async function() {
     }
 
 });
-

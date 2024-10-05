@@ -514,19 +514,19 @@ public class GptResultService {
                 return 0; // 0.5 미만일 경우 활동 없음
             }
         } else {
-            if (totalTime / 3 >= 6.5) {
+            if (totalTime / 2.5 >= 6.5) {
                 return 7;
-            } else if (totalTime / 3 >= 5.5) {
+            } else if (totalTime / 2.5 >= 5.5) {
                 return 6;
-            } else if (totalTime / 3 >= 4.5) {
+            } else if (totalTime / 2.5 >= 4.5) {
                 return 5;
-            } else if (totalTime / 3 >= 3.5) {
+            } else if (totalTime / 2.5 >= 3.5) {
                 return 4;
-            } else if (totalTime / 3 >= 2.5) {
+            } else if (totalTime / 2.5 >= 2.5) {
                 return 3;
-            } else if (totalTime / 3 >= 1.5) {
+            } else if (totalTime / 2.5 >= 1.5) {
                 return 2;
-            } else if (totalTime / 3 >= 0.5) {
+            } else if (totalTime / 2.5 >= 0.5) {
                 return 1;
             } else {
                 return 0; // 0.5 미만일 경우 활동 없음

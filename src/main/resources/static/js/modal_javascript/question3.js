@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const kids = document.getElementById("button-kids");
   const parents = document.getElementById("button-parents");
   const friend = document.getElementById("button-friend");
-
   const next_button3 = document.querySelector(".button-next-page3");
   const num_resultBox = document.querySelector(".box-who-result-round");
   const adultInputDiv = num_resultBox.querySelector(".adult");
@@ -30,11 +29,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 다른 버튼 상태 초기화 함수
   function resetButtons() {
-    alone.style.backgroundColor = "";
-    couple.style.backgroundColor = "";
-    kids.style.backgroundColor = "";
-    parents.style.backgroundColor = "";
-    friend.style.backgroundColor = "";
+    alone.style.border = "1px solid skyblue";
+    couple.style.border = "1px solid skyblue";
+    kids.style.border = "1px solid skyblue";
+    parents.style.border = "1px solid skyblue";
+    friend.style.border = "1px solid skyblue";
     trip_type.textContent = ""; // 여행 유형 초기화
     // 각 버튼의 활성화 상태를 초기화
     aloneActive = false;
@@ -58,12 +57,8 @@ document.addEventListener("DOMContentLoaded", function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!aloneActive) {
       trip_type.textContent = "혼자";
-      alone.style.backgroundColor = "gray";
-      couple.style.backgroundColor = "white";
-      kids.style.backgroundColor = "white";
-      parents.style.backgroundColor = "white";
-      friend.style.backgroundColor = "white";
-      next_button3.style.visibility = "visible";
+      alone.style.setProperty("border", "5px solid skyblue", "important");
+      next_button3.style.visibility = "visible ";
       num_resultBox.style.visibility = "hidden";
       adultInputDiv.style.visibility = "hidden";
       kidsInputDiv.style.visibility = "hidden";
@@ -82,11 +77,8 @@ document.addEventListener("DOMContentLoaded", function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!coupleActive) {
       trip_type.textContent = "커플";
-      couple.style.backgroundColor = "gray";
-      alone.style.backgroundColor = "white";
-      kids.style.backgroundColor = "white";
-      parents.style.backgroundColor = "white";
-      friend.style.backgroundColor = "white";
+      couple.style.setProperty("border", "5px solid skyblue", "important");
+
       next_button3.style.visibility = "visible";
       num_resultBox.style.visibility = "hidden";
       adultInputDiv.style.visibility = "hidden";
@@ -106,11 +98,8 @@ document.addEventListener("DOMContentLoaded", function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!kidsActive) {
       trip_type.textContent = "아이";
-      kids.style.backgroundColor = "gray";
-      couple.style.backgroundColor = "white";
-      alone.style.backgroundColor = "white";
-      parents.style.backgroundColor = "white";
-      friend.style.backgroundColor = "white";
+      kids.style.setProperty("border", "5px solid skyblue", "important");
+
       num_resultBox.style.visibility = "visible";
       adultInputDiv.style.visibility = "visible";
       kidsInputDiv.style.visibility = "visible";
@@ -131,11 +120,8 @@ document.addEventListener("DOMContentLoaded", function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!parentsActive) {
       trip_type.textContent = "부모님";
-      parents.style.backgroundColor = "gray";
-      alone.style.backgroundColor = "white";
-      couple.style.backgroundColor = "white";
-      kids.style.backgroundColor = "white";
-      friend.style.backgroundColor = "white";
+      parents.style.setProperty("border", "5px solid skyblue", "important");
+
       num_resultBox.style.visibility = "visible";
       adultInputDiv.style.visibility = "visible";
       kidsInputDiv.style.visibility = "hidden";
@@ -156,11 +142,8 @@ document.addEventListener("DOMContentLoaded", function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!friendActive) {
       trip_type.textContent = "친구";
-      friend.style.backgroundColor = "gray";
-      alone.style.backgroundColor = "white";
-      couple.style.backgroundColor = "white";
-      kids.style.backgroundColor = "white";
-      parents.style.backgroundColor = "white";
+      friend.style.setProperty("border", "5px solid skyblue", "important");
+
       num_resultBox.style.visibility = "visible";
       adultInputDiv.style.visibility = "visible";
       kidsInputDiv.style.visibility = "hidden";

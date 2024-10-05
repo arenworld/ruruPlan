@@ -101,33 +101,6 @@ body.responsive-login-page {
     height: auto;
 }
 
-/* 로고와 타이틀 부분 스타일 설정 */
-.logo-title {
-    display: flex;
-    align-items: center;
-    gap: 0.625rem; /* 10px -> 0.625rem */
-    position: absolute;
-    top: 1.25rem; /* 20px -> 1.25rem */
-    left: 0.625rem; /* 10px -> 0.625rem */
-    z-index: 10000;
-}
-
-/* 로고 이미지 스타일 */
-.logo {
-    width: 1.875rem; /* 30px -> 1.875rem */
-    height: 1.875rem; /* 30px -> 1.875rem */
-    z-index: 10000;
-    background-image: url("images/임시로.png");
-}
-
-/* 로고 텍스트 스타일 */
-.logo-title p {
-    font-size: 1.0625rem; /* 17px -> 1.0625rem */
-    margin: 0;
-    color: #27c5b8;
-    z-index: 10000;
-}
-
 /* 메인 타이틀 스타일 설정 */
 .main-title {
     font-size: 3.75rem; /* 60px -> 3.75rem */
@@ -232,20 +205,7 @@ select,
     white-space: nowrap;
 }
 
-/* 이미지 배경이 있는 body의 스타일 - 특정 페이지에서만 사용 */
-.img-body {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    min-height: 100vh;
-    background-image: url("/tour-1.0.0/tour-1.0.0/images/11311.png");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    padding-left: 10%;
-}
+
 
 /* 배경 이미지 위에 오버레이 추가 */
 .img-body::before {

@@ -46,8 +46,8 @@
                 <a th:href="@{/myPage}" th:text="#{mypage}"></a>
             </li>
 
-            <li><a th:href="@{planBoard/list}" th:text="#{plan_board}"></a></li>
-            <li><a th:href="@{board/list}" th:text="#{board}"></a></li>
+            <li><a th:href="@{/planBoard/list}" th:text="#{plan_board}"></a></li>
+            <li><a th:href="@{/board/list}" th:text="#{board}"></a></li>
 
 
             <li sec:authorize="not isAuthenticated()">

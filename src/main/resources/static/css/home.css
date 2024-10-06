@@ -41,7 +41,6 @@ a:hover {
 .text-primary {
     /* 주요 색상의 텍스트 설정 */
     color: #1a374d !important;
-
 }
 /*호버 제거 */
 .logo:hover {
@@ -151,7 +150,7 @@ h4 {
     font-size: 40px;
     color: #000000;
     font-weight: 700;
-    margin-left: 30px !important;
+    margin-left: 10px !important;
 }
 
 #lang {

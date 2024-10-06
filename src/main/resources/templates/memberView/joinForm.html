@@ -89,7 +89,7 @@
              <pre  th:text="#{terms1}" style="text-align: left; font-size: 12px;"></pre>
         </div>
     </div>
-
+    <input type="hidden" id="lang" th:value="${#locale.language}">
     <!-- 회원가입 양식 -->
     <form class="login-form" id="joinForm" th:action="@{/join}" th:method="post">
         <div class="input-group">

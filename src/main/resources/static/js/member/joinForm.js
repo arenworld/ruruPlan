@@ -1,4 +1,6 @@
+
 $(document).ready(function() {
+    lang = $('#lang').val();
     //초기 설정: Id 확정 부분 숨김
     $('#finalId').hide();
 
@@ -77,7 +79,7 @@ function idConfirm() {
     if (!id_regex.test(id)) {
         $('#finalId').hide();   // 아이디 확정 버튼 숨기기
         $('#idmsg').css('color', 'red');
-        $('#idmsg').html('아이디는 영문,숫자로 6~15글자 입력해 주세요');
+        $('#idmsg').html(lang === 'ko' ? '아이디는 영문,숫자로 6~15글자 입력해 주세요' : 'IDは英数字で6文字以上、15文字以内でご入力ください');
         return Promise.resolve(false);  // 형식이 잘못되었으면 바로 false 반환
     }
 
@@ -99,7 +101,7 @@ function idDuplicated() {
                 if (res) {
                     $('#finalId').hide();
                     $('#idmsg').css('color', 'red');
-                    $('#idmsg').html("이미 사용중인 ID입니다");
+                    $('#idmsg').html(lang === 'ko' ? "이미 사용중인 ID입니다" : '既に使用中のIDです');
                     console.log("에이젝스 flase");
                     resolve(false);  // 중복된 ID이면 false 반환
                 } else {
@@ -132,11 +134,11 @@ function nicknameConfirm(){
 
     if (!nickname_regex.test(nickname)) {
         $('#nicknamemsg').css('color', 'red');
-        $('#nicknamemsg').html('닉네임은 영문,한글,일어 숫자로 2~10 입력해 주세요');
+        $('#nicknamemsg').html(lang === 'ko' ? '닉네임은 영문,한글,일어,숫자로 2~10 입력해 주세요' : 'ニックネームは英文、ハングル、日本語、数字で2文字以上、10文字以内でご入力ください');
         return false;
     } else {
         $('#nicknamemsg').css('color', 'blue');
-        $('#nicknamemsg').html('사용 가능한 닉네임입니다.');
+        $('#nicknamemsg').html(lang === 'ko' ? '사용 가능한 닉네임입니다' : '使用可能なニックネームです');
         return true;
     }
 }
@@ -150,7 +152,7 @@ function validatePw() {
     if (!pw_regex.test(pw)) {
         $('#pwmsg1').css('color', 'red');
         $('#pwmsg1').css('font-size', '12px');
-        $('#pwmsg1').html('영문/숫자/특수문자를 1자 이상 포함한 8~15자로 입력');
+        $('#pwmsg1').html(lang === 'ko' ? '영문/숫자/특수문자를 1자 이상 포함한 8~15자로 입력해주세요' : '英数字特殊文字を1文字以上含む8文字以上、15文字以内でご入力ください');
         return false;
     } else {
         $('#pwmsg1').html("");
@@ -165,11 +167,11 @@ function validatePw() {
 
     if(pwConfirm == pw){
         $('#pwmsg').css('color', 'green');
-        $('#pwmsg').html("비밀번호 일치");
+        $('#pwmsg').html(lang === 'ko' ? "비밀번호 일치" : 'パスワード一致');
         return true;
     } else {
         $('#pwmsg').css('color', 'red');
-        $('#pwmsg').html("비밀번호가 일치하지 않습니다.");
+        $('#pwmsg').html(lang === 'ko' ? "비밀번호가 일치하지 않습니다" : 'パスワードが一致しません');
         return false;
     }
 }
@@ -182,7 +184,7 @@ function validateEmail() {
 
     if (!email_regex.test(email)) {
         $('#emailmsg').css('color', 'red');
-        $('#emailmsg').html("유효하지 않은 이메일 주소입니다.");
+        $('#emailmsg').html(lang === 'ko' ? "유효하지 않은 이메일 주소 입니다" : "無効なメールアドレスです");
         $('#emCodeBt').prop('disabled', true);
         return Promise.resolve(false);
     }
@@ -204,7 +206,7 @@ function emailDuplicate() {
             success: function (res) {
                 if (res) {
                     $('#emailmsg').css('color', 'red');
-                    $('#emailmsg').html("이미 사용중인 email입니다");
+                    $('#emailmsg').html(lang === 'ko' ? "이미 사용중인 이메일 주소 입니다" : '既に使用中のメールアドレスです');
                     $('#emCodeBt').prop('disabled', true);
                     resolve(false);
                 } else {
@@ -235,14 +237,15 @@ function emConfirm(){
         data: {email: email},
         success: function (code) {
             if (code) {
-                alert("이메일이 전송되었습니다." +
-                "인증번호 확인 후 입력해주세요.");
+                alert(lang === 'ko' ? "메일이 전송되었습니다" +
+                "인증번호 확인 후 입력해주세요" : "メールが送信されました" +
+                "認証番号をご確認の上、ご入力ください");
                 $('#emailconfirm').prop('readonly',false);
                 chkEmailConfirm(code);
             }
         },
         error: function () {
-            alert("이메일 전송에 실패하였습니다.");
+            alert(lang === 'ko' ? "메일 전송에 실패하였습니다" : "メールの送信に失敗しました");
         }
     });
 }
@@ -250,7 +253,8 @@ function emConfirm(){
 function chkEmailConfirm(code){
     $('#emailconfirm').on("keyup", function(){
         if (code != $('#emailconfirm').val()) {
-            $('#emchkmsg').html("<span id='emconfirmchk'>인증번호가 잘못되었습니다</span>")
+            $('#emchkmsg').html(lang === 'ko' ? "<span id='emconfirmchk'>인증번호가 잘못되었습니다</span>"
+            : "<span id='emconfirmchk'>認証番号が正しくありません</span>")
             $("#emconfirmchk").css({
                     "color" : "#FA3E3E",
                     "font-weight" : "bold",
@@ -259,7 +263,8 @@ function chkEmailConfirm(code){
             )
         } else {
             $('#emailconfirm').prop('readonly',true);
-            $('#emchkmsg').html("<span id='emconfirmchk'>인증번호 확인 완료</span>")
+            $('#emchkmsg').html(lang === 'ko' ? "<span id='emconfirmchk'>인증번호 확인 완료</span>"
+            : "<span id='emconfirmchk'>認証番号確認完了</span>")
             $("#emconfirmchk").css({
                 "color" : "#0D6EFD",
                 "font-weight" : "bold",
@@ -273,33 +278,33 @@ function chkEmailConfirm(code){
 function formConfirm(){
 
     if(!validatePw()) {
-        alert("유효하지 않은 비밀번호입니다.");
+        alert(lang === 'ko' ? "유효하지 않은 비밀번호입니다" : "無効なパスワードです");
         $('#memberPw').css('border-color', red);
         return false;
     }
 
     if (!pwConfirm()) {
-        alert("비밀번호가 일치하지 않습니다.");
+        alert(lang === 'ko' ? "비밀번호가 일치하지 않습니다" : "パスワードが一致しません");
         return false;
     }
 
     if(!nicknameConfirm()) {
-        alert("유효하지 않은 닉네임입니다.");
+        alert(lang === 'ko' ? "유효하지 않은 닉네임입니다" : "無効なニックネームです");
         return false;
     }
 
     if(!$('#emailconfirm').prop('readonly') ) {
-        alert("인증번호가 일치하지 않습니다.");
+        alert(lang === 'ko' ? "인증번호가 일치하지 않습니다" : "認証番号が一致しません");
         return false;
     }
 
     if(!$('#memberId').prop('readonly')) {
-        alert("아이디가 확정되지 않았습니다.")
+        alert(lang === 'ko' ? "아이디가 확정되지 않았습니다" : "IDが確定されていません")
         return false;
     }
 
     if(!$('#email').prop('readonly')) {
-        alert("유효하지 않은 이메일입니다.")
+        alert(lang === 'ko' ? "유효하지 않은 이메일입니다" : "無効なメールアドレスです")
         return false;
     }
 

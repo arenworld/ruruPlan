@@ -192,8 +192,8 @@
                 <div class="theme-buttons-div">
                     <button class="theme-button" th:each="theme : ${themeArray}"
                             th:id="|theme-${theme}-button|" th:text="${theme}" th:data-theme="${theme}"></button>
-                    <span class="notice-click-theme">테마를 선택해주세요!</span>
-                    <span class="notice-click-add-button">클릭시 내 일정으로 추가됩니다👇</span>
+                    <span class="notice-click-theme" th:text="#{please_select_theme}"></span>
+                    <span class="notice-click-add-button" th:text="#{click_in_myplan}"></span>
                 </div>
 
                 <div class="task-place-info-list-box">
@@ -237,7 +237,7 @@
 
                 <div class="custom-block" data-aos="fade-up">
                     <h6>
-                        <span class="day-plans-totalCost">총 예상비용</span>
+                        <span class="day-plans-totalCost" th:text="#{total_cost}"></span>
                         <span id="totalCost"></span>
                     </h6>
 

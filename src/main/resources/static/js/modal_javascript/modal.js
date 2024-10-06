@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .then((data) => {
           console.log("서버 응답:", data);
           modal5.style.display = "none"; // 모달 닫기
-          alert("제출이 완료되었습니다!");
+          alert(lang === 'ko' ? '제출이 완료되었습니다!' : '提出が完了致しました！');
           window.location.href = "/gptView/loading";
         })
         .catch((error) => {

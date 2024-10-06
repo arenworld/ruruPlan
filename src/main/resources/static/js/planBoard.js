@@ -1,5 +1,7 @@
 $(document).ready(function() {
     let selectedTags = []; // 선택된 태그들을 저장하는 배열
+    let currentPage = 1;   // 현재 페이지 번호
+    const pageSize = 12;   // 한 페이지에 표시할 게시물 수
 
     i18next.init({
         lng: $('#lang').val(), // 'ko' 또는 'ja'
@@ -86,18 +88,41 @@ $(document).ready(function() {
         }
 
         // 태그가 변경될 때마다 목록을 업데이트
-        loadPlanBoardList(1, selectedTags); // 1페이지부터 로드
+        currentPage = 1; // 페이지 초기화
+        loadPlanBoardList(currentPage, selectedTags); // 1페이지부터 로드
+    });
+
+    // 페이지네이션 버튼 클릭 이벤트
+    $(document).on('click', '.pagination .page-link', function(e) {
+        e.preventDefault();
+        const target = $(this).attr('aria-label');
+
+        if (target === 'Previous') {
+            if (currentPage > 1) {
+                currentPage--;
+                loadPlanBoardList(currentPage, selectedTags);
+            }
+        } else if (target === 'Next') {
+            currentPage++;
+            loadPlanBoardList(currentPage, selectedTags);
+        } else {
+            const page = parseInt($(this).text());
+            if (!isNaN(page)) {
+                currentPage = page;
+                loadPlanBoardList(currentPage, selectedTags);
+            }
+        }
     });
 
     // 처음 페이지 로드 시 모든 태그를 선택하지 않고 기본적으로 실행
-    loadPlanBoardList(1, []);
+    loadPlanBoardList(currentPage, selectedTags);
 
     // Save 버튼 클릭 이벤트 처리
     $(document).on('click', '.save', function() {
         const planNum = $(this).attr('data-board-num');
         const msg = $('#shareMsg').val();
         $.ajax({
-            url: 'savePlan',
+            url: 'planBoard/savePlan',
             type: 'post',
             data: { planNum: planNum },
             success: function() {
@@ -109,7 +134,7 @@ $(document).ready(function() {
         });
     });
 });
-
+// 플랜 게시판 목록 로드 함수
 function loadPlanBoardList(page, tags) {
     $.ajax({
         url: '/planBoard/listJson', // API URL
@@ -122,6 +147,7 @@ function loadPlanBoardList(page, tags) {
         },
         success: function(response) {
             renderPlanBoardList(response.content); // 데이터 렌더링
+            renderPagination(response);            // 페이지네이션 렌더링 추가
         },
         error: function(error) {
             console.error("플랜 목록을 불러오는 중 오류 발생", error);
@@ -129,6 +155,7 @@ function loadPlanBoardList(page, tags) {
     });
 }
 
+// 플랜 리스트 렌더링 함수
 function renderPlanBoardList(boardList) {
     let boardContainer = $('#plan-board-list');
     boardContainer.empty();
@@ -171,4 +198,39 @@ function renderPlanBoardList(boardList) {
         `;
         boardContainer.append(boardHtml);
     });
+}
+
+// 페이지네이션 렌더링 함수
+function renderPagination(response) {
+    const pagination = $('.pagination');
+    pagination.find('li.page-number').remove(); // 기존 페이지 번호 버튼 제거
+
+    const totalPages = response.totalPages;
+    const currentPage = response.number + 1; // Spring의 Page는 0부터 시작
+
+    // 이전 페이지 버튼 비활성화 처리
+    if (!response.first) {
+        $('#prev-page').removeClass('disabled');
+    } else {
+        $('#prev-page').addClass('disabled');
+    }
+
+    // 다음 페이지 버튼 비활성화 처리
+    if (!response.last) {
+        $('#next-page').removeClass('disabled');
+    } else {
+        $('#next-page').addClass('disabled');
+    }
+
+    // 페이지 번호 버튼 생성 (linkSize=1을 고려하여 이전과 다음 1페이지씩만 표시)
+    const startPage = Math.max(currentPage - 1, 1);
+    const endPage = Math.min(currentPage + 1, totalPages);
+
+    for (let i = startPage; i <= endPage; i++) {
+        const activeClass = (i === currentPage) ? ' active' : '';
+        const pageItem = `<li class="page-item page-number${activeClass}">
+                                    <a class="page-link" href="#">${i}</a>
+                                  </li>`;
+        $('#next-page').before(pageItem);
+    }
 }

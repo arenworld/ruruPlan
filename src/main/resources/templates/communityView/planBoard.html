@@ -32,6 +32,10 @@
             font-family: 'korur', sans-serif;
         }
 
+        .pagination {
+            display: flex;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -164,6 +168,29 @@
             <div class="row" id="plan-board-list">
                 <!-- 여기서 JavaScript로 리스트가 동적으로 그려짐 -->
             </div>
+        </div>
+    </div>
+
+    <!-- 페이지네이션 -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <!-- 이전 페이지 버튼 -->
+                    <li class="page-item" id="prev-page">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <!-- 페이지 번호 버튼 -->
+                    <!-- JavaScript로 동적으로 생성됨 -->
+                    <li class="page-item" id="next-page">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </main>

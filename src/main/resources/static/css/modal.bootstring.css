@@ -1501,7 +1501,7 @@ z-index: 100;
     text-align: center;
 }
 .selected {
-    background-color: gray !important;
+    background-color: #66B2E4 !important;
 }
 
 .unselected {

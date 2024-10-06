@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
       reservationChoice = 1; // 예약 선택 상태 설정
 
       resultBox.style.display = "block"; // 결과 박스 보이기
-      reservation.style.backgroundColor = "gray"; // 클릭 시 배경색 변경
+      reservation.style.backgroundColor = "#66B2E4"; // 클릭 시 배경색 변경
       notreservation.style.backgroundColor = ""; // 예약 안 함 버튼 초기화
 
       // 시간 입력 필드가 모두 채워졌는지 확인하는 함수
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     reservationChoice = 0; // 예약 안 함 선택 상태 설정
-    notreservation.style.backgroundColor = "gray"; // 클릭 시 배경색 변경
+    notreservation.style.backgroundColor = "#66B2E4"; // 클릭 시 배경색 변경
     reservation.style.backgroundColor = ""; // 예약 버튼 색상 초기화
 
     // 예약 안 함이 클릭되면 다음 버튼 숨기기 및 결과 박스 숨기기

@@ -59,6 +59,7 @@ public class BoardController {
         BoardDTO boardDTO = boardService.getBoard(boardNum);
         List<ReplyDTO> replyList = boardService.getReplyList(boardNum);
         log.debug("게시글 내용: {}", boardDTO.getContents());  // 게시글 내용 출력
+        log.debug("게시글 생성일자: {}", boardDTO.getCreateDate());
         model.addAttribute("post", boardDTO);
         model.addAttribute("replyList", replyList);
         return "communityView/free_bulletin_board_concrete";

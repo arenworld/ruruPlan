@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // 새로운 테마 선택
-      theme.style.backgroundColor = "gray"; // 클릭한 테마 버튼을 회색으로 변경
+      theme.style.backgroundColor = "#66B2E4"; // 클릭한 테마 버튼을 회색으로 변경
       selectedThemes.push(themeText); // 화면에 표시될 목록에 추가
       selectedThemeValues.push(saveText); // DB로 보낼 목록에 추가
       updateThemeBoxes(); // 테마 박스 재정렬
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 스포츠 테마가 하나라도 선택되었을 경우 레포츠 버튼 회색으로 변경
     if (sportsSelected) {
-      leisure_sports.style.backgroundColor = "gray";
+      leisure_sports.style.backgroundColor = "#66B2E4";
     } else {
       leisure_sports.style.backgroundColor = "white";
     }

@@ -27,7 +27,7 @@ body {
 /* 프레임과 같은 너비와 중앙 정렬 */
 .comment-frame,
 .comment-footer {
-    max-width: 700px;
+    max-width: 790px;
     margin: 0 auto; /* 중앙 정렬 */
     background-color: #fff;
 }
@@ -244,7 +244,7 @@ body {
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 700px;
+    width: 790px;
     background-color: #fff;
     box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -506,4 +506,7 @@ writeForm-row3{
     margin-left: 470px !important;
     border-radius: 10px;
 
+}
+a:-webkit-any-link{
+    text-decoration: none;
 }

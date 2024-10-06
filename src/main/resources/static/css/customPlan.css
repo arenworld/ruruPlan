@@ -253,9 +253,17 @@ tr.selected {
     text-align: right;
 }
 
+#totalCost2 {
+    position: absolute;
+    padding-right: 5px;
+    right: 0%;
+    text-align: right;
+    margin-top: 5px;
+}
 
 
-/********** 장소 정보 리스트 박스 (스크롤) **********/
+
+    /********** 장소 정보 리스트 박스 (스크롤) **********/
 /* 일정마커 정보리스트 박스 */
 .task-place-info-list-box {
     width: 100%;

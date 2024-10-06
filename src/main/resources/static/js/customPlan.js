@@ -1362,6 +1362,14 @@ function hideMarker(map, marker) {
 // 총비용 계산(allDay, 일자별 계산 모두 가능)
 function calculateTotalCost(dayNumOfButton) {
     let totalCost = 0;
+    let totalCostYen = 0;
+    let exchangeRate = parseInt($('#exchangeRate').val());
+
+    if (parseInt(exchangeRate) === 0) {
+        exchangeRate = 900;
+    }
+    console.log(exchangeRate);
+
     $('.day-table-td-cost input').each(function () {
         let dayNumOfCost = $(this).data('daynum-cost');
 
@@ -1371,6 +1379,7 @@ function calculateTotalCost(dayNumOfButton) {
             let cost = parseInt($(this).val());
             if (!isNaN(cost)) {
                 totalCost += cost;
+                totalCostYen = parseInt((totalCost/exchangeRate) * 100);
             }
         } else {
             //데이값이 일치하는 cost만
@@ -1378,11 +1387,13 @@ function calculateTotalCost(dayNumOfButton) {
                 let cost = parseInt($(this).val());
                 if (!isNaN(cost)) {
                     totalCost += cost;
+                    totalCostYen = (totalCost/exchangeRate) * 100;
                 }
             }
         }
     });
-    $('#totalCost').text(totalCost.toLocaleString() + ' 원'); // 총합을 표시할 요소에 추가
+    $('#totalCost').text(totalCost.toLocaleString() + '₩'); // 총합을 표시할 요소에 추가
+    $('#totalCost2').text('(' + totalCostYen.toLocaleString() + '¥)'); // 총합을 표시할 요소에 추가
 }
 
 // 일정마커 배열을 비우기

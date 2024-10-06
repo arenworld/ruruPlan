@@ -2,6 +2,7 @@ package net.datasa.ruruplan.plan.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.ruruplan.exchangeTest;
 import net.datasa.ruruplan.gpt.domain.dto.GptCmdDTO;
 import net.datasa.ruruplan.gpt.domain.entity.GptCmdEntity;
 import net.datasa.ruruplan.plan.domain.dto.PlaceInfoDTO;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
@@ -40,7 +42,7 @@ public class CustomPlanController {
      * @return
      */
     @GetMapping("/{planNum}")
-    public String customPlan(Model model, Locale locale, @PathVariable("planNum") Integer planNum) { //@RequestParam("planNum") Integer planNum) 지금은 테스트로 직접 넣고 나중에, planNum을 파람으로 받음
+    public String customPlan(Model model, Locale locale, @PathVariable("planNum") Integer planNum) throws IOException {
         // custom.html로드될 때 뿌려줄 플랜정보불러오기
         PlanDTO planDTO = customPlanService.getPlan(planNum);
         log.debug("cmdNum: {}", planDTO.getCmdNum());
@@ -69,6 +71,23 @@ public class CustomPlanController {
         model.addAttribute("lastDay", lastDay);
         model.addAttribute("cmdDTO", cmdDTO);
         log.debug("옵션정보:{}", cmdDTO);
+
+
+        // 환율 값 불러오는 java 메소드 호출
+        String value = exchangeTest.exchangeValue();
+        double exchange = Double.parseDouble(value);
+        double exchangeValue = Math.round(exchange*100) / 100.0 * 100;
+
+        String exchangeValue2 = Double.toString(exchangeValue);
+
+        if (exchangeValue2 == null) {
+            exchangeValue2 = "0";
+        }
+
+        model.addAttribute("exchange", exchangeValue2);
+
+
+
         return "customView/customPlan";
     };
 
@@ -153,4 +172,6 @@ public class CustomPlanController {
     , @AuthenticationPrincipal AuthenticatedUser user) {
         customPlanService.addNewTask(newPlaceId, preTransDuration, preTransType, planNum, dayNum, lastTaskNum, user.getUsername());
     }
+
+
 }

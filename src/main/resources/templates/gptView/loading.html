@@ -103,6 +103,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
+
+            lang = $('#lang').val();
             const cmdNum = $("#cmdNum").val().trim(); // 모델에서 넘긴 cmdNum을 가져옴
             console.log("전달된 cmdNum:", cmdNum);
 
@@ -128,6 +130,7 @@
 </head>
 <body class="loding_body">
 <input type="hidden" th:value="${cmdNum}" id="cmdNum" />
+<input type="hidden" id="lang" th:value="${#locale.language}">
 
 <div class="back">
     <div class="loding_box">

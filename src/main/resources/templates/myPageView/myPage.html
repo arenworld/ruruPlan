@@ -35,12 +35,11 @@
                 <a th:href="@{/myPage}" th:text="#{mypage}"></a>
             </li>
 
-            <li><a th:href="@{planBoard/list}" th:text="#{plan_board}"></a></li>
-            <li><a th:href="@{board/list}" th:text="#{board}"></a></li>
-
+            <li><a th:href="@{/planBoard/list}" th:text="#{plan_board}"></a></li>
+            <li><a th:href="@{/board/list}" th:text="#{board}"></a></li>
 
             <li sec:authorize="not isAuthenticated()">
-                <a th:href="@{login/loginForm}" th:text="#{login.bt}"></a>
+                <a th:href="@{/login/loginForm}" th:text="#{login.bt}"></a>
                 <a id="join" th:href="@{/join/joinForm}" th:text="#{join}"></a>
             </li>
 

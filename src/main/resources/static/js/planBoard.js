@@ -1,8 +1,98 @@
 $(document).ready(function() {
+    let selectedTags = []; // 선택된 태그들을 저장하는 배열
 
-    loadPlanBoardList(1); // 초기 로드 시 첫 페이지를 불러옴
+    i18next.init({
+        lng: $('#lang').val(), // 'ko' 또는 'ja'
+        resources: {
+            ko: {
+                translation: {
+                    "spring": "봄",
+                    "summer": "여름",
+                    "fall": "가을",
+                    "winter": "겨울",
+                    "2days": "1박2일",
+                    "3days": "2박3일",
+                    "4days": "3박4일",
+                    "5days": "4박5일",
+                    "6days": "5박6일",
+                    "trip_type1": "혼자",
+                    "trip_type2": "커플",
+                    "trip_type3": "부모님",
+                    "trip_type4": "친구",
+                    "kids": "아이",
+                    "theme1": "쇼핑",
+                    "theme2": "음식",
+                    "theme3": "카페",
+                    "theme4": "역사",
+                    "theme5": "문화",
+                    "theme6": "힐링",
+                    "theme7": "체험",
+                    "theme8": "랜드마크",
+                    "theme9": "레포츠",
+                    "theme9_1": "수상레저",
+                    "theme9_2": "아이스링크",
+                    "theme9_3": "자전거"
+                }
+            },
+            ja: {
+                translation: {
+                    "spring": "春",
+                    "summer": "夏",
+                    "fall": "秋",
+                    "winter": "冬",
+                    "2days": "1泊2日",
+                    "3days": "2泊3日",
+                    "4days": "3泊4日",
+                    "5days": "4泊5日",
+                    "6days": "5泊6日",
+                    "trip_type1": "一人",
+                    "trip_type2": "カップル",
+                    "trip_type3": "ご両親",
+                    "trip_type4": "友達",
+                    "kids": "お子さま",
+                    "theme1": "ショッピング",
+                    "theme2": "食べ物",
+                    "theme3": "カフェ",
+                    "theme4": "歴史",
+                    "theme5": "文化",
+                    "theme6": "ヒーリング",
+                    "theme7": "体験",
+                    "theme8": "ランドマーク",
+                    "theme9": "レジャー·スポーツー",
+                    "theme9_1": "ウォータースポーツ",
+                    "theme9_2": "アイスリンク",
+                    "theme9_3": "自転車"
+                }
+            }
+        }
+    }, function(err, t) {
+        // 초기화 완료 후 필요한 작업 수행
+    });
 
-    // 동적으로 추가된 요소에 이벤트 바인딩
+    // 버튼 클릭 이벤트 처리
+    $('.button-container .button').on('click', function() {
+        const tag = $(this).data('tag'); // data-tag 속성에서 태그 값 가져오기
+
+        // 선택된 태그 배열에 해당 태그가 있는지 확인
+        const index = selectedTags.indexOf(tag);
+        if (index === -1) {
+            // 태그가 없으면 추가
+            selectedTags.push(tag);
+            $(this).addClass('selected'); // 선택된 버튼에 표시 (배경색 변경 등)
+        } else {
+            // 이미 선택된 태그면 배열에서 제거
+            selectedTags.splice(index, 1);
+            $(this).removeClass('selected'); // 선택 해제 표시
+        }
+
+        // 태그가 변경될 때마다 목록을 업데이트
+        loadPlanBoardList(1, selectedTags); // 1페이지부터 로드
+    });
+
+    // 처음 페이지 로드 시 모든 태그를 선택하지 않고 기본적으로 실행
+    loadPlanBoardList(1, []);
+
+    // Save 버튼 클릭 이벤트 처리
     $(document).on('click', '.save', function() {
         const planNum = $(this).attr('data-board-num');
         const msg = $('#shareMsg').val();
@@ -14,41 +104,45 @@ $(document).ready(function() {
                 alert(msg);
             },
             error: function() {
-                alert('Sharing error');
+                alert('저장 중 오류 발생');
             }
         });
     });
 });
 
-function loadPlanBoardList(page) {
+function loadPlanBoardList(page, tags) {
     $.ajax({
         url: '/planBoard/listJson', // API URL
         type: 'GET',
         dataType: 'json',
+        traditional: true, // 배열 데이터를 제대로 전달하기 위해 설정
         data: {
             page: page,
-            tag1: '', // 필요한 태그 필터링 값들
-            tag2: '',
-            tag3: '',
-            tag4: '',
-            tag5: '',
-            tag6: ''
+            tags: tags // 선택된 태그 배열을 서버에 전달
         },
         success: function(response) {
-            renderPlanBoardList(response.content); // 성공 시 HTML 그리기
+            renderPlanBoardList(response.content); // 데이터 렌더링
         },
         error: function(error) {
-            console.error("Error fetching plan board list", error);
+            console.error("플랜 목록을 불러오는 중 오류 발생", error);
         }
     });
 }
 
 function renderPlanBoardList(boardList) {
-    let boardContainer = $('#plan-board-list'); // 플랜 리스트가 들어갈 정확한 컨테이너 선택
-    boardContainer.empty(); // 기존 내용을 지움
+    let boardContainer = $('#plan-board-list');
+    boardContainer.empty();
 
-    // 받아온 boardList로 HTML 동적 생성
     boardList.forEach(function(board) {
+        let tags = [board.tag1, board.tag2, board.tag3, board.tag4, board.tag5, board.tag6];
+        let tagHtml = '';
+
+        tags.forEach(function(tag) {
+            if (tag) {
+                tagHtml += `<span>#${i18next.t(tag)}</span> `;
+            }
+        });
+
         let boardHtml = `
             <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                 <div class="media-1">
@@ -60,24 +154,21 @@ function renderPlanBoardList(boardList) {
                     <div>
                         <img id="like" src="/images/plan/하트.png" style="width: 25px; height: 25px;">
                         <span>${board.likeCount}</span>
-                        <img id="save" src="/images/plan/북마크.png" style="width: 30px; height: 30px;">
+                        <a href="#" class="save" data-board-num="${board.boardNum}">
+                            <img id="save" src="/images/plan/북마크.png" style="width: 30px; height: 30px;">
+                        </a>
                     </div>
                 </span>
                 <div class="d-flex align-items-center">
                     <div>
                         <h3><a href="#">${board.planName}</a></h3>
                         <div class="price ml-auto" style="border-bottom: 100px">
-                            <span>#${board.tag1}</span>
-                            <span>#${board.tag2}</span>
-                            <span>#${board.tag3}</span>
-                            <span>#${board.tag4}</span>
-                            ${board.tag5 ? `<span>#${board.tag5}</span>` : ''}
-                            ${board.tag6 ? `<span>#${board.tag6}</span>` : ''}
+                            ${tagHtml}
                         </div>
                     </div>
                 </div>
             </div>
         `;
-        boardContainer.append(boardHtml); // 컨테이너에 추가
+        boardContainer.append(boardHtml);
     });
 }

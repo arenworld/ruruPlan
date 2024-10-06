@@ -130,38 +130,43 @@
             <p th:text="#{share_plan_mg}"></p>
         </div>
     </div>
-    <!--버튼-->
+    <!-- 버튼들 -->
     <div class="button-container">
-        <div class='button -regular center' th:text="#{spring}"></div>
-        <div class='button -regular center' th:text="#{summer}"></div>
-        <div class='button -regular center' th:text="#{fall}"></div>
-        <div class='button -regular center'  th:text="#{winter}"></div>
+        <!-- 계절 -->
+        <div class="button -regular center" data-tag="spring" id="btn-spring" th:text="#{spring}"></div>
+        <div class="button -regular center" data-tag="summer" id="btn-summer" th:text="#{summer}"></div>
+        <div class="button -regular center" data-tag="fall" id="btn-fall" th:text="#{fall}"></div>
+        <div class="button -regular center" data-tag="winter" id="btn-winter" th:text="#{winter}"></div>
 
-        <div class='button -regular center' value="2days" th:text="#{2days}"></div>
-        <div class='button -regular center' value="3days" th:text="#{3days}"></div>
-        <div class='button -regular center' value="4days" th:text="#{4days}"></div>
-        <div class='button -regular center' value="5days" th:text="#{5days}"></div>
-        <div class='button -regular center' value="6days" th:text="#{6days}"></div>
+        <!-- 기간 -->
+        <div class="button -regular center" data-tag="2days" id="btn-2days" th:text="#{2days}"></div>
+        <div class="button -regular center" data-tag="3days" id="btn-3days" th:text="#{3days}"></div>
+        <div class="button -regular center" data-tag="4days" id="btn-4days" th:text="#{4days}"></div>
+        <div class="button -regular center" data-tag="5days" id="btn-5days" th:text="#{5days}"></div>
+        <div class="button -regular center" data-tag="6days" id="btn-6days" th:text="#{6days}"></div>
 
-        <div class='button -regular center' value="trip_type1" th:text="#{trip_type1}"></div>
-        <div class='button -regular center' value="trip_type2" th:text="#{trip_type2}"></div>
-        <div class='button -regular center' value="trip_type3" th:text="#{trip_type3}"></div>
-        <div class='button -regular center' value="trip_type4" th:text="#{trip_type4}"></div>
-        <div class='button -regular center' value="kids" th:text="#{kids}"></div>
+        <!-- 여행 타입 -->
+        <div class="button -regular center" data-tag="trip_type1" id="btn-trip-type1" th:text="#{trip_type1}"></div>
+        <div class="button -regular center" data-tag="trip_type2" id="btn-trip-type2" th:text="#{trip_type2}"></div>
+        <div class="button -regular center" data-tag="trip_type3" id="btn-trip-type3" th:text="#{trip_type3}"></div>
+        <div class="button -regular center" data-tag="trip_type4" id="btn-trip-type4" th:text="#{trip_type4}"></div>
+        <div class="button -regular center" data-tag="kids" id="btn-kids" th:text="#{kids}"></div>
 
-        <div class='button -regular center' value="theme1" th:text="#{theme1}"></div>
-        <div class='button -regular center' value="theme2" th:text="#{theme2}"></div>
-        <div class='button -regular center' value="theme3" th:text="#{theme3}"></div>
-        <div class='button -regular center' value="theme4" th:text="#{theme4}"></div>
-        <div class='button -regular center' value="theme5" th:text="#{theme5}"></div>
-        <div class='button -regular center' value="theme6" th:text="#{theme6}"></div>
-        <div class='button -regular center' value="theme7" th:text="#{theme7}"></div>
-        <div class='button -regular center' value="theme8" th:text="#{theme8}"></div>
-        <div class='button -regular center' value="theme9" th:text="#{theme9}"></div>
-        <div class='button -regular center' value="theme9_1" th:text="#{theme9_1}"></div>
-        <div class='button -regular center' value="theme9_2" th:text="#{theme9_2}"></div>
-        <div class='button -regular center' value="theme9_3" th:text="#{theme9_3}"></div>
+        <!-- 테마 -->
+        <div class="button -regular center" data-tag="theme1" id="btn-theme1" th:text="#{theme1}"></div>
+        <div class="button -regular center" data-tag="theme2" id="btn-theme2" th:text="#{theme2}"></div>
+        <div class="button -regular center" data-tag="theme3" id="btn-theme3" th:text="#{theme3}"></div>
+        <div class="button -regular center" data-tag="theme4" id="btn-theme4" th:text="#{theme4}"></div>
+        <div class="button -regular center" data-tag="theme5" id="btn-theme5" th:text="#{theme5}"></div>
+        <div class="button -regular center" data-tag="theme6" id="btn-theme6" th:text="#{theme6}"></div>
+        <div class="button -regular center" data-tag="theme7" id="btn-theme7" th:text="#{theme7}"></div>
+        <div class="button -regular center" data-tag="theme8" id="btn-theme8" th:text="#{theme8}"></div>
+        <div class="button -regular center" data-tag="theme9" id="btn-theme9" th:text="#{theme9}"></div>
+        <div class="button -regular center" data-tag="theme9_1" id="btn-theme9-1" th:text="#{theme9_1}"></div>
+        <div class="button -regular center" data-tag="theme9_2" id="btn-theme9-2" th:text="#{theme9_2}"></div>
+        <div class="button -regular center" data-tag="theme9_3" id="btn-theme9-3" th:text="#{theme9_3}"></div>
     </div>
+
 
     <!-- 플랜 리스트 -->
     <div class="untree_co-section">
@@ -172,10 +177,18 @@
         </div>
     </div>
 </main>
+<input type="hidden" id="lang" th:value="${#locale.language}">
+
+<!-- i18next CDN -->
+<script src="https://unpkg.com/i18next@21.6.3/dist/umd/i18next.min.js"></script>
+
+
 <script src="/js/jquery-3.4.1.min.js"></script>
 <script src="/js/member/locale.js"></script>
 <script src="/js/weather/nowWeather.js"></script>
 <script src="/js/planBoard.js"></script>
 <script src="/js/tag.js"></script>
+
+
 </body>
 </html>

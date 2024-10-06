@@ -1,16 +1,23 @@
 package net.datasa.ruruplan.community.repository;
 
+import io.lettuce.core.dynamic.annotation.Param;
 import net.datasa.ruruplan.community.domain.entity.PlanBoardEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface PlanBoardRepository extends JpaRepository<PlanBoardEntity, Integer> {
+
+    @Query("SELECT pb FROM PlanBoardEntity pb WHERE " +
+            "(:tags IS NULL OR pb.tag1 IN :tags OR pb.tag2 IN :tags OR pb.tag3 IN :tags OR " +
+            "pb.tag4 IN :tags OR pb.tag5 IN :tags OR pb.tag6 IN :tags)")
+    Page<PlanBoardEntity> findByTags(@Param("tags") List<String> tags, Pageable pageable);
 
     List<PlanBoardEntity> findAllByOrderByBoardNumDesc();
     Page<PlanBoardEntity> findAllByOrderByBoardNumDesc(int num, Pageable pageable);

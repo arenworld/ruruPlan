@@ -19,48 +19,30 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class PlanBoardService {
-    final PlanBoardRepository boardRepo;
+    final PlanBoardRepository planBoardRepository;
     final PlanJpaRepository planRepo;
     final MemberRepository memberRepo;
 
-    /**
-     * 플랜 공유 게시판 목록
-     * @param page        현재 페이지
-     * @param pageSize    한 페이지당 글 수
-     * @param searchType1  검색 대상
-     * @param searchType2  검색어
-     * @return 한페이지의 글 목록
-     */
-    public Page<PlanBoardDTO> getList(int page, int pageSize, String searchType1, String searchType2) {
-        //Page 객체는 번호가 0부터 시작
-        page--;
 
-        //페이지 조회 조건 (현재 페이지, 페이지당 글수, 정렬 순서, 정렬 기준 컬럼)
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.Direction.DESC, "boardNum");
 
-        Page<PlanBoardEntity> entityPage = null;
+    public Page<PlanBoardDTO> getListByTags(int page, int pageSize, List<String> tags) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        // Entity로 조회된 결과를 DTO로 변환
+        Page<PlanBoardEntity> planBoardEntities = planBoardRepository.findByTags(tags, pageable);
 
-        switch (searchType1) {
-            case "theme5" :
-                entityPage = boardRepo.findByTag1ContainingOrTag2ContainingOrTag3ContainingOrTag4ContainingOrTag5Containing(searchType1,
-                        searchType1, searchType1, searchType1, searchType1, pageable);
-            default :
-                entityPage = boardRepo.findAll(pageable); break;
-        }
+        Page<PlanBoardDTO> dtoPage = planBoardEntities.map(this::convertToDTO);
 
-        log.debug("조회된 결과 엔티티페이지 : {}", entityPage.getContent());
-
-        //entityPage의 각 요소들을 순회하면서 convertToDTO() 메소드로 전달하여 DTO로 변환하고
-        //이를 다시 새로운 Page객체로 만든다.
-        Page<PlanBoardDTO> planboardDTOPage = entityPage.map(this::convertToDTO);
-        return planboardDTOPage;
+        return dtoPage;
     }
+
+
 
     /**
      * DB에서 조회한 게시글 정보인 PlanBoardEntity 객체를 BoardDTO 객체로 변환
@@ -85,6 +67,7 @@ public class PlanBoardService {
                 .tag3(entity.getTag3())
                 .tag4(entity.getTag4())
                 .tag5(entity.getTag5())
+                .tag6(entity.getTag6())
                 .build();
 
         return dto;
@@ -167,7 +150,7 @@ public class PlanBoardService {
                 .tag6(plan.getTheme3())
                 .build();
 
-        boardRepo.save(entity);
+        planBoardRepository.save(entity);
     }
 
 }

@@ -41,12 +41,15 @@ a:hover {
 .text-primary {
     /* 주요 색상의 텍스트 설정 */
     color: #1a374d !important;
+
+}
+/*호버 제거 */
+.logo:hover {
+    text-decoration: none !important;
+    border-bottom: none !important;
 }
 
-a.text-primary:hover {
-    /* 주요 색상의 텍스트 링크 호버 시 색상 유지 */
-    color: #1a374d !important;
-}
+
 
 h1,
 h2,
@@ -193,18 +196,20 @@ h4 {
 }
 
 .site-menu li a:hover {
-    color: #f40000;
+    color: #f40000 !important;
+    text-decoration: none;
 }
 
 .site-nav .site-menu > li > a {
     font-size: 14px;
     padding: 10px 15px;
-    color: rgb(0, 0, 0);
+    color: rgb(0, 0, 0) !important;
     text-decoration: none;
 }
 
 .site-nav .site-menu > li > a:hover {
-    color: #f40000;
+    color: #f40000 !important;
+    text-decoration: none;
 }
 
 .site-nav .site-menu > li.cta-button a {
@@ -432,4 +437,7 @@ h4 {
     top: 1.25rem; /* 20px */
     right: 0.625rem; /* 10px -> 오른쪽 끝에 가까운 위치 */
     z-index: 10000; /* 다른 요소보다 위에 표시 */
+}
+a:before {
+    display: none;
 }

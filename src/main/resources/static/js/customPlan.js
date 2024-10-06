@@ -526,11 +526,11 @@ function addNewTask(newPlaceId, lastTaskNum) {
             , preTransType: preTransType
         },
         success: function () {
-            console.log("왔다!");
             clickCountAddNewTask--;
             targetDayNum = '';
             preTransDuration = '';
             preTransType = '';
+            alert(lang === 'ko' ? '일정이 성공적으로 추가되었습니다.' : 'スケジュールが正常に追加されました。');
             dayPlansPrint(dayNumOfButton, planNum);
             $('.task-place-info-list-box').css('display', 'block');
             $('.theme-place-info-list-box').css('display', 'none');
@@ -587,6 +587,7 @@ function updateTaskPlace(newPlaceId) {
             transportTime = '';
             preTransDuration = '';
             nextTransDuration = '';
+            alert(lang === 'ko' ? '일정이 성공적으로 수정되었습니다.' : 'スケジュールが正常に修正されました。');
             dayPlansPrint(dayNumOfButton, planNum);
             $('.task-place-info-list-box').css('display', 'block');
             $('.theme-place-info-list-box').css('display', 'none');
@@ -619,6 +620,7 @@ function updateFirstTaskPlace(newPlaceId) {
             walkTime = '';
             transportTime = '';
             nextTransDuration = '';
+            alert(lang === 'ko' ? '일정이 성공적으로 수정되었습니다.' : 'スケジュールが正常に修正されました。');
             dayPlansPrint(dayNumOfButton, planNum);
             $('.task-place-info-list-box').css('display', 'block');
             $('.theme-place-info-list-box').css('display', 'none');
@@ -654,6 +656,7 @@ function updateLastTaskPlace(newPlaceId) {
             transportTime = '';
             preTransDuration = '';
             nextTransDuration = '';
+            alert(lang === 'ko' ? '일정이 성공적으로 수정되었습니다.' : 'スケジュールが正常に修正されました。');
             dayPlansPrint(dayNumOfButton, planNum);
             $('.task-place-info-list-box').css('display', 'block');
             $('.theme-place-info-list-box').css('display', 'none');
@@ -720,7 +723,7 @@ function updateDurationCost() {
             setTimeout(function () {
                 calculateTotalCost(dayNumOfButton);
             }, 100);
-
+            alert(lang === 'ko' ? '일정이 성공적으로 수정되었습니다.' : 'スケジュールが正常に修正されました。');
             $('.editImgButton').css('display', 'block');
             $('.saveImgButton').css('display', 'none');
         },

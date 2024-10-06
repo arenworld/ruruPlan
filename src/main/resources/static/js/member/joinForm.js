@@ -272,8 +272,6 @@ function chkEmailConfirm(code){
 //회원가입 폼 제출 내용 확인
 function formConfirm(){
 
-    alert("실행은 일단 됨");
-
     if(!validatePw()) {
         alert("유효하지 않은 비밀번호입니다.");
         $('#memberPw').css('border-color', red);
@@ -304,4 +302,6 @@ function formConfirm(){
         alert("유효하지 않은 이메일입니다.")
         return false;
     }
+
+    alert(lang === 'ko' ? '환영합니다.' : '歓迎致します.');
 }

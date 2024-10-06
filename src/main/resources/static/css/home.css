@@ -131,11 +131,13 @@ h4 {
     align-items: center;
     padding-left: 10px;
     margin-left: -190px;
+    z-index: 10;
 }
 
 .logo {
     display: flex;
     align-items: center;
+    z-index: 100;
 }
 
 .logo_img {
@@ -149,6 +151,7 @@ h4 {
     font-size: 40px;
     color: #000000;
     font-weight: 700;
+    margin-left: 30px !important;
 }
 
 #lang {
@@ -186,11 +189,12 @@ h4 {
 
 .site-menu li {
     margin-left: 5px;
+    color: black !important;
 }
 
 .site-menu li a {
     text-decoration: none;
-    color: #000000;
+    color: #000000 !important;
     font-size: 14px;
     padding: 10px;
 }
@@ -346,7 +350,7 @@ h4 {
 }
 
 .hero .slides {
-    background: #000000;
+    background-color:white !important;
     top: 150px !important;
     left: -300px !important;
     z-index: 0;
@@ -362,6 +366,7 @@ h4 {
     transition: 4s opacity ease;
     width: 880px;
     height: 450px;
+    border-radius: 0;
 }
 
 .hero .slides img.active {
@@ -402,7 +407,7 @@ h4 {
     display: block !important;
 }
 .site-menu li:first-child {
-    margin-left: 110px; /* 첫 번째 메뉴 항목과 로고 사이의 간격 추가 */
+    margin-left: 140px; /* 첫 번째 메뉴 항목과 로고 사이의 간격 추가 */
 }
 
 

@@ -35,6 +35,8 @@
     </style>
 </head>
 <body>
+<!--alert msg-->
+<input type="hidden" id="saveMsg" th:value="#{save_plan}">
 <header>
     <nav class="site-nav">
         <div class="site-navigation">
@@ -177,9 +179,12 @@
 					    <div>
                             <img id="like" th:src="@{/images/plan/하트.png}" style="width: 25px; height: 25px;">
 							<span th:text="${board.likeCount}">좋아요 수</span>
-                            <img id="save" th:src="@{/images/plan/북마크.png}" style="width: 30px; height: 30px;">
+                            <a th:href="@{/}" class="save" th:data-board-num="${board.boardNum}" >
+                                <img id="save" th:src="@{/images/plan/북마크.png}" style="width: 30px; height: 30px;">
+                            </a>
                         </div>
 					</span>
+
                     <!--태그-->
                     <div class="d-flex align-items-center">
                         <div>
@@ -202,6 +207,7 @@
 <script src="/js/jquery-3.4.1.min.js"></script>
 <script src="/js/member/locale.js"></script>
 <script src="/js/weather/nowWeather.js"></script>
+<script src="/js/planBoard.js"></script>
 <script src="/js/tag.js"></script>
 </body>
 </html>

@@ -93,25 +93,4 @@ public class MyPageService {
         return dtoList;
     }
 
-    public PlanDTO getPlanShare(int planNum){
-
-        PlanEntity entity = planJpaRepository.findById(planNum)
-                .orElseThrow(() -> new EntityNotFoundException("해당 플랜이 없습니다."));
-
-        PlanDTO dto = PlanDTO.builder()
-                .planNum(entity.getPlanNum())
-                .planName(entity.getPlanName())
-                .memberId(entity.getMember().getMemberId())
-                .startDate(entity.getStartDate())
-                .endDate(entity.getEndDate())
-                .planCreateDate(entity.getPlanCreateDate())
-                .planUpdateDate(entity.getPlanUpdateDate())
-                .coverImageUrl(entity.getCoverImageUrl())
-                .theme1(entity.getTheme1())
-                .theme2(entity.getTheme2())
-                .theme3(entity.getTheme3())
-                .build();
-        return dto;
-    }
-
 }

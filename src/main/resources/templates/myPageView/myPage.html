@@ -125,13 +125,13 @@
             <div class="myPage-main-area">
                 <!-- 첫 번째 줄 -->
                 <div class="myPage-main-item"><a th:href="@{/myPage/myPlanList}">
-                        <h3 class="myPage-main-item-myPlan">내 일정</h3></a>
+                        <h3 class="myPage-main-item-myPlan" th:text="#{my_plan}">내 일정</h3></a>
+                </div>
+                <div class="myPage-main-item"><a th:href="@{/myPage/bookmarks}">
+                        <h3 class="myPage-main-item-myPlan" th:text="#{save_plan}">스크랩한 일정</h3></a>
                 </div>
                 <div class="myPage-main-item"><a href="#">
-                        <h3 class="myPage-main-item-myPlan">스크랩한 일정</h3></a>
-                </div>
-                <div class="myPage-main-item"><a href="#">
-                        <h3 class="myPage-main-item-myPlan">개인정보 수정</h3></a>
+                        <h3 class="myPage-main-item-myPlan" th:text="#{update_myinfo}">개인정보 수정</h3></a>
                 </div>
             </div>
     </div>
@@ -142,6 +142,10 @@
 <div class="modal-picture-example">
     <span class="letters-in-modal-picture">아이</span>
 </div>
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/member/locale.js"></script>
 <script src="/js/mypage.js"></script>
+<script src="/js/myPlanList.js"></script>
+<script src="/js/weather/nowWeather.js"></script>
 </body>
 </html>

@@ -353,7 +353,7 @@ $(document).ready(async function() {
             data: JSON.stringify(planDTO),
             success: function(response) {
                 alert(lang === 'ko' ? '플랜이 저장되었습니다!😄' : 'プランが保存されました！😄');
-                window.location.href = "/";    // /myPage/myPlanList
+                window.location.href = "/myPage/myPlanList";    // /myPage/myPlanList
             },
             error: function(error) {
                 alert(lang === 'ko' ? '플랜 저장에 실패하였습니다.😭' : 'プランの保存中に問題が発生しました。😭');

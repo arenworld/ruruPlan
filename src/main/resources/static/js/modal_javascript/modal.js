@@ -1,8 +1,9 @@
 /*    모달의 전.후 페이지로 이동 DB로 전달을 담당하는 자바스크립트
 *
 * */
-lang = $('#lang').val();
+
 document.addEventListener("DOMContentLoaded", function () {
+  lang = $('#lang').val();
   const modal1 = document.getElementById("myModal1");
   const modal2 = document.getElementById("myModal2");
   const modal3 = document.getElementById("myModal3");
@@ -45,24 +46,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 다음 버튼 클릭 시 이벤트 핸들러 설정
   document.querySelector("#myModal1 .button-next").onclick = function (event) {
+    lang = $('#lang').val();
     event.preventDefault();
     modal1.style.display = "none";
     showModal(modal2, 1, `${qs2}`);
   };
 
   document.querySelector("#myModal2 .button-next-page2").onclick = function (event) {
+    lang = $('#lang').val();
     event.preventDefault();
     modal2.style.display = "none";
     showModal(modal3, 2, `${qs3}`);
   };
 
   document.querySelector("#myModal3 .button-next-page3").onclick = function (event) {
+    lang = $('#lang').val();
     event.preventDefault();
     modal3.style.display = "none";
     showModal(modal4, 3, `${qs4}`);
   };
 
   document.querySelector("#myModal4 .button-next-page4").onclick = function (event) {
+    lang = $('#lang').val();
     event.preventDefault();
     modal4.style.display = "none";
     showModal(modal5, 4, `${qs5}`);
@@ -72,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelector("#myModal5 .modal-submit-button").addEventListener("click", function (event) {
     event.preventDefault();
 
+    lang = $('#lang').val();
     // 데이터를 가져오기 전에 요소가 존재하는지 확인
     const first_date = document.getElementById("first_date")?.value ;
     const last_date = document.getElementById("last_date")?.value ;

@@ -1,3 +1,16 @@
+@font-face {
+  font-family: 'MangoDdobak-B';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405-3@1.1/MangoDdobak-B.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* overflow 설정시 custom페이지에서 스크롤 삭제되는 현상 발견되어 일단 묶어둠*/
+body {
+  /* 기본 글꼴, 줄 높이, 배경 색상, 오버플로우 설정 */
+  font-family: 'MangoDdobak-B', serif;
+}
+
 /* 모달 기본 스타일 */
 .modal {
   display: none; /* 기본적으로 숨김 */
@@ -105,7 +118,8 @@
 
 /* 전체 body 요소의 기본 스타일 설정 */
 body.modal-body {
-  font-family: Arial, sans-serif;
+  /*font-family: Arial, sans-serif;*/
+  font-family: 'MangoDdobak-B', serif;
   margin: 0;
   padding: 0;
   height: 100vh;

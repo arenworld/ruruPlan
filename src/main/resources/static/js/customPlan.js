@@ -434,7 +434,7 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                         // 소요시간 변환
                         let durationHour = task.duration.substring(1, 2);
                         let durationMinute = task.duration.substring(3, 5);
-                        let totalDurationInMinutes = Math.floor((durationHour * 60 + durationMinute) / 30);
+                      //  let totalDurationInMinutes = Math.floor((durationHour * 60 + durationMinute) / 30);
 
                         // 타임라인 변환
                         let startTimeHour = task.startTime.substring(0, 2);
@@ -446,8 +446,8 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                         let contentsTypeMove = lang === 'ko' ? `이동(${task.contentsTypeKr})` : `移動(${task.contentsTypeJp})`;
 
                         // Start building task row
-                        let rowHeight = totalDurationInMinutes * 0.2;
-                        dayTable += `<tr class="task-list${task.taskNum}" data-tasknum="${task.taskNum}" data-map-x="${task.place.mapX}" data-map-y="${task.place.mapY}"  style="height:${rowHeight}px">                                        
+                        // let rowHeight = totalDurationInMinutes * 0.2;
+                        dayTable += `<tr class="task-list${task.taskNum}" data-tasknum="${task.taskNum}" data-map-x="${task.place.mapX}" data-map-y="${task.place.mapY}"  style="height:35px">                                        
                                         <td>${startTime}</td>`;
 
                         // 이동 task가 아닐 때

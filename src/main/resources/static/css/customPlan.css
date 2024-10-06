@@ -93,9 +93,6 @@
     border-bottom: solid 1px #e1f3fa;
 }
 
-.day-plans-table td {
-    vertical-align: top;
-}
 
 .day-plans-table input {
     border: none;

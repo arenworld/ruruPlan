@@ -18,25 +18,29 @@
 
 <!-- 본문 콘텐츠 -->
 <div class="comment-frame">
-  <div class="community-page">
-    <div class="post-content" th:text="${post.contents}"></div>
-      <div class="comunity_text_header">
-        <img src="/images/logo.png" id="User_profile" alt="User_profile" />
-        <div class="row-1">
-          <strong class="user_name"      th:text="${post.nickname} ?: '익명'"></strong>
+  <div class="post-header">
+    <img th:src="${post.profileImageUrl != null ? post.profileImageUrl : '/images/mypage/기본프사.jpg'}"
+         class="profile-image" />
 
-          <span th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd')}"></span>
-
-        </div>
-      </div>
-
-
-      <!-- 첨부 이미지 표시 -->
-      <div class="post-img-local" th:if="${post.fileName != null}">
-        <img th:src="@{/uploads/{fileName}(fileName=${post.fileName})}" class="post-img" />
-      </div>
+    <div class="row-1">
+      <strong
+              class="user_name"
+              th:text="${post.nickname} ?: '익명'"
+      ></strong>
+      <span class="write_day">
+                  ·
+                  <span
+                          th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd') ?: ''}"
+                  ></span
+                  ></span>
     </div>
-
+  </div>
+  <div class="post-body">
+    <div class="post-content" th:text="${post.contents}"></div>
+    <div class="post-img-local" th:if="${post.fileName != null}">
+      <img th:src="@{/uploads/{fileName}(fileName=${post.fileName})}" class="post-img" />
+    </div>
+  </div>
     <!-- 좋아요 및 저장 버튼 -->
     <div class="post-actions">
       <form th:action="@{/board/like/{boardNum}(boardNum=${post.boardNum})}" method="post">

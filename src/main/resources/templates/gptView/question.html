@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bootstrap Layout Example</title>
+    <title>question</title>
     <link rel="stylesheet" href="css/bootstring.css" />
     <!-- Bootstrap CSS 링크 -->
     <link
@@ -94,7 +94,10 @@
 <input type="hidden" id="room_cost" />
 <!-- 여행 유형 -->
 <input type="hidden" id="trip_type" />
-
+<!-- 어른 수를 저장할 히든 필드 추가 -->
+<input type="hidden" id="adult" name="adult" />
+<!-- 아이 수를 저장할 히든 필드 추가 -->
+<input type="hidden" id="children" name="children" />
 
 
 <div hidden="hidden">
@@ -308,10 +311,7 @@
             </div>
         </div>
 
-        <div class="box-who-result-round text-group-center-row-who">
-            <div class="adult"><span th:text="#{adult}"></span><input type="text" id="adult" /><span th:text="#{num_people}"></span> </div>
-            <div class="kids"><span th:text="#{kids}"></span><input type="text" id="children" /><span th:text="#{num_people}"></span> </div>
-        </div>
+
         <div class="progress-custom-question-container">
             <div class="progress-question-step"></div>
             <div class="progress-question-step"></div>
@@ -466,8 +466,6 @@
                 </button>
             </div>
         </div>
-
-        <input type="hidden" id="lang" th:value="${#locale.language}">
 
         <div class="progress-custom-question-container">
             <div class="progress-question-step"></div>

@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
         footer.style.visibility = "hidden";
         writeFormButton.style.backgroundColor = "gray";
         writeFormButton.disabled = true; // 비활성화 상태로 시작
+        count.textContent = "0/1000자";
     });
 
     // 모달 닫기
@@ -29,6 +30,8 @@ document.addEventListener("DOMContentLoaded", function () {
         modal_overlay.style.display = "none";
         footer.style.visibility = "visible";
         document.body.style.overflow = "auto";
+        contentArea.value = ""; // 입력 필드의 내용을 초기화
+        contentLength.value="0";
     });
 
     // 글자수 세기 및 버튼 활성화 로직
@@ -37,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
         count.textContent = `${contentLength}/1000자`;
 
         if (contentLength >= 5 && contentLength <= 1000) {
-            writeFormButton.style.backgroundColor = "blue";
+            writeFormButton.style.backgroundColor = "#66b2e4";
             writeFormButton.disabled = false; // 버튼 활성화
         } else {
             writeFormButton.style.backgroundColor = "gray";

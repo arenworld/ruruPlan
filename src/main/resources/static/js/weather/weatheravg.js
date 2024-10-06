@@ -1,5 +1,8 @@
 $(document).ready(function(){
 
+    let startDate;
+    let endDate;
+
     const key = "OLmqqqBz%2FpgJKAez5lZ6oIU6Dgn2aRuV00bmzoOZ%2FFPcHe4ZMCLTyeyFAT1CxRXXTgfxm%2F4IWoXeqj7YIuFDfw%3D%3D"
 
     var xhr = new XMLHttpRequest();
@@ -8,8 +11,8 @@ $(document).ready(function(){
     queryParams += '&' + encodeURIComponent('dataType') + '=' + encodeURIComponent('XML'); /*요청자료 형식*/
     queryParams += '&' + encodeURIComponent('dataCd') + '=' + encodeURIComponent('ASOS'); /*자료 분류 코드*/
     queryParams += '&' + encodeURIComponent('dateCd') + '=' + encodeURIComponent('DAY'); /*날짜 분류 코드*/
-    queryParams += '&' + encodeURIComponent('startDt') + '=' + encodeURIComponent('20221007'); /*조회 기간 시작일*/
-    queryParams += '&' + encodeURIComponent('endDt') + '=' + encodeURIComponent('20221010'); /*조회 기간 종료일*/
+    queryParams += '&' + encodeURIComponent('startDt') + '=' + encodeURIComponent('20221007'); /*조회 기간 시작일('startDate')*/
+    queryParams += '&' + encodeURIComponent('endDt') + '=' + encodeURIComponent('20221010'); /*조회 기간 종료일('endDate')*/
     queryParams += '&' + encodeURIComponent('stnIds') + '=' + encodeURIComponent('108'); /*서울*/
 
     xhr.open('GET', url + queryParams);

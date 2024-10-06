@@ -47,6 +47,9 @@ public class MyPageController {
         String userId = user.getId();
         List<PlanDTO> myPlanList = myPageService.getMyPlanList(userId);
 
+        MemberDTO member = myPageService.getMemberInfo(userId);
+        model.addAttribute("member", member);
+
         model.addAttribute("userId", userId);
         model.addAttribute("myPlanList", myPlanList);
 
@@ -56,16 +59,6 @@ public class MyPageController {
     @GetMapping("myPlan")
     public String myPlan() {
         return "myPageView/myPlan";
-    }
-
-    @GetMapping("myPlanShare")
-    public String myPlanShare(Model model, @RequestParam("planNum") int planNum) {
-
-        PlanDTO dto = myPageService.getPlanShare(planNum);
-
-        model.addAttribute("dto", dto);
-
-        return "myPageView/myPlanShare";
     }
 
     /**
@@ -78,7 +71,6 @@ public class MyPageController {
 
         String userId = user.getId();
 
-        log.debug("여기있음: {}, {}", planNum, userId);
         planBoardService.sharePlan(planNum, userId);
 
     }

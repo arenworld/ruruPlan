@@ -438,6 +438,7 @@ hr {
 }
 
 .img-fluid {
+    border-radius: 20px;
     max-width: 100%;
     height: auto
 }

@@ -10,7 +10,6 @@
     <!--위치 아이콘-->
     <link rel="stylesheet" href="/fonts/icomoon/style.css">
     <!--귀여운 폰트// 그러나 언어 변경 버튼에 영향을 줌-->
-    <link rel="stylesheet" href="/css/style.css">
     <!--태그버튼-->
     <link rel="stylesheet" href="/css/button.css">
 
@@ -19,32 +18,103 @@
     <meta name="_csrf" content="your-csrf-token">
     <meta name="_csrf_header" content="X-CSRF-TOKEN">
 
-    <!-- 파비콘 -->
+    <!-- 로고 -->
     <link rel="icon" href="/images/home/logo_favicon_512.png">
     <link rel="apple-touch-icon" href="/images/home/logo_favicon_512.png">
 
     <!-- CSS 파일 가져오기 -->
     <link rel="stylesheet" href="/css/mypage.css" />
+    <link rel="stylesheet" href="/css/home.css" />
+    <link rel="stylesheet" href="/css/language.css" />
 </head>
 <body>
 <!--alert msg-->
-<hidden th:text="#{share_confirm}" id="shareMsg"></hidden>
+<input type="hidden" id="shareMsg" th:value="#{share_confirm}">
+<nav class="site-nav">
+    <div class="site-navigation">
+        <!-- 로고 -->
+        <div class="logo-container">
+            <a class="logo">
+                <img class="logo_img" src="/images/home/로고_수정.png" />
+                <span class="text-primary" th:text="#{logo}"></span>
+            </a>
+        </div>
+        <!-- 네비바  로그인x 로그인,조인  로그인o 로그아웃,마이페이지-->
+        <ul class="site-menu">
+            <li class="has-children">
+                <a th:text="#{community}"></a>
+                <ul class="dropdown">
+                    <li><a th:href="@{/planBoard/list}" th:text="#{plan_board}"></a></li>
+                    <li><a th:href="@{board/list}" th:text="#{board}"></a></li>
+                </ul>
+            </li>
+            <li class="has-children">
+                <a href="#" th:text="#{plan}"></a>
+                <ul class="dropdown">
+                    <li><a href="#" th:text="#{my_plan}"></a></li>
+                    <li><a href="#" th:text="#{save_plan}"></a></li>
+                </ul>
+            </li>
 
-<!-- 헤더 -->
-<header class="header-container">
+            <li sec:authorize="not isAuthenticated()">
+                <a th:href="@{login/loginForm}" th:text="#{login.bt}">Login</a>
+                <a href="#">join</a>
+            </li>
 
-    <div class="mypag-main-title">마이 페이지</div>
-    <div class="mypage_sidemenu">
-        <a th:href="@{/member/logout}" th:text="#{logout}"></a>
-        <a href="#" th:text="#{community}">커뮤니티</a>
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/member/logout}" th:text="#{logout}">Logout</a>
+            </li>
+
+        </ul>
+
+        <!-- 날씨정보 박스 -->
+        <div class="weather_box">
+            <div id="weather_icon">
+                <!-- 이모티콘자리 -->
+                <img class="weather_icon_set" id="weather" src="/images/home/날씨기본.png" />
+            </div>
+            <!-- 온도 -->
+            <span class="temperature" id="tem"> -°C</span>
+            <!-- 습도 -->
+            <span class="humidity" id="hum"> -%</span>
+        </div>
+
+        <!-- 언어변경파트 -->
+        <div class="lenge_select-toggle">
+            <div class="language-selector">
+                <img src="/images/home/지구본.png" alt="Globe Icon" />
+                <div class="languages">
+              <span
+                      class="span_kor"
+                      th:if="${#locale.language == 'ko'}"
+                      style="font-weight: bold"
+              >KOR</span
+              >
+                    <span class="span_kor" th:if="${#locale.language != 'ko'}"
+                    >KOR</span
+                    >
+                    <div class="lang-separator"></div>
+                    <span
+                            class="span_jp"
+                            th:if="${#locale.language == 'ja'}"
+                            style="font-weight: bold"
+                    >JP</span
+                    >
+                    <span class="span_jp" th:if="${#locale.language != 'ja'}"
+                    >JP</span
+                    >
+                </div>
+            </div>
+        </div>
     </div>
-</header>
+</nav>
+
 
 <!-- 메인 컨테이너 -->
 <main class="main_mypage">
     <!-- 왼쪽 사이드바 -->
-    <aside class="mypage-left">
-        <div class="userinfo" th:each="member : ${member}">
+    <aside class="mypage-profile">
+        <div class="userinfo">
             <div class="profile-img-container">
                 <img th:src="${member.profileImageUrl != null ? member.profileImageUrl : '/images/mypage/기본프사.jpg'}"
                      class="profile-img" alt="Profile Image" />
@@ -53,7 +123,7 @@
                 <input type="file" id="imageInput" style="display:none" accept="image/*" />
 
                 <!-- 프로필 수정 버튼 -->
-                <button class="profile-edit-button">변경</button>
+                <img class="profile-edit-button" th:src="@{/images/mypage/edit-button-pen.png}">
             </div>
 
             <div class="profile-name" th:text="${member.nickname}"></div>
@@ -61,53 +131,59 @@
         </div>
     </aside>
 
-    <!-- 플랜 정보 -->
-    <div class="container">
-        <!--플랜 불러오기-->
-        <div class="row">
-            <div th:each="plan, status : ${myPlanList}" class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
+    <!-- 메인 프로필 정보 -->
+    <div class="info area">
 
-                <!--플랜 커버-->
-                <div class="media-1">
-                    <a th:href="@{/myPage/myPlan/{planNum}(planNum=${plan.planNum})}" class="d-block mb-3">
-                        <img th:src="${plan.coverImageUrl}" alt="Image" class="img-fluid">
-                    </a>
-                </div>
-                <!--플랜 명, 태그-->
-                <div class="d-flex align-items-center">
-                    <div>
-                        <div class="d-flex align-items-center loc mb-2">
-                            <!--플랜명-->
-                            <h3><a th:href="@{/myPage/myPlan/{planNum}(planNum=${plan.planNum})}" th:text="${plan.planName}"></a></h3>
-                            <!--플랜 공유 이미지-->
-                            <a class="sharePlan" th:data-plan-num="${plan.planNum}">
-                                <img th:src="@{/images/upload.png}"
-                                     style="float: right;  margin-right: 0px; margin-bottom: 5px; height: 25px; width: 25px;">
+            <!-- 플랜 정보 -->
+            <div class="container">
+                <!--플랜 불러오기-->
+                <div class="row">
+                    <div th:each="plan, status : ${myPlanList}" class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
+
+                        <!--플랜 커버-->
+                        <div class="media-1" style="border-radius: 20px; text-align: left;">
+                            <a th:href="@{/myPage/myPlan/{planNum}(planNum=${plan.planNum})}" class="d-block mb-3">
+                                <img th:src="${plan.coverImageUrl}" alt="Image" class="img-fluid">
                             </a>
                         </div>
-                            <!--일정-->
-                            <span class="d-flex align-items-center loc mb-2">
+                        <!--플랜 명, 태그-->
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <div class="d-flex align-items-center loc mb-2">
+                                    <!--플랜명-->
+                                    <h3><a th:href="@{/myPage/myPlan/{planNum}(planNum=${plan.planNum})}" th:text="${plan.planName}"
+                                    style="width: 180px !important;"></a></h3>
+                                    <!--플랜 공유 이미지-->
+                                    <a class="sharePlan" th:data-plan-num="${plan.planNum}" style="justify-content: right !important;">
+                                        <img th:src="@{/images/upload.png}"
+                                             style="float: right;  margin-right: 0px; margin-bottom: 5px; height: 25px; width: 25px;">
+                                    </a>
+                                </div>
+                                <!--일정-->
+                                <span class="d-flex align-items-center loc mb-2">
 					    <div>
                             <span th:text="${plan.startDate}"></span>
                             <span>  ~  </span>
 							<span th:text="${plan.endDate}"></span>
                         </div>
 				        </span>
-                        <!--태그-->
-                        <div class="price ml-auto" style="border-bottom: 100px">
-                            <span>#<span th:text="#{${plan.theme1}}">테마1</span></span>
-                            <span>#<span  th:text="#{${plan.theme2}}">테마2</span></span>
-                            <span>#<span  th:text="#{${plan.theme3}}">테마3</span></span>
+                                <!--태그-->
+                                <div class="price ml-auto" style="border-bottom: 100px">
+                                    <span>#<span th:text="#{${plan.theme1}}">테마1</span></span>
+                                    <span>#<span  th:text="#{${plan.theme2}}">테마2</span></span>
+                                    <span>#<span  th:text="#{${plan.theme3}}">테마3</span></span>
+                                </div>
+                                <br><br>
+                            </div>
                         </div>
-                        <br><br>
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 </main>
 <script src="/js/jquery-3.4.1.min.js"></script>
 <script src="/js/mypage.js"></script>
 <script src="/js/myPlanList.js"></script>
+<script src="/js/weather/nowWeather.js"></script>
 </body>
 </html>

@@ -1262,7 +1262,7 @@ function updatePlanInfoList(visiblePlanMarkerKeyList) {
     for (const key of visiblePlanMarkerKeyList) {
         const task = taskListData.find(t => t.taskNum === key); // Assuming taskList is globally accessible
         // Create the HTML structure for each visible marker
-        let img = task.place.originImgUrl === null ?
+        let img = task.place.originImgUrl === (null || undefined || '') ?
             '<img src="/images/customPlan/nonImg.png" class="place-info-imgNone">' :
             `<img src="${task.place.originImgUrl}" class="place-info-img">`;
 

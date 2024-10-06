@@ -57,6 +57,8 @@ public class PlanBoardDTO {
     private String tag4;
     //태그5
     private String tag5;
+    //태그6
+    private String tag6;
 
     //플랜 커버 이미지
     private String coverImageUrl;

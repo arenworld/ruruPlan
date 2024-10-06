@@ -39,7 +39,7 @@ public class PlanBoardEntity {
     private PlanEntity plan;
 
     //공유 플랜 이름
-    @JoinColumn(name="plan_name", referencedColumnName = "plan_name", nullable = false)
+    @Column(name="plan_name", nullable = false)
     private String planName;
 
     //글내용
@@ -81,5 +81,9 @@ public class PlanBoardEntity {
     //태그5
     @Column(name = "tag5", length = 30)
     private String tag5;
+
+    //태그6
+    @Column(name = "tag6", length = 30)
+    private String tag6;
 
 }

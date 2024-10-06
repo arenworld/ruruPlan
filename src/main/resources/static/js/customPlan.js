@@ -1368,7 +1368,16 @@ function calculateTotalCost(dayNumOfButton) {
     if (parseInt(exchangeRate) === 0) {
         exchangeRate = 900;
     }
-    console.log(exchangeRate);
+
+    // 오늘 날짜 가져오기
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+    const day = String(today.getDate()).padStart(2, '0');
+
+    // HTML 요소에 오늘 날짜 표시
+    const formattedDate = `${year}-${month}-${day}`;
+    $('.day-plans-totalCost-exchange-date').text(formattedDate);
 
     $('.day-table-td-cost input').each(function () {
         let dayNumOfCost = $(this).data('daynum-cost');
@@ -1379,7 +1388,7 @@ function calculateTotalCost(dayNumOfButton) {
             let cost = parseInt($(this).val());
             if (!isNaN(cost)) {
                 totalCost += cost;
-                totalCostYen = parseInt((totalCost/exchangeRate) * 100);
+                totalCostYen = parseInt((totalCost / exchangeRate) * 100);
             }
         } else {
             //데이값이 일치하는 cost만
@@ -1387,13 +1396,13 @@ function calculateTotalCost(dayNumOfButton) {
                 let cost = parseInt($(this).val());
                 if (!isNaN(cost)) {
                     totalCost += cost;
-                    totalCostYen = (totalCost/exchangeRate) * 100;
+                    totalCostYen = (totalCost / exchangeRate) * 100;
                 }
             }
         }
     });
     $('#totalCost').text(totalCost.toLocaleString() + '₩'); // 총합을 표시할 요소에 추가
-    $('#totalCost2').text('(' + totalCostYen.toLocaleString() + '¥)'); // 총합을 표시할 요소에 추가
+    $('#totalCost2').text(totalCostYen.toLocaleString() + '¥'); // 총합을 표시할 요소에 추가
 }
 
 // 일정마커 배열을 비우기

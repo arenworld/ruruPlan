@@ -243,7 +243,18 @@ tr.selected {
 
 .day-plans-totalCost {
     position: absolute;
-    right: 30%;
+    right: 40%;
+}
+
+.day-plans-totalCost-exchange-date {
+    position: absolute;
+    right: 39%;
+    margin-top: 5px;
+}
+.day-plans-totalCost-exchange {
+    position: absolute;
+    right: 23%;
+    margin-top: 5px;
 }
 
 #totalCost {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Slf4j
@@ -33,19 +34,44 @@ public class PlanBoardController {
     private String uploadPath;
 
     @GetMapping("list")
-    public String planBoard(Model model
-            , @RequestParam(name = "page", defaultValue = "1") int page
-            , @RequestParam(name = "searchType1", defaultValue = "") String searchType1
-            , @RequestParam(name = "searchType2", defaultValue = "") String searchType2) {
+    public String planBoard(Model model,
+                            @RequestParam(name = "page", defaultValue = "1") int page,
+                            @RequestParam(name = "tag1", defaultValue = "") String tag1,
+                            @RequestParam(name = "tag2", defaultValue = "") String tag2,
+                            @RequestParam(name = "tag3", defaultValue = "") String tag3,
+                            @RequestParam(name = "tag4", defaultValue = "") String tag4,
+                            @RequestParam(name = "tag5", defaultValue = "") String tag5,
+                            @RequestParam(name = "tag6", defaultValue = "") String tag6) {
 
-        Page<PlanBoardDTO> boardPage = boardSer.getList(page, pageSize, searchType1, searchType2);
+        // Fetch board data with pagination
+        Page<PlanBoardDTO> boardPage = boardSer.getList(page, pageSize, tag1, tag2);
 
+        // Add necessary attributes to the model
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("page", page);
-        model.addAttribute("searchType", searchType1);
-        model.addAttribute("searchType", searchType1);
+        model.addAttribute("pageSize", pageSize);
         model.addAttribute("linkSize", linkSize);
+        model.addAttribute("tag1", tag1);
+        model.addAttribute("tag2", tag2);
+        model.addAttribute("tag3", tag3);
+        model.addAttribute("tag4", tag4);
+        model.addAttribute("tag5", tag5);
+        model.addAttribute("tag6", tag6);
 
-        return "communityView/planBoard";
+        return "communityView/planBoard"; // This should point to the Thymeleaf HTML file
+    }
+
+    @GetMapping("/listJson")
+    @ResponseBody
+    public Page<PlanBoardDTO> getPlanBoardListJson(@RequestParam(name = "page", defaultValue = "1") int page,
+                                                   @RequestParam(name = "tag1", defaultValue = "") String tag1,
+                                                   @RequestParam(name = "tag2", defaultValue = "") String tag2,
+                                                   @RequestParam(name = "tag3", defaultValue = "") String tag3,
+                                                   @RequestParam(name = "tag4", defaultValue = "") String tag4,
+                                                   @RequestParam(name = "tag5", defaultValue = "") String tag5,
+                                                   @RequestParam(name = "tag6", defaultValue = "") String tag6) {
+
+        // Page로 받은 데이터 그대로 반환 (JSON 형태로 반환됨)
+        return boardSer.getList(page, pageSize, tag1, tag2);
     }
 }

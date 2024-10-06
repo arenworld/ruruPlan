@@ -7,9 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import net.datasa.ruruplan.community.domain.dto.BoardDTO;
 import net.datasa.ruruplan.community.domain.dto.ReplyDTO;
 import net.datasa.ruruplan.community.domain.entity.BoardEntity;
+import net.datasa.ruruplan.community.domain.entity.PlanBoardEntity;
 import net.datasa.ruruplan.community.domain.entity.ReplyEntity;
+import net.datasa.ruruplan.community.domain.entity.SavePlanEntity;
 import net.datasa.ruruplan.community.repository.BoardRepository;
+import net.datasa.ruruplan.community.repository.PlanBoardRepository;
 import net.datasa.ruruplan.community.repository.ReplyRepository;
+import net.datasa.ruruplan.community.repository.SavePlanRepository;
 import net.datasa.ruruplan.member.domain.entity.MemberEntity;
 import net.datasa.ruruplan.member.repository.MemberRepository;
 import org.springframework.data.domain.Sort;
@@ -36,6 +40,8 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
     private final ReplyRepository replyRepository;
+    private final SavePlanRepository savePlanRepository;
+    private final PlanBoardRepository planBoardRepository;
 
     /**
      * 게시판 글 저장
@@ -314,5 +320,20 @@ public class BoardService {
                 .contents(entity.getContents())
                 .createDate(entity.getCreateDate())
                 .build();
+    }
+
+    public void savePlan(int boardNum, String userId) {
+        PlanBoardEntity planBoardEntity = planBoardRepository.findById(boardNum)
+                .orElseThrow(() -> new EntityNotFoundException("boardNum에 해당되는 엔터티가 없습니다."));
+
+        MemberEntity memberEntity = memberRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("userId에 해당되는 회원이 없습니다."));
+
+        SavePlanEntity savePlanEntity = SavePlanEntity.builder()
+                .planBoard(planBoardEntity)
+                .member(memberEntity)
+                .build();
+
+        savePlanRepository.save(savePlanEntity);
     }
 }

@@ -119,12 +119,12 @@ $(document).ready(function() {
 
     // Save 버튼 클릭 이벤트 처리
     $(document).on('click', '.save', function() {
-        const planNum = $(this).attr('data-board-num');
+        const boardNum = $(this).attr('data-board-num');
         const msg = $('#shareMsg').val();
         $.ajax({
-            url: 'planBoard/savePlan',
+            url: 'savePlan',
             type: 'post',
-            data: { planNum: planNum },
+            data: { boardNum: boardNum },
             success: function() {
                 alert(msg);
             },

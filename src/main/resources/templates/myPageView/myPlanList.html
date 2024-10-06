@@ -27,6 +27,9 @@
     <link rel="stylesheet" href="/css/mypage.css" />
 </head>
 <body>
+<!--alert msg-->
+<hidden th:text="#{share_confirm}" id="shareMsg"></hidden>
+
 <!-- 헤더 -->
 <header class="header-container">
 
@@ -58,8 +61,6 @@
         </div>
     </aside>
 
-
-
     <!-- 플랜 정보 -->
     <div class="container">
         <!--플랜 불러오기-->
@@ -79,7 +80,7 @@
                             <!--플랜명-->
                             <h3><a th:href="@{/myPage/myPlan/{planNum}(planNum=${plan.planNum})}" th:text="${plan.planName}"></a></h3>
                             <!--플랜 공유 이미지-->
-                            <a th:href="|myPlanShare?planNum=${plan.planNum}|">
+                            <a class="sharePlan" th:data-plan-num="${plan.planNum}">
                                 <img th:src="@{/images/upload.png}"
                                      style="float: right;  margin-right: 0px; margin-bottom: 5px; height: 25px; width: 25px;">
                             </a>
@@ -105,6 +106,8 @@
         </div>
     </div>
 </main>
+<script src="/js/jquery-3.4.1.min.js"></script>
 <script src="/js/mypage.js"></script>
+<script src="/js/myPlanList.js"></script>
 </body>
 </html>

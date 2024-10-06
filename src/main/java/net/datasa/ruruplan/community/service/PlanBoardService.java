@@ -18,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.temporal.ChronoUnit;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -88,32 +90,82 @@ public class PlanBoardService {
         return dto;
     }
 
-    public void save(PlanBoardDTO dto) {
-        PlanEntity plan = planRepo.findById(dto.getPlanNum())  // planNum으로 PlanEntity 조회
+    /**
+     * 마이페이지에서 공유
+     * @param dto
+     */
+    public void sharePlan(Integer planNum, String userId) {
+        PlanEntity plan = planRepo.findById(planNum)  // planNum으로 PlanEntity 조회
                 .orElseThrow(() -> new EntityNotFoundException("Plan not found"));
 
-        MemberEntity member = memberRepo.findById(dto.getMemberId())  // memberId로 MemberEntity 조회
+        MemberEntity member = memberRepo.findById(userId)  // memberId로 MemberEntity 조회
                 .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+
+        int month = plan.getStartDate().getMonthValue();
+        String season = "";
+        String days = ChronoUnit.DAYS.between(plan.getStartDate(), plan.getEndDate()) + 1 + "days";
+
+        //tag1
+        switch (month) {
+            case 3:
+            case 4:
+            case 5:
+                season = "spring";
+                break;
+            case 6:
+            case 7:
+            case 8:
+                season = "summer";
+                break;
+            case 9:
+            case 10:
+            case 11:
+                season = "fall";
+                break;
+            case 12:
+            case 1:
+            case 2:
+                season = "winter";
+                break;
+            default:
+                break;
+        }
+        //tag3 누구랑
+        String whom = plan.getCmd().getTripType();
+        switch (whom) {
+            case "혼자":
+                whom = "trip_type1";
+                break;
+            case "커플":
+                whom = "trip_type2";
+                break;
+            case "부모님":
+                whom = "trip_type3";
+                break;
+            case "친구":
+                whom = "trip_type4";
+                break;
+            case "아이":
+                whom = "kids";
+                break;
+            default:
+                break;
+
+        }
 
         PlanBoardEntity entity = PlanBoardEntity.builder()
                 .plan(plan)
                 .member(member)
-                .planName(dto.getPlanName())
-                .contents(dto.getContents())
+                .planName(plan.getPlanName())
                 .viewCount(0)
                 .likeCount(0)
-                .tag1(dto.getTag1())
-                .tag2(dto.getTag2())
-                .tag3(dto.getTag3())
-                .tag4(dto.getTag4())
-                .tag5(dto.getTag5())
+                .tag1(season)
+                .tag2(days)
+                .tag3(whom)
+                .tag4(plan.getTheme1())
+                .tag5(plan.getTheme2())
+                .tag6(plan.getTheme3())
                 .build();
-
-        // 플랜 제목과 커버사진이 변경되었다면 적용.
-        plan.setPlanName(dto.getPlanName());
-        plan.setCoverImageUrl(dto.getCoverImageUrl());
-
-        planRepo.save(plan);
 
         boardRepo.save(entity);
     }

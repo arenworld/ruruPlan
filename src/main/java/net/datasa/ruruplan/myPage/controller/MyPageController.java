@@ -68,12 +68,19 @@ public class MyPageController {
         return "myPageView/myPlanShare";
     }
 
-    @PostMapping("myPlanShare")
-    public String myPlanShare(@ModelAttribute PlanBoardDTO dto) {
+    /**
+     * 나의 플랜 공유 플랜 게시판에 게시(저장)
+     * @param planNum
+     */
+    @ResponseBody
+    @PostMapping("planShare")
+    public void myPlanShare(@RequestParam("planNum") Integer planNum, @AuthenticationPrincipal AuthenticatedUser user) {
 
-        planBoardService.save(dto);
+        String userId = user.getId();
 
-        return "redirect:/";
+        log.debug("여기있음: {}, {}", planNum, userId);
+        planBoardService.sharePlan(planNum, userId);
+
     }
 
 }

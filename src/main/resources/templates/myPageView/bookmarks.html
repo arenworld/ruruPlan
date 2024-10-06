@@ -143,7 +143,7 @@
                         <img th:src="${plan.coverImageUrl}" alt="Image" class="img-fluid">
                     </a>
                 </div>
-                <!--하트, 북마크-->
+                <!--하트-->
                 <span class="d-flex align-items-center loc mb-2">
 					    <div>
                             <img id="like" th:src="@{/images/plan/하트.png}" style="width: 25px; height: 25px;">
@@ -167,6 +167,9 @@
                 </div>
             </div>
         </div>
+
+        <br>
+        <div id="weatherData"></div>
     </div>
 </main>
 <script src="/js/jquery-3.4.1.min.js"></script>
@@ -174,5 +177,6 @@
 <script src="/js/mypage.js"></script>
 <script src="/js/myPlanList.js"></script>
 <script src="/js/weather/nowWeather.js"></script>
+<script src="/js/weather/weatheravg.js"></script>
 </body>
 </html>

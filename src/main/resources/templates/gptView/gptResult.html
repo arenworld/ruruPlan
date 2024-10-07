@@ -104,7 +104,7 @@
 
 
     <div th:each="dateEntry : ${taskByDateMap}">
-        <h3 th:text="'Day ' + ${dateEntry.key}"></h3>
+        <h3 id="day" th:text="'Day ' + ${dateEntry.key}"></h3>
         <table>
             <thead>
             <tr>

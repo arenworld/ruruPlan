@@ -305,6 +305,8 @@ $(document).ready(function () {
             days.forEach(function (otherDay) {
                 $('#plan-' + otherDay + '-button').css('background-color', '#f0f0f0'); // Original color, adjust as needed
             });
+            $('#plan-' + otherDay + '-button').css('color', 'black'); // Original color, adjust as needed
+        });
 
             $(this).css('background-color', 'orangered');
             $(this).css('color', 'white');
@@ -380,7 +382,6 @@ $(document).ready(function () {
                 $(this).css('color', 'white');
             }
         });
-    });
 });
 
 

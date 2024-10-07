@@ -90,10 +90,10 @@ $(document).ready(function(){
                 sR += (sumRn = '') ? (0 + sR) : (sumRn+sR);
                 snow += (ddMefs = '') ? (0 + snow) : (ddMefs+snow);
             }
-            avgt = avgt/(items.length);
-            avgR = avgR/(items.length);
-            sR = sR/(items.length);
-            snow = snow/(items.length);
+            avgt = Math.round(avgt/(items.length) * 100) / 100.0;
+            avgR = Math.round(avgR/(items.length) * 100) / 100.0;
+            sR = Math.round(sR/(items.length) * 100) / 100.0;
+            snow = Math.round(snow/(items.length) * 100) / 100.0;
 
             // essentials 리스트를 빈 배열로 초기화
             let essentials = [];

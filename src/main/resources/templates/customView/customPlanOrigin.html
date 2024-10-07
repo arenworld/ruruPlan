@@ -5,185 +5,208 @@
 * License: https://creativecommons.org/licenses/by/3.0/
 */ -->
 <!doctype html>
-<html lang="kor" xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <script src="js/jquery-3.4.1.min.js"></script>
-    <script src="js/customPlan.js"></script>
+    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{/js/customPlanOriginThis.js}"></script>
 
     <meta charset="UTF-8">
-
-    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Untree.co">
 
-    <link rel="shortcut icon" href="favicon.png">
-
-    <meta name="description" content="" />
-    <meta name="keywords" content="bootstrap, bootstrap4" />
+    <meta name="description" content=""/>
+    <meta name="keywords" content="bootstrap, bootstrap4"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Serif+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Serif+Pro:wght@400;700&display=swap"
+          rel="stylesheet">
 
-    <link rel="stylesheet" th:href="@{css/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{css/owl.carousel.min.css}">
-    <link rel="stylesheet" th:href="@{css/owl.theme.default.min.css}">
-    <link rel="stylesheet" th:href="@{css/jquery.fancybox.min.css}">
-    <link rel="stylesheet" th:href="@{fonts/icomoon/style.css}">
-    <link rel="stylesheet" th:href="@{fonts/flaticon/font/flaticon.css}">
-    <link rel="stylesheet" th:href="@{css/daterangepicker.css}">
-    <link rel="stylesheet" th:href="@{css/aos.css}">
-    <link rel="stylesheet" th:href="@{css/style.css}">
-    <link rel="stylesheet" th:href="@{css/customPlan.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery.fancybox.min.css}">
+    <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}">
+    <link rel="stylesheet" th:href="@{/fonts/flaticon/font/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/css/daterangepicker.css}">
+    <link rel="stylesheet" th:href="@{/css/aos.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/customPlan.css}">
+    <link rel="stylesheet" th:href="@{/css/language.css}" />
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
 
-    <title>custom</title>
-
+    <title>SharePlan</title>
+    <style>
+        .modal-content {
+            display: flex;
+            flex-direction: column;
+            background-color: rgb(255,255,255,3);
+            border-radius: 40px;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            max-width: 500px;
+        }
+        .close {
+            margin: auto;
+        }
+        #weatherData {
+            margin: auto;
+        }
+    </style>
     <!-- 네이버 MapApi 불러오기-->
-    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ycuy92lblj&language=ja"></script>
+    <script type="text/javascript"
+            src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ycuy92lblj&language=ja"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.4/dayjs.min.js"></script>
+
+    <!-- 티맵api -->
+    <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=7ejrjQSxsM8Vp5U8WbLArOuHpOwQNnJ31hqE3Pt7"></script>
+
+    <!-- 국제화 적용 위한 js-->
+    <script th:src="@{/js/member/locale.js}"></script>
+    <script th:src="@{/js/weather/nowWeather.js}"></script>
+    <script th:src="@{/js/weather/weatheravg.js}"></script>
+    <script th:src="@{/js/typed.js}"></script>
+
+    <style>
+        .li a {
+            z-index: 10000 !important ; /* 더 높은 값으로 설정 */
+        }
+    </style>
+
+    <link rel="icon" href="/images/home/logo_favicon_512.png">
+    <link rel="apple-touch-icon" href="/images/home/logo_favicon_512.png">
 
 </head>
 
 <body>
 
-<!--네비게이션 / 헤더 -->
-<!--모바일버전 -->
-<div class="site-mobile-menu site-navbar-target">
-    <div class="site-mobile-menu-header">
-        <div class="site-mobile-menu-close">
-            <span class="icofont-close js-menu-toggle"></span>
-        </div>
-    </div>
-    <div class="site-mobile-menu-body"></div>
-</div> <!--네비게이션 / 헤더 : 모바일버전 -->
+<!--                    <p class="text-white">私の旅行をもっと完璧に、自由カスタム</p>-->
 
 
-
-<!-- 웹버전 / 네비게이션-->
 <nav class="site-nav">
-     <div class="container">
-
-        <div class="site-navigation">
-            <a th:href="@{/}" class="logo m-0">ルルプラン<span class="text-primary">.</span></a>
-
-            <ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right">
-                <li class="active"><a href="index.html">Home</a></li>
-                <li class="has-children">
-                    <a href="#">Dropdown</a>
-                    <ul class="dropdown">
-                        <li class="active"><a href="elements.html">Customizing My Plan</a></li>
-                        <li><a href="#">Menu One</a></li>
-                        <li class="has-children">
-                            <a href="#">Menu Two</a>
-                            <ul class="dropdown">
-                                <li><a href="#">Sub Menu One</a></li>
-                                <li><a href="#">Sub Menu Two</a></li>
-                                <li><a href="#">Sub Menu Three</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">Menu Three</a></li>
-                    </ul>
-                </li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
-            </ul>
-
-            <a href="#" class="burger ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-none light" data-toggle="collapse" data-target="#main-navbar">
-                <span></span>
+    <div class="site-navigation">
+        <!-- 로고 -->
+        <div class="logo-container">
+            <a class="logo" href="/">
+                <img class="logo_img" src="/images/home/로고_수정.png" />
+                <span class="text-primary" th:text="#{logo}"></span>
             </a>
-
         </div>
-    </div>
-</nav> <!-- 네비게이션 웹버전-->
 
+        <!-- 날씨정보 박스 -->
+        <div class="weather_box"  style="position:absolute; right: 40%;">
+            <div id="weather_icon">
+                <!-- 이모티콘자리 -->
+                <img class="weather_icon_set" id="weather" src="/images/home/날씨기본.png" />
+            </div>
+            <!-- 온도 -->
+            <span class="temperature" id="tem"> -°C</span>
+            <!-- 습도 -->
+            <span class="humidity" id="hum"> -%</span>
+        </div>
 
-<!-- 헤더 메인 문구 및 소제목 -->
-<div class="hero hero-inner">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 mx-auto text-center">
-                <div class="intro-wrap">
-                    <h1 class="mb-0">Customizing My Plan</h1>
-                    <p class="text-white">私の旅行をもっと完璧に、自由カスタム</p>
+        <!-- 언어변경파트 -->
+        <div class="lenge_select-toggle">
+            <div class="language-selector">
+                <img src="/images/home/지구본.png" alt="Globe Icon" />
+                <div class="languages">
+              <span
+                      class="span_kor"
+                      th:if="${#locale.language == 'ko'}"
+                      style="font-weight: bold"
+              >KOR</span
+              >
+                    <span class="span_kor" th:if="${#locale.language != 'ko'}"
+                    >KOR</span
+                    >
+                    <div class="lang-separator"></div>
+                    <span
+                            class="span_jp"
+                            th:if="${#locale.language == 'ja'}"
+                            style="font-weight: bold"
+                    >JP</span
+                    >
+                    <span class="span_jp" th:if="${#locale.language != 'ja'}"
+                    >JP</span
+                    >
                 </div>
             </div>
         </div>
     </div>
-</div>
+</nav>
+
 
 
 <!--본문 내용 ( 맨아래 푸터 제외, 가운데 + our Team 소개 /전체 3분할 중 가운데-->
 <div class="untree_co-section">
 
     <!--본문 내용 -->
-    <div class="container my-5">
+    <div class="container my-5" style="padding-top: 80px; width:1300px;">
 
         <!-- 플래너 정보 출력 -->
-        <div class="present-planDTO">
+        <div class="info-current-plan">
 
-            <div class="plan-head">
-                <h1>
-                    <span th:text="|『${planDTO.planName}』|" id="head-planName"> </span> [[#{plan}]]
-                </h1>
-
-                <form th:action="@{locale/}" method="get">
-                    <select name="lang" onchange="this.form.submit()"
-                            style="width: 70px; height:40px; font-size: 12px; text-align: left; padding: 0px">
-                        <option value="ko" th:selected="${#locale.language == 'ko'}">한국어</option>
-                        <option value="ja" th:selected="${#locale.language == 'ja'}">日本語</option>
-                    </select>
-                </form>
-            </div>
-
-            <div class ="plan-options">
-
-                <table id="plan-options">
-                    <tr>
-                        <th>『[[${planDTO.planName}]]』 플래너 </th>
-                        <td th:text="|(${lastDay-1}박 ${lastDay}일)|" id="nightsNdays"></td>
-                    </tr>
-                    <tr>
-                        <th>여행기간</th>
-                        <td th:text="|${#temporals.format(planDTO.startDate, 'yyyy년 MM월 dd일')}~|" id="firstDate"></td>
-                        <td th:text="${#temporals.format(planDTO.endDate, 'yyyy년 MM월 dd일')}" id="lastDate"></td>
-                    </tr>
-                    <tr>
-                        <th>누구랑?</th>
-                        <td th:text="${cmdDTO.tripType}"></td>
-                            <th>총 인원</th>
-                        <th:block th:if="${cmdDTO.tripType} != 아이들">
-                            <td th:text="|${cmdDTO.adult}명|"></td>
-                        </th:block>
-                        <th:block th:if="${cmdDTO.tripType} == 아이들">
-                            <td th:text="|${cmdDTO.adult}명) 아이(${cmdDTO.children}명)|"></td>
-                        </th:block>
-
-                    </tr>
-                    <tr>
-                        <th>선택테마</th>
-                        <td th:text="|①${cmdDTO.theme1}|"></td>
-                        <td th:text="|②${cmdDTO.theme2}|"></td>
-                        <td th:text="|③${cmdDTO.theme3}"|></td>
-                    </tr>
-                </table>
-            </div>
+            <!--필요한 값-->
+            <input type="hidden" id="sd" th:value="${planDTO.startDate}">
+            <input type="hidden" id="ed" th:value="${planDTO.endDate}">
+            <input type="hidden" id="lastY" th:value="#{last_year_w}">
+            <input type="hidden" id="temS" th:value="#{tem}">
+            <input type="hidden" id="rhm" th:value="#{rhm}">
+            <input type="hidden" id="avgrn" th:value="#{avgrn}">
+            <input type="hidden" id="essentials" th:value="#{essentials}">
+            <input type="hidden" id="e1" th:value="#{e1}">
+            <input type="hidden" id="e2" th:value="#{e2}">
+            <input type="hidden" id="e3" th:value="#{e3}">
+            <input type="hidden" id="e4" th:value="#{e4}">
+            <input type="hidden" id="e5" th:value="#{e5}">
+            <input type="hidden" id="wm1" th:value="#{w_msg1}">
+            <input type="hidden" id="wm2" th:value="#{w_msg2}">
+            <input type="hidden" id="wm3" th:value="#{w_msg3}">
+            <input type="hidden" id="wm4" th:value="#{w_msg4}">
 
             <input type="hidden" id="planNum" th:value="${planDTO.planNum}">
+            <input type="hidden" id="lang" th:value="${#locale.language}">
+            <input type="hidden" id="boardNum" th:value="${boardNum}">
 
         </div>
 
-        <div class="row justify-content-center">
+
+        <!-- 본문 시작 -->
+        <div class="row justify-content-start" style="margin:0px;">
+
+
             <!-- 왼쪽 파트 -->
             <div class="col-lg-4">
 
-                <!-- 지도 -->
-                <div id="map" style="width:100%; height:500px;"></div>
+                <div class="plan-head">
+                    <h1>
+                        <span th:text="|『${planDTO.planName}』|" id="head-planName"> </span> [[#{plan}]]
+                    </h1>
 
-                <!-- 테마버튼 -->
-                <div class="theme-buttons-div">
-                    <button class="theme-buttons" th:each="theme : ${themeArray}"
-                            th:id="|theme-${theme}-button|" th:text="${theme}" th:data-theme="${theme}"></button>
+                </div>
+
+                <!-- 지도 -->
+                <div id="map" style="width:100%; height:400px;"></div>
+
+
+                <div class="task-place-info-list-box">
+
+                </div>
+
+                <div class="theme-place-info-list-box">
+
+                </div>
+
+                <div class="badges">
+                    <span class="badge-explain" id="barrierBadge-explain">장애인, 고령자, 영유아 등 누구나 편리한 무장애 시설</span>
+                    <span class="badge-explain" id="petBadge-explain">반려동물 동반이 가능한 펫 프렌들리 시설</span>
+                    <span class="badge-explain" id="heritageBadge-explain">세계문화 유산으로 인정</span>
+                </div>
+
+                <div class="place-info-modal">
+
                 </div>
 
 
@@ -191,231 +214,84 @@
 
             <!-- 오른쪽 파트 -->
             <div class="col-lg-4">
-                <!-- 전체 일정 출력 -->
-                <h6>장소를 클릭하면 지도 상에서 해당 위치로 바로 이동합니다.</h6>
 
-                <div class="day-buttons">
-                    <button class="days" th:id="plan-allday-button" th:text="All" th:data-daynum-button="0"></button>
-                    <button class="days" th:each="dayNum : ${#numbers.sequence(1, 6)}" th:if="${lastDay} >= ${dayNum}"
-                            th:id="|plan-${dayNum}day-button|" th:text="|Day${dayNum}|" th:data-daynum-button="${dayNum}"></button>
+                <!--               날씨 모달 -->
+                <div id="wModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <div id="weatherData"></div>
+                    </div>
                 </div>
+                <!-- 전체 일정 출력 -->
+                <!-- <h6>장소를 클릭하면 지도 상에서 해당 위치로 바로 이동합니다.</h6> -->
 
-                <div class="plan-details" id="planTable-allday">
-
-                    <!-- 일자별로 테이블을 생성 -->
-                    <div th:each="dayNum : ${#numbers.sequence(1, lastDay)}" th:id="|planTable-${dayNum}day|" th:data-daynum-table="${dayNum}" th:class="planTables">
-                        <!-- 날짜 제목 -->
-                        <h4 th:text="|Day ${dayNum}|" class="day-table-dayTitle"></h4>
-
-                        <table class="day-plans-table">
-                            <thead>
-                            <tr class="day-table-tr1">
-                               <!-- <th class="day-table-th1">no</th> -->
-                                <th class="day-table-th2">time</th>
-                                <th class="day-table-th3">task</th>
-                                <th class="day-table-th4">place</th>
-                                <th class="day-table-th5">duration</th>
-                                <th class="day-table-th6">cost</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <!-- 해당 날짜의 일정을 반복 -->
-                            <tr th:class="task-list" th:each="task, iterStat : ${planDTO.taskList}" th:if="${task.dateN == dayNum}">
-                                <input type="hidden" th:value="${task.taskNum}" th:class="|task-list${task.taskNum+1}|">
-                                <td th:text="${task.startTime}"></td>
-
-                                <!-- 홀수라인일 때 -->
-                                <th:block th:if="${iterStat.count % 2 != 0}">
-                                    <td th:if="${iterStat.count % 2 != 0}" th:text="${task.contentsTypeKr}"></td>
-                                    <td th:text="${task.place.titleKor}" th:data-tasknum="${task.taskNum}" class="placeTitle" style="cursor:pointer;"></td>
-                                </th:block>
-
-                                <!-- 짝수라인일 때-->
-                                <th:block th:if="${iterStat.count % 2 == 0}">
-                                    <td th:attr="colspan=2" th:text="${task.contentsTypeKr}"></td>
-                                </th:block>
-
-                                <th:block th:if="${task.duration.hour != 0}">
-                                    <td th:text="${#temporals.format(task.duration, 'H시간 m분')}"></td>
-                                </th:block>
-
-                                <th:block th:if="${task.duration.hour == 0}">
-                                    <td th:text="${#temporals.format(task.duration, 'm분')}"></td>
-                                </th:block>
-
-                                <td th:text="|${task.cost}|" th:class="day-table-td-cost" th:data-daynum-cost="${task.dateN}"></td>
-                                <td>원</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <div class="day-buttons-div">
+                    <button class="days-button" th:id="plan-allday-button" th:text="All"
+                            th:data-daynum-button="0"></button>
+                    <button class="days-button" th:each="dayNum : ${#numbers.sequence(1, 6)}"
+                            th:if="${lastDay} >= ${dayNum}"
+                            th:id="|plan-${dayNum}day-button|" th:text="|Day${dayNum}|"
+                            th:data-daynum-button="${dayNum}"></button>
+                    <div  class="wea_info">
+                        <img id="wea_img" src="/images/home/weather.jpg" style="width: 40px; height: 40px;">
+                        <span style="font-size: 10px;"><-CLICK!</span>
                     </div>
                 </div>
 
-
+                <div class="plan-details" id="planTable-allDay"></div>
 
                 <div class="custom-block" data-aos="fade-up">
                     <h6>
-                        <span class="day-plans-totalCost">총 예상비용</span>
+                        <span class="day-plans-totalCost" th:text="#{total_cost}"></span>
                         <span id="totalCost"></span>
                     </h6>
+                </div>
+                <div class="custom-block" data-aos="fade-up">
+                    <span class="day-plans-totalCost-exchange-date"></span>
+                    <span class="day-plans-totalCost-exchange" th:text="#{total_cost_exchange}"></span>
 
-                </div> <!-- END .custom-block -->
+                    <span id="totalCost2"></span><br>
+                    <input type="hidden" th:value="${exchange}" id="exchangeRate">
 
-              <!--  <div class="custom-block" data-aos="fade-up" data-aos-delay="100">
-                    <div class="text-center">
-                        <h2 class="section-title text-center">Slider</h2>
-                    </div>
-                    <div class="owl-single owl-carousel no-nav">
-                        <div class="testimonial mx-auto">
-                            <figure class="img-wrap">
-                                <img src="images/person_2.jpg" alt="Image" class="img-fluid">
-                            </figure>
-                            <h3 class="name">Adam Aderson</h3>
-                            <blockquote>
-                                <p>&ldquo;There live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.&rdquo;</p>
-                            </blockquote>
-                        </div>
-
-                        <div class="testimonial mx-auto">
-                            <figure class="img-wrap">
-                                <img src="images/person_3.jpg" alt="Image" class="img-fluid">
-                            </figure>
-                            <h3 class="name">Lukas Devlin</h3>
-                            <blockquote>
-                                <p>&ldquo;There live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.&rdquo;</p>
-                            </blockquote>
-                        </div>
-
-                        <div class="testimonial mx-auto">
-                            <figure class="img-wrap">
-                                <img src="images/person_4.jpg" alt="Image" class="img-fluid">
-                            </figure>
-                            <h3 class="name">Kayla Bryant</h3>
-                            <blockquote>
-                                <p>&ldquo;There live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.&rdquo;</p>
-                            </blockquote>
-                        </div>
-
-                    </div>
-                </div>-->
-
+                </div>
             </div>
         </div>
 
+    </div>
+
+    <!-- Our Team 소개 -->
+    <div class="custom-plan-end-line">
+
+    </div>
+
+    <!-- footer -->
+    <div class="site-footer">
 
     </div>
 
 
-
-<!-- Our Team 소개 -->
-<div class="py-5 cta-section">
-    <div class="container">
-        <div class="row text-center">
-            <div class="col-md-12">
-                <h2 class="mb-2 text-white">Lets you Explore the Best. Contact Us Now</h2>
-                <p class="mb-4 lead text-white text-white-opacity">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, fugit?</p>
-                <p class="mb-0"><a href="booking.html" class="btn btn-outline-white text-white btn-md font-weight-bold">Get in touch</a></p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- footer -->
-<div class="site-footer">
-    <div class="inner first">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-lg-4">
-                    <div class="widget">
-                        <h3 class="heading">About Tour</h3>
-                        <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                    </div>
-                    <div class="widget">
-                        <ul class="list-unstyled social">
-                            <li><a href="#"><span class="icon-twitter"></span></a></li>
-                            <li><a href="#"><span class="icon-instagram"></span></a></li>
-                            <li><a href="#"><span class="icon-facebook"></span></a></li>
-                            <li><a href="#"><span class="icon-linkedin"></span></a></li>
-                            <li><a href="#"><span class="icon-dribbble"></span></a></li>
-                            <li><a href="#"><span class="icon-pinterest"></span></a></li>
-                            <li><a href="#"><span class="icon-apple"></span></a></li>
-                            <li><a href="#"><span class="icon-google"></span></a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-2 pl-lg-5">
-                    <div class="widget">
-                        <h3 class="heading">Pages</h3>
-                        <ul class="links list-unstyled">
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-2">
-                    <div class="widget">
-                        <h3 class="heading">Resources</h3>
-                        <ul class="links list-unstyled">
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="widget">
-                        <h3 class="heading">Contact</h3>
-                        <ul class="list-unstyled quick-info links">
-                            <li class="email"><a href="#">mail@example.com</a></li>
-                            <li class="phone"><a href="#">+1 222 212 3819</a></li>
-                            <li class="address"><a href="#">43 Raymouth Rd. Baltemoer, London 3910</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    <div class="loader">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
         </div>
     </div>
 
 
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/owl.carousel.min.js}"></script>
+    <script th:src="@{/js/jquery.animateNumber.min.js}"></script>
+    <script th:src="@{/js/jquery.waypoints.min.js}"></script>
+    <script th:src="@{/js/jquery.fancybox.min.js}"></script>
+    <script th:src="@{/js/aos.js}"></script>
+    <script th:src="@{/js/moment.min.js}"></script>
+    <script th:src="@{/js/daterangepicker.js}"></script>
 
-    <div class="inner dark">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-md-8 mb-3 mb-md-0 mx-auto">
-                    <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co" class="link-highlight">Untree.co</a> <!-- License information: https://untree.co/license/ -->Distributed By <a href="https://themewagon.com" target="_blank" >ThemeWagon</a>
-                    </p>
-                </div>
+    <script th:src="@{/js/typed.js}"></script>
 
-            </div>
-        </div>
-    </div>
-</div>
+    <script th:src="@{/js/custom.js}"></script>
 
-<div id="overlayer"></div>
-
-<div class="loader">
-    <div class="spinner-border" role="status">
-        <span class="sr-only">Loading...</span>
-    </div>
-</div>
-
-
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/owl.carousel.min.js"></script>
-<script src="js/jquery.animateNumber.min.js"></script>
-<script src="js/jquery.waypoints.min.js"></script>
-<script src="js/jquery.fancybox.min.js"></script>
-<script src="js/aos.js"></script>
-<script src="js/moment.min.js"></script>
-<script src="js/daterangepicker.js"></script>
-
-<script src="js/typed.js"></script>
-
-<script src="js/custom.js"></script>
-
-<!-- untree 디브, 가장 바깥그릇-->
+    <!-- untree 디브, 가장 바깥그릇-->
 </div>
 
 </body>

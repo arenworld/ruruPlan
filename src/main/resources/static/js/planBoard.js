@@ -195,7 +195,7 @@ function renderPlanBoardList(boardList) {
         let boardHtml = `
             <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                 <div class="media-1">
-                    <a href="#" class="d-block mb-3" data-board-num-plan="${board.boardNum}">
+                    <a href="/planBoard/list/${board.planNum}/${board.boardNum}" class="d-block mb-3" data-board-num-plan="${board.boardNum}">
                         <img src="${board.coverImageUrl}" alt="Image" class="img-fluid">
                     </a>
                 </div>
@@ -217,7 +217,7 @@ function renderPlanBoardList(boardList) {
                 </span>
                 <div class="d-flex align-items-center">
                     <div>
-                        <h3><a href="#">${board.planName}</a></h3>
+                        <h3><a href="/planBoard/list/${board.planNum}/${board.boardNum}">${board.planName}</a></h3>
                         <div class="price ml-auto" style="border-bottom: 100px">
                             ${tagHtml}
                         </div>

@@ -431,13 +431,11 @@ public class GptResultService {
         List<String> themes = Arrays.asList(theme1, theme2, theme3);
         List<String> placeIds = placeInfoRepository.findPlaceIdsByAddressAndThemes(address, themes);
 
-
         placeIds.removeAll(existingPlaceIds);
 
         log.debug("처음 선택된 자료 제외한 테마와 주소기준으로 선택된 관광지 개수 : {}", placeIds.size());
 
         if (!placeIds.isEmpty()) {
-            // 랜덤으로 하나 선택
             Random random = new Random();
             return placeIds.get(random.nextInt(placeIds.size()));
         } else {
@@ -448,7 +446,9 @@ public class GptResultService {
                 Random random = new Random();
                 return alternativePlaceIds.get(random.nextInt(alternativePlaceIds.size()));
             } else {
-                return "자료 없음"; // 해당 구에 일치하는 곳이 없을 때
+                Random random = new Random();
+                List<String> lastRandomTourPlaceId = placeInfoRepository.findTourismOrCulturalPlaceIds();
+                return lastRandomTourPlaceId.get(random.nextInt(lastRandomTourPlaceId.size())); // 정말 아무것도 일치하는 게 없을 때
             }
         }
     }
@@ -675,7 +675,7 @@ public class GptResultService {
             createAndAddTask(planDTO, cmdNum, lastDate, totalDays, placeIdList.get(placeIndex++), taskNum++,
                     lastDayOrder.get(i), null, density, arrival, isFirstTaskOfDay);
 
-            if (i >= 0 && i < lastDayTaskCount - 1) {
+            if (i >= 0 && i < lastDayTaskCount - 1 && placeIndex < placeIdList.size()) {
                 createAndAddTask(planDTO, cmdNum, lastDate, totalDays, null, taskNum++,
                         "이동", "移動", density, arrival, false);
             }

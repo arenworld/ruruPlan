@@ -15,4 +15,5 @@ public interface PlaceInfoRepository {
     Optional<PlaceInfoEntity> findById(String placeId);
     List<String> findByThemeAndExcludeExistingPlaces(String theme, List<String> existingPlaceIds);
     List<String> findByThemePlaces(String theme);
+    List<String> findTourismOrCulturalPlaceIds();  // '관광' 또는 '문화시설' 테마 장소 조회
 }

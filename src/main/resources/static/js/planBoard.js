@@ -2,6 +2,7 @@ $(document).ready(function() {
     let selectedTags = []; // 선택된 태그들을 저장하는 배열
     let currentPage = 1;   // 현재 페이지 번호
     const pageSize = 12;   // 한 페이지에 표시할 게시물 수
+    let lang = $('#lang').val();
 
     i18next.init({
         lng: $('#lang').val(), // 'ko' 또는 'ja'
@@ -126,10 +127,10 @@ $(document).ready(function() {
             type: 'post',
             data: { boardNum: boardNum },
             success: function() {
-                alert(msg);
+                alert(lang === 'ko' ? '일정 북마크 성공' : 'ブックマーク、成功!');
             },
             error: function() {
-                alert('저장 중 오류 발생');
+                alert(lang !== 'ko' ? '저장 중 오류 발생' : '保存に失敗しました!');
             }
         });
     });

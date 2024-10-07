@@ -126,4 +126,14 @@ public class PlaceInfoRepositoryImpl implements PlaceInfoRepository {
 
         return Optional.ofNullable(placeInfoEntity);
     }
+
+    @Override
+    public List<String> findTourismOrCulturalPlaceIds() {
+        return queryFactory.select(placeInfoEntity.placeId)
+                .from(placeInfoEntity)
+                .where(
+                        placeInfoEntity.theme1.in("관광", "문화시설")
+                )
+                .fetch();
+    }
 }

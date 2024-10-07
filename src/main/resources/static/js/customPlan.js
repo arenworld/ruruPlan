@@ -1405,7 +1405,7 @@ function calculateTotalCost(dayNumOfButton) {
                 let cost = parseInt($(this).val());
                 if (!isNaN(cost)) {
                     totalCost += cost;
-                    totalCostYen = (totalCost / exchangeRate) * 100;
+                    totalCostYen = parseInt(totalCost / exchangeRate) * 100;
                 }
             }
         }

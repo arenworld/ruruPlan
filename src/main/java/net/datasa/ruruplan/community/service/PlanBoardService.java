@@ -9,7 +9,14 @@ import net.datasa.ruruplan.community.domain.entity.PlanBoardEntity;
 import net.datasa.ruruplan.community.repository.PlanBoardRepository;
 import net.datasa.ruruplan.member.domain.entity.MemberEntity;
 import net.datasa.ruruplan.member.repository.MemberRepository;
+import net.datasa.ruruplan.plan.domain.dto.PlaceInfoDTO;
+import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
+import net.datasa.ruruplan.plan.domain.dto.TaskDTO;
+import net.datasa.ruruplan.plan.domain.entity.PlaceInfoEntity;
 import net.datasa.ruruplan.plan.domain.entity.PlanEntity;
+import net.datasa.ruruplan.plan.domain.entity.TaskEntity;
+import net.datasa.ruruplan.plan.repository.PlaceInfoRepository;
+import net.datasa.ruruplan.plan.repository.TaskRepository;
 import net.datasa.ruruplan.plan.repository.impl.PlanRepositoryImpl;
 import net.datasa.ruruplan.plan.repository.jpa.PlanJpaRepository;
 import org.springframework.data.domain.Page;
@@ -19,6 +26,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -27,8 +35,10 @@ import java.util.List;
 @Transactional
 public class PlanBoardService {
     final PlanBoardRepository planBoardRepository;
-    final PlanJpaRepository planRepo;
+    final PlanJpaRepository planJpaRepository;
     final MemberRepository memberRepo;
+    final TaskRepository taskRepository;
+
 
 
 
@@ -78,7 +88,7 @@ public class PlanBoardService {
      * @param dto
      */
     public void sharePlan(Integer planNum, String userId) {
-        PlanEntity plan = planRepo.findById(planNum)  // planNum으로 PlanEntity 조회
+        PlanEntity plan = planJpaRepository.findById(planNum)  // planNum으로 PlanEntity 조회
                 .orElseThrow(() -> new EntityNotFoundException("Plan not found"));
 
         MemberEntity member = memberRepo.findById(userId)  // memberId로 MemberEntity 조회
@@ -152,5 +162,92 @@ public class PlanBoardService {
 
         planBoardRepository.save(entity);
     }
+
+    public PlanDTO selectPlan(Integer boardNum) {
+        PlanBoardEntity planBoardEntity = planBoardRepository.findById(boardNum)
+                .orElseThrow(() -> new EntityNotFoundException("boardNum에 해당되는 Entity가 없습니다."));
+
+        PlanEntity planEntity = planJpaRepository.findById(planBoardEntity.getPlan().getPlanNum())
+                .orElseThrow(() -> new EntityNotFoundException("해당 planNum에 해당되는 PlanEntity없음"));
+
+
+        List<TaskEntity> taskEntityList = planEntity.getTaskList();
+
+        List<TaskDTO> taskDTOList = new ArrayList<>();
+
+        for (TaskEntity taskEntity : taskEntityList) {
+            // PlaceInfoEntity -> PlaceInfoDTO 변환
+            PlaceInfoDTO placeInfoDTO = PlaceInfoDTO.builder()
+                    .placeId(taskEntity.getPlace().getPlaceId())
+                    .titleKr(taskEntity.getPlace().getTitleKr())
+                    .titleJp(taskEntity.getPlace().getTitleJp())
+                    .addressKr(taskEntity.getPlace().getAddressKr())
+                    .addressJp(taskEntity.getPlace().getAddressJp())
+                    .mapX(taskEntity.getPlace().getMapX())
+                    .mapY(taskEntity.getPlace().getMapY())
+                    .siGunGu(taskEntity.getPlace().getSiGunGu())
+                    .contentsTypeKr(taskEntity.getPlace().getContentsTypeKr())
+                    .contentsTypeJp(taskEntity.getPlace().getContentsTypeJp())
+                    .theme1(taskEntity.getPlace().getTheme1())
+                    .theme2(taskEntity.getPlace().getTheme2())
+                    .theme3(taskEntity.getPlace().getTheme3())
+                    .petFriendly(taskEntity.getPlace().getPetFriendly())
+                    .barrierFree(taskEntity.getPlace().getBarrierFree())
+                    .overviewKr(taskEntity.getPlace().getOverviewKr())
+                    .overviewJp(taskEntity.getPlace().getOverviewJp())
+                    .heritage(taskEntity.getPlace().getHeritage())
+                    .infocenter(taskEntity.getPlace().getInfocenter())
+                    .usetimeKr(taskEntity.getPlace().getUsetimeKr())
+                    .usetimeJp(taskEntity.getPlace().getUsetimeJp())
+                    .restdateKr(taskEntity.getPlace().getRestdateKr())
+                    .restdateJp(taskEntity.getPlace().getRestdateJp())
+                    .fee(taskEntity.getPlace().getFee())
+                    .feeInfoKr(taskEntity.getPlace().getFeeInfoKr())
+                    .feeInfoJp(taskEntity.getPlace().getFeeInfo_Jp())
+                    .saleItemKr(taskEntity.getPlace().getSaleItemKr())
+                    .saleItemJp(taskEntity.getPlace().getSaleItemJp())
+                    .originImgUrl(taskEntity.getPlace().getOriginImgUrl())
+                    .build();
+
+            // TaskEntity -> TaskDTO 변환
+            TaskDTO taskDTO = TaskDTO.builder()
+                    .taskNum(taskEntity.getTaskNum())
+                    .planNum(taskEntity.getPlan().getPlanNum())
+                    .place(placeInfoDTO) // 변환된 PlaceInfoDTO 할당
+                    .memberId(taskEntity.getMember().getMemberId())
+                    .dateN(taskEntity.getDateN())
+                    .startTime(taskEntity.getStartTime())
+                    .duration(taskEntity.getDuration())
+                    .endTime(taskEntity.getEndTime())
+                    .contentsTypeKr(taskEntity.getContentsTypeKr())
+                    .contentsTypeJp(taskEntity.getContentsTypeJp())
+                    .cost(taskEntity.getCost())
+                    .memo(taskEntity.getMemo())
+                    .build();
+
+            // 변환된 TaskDTO를 리스트에 추가
+            taskDTOList.add(taskDTO);
+        }
+
+
+        PlanDTO planDTO = PlanDTO.builder()
+                .planNum(planEntity.getPlanNum())
+                .planName(planEntity.getPlanName())
+                .cmdNum(planEntity.getCmd().getCmdNum())
+                .memberId(planEntity.getMember().getMemberId())
+                .startDate(planEntity.getStartDate())
+                .endDate(planEntity.getEndDate())
+                .theme1(planEntity.getTheme1())
+                .theme2(planEntity.getTheme2())
+                .theme3(planEntity.getTheme3())
+                .planCreateDate(planEntity.getPlanCreateDate())
+                .planUpdateDate(planEntity.getPlanUpdateDate())
+                .coverImageUrl(planEntity.getCoverImageUrl())
+                .taskList(taskDTOList)
+                .build();
+
+        return planDTO;
+    }
+
 
 }

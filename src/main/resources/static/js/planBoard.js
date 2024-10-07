@@ -31,7 +31,6 @@ $(document).ready(function() {
                     "theme6": "힐링",
                     "theme7": "체험",
                     "theme8": "랜드마크",
-                    "theme9": "레포츠",
                     "theme9_1": "수상레저",
                     "theme9_2": "아이스링크",
                     "theme9_3": "자전거"
@@ -61,7 +60,6 @@ $(document).ready(function() {
                     "theme6": "ヒーリング",
                     "theme7": "体験",
                     "theme8": "ランドマーク",
-                    "theme9": "レジャー·スポーツー",
                     "theme9_1": "ウォータースポーツ",
                     "theme9_2": "アイスリンク",
                     "theme9_3": "自転車"
@@ -174,7 +172,7 @@ function renderPlanBoardList(boardList) {
         let boardHtml = `
             <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                 <div class="media-1">
-                    <a href="#" class="d-block mb-3">
+                    <a href="#" class="d-block mb-3" data-board-num-plan="${board.boardNum}">
                         <img src="${board.coverImageUrl}" alt="Image" class="img-fluid">
                     </a>
                 </div>
@@ -234,4 +232,23 @@ function renderPagination(response) {
                                   </li>`;
         $('#next-page').before(pageItem);
     }
+
+
+    // 플랜 클릭시 보여주기 위함
+    $(document).on('click', '.d-block.mb-3', function() {
+        const boardNumPlan = $(this).data('board-num-plan'); // 클릭된 요소의 boardNum 가져오기
+
+        // AJAX 요청
+        $.ajax({
+            url: 'selectPlan', // 컨트롤러 메서드 경로
+            type: 'POST',
+            data: { boardNum: boardNumPlan }, // boardNum을 전송
+            success: function (response) {
+                // 성공 시 처리할 로직
+            },
+            error: function () {
+                alert('플랜 정보를 불러오는 중 오류가 발생했습니다.');
+            }
+        });
+    });
 }

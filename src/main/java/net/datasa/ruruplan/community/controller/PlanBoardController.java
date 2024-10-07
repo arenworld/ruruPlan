@@ -6,9 +6,11 @@ import net.datasa.ruruplan.community.domain.dto.PlanBoardDTO;
 import net.datasa.ruruplan.community.service.BoardService;
 import net.datasa.ruruplan.community.service.PlanBoardReplyService;
 import net.datasa.ruruplan.community.service.PlanBoardService;
+import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
 import net.datasa.ruruplan.security.AuthenticatedUser;
 import net.datasa.ruruplan.security.AuthenticatedUserDetailService;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +29,7 @@ public class PlanBoardController {
     private final PlanBoardReplyService ReplySer;
     private final BoardService boardService;
     private final AuthenticatedUserDetailService authenticatedUserDetailService;
+    private final PlanBoardService planBoardService;
 
     //application.properties 파일의 게시판 관련 설정값
     @Value("${board.pageSize}")
@@ -57,5 +60,12 @@ public class PlanBoardController {
     @ResponseBody
     public void savePlan(@RequestParam("boardNum") int boardNum, @AuthenticationPrincipal AuthenticatedUser user) {
         boardService.savePlan(boardNum, user.getId());
+    }
+
+    @PostMapping("/selectPlan")
+    @ResponseBody
+    public ResponseEntity<PlanDTO> selectPlan(@RequestParam("boardNum") Integer boardNum) {
+        PlanDTO planDTO = planBoardService.selectPlan(boardNum);
+        return ResponseEntity.ok(planDTO);
     }
 }

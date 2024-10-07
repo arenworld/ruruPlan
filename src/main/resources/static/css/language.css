@@ -121,6 +121,10 @@
     left: 5px !important; /* Move the text to the right */
     z-index: 10000; /* 다른 요소보다 위에 표시 */
 }
+
+.pagelogo_find {
+    text-decoration: none;
+}
 .pagelogo a {
     text-decoration: none !important; /* 링크의 밑줄 제거 */
     color: inherit !important; /* 링크의 색상을 상속된 대로 유지 */
@@ -144,8 +148,12 @@
     font-weight: 700;
     border-bottom: none;
 }
-
-
+.pagelogo{
+    border-bottom: none;
+}
+.text-primary{
+    border: none;
+}
 
 
 /* 언어 변경 컨테이너 */

@@ -443,3 +443,71 @@ h4 {
 a:before {
     display: none;
 }
+
+/*미디어 쿼리문*/
+
+@media (min-width: 1920px) {
+    .slides img {
+        width: 1000px!important; /* 이미지 크기 조정 */
+        height: 600px!important;  /* 높이는 자동 조정 */
+        max-width: none !important; /* 최대 너비 제한 제거 */
+    }
+    .home-select-button {
+        width: 400px!important; /* 버튼 크기 조정 */
+        height: 150px!important;
+    }
+    .home-select-button-container {
+        top: 480px !important;
+
+
+    }
+    .site-menu li:first-child {
+        margin-left: 200px !important; /* 로고랑 메뉴바 거리 */
+    }
+    .logo_img{
+        width: 120px !important;
+        height: 120px !important;
+        z-index: 100000; /* 다른 요소보다 위에 표시 */
+    }
+    .logo-container {
+        display: flex;
+        align-items: center;
+        padding-left: 10px;
+        margin-left: -210px;
+        z-index: 10;
+    }
+
+    .lenge_select-toggle {
+        right: -330px !important;
+    }
+
+    .weather_icon_set {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+    .temperature {
+        font-size: 20px;
+    }
+
+    .humidity {
+        font-size: 20px;
+        margin-left: 5px;
+    }
+
+    .weather_box {
+        margin-right: -500px;
+        margin-left: 20px;
+    }
+
+    body {
+        font-size: 20px; /* 폰트 크기 조정 */
+        padding: 10px;   /* 여백 조정 */
+    }
+    .site-menu li a {
+        font-size: 20px !important; /* 폰트 크기 조정 */
+    }
+    .lenge_select-toggle {
+        right: -250px !important;
+    }
+}

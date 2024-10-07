@@ -647,7 +647,7 @@ footer a {
     display: block;
     width: 0.625rem; /* 10px -> 0.625rem */
     height: 0.625rem; /* 10px -> 0.625rem */
-    background-color: #ffeb3b;
+    background-color: #FF8339;
     position: absolute;
     top: 2rem; /* 29px -> 1.8125rem */
     left: 35%;
@@ -760,9 +760,9 @@ footer a {
 .korean-holiday-circle {
     background-color: #3b5998;
 }
-
+/*공휴일 색깔*/
 .japanese-holiday-circle {
-    background-color: #ffeb3b;
+    background-color: #FF8339;
 }
 
 .both-holiday-circle {

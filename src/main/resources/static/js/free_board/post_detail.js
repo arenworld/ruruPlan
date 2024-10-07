@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         goodButton.querySelector('.good-num').textContent = data.likeCount;
                         goodButton.dataset.liked = 'true';
                     } else {
-                        alert('좋아요 처리에 실패했습니다.');
+
                     }
                 })
                 .catch(error => console.error('Error:', error));

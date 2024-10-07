@@ -28,7 +28,6 @@ public class PlanBoardController {
     private final PlanBoardService boardSer;
     private final PlanBoardReplyService ReplySer;
     private final BoardService boardService;
-    private final AuthenticatedUserDetailService authenticatedUserDetailService;
     private final PlanBoardService planBoardService;
 
     //application.properties 파일의 게시판 관련 설정값
@@ -60,6 +59,14 @@ public class PlanBoardController {
     @ResponseBody
     public void savePlan(@RequestParam("boardNum") int boardNum, @AuthenticationPrincipal AuthenticatedUser user) {
         boardService.savePlan(boardNum, user.getId());
+    }
+
+    @PostMapping("likePlan")
+    @ResponseBody
+    public Integer likePlan(@RequestParam("boardNum") int boardNum, @AuthenticationPrincipal AuthenticatedUser user) {
+        Integer res = boardSer.like(boardNum, user.getId());
+
+        return res;
     }
 
     @PostMapping("/selectPlan")

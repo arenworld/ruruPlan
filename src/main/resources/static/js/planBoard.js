@@ -116,6 +116,29 @@ $(document).ready(function() {
     // 처음 페이지 로드 시 모든 태그를 선택하지 않고 기본적으로 실행
     loadPlanBoardList(currentPage, selectedTags);
 
+    // 하트 버튼 클릭 이벤트 처리
+    $(document).on('click', '.like', function() {
+        const boardNum = $(this).attr('data-board-num');
+        let likeCount = "like-" + boardNum;
+        const msg = $('#shareMsg').val();
+        $.ajax({
+            url: 'likePlan',
+            type: 'post',
+            data: { boardNum: boardNum },
+            success: function(res) {
+                if (res == '') {
+                    alert(lang === 'ko' ? '자신의 게시물에는 좋아요를 할 수 없습니다.' : '自分の投稿にはいいねができません。');
+                } else {
+                    document.getElementById(likeCount).innerHTML = res ;
+                }
+
+            },
+            error: function() {
+                alert(lang !== 'ko' ? '오류 발생' : '失敗しました!');
+            }
+        });
+    });
+
     // Save 버튼 클릭 이벤트 처리
     $(document).on('click', '.save', function() {
         const boardNum = $(this).attr('data-board-num');
@@ -177,13 +200,20 @@ function renderPlanBoardList(boardList) {
                     </a>
                 </div>
                 <span class="d-flex align-items-center loc mb-2">
-                    <div>
+                <table>
+                    <tr>
+                        <th style = "width: fit-content;">
+                        <a href="#" class="like" data-board-num="${board.boardNum}">
                         <img id="like" src="/images/plan/하트.png" style="width: 25px; height: 25px;">
-                        <span>${board.likeCount}</span>
-                        <a href="#" class="save" data-board-num="${board.boardNum}">
-                            <img id="save" src="/images/plan/북마크.png" style="width: 30px; height: 30px;">
                         </a>
-                    </div>
+                        <span id="like-${board.boardNum}">${board.likeCount}</span></th>
+                        <th>
+                            <a href="#" class="save" data-board-num="${board.boardNum}">
+                                <img id="save" src="/images/plan/북마크.png" style="width: 30px; height: 30px;">
+                            </a>
+                        </th>
+                    </tr>
+                </table>
                 </span>
                 <div class="d-flex align-items-center">
                     <div>

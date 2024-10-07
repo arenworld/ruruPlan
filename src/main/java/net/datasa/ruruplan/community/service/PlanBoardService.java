@@ -249,5 +249,25 @@ public class PlanBoardService {
         return planDTO;
     }
 
+    /**
+     * 좋아요 값 증가 처리
+     * @param boardNum
+     * @param userId
+     * @return
+     */
+    public Integer like(int boardNum, String userId) {
+        PlanBoardEntity entity = planBoardRepository.findById(boardNum)
+                .orElseThrow(() -> new EntityNotFoundException("The board not found"));
+
+        //자신의 게시물이면  false 반환
+        if (entity.getMember().getMemberId().equals(userId)){
+            return null;
+        }
+
+        entity.setLikeCount(entity.getLikeCount() + 1);
+
+        planBoardRepository.save(entity);
+        return entity.getLikeCount();
+    }
 
 }

@@ -43,7 +43,7 @@ public class PlanBoardService {
 
 
     public Page<PlanBoardDTO> getListByTags(int page, int pageSize, List<String> tags) {
-        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.DESC, "boardNum"));
         // Entity로 조회된 결과를 DTO로 변환
         Page<PlanBoardEntity> planBoardEntities = planBoardRepository.findByTags(tags, pageable);
 

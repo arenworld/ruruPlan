@@ -59,16 +59,16 @@ function nowWeather() {  // Text API 호출 함수
                         case 0:
                         case 1:
                         case 2:
+                            iconSrc += "맑음.png";
+                            break;
                         case 3:
                         case 4:
                         case 5:
-                            iconSrc += "맑음.png";
+                            iconSrc += "구름.png";
                             break;
                         case 6:
                         case 7:
                         case 8:
-                            iconSrc += "구름.png";
-                            break;
                         case 9:
                         case 10:
                             iconSrc += "흐림.png";

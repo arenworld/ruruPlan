@@ -38,17 +38,23 @@
 
     <title>Custom MyPlan</title>
     <style>
-        /* 기본적으로 숨김 처리 */
-        .hidden {
-            display: none;
+        .modal-content {
+            display: flex;
+            flex-direction: column;
+            background-color: rgb(255,255,255,3);
+            border-radius: 40px;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            max-width: 500px;
         }
-
-        /* 첫 번째 <th>에 마우스를 올리면 옆의 .hidden 요소를 표시 */
-        .day-table-th-dayTitle:hover + .day-table-th-dayTitle .hidden {
-            display: block;
+        .close {
+            margin: auto;
+        }
+        #weatherData {
+            margin: auto;
         }
     </style>
-
     <!-- 네이버 MapApi 불러오기-->
     <script type="text/javascript"
             src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ycuy92lblj&language=ja"></script>
@@ -149,6 +155,18 @@
             <input type="hidden" id="temS" th:value="#{tem}">
             <input type="hidden" id="rhm" th:value="#{rhm}">
             <input type="hidden" id="avgrn" th:value="#{avgrn}">
+            <input type="hidden" id="essentials" th:value="#{essentials}">
+            <input type="hidden" id="e1" th:value="#{e1}">
+            <input type="hidden" id="e2" th:value="#{e2}">
+            <input type="hidden" id="e3" th:value="#{e3}">
+            <input type="hidden" id="e4" th:value="#{e4}">
+            <input type="hidden" id="e5" th:value="#{e5}">
+            <input type="hidden" id="wm1" th:value="#{w_msg1}">
+            <input type="hidden" id="wm2" th:value="#{w_msg2}">
+            <input type="hidden" id="wm3" th:value="#{w_msg3}">
+            <input type="hidden" id="wm4" th:value="#{w_msg4}">
+
+
 
             <!--            <div class ="plan-options">-->
 
@@ -238,7 +256,13 @@
             <!-- 오른쪽 파트 -->
             <div class="col-lg-4">
 
-
+<!--               날씨 모달 -->
+                <div id="wModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <div id="weatherData"></div>
+                    </div>
+                </div>
                 <!-- 전체 일정 출력 -->
                 <!-- <h6>장소를 클릭하면 지도 상에서 해당 위치로 바로 이동합니다.</h6> -->
 
@@ -249,6 +273,10 @@
                             th:if="${lastDay} >= ${dayNum}"
                             th:id="|plan-${dayNum}day-button|" th:text="|Day${dayNum}|"
                             th:data-daynum-button="${dayNum}"></button>
+                    <div  class="wea_info">
+                        <img id="wea_img" src="/images/home/weather.jpg" style="width: 40px; height: 40px;">
+                        <span style="font-size: 10px;"><-CLICK!</span>
+                    </div>
                 </div>
 
                 <div class="plan-details" id="planTable-allDay"></div>

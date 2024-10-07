@@ -1,7 +1,15 @@
 $(document).ready(function(){
 
-    let startDate;
-    let endDate;
+    let sd = $('#sd').val();
+    const startDate = sd.replace(/-/g, "") - 10000;
+
+    let ed = $('#ed').val();
+    const endDate = ed.replace(/-/g, "") - 10000;
+
+    let lastY = $('#lastY').val();
+    let tem = $('#temS').val();
+    let rhm = $('#rhm').val();
+    let rn = $('#avgrn').val();
 
     const key = "OLmqqqBz%2FpgJKAez5lZ6oIU6Dgn2aRuV00bmzoOZ%2FFPcHe4ZMCLTyeyFAT1CxRXXTgfxm%2F4IWoXeqj7YIuFDfw%3D%3D"
 
@@ -11,8 +19,8 @@ $(document).ready(function(){
     queryParams += '&' + encodeURIComponent('dataType') + '=' + encodeURIComponent('XML'); /*요청자료 형식*/
     queryParams += '&' + encodeURIComponent('dataCd') + '=' + encodeURIComponent('ASOS'); /*자료 분류 코드*/
     queryParams += '&' + encodeURIComponent('dateCd') + '=' + encodeURIComponent('DAY'); /*날짜 분류 코드*/
-    queryParams += '&' + encodeURIComponent('startDt') + '=' + encodeURIComponent('20221007'); /*조회 기간 시작일('startDate')*/
-    queryParams += '&' + encodeURIComponent('endDt') + '=' + encodeURIComponent('20221010'); /*조회 기간 종료일('endDate')*/
+    queryParams += '&' + encodeURIComponent('startDt') + '=' + encodeURIComponent(startDate); /*조회 기간 시작일('startDate')*/
+    queryParams += '&' + encodeURIComponent('endDt') + '=' + encodeURIComponent(endDate); /*조회 기간 종료일('endDate')*/
     queryParams += '&' + encodeURIComponent('stnIds') + '=' + encodeURIComponent('108'); /*서울*/
 
     xhr.open('GET', url + queryParams);
@@ -25,9 +33,10 @@ $(document).ready(function(){
 
             // 사용가능한 타입으로 정보 추출 추출
             var items = xmlDoc.getElementsByTagName("item");
-            var resultHTML = "<table><tr><th>일자</th><th>기온</th><th>최저 기온</th><th>최고 기온</th><th>습도</th><th>강수량</th></tr>";
+            var resultHTML = "";
 
-            for (var i = 0; i < items.length; i++) {       // 시작일~종료일 반복문
+            for (var i = 0; i < items.length; i++) {
+                let dayNum = i+1;// 시작일~종료일 반복문
                 var date = items[i].getElementsByTagName("tm")[0].childNodes[0].nodeValue;          //일시
                 var avgTemp = items[i].getElementsByTagName("avgTa")[0].childNodes[0].nodeValue;    //평균기온
                 var minTemp = items[i].getElementsByTagName("minTa")[0].childNodes[0].nodeValue;    //일 최저 기온
@@ -35,13 +44,18 @@ $(document).ready(function(){
                 var avgRhm = items[i].getElementsByTagName("avgRhm")[0].childNodes[0].nodeValue;    //평균 습도
                 var sumRn = items[i].getElementsByTagName("maxTa")[0].childNodes[0].nodeValue;      //일 평균 강수량
 
-                resultHTML += "<tr><td>" + date + "</td><td>" + avgTemp + "℃</td><td>" + minTemp + "℃</td><td>" + maxTemp + "℃</td>" +
-                    "<td>" + avgRhm + "%</td><td>" + sumRn + "(mm)</td></tr>";
+                resultHTML = tem +
+                    "<table><tr><td colspan='2'>" + lastY + "</td></tr><tr><td>"
+                    + tem + "</td><td>" + minTemp + "℃ /" + maxTemp + "℃</td>" +
+                    "<tr><td>" + rhm + "</td><td>" + avgRhm + "%</td><tr><td>"
+                    + rn + "</td><td>" + sumRn + "(mm)</td></tr></table>";
+
+                document.getElementById(`weatherData-${dayNum}`).innerHTML = resultHTML;
+
             }
-            resultHTML += "</table>";
+
 
             // 결과를 HTML에 표시
-             document.getElementById("weatherData").innerHTML = resultHTML;
         }
     };
 

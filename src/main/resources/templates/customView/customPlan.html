@@ -37,6 +37,17 @@
     <link rel="stylesheet" th:href="@{/css/home.css}" />
 
     <title>Custom MyPlan</title>
+    <style>
+        /* 기본적으로 숨김 처리 */
+        .hidden {
+            display: none;
+        }
+
+        /* 첫 번째 <th>에 마우스를 올리면 옆의 .hidden 요소를 표시 */
+        .day-table-th-dayTitle:hover + .day-table-th-dayTitle .hidden {
+            display: block;
+        }
+    </style>
 
     <!-- 네이버 MapApi 불러오기-->
     <script type="text/javascript"
@@ -49,6 +60,7 @@
     <!-- 국제화 적용 위한 js-->
     <script th:src="@{/js/member/locale.js}"></script>
     <script th:src="@{/js/weather/nowWeather.js}"></script>
+    <script th:src="@{/js/weather/weatheravg.js}"></script>
     <script th:src="@{/js/typed.js}"></script>
 
     <style>
@@ -130,7 +142,13 @@
         <!-- 플래너 정보 출력 -->
         <div class="info-current-plan">
 
-
+            <!--필요한 값-->
+            <input type="hidden" id="sd" th:value="${planDTO.startDate}">
+            <input type="hidden" id="ed" th:value="${planDTO.endDate}">
+            <input type="hidden" id="lastY" th:value="#{last_year_w}">
+            <input type="hidden" id="temS" th:value="#{tem}">
+            <input type="hidden" id="rhm" th:value="#{rhm}">
+            <input type="hidden" id="avgrn" th:value="#{avgrn}">
 
             <!--            <div class ="plan-options">-->
 
@@ -251,9 +269,7 @@
             </div>
         </div>
 
-
     </div>
-
 
     <!-- Our Team 소개 -->
     <div class="custom-plan-end-line">

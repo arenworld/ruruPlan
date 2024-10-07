@@ -410,8 +410,15 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                             <table class="day-plans-table">
                                 <thead>
                                     <tr class="day-table-tr-basics">
-                                        <th class="day-table-th-dayTitle" colspan="9">
+                                        <th class="day-table-th-dayTitle" colspan="3">
                                             <h4 class="day-table-dayTitle">Day ${dayNum}</h4>
+                                        </th>
+                                        // 날씨
+                                        <th  class="day-table-th-dayTitle" colspan="2">
+                                            <img src="/images/home/맑음.png" style="width: 35px; height: 35px; margin-left:0px; margin: auto ;">
+                                        </th>
+                                        <th class="day-table-th-dayTitle" colspan="2">
+                                             <div id="weatherData-${dayNum}" class="hidden"></div>
                                         </th>
                                         <th class="day-table-th-add-new-task" colspan="2">
                                             <img class="day-table-add-new-task" src="/images/customPlan/add-schedule.png" data-table-num="${dayNum}">
@@ -1388,7 +1395,7 @@ function calculateTotalCost(dayNumOfButton) {
             let cost = parseInt($(this).val());
             if (!isNaN(cost)) {
                 totalCost += cost;
-                totalCostYen = parseInt((totalCost / exchangeRate) * 100);
+                totalCostYen = parseInt (totalCost / exchangeRate) * 100;
             }
         } else {
             //데이값이 일치하는 cost만

@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("days:", document.getElementById("daysValue")?.value);
     console.log("arrival:", startTimeValue);
     console.log("depart:", endTimeValue);
-    console.log("trip_type:", document.getElementById("trip_type")?.textContent);
+    console.log("trip_type:", document.getElementById("trip_type")?.value);
     console.log("children:", document.getElementById("children")?.value);
     console.log("adult:", document.getElementById("adult")?.value);
     console.log("theme1:", document.getElementById("theme_1")?.textContent);
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
       days: document.getElementById("daysValue")?.value,
       arrival: startTimeValue,
       depart: endTimeValue,
-      tripType: document.getElementById("trip_type")?.textContent,
+      tripType: document.getElementById("trip_type")?.value,
       children: document.getElementById("children")?.value,
       adult: document.getElementById("adult")?.value,
       theme1: selectedThemeValues[0] ,  // 한국어 value 값 전송

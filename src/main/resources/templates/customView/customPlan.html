@@ -284,6 +284,7 @@
                 <div class="custom-block" data-aos="fade-up">
                     <h6>
                         <span class="day-plans-totalCost" th:text="#{total_cost}"></span>
+                        <span><img src="/images/customPlan/question.png" class="day-plans-question-mark"></span>
                         <span id="totalCost"></span>
                     </h6>
                 </div>
@@ -291,8 +292,11 @@
                     <span class="day-plans-totalCost-exchange-date"></span>
                     <span class="day-plans-totalCost-exchange" th:text="#{total_cost_exchange}"></span>
 
-                    <span id="totalCost2"></span>
+                    <span id="totalCost2"></span><br>
                     <input type="hidden" th:value="${exchange}" id="exchangeRate">
+                    <div class="cost-info" th:text="#{cost_info}">
+
+                    </div>
                 </div>
             </div>
         </div>

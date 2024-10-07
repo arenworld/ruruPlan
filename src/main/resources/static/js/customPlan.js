@@ -306,8 +306,8 @@ $(document).ready(function () {
                 $('#plan-' + otherDay + '-button').css('background-color', '#f0f0f0'); // Original color, adjust as needed
             });
 
-
-            $(this).css('background-color', '#FAFFAF');
+            $(this).css('background-color', 'orangered');
+            $(this).css('color', 'white');
             $(this).css('border', 'solid 1px grey');
             // dayNum 저장
             dayNumOfButton = $(this).data('daynum-button');
@@ -376,7 +376,8 @@ $(document).ready(function () {
                 $(this).css('background-color', '#f0f0f0');
             }
             if (previousTheme === '' || previousTheme !== currentTheme) {
-                $(this).css('background-color', '#FAFFAF');
+                $(this).css('background-color', 'orangered');
+                $(this).css('color', 'white');
             }
         });
     });
@@ -546,10 +547,10 @@ function addNewTask(newPlaceId, lastTaskNum) {
  */
 function clickUpdateTaskPlace() {
     $('.theme-button').css({
-        'border': 'double 2px #FEFF9F',
+        'border': 'double 2px navy',
         'border-radius': '20px',
         'animation': 'vibration 0.5s infinite',
-        'background-color': '#f0f0f0'
+        'background-color': 'orange'
     });
 
     $('.notice-click-theme').css('display', 'block');
@@ -679,10 +680,16 @@ function activateDayTableInputs() {
 
     tr.css('background-color', 'transparent');
     tr.find('.day-table-duration-hour').prop('disabled', false);
+    tr.find('.day-table-duration-hour').css('color', 'white');
+
     tr.find('.day-table-duration-minute').prop('disabled', false);
+    tr.find('.day-table-duration-minute').css('color', 'white');
+
     tr.find('.day-table-cost').prop('disabled', false);
+    tr.find('.day-table-cost').css('color', 'white');
 
     tr.find('input').css('background-color', 'grey');
+    tr.find('input').css('color', 'white');
 
     tr.find('.click-overlay').css({
         'cursor': 'default',
@@ -804,13 +811,15 @@ function planMarkers(dayNumOfButton) {
                 console.log('줌레벨');
                 // Conditional logic based on zoom level
                 $.each(themeAllMarkers, function (index, themeMarker) {
-                    if (currentZoom > 15) {
+                    if (currentZoom > 14) {
                         // Use a larger circle for higher zoom levels
                         themeMarker.setIcon({
-                            content: `<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="35px" fill="#092a2a" stroke="white" stroke-width="10px"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg>`,
-                            anchor: new naver.maps.Point(15, 15) // Adjust anchor accordingly
+                            content: `<svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"
+                                viewBox="0 0 20 20" fill="#092a2a" stroke="white" stroke-width="1px" stroke-opacity="0.24">
+                                <circle cx="10" cy="10" r="8"/></svg>`,
+                            anchor: new naver.maps.Point(10, 10) // Adjust anchor accordingly
                         });
-                    } else if (currentZoom > 8) {
+                    } else if (currentZoom > 9) {
                         // Medium-sized circle for mid zoom levels
                         themeMarker.setIcon({
                             content: `<svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"
@@ -818,12 +827,12 @@ function planMarkers(dayNumOfButton) {
                                 <circle cx="10" cy="10" r="6"/></svg>`,
                             anchor: new naver.maps.Point(10, 10) // Adjust anchor accordingly
                         });
-                    } else {
+                    } else if (currentZoom <= 9) {
                         // Small circle for lower zoom levels
                         themeMarker.setIcon({
-                            content: `<svg xmlns="http://www.w3.org/2000/svg" width="10px" height="10px"
+                            content: `<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
                                 viewBox="0 0 10 10" fill="#006400" stroke="white" stroke-width="1px" stroke-opacity="0.24">
-                                <circle cx="5" cy="5" r="4"/></svg>`,
+                                <circle cx="8" cy="8" r="4"/></svg>`,
                             anchor: new naver.maps.Point(5, 5) // Adjust anchor accordingly
                         });
                     }
@@ -1298,7 +1307,7 @@ function updateThemeInfoList(visibleThemeMarkerKeyList) {
     for (const key of visibleThemeMarkerKeyList) {
         const place = placeListData.find(p => p.placeId === key); // Assuming taskList is globally accessible
         // Create the HTML structure for each visible marker
-        let img = place.originImgUrl === null ?
+        let img = place.originImgUrl === (null || undefined || '') ?
             '<img src="/images/customPlan/nonImg.png" class="place-info-imgNone">' :
             `<img src="${place.originImgUrl}" class="place-info-img">`;
 

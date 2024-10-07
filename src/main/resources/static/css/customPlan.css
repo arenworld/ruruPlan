@@ -40,7 +40,8 @@
 }/* 데이버튼 */
 
 .days-button:hover {
-    background-color: #FAFFAF;
+    background-color: orangered;
+    color: white;
 }
 
 .theme-button {
@@ -51,7 +52,8 @@
 } /* 테마버튼 */
 
 .theme-button:hover {
-    background-color: #FAFFAF;
+    background-color: orangered;
+    color: white;
 }/* 테마버튼 후버효과 */
 
 .notice-click-theme {
@@ -246,6 +248,15 @@ tr.selected {
     right: 40%;
 }
 
+.day-plans-question-mark {
+    width: 20px;
+    height: 20px;
+    position:absolute;
+    right: 36%;
+    padding-bottom: 1px;
+}
+
+
 .day-plans-totalCost-exchange-date {
     position: absolute;
     right: 39%;
@@ -272,6 +283,19 @@ tr.selected {
     margin-top: 5px;
 }
 
+.cost-info {
+    position: absolute;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    margin: 5px;
+}
+.custom-block:hover .cost-info {
+    opacity: 1;
+}
 
 
     /********** 장소 정보 리스트 박스 (스크롤) **********/

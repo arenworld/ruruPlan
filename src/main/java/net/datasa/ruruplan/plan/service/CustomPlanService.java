@@ -548,4 +548,26 @@ public class CustomPlanService {
         taskJpaRepository.save(newPlanTaskEntity);
 
     }
+
+    public void deleteTask(Integer dayNum, Integer planNum) {
+        Sort sort = Sort.by(Sort.Order.asc("dateN"), Sort.Order.asc("taskNum"));
+
+        //taskList 처리
+        List<TaskEntity> taskEntityList = taskRepository.dayTaskList(planNum, dayNum);
+
+        if (taskEntityList.size() >= 2) {
+            // 마지막에서 두 번째 TaskEntity를 가져옴
+            TaskEntity lastMoveTask = taskEntityList.get(taskEntityList.size() - 2);
+            TaskEntity lastTask = taskEntityList.get(taskEntityList.size() - 1);
+
+            // 마지막에서 두 번째 태스크 삭제
+            taskJpaRepository.deleteById(lastMoveTask.getTaskNum());
+            taskJpaRepository.deleteById(lastTask.getTaskNum());
+        } else {
+            // 에러 처리: 리스트에 태스크가 2개 미만일 경우
+            throw new IllegalStateException("태스크가 충분하지 않습니다.");
+        }
+
+
+    }
 }

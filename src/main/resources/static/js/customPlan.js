@@ -87,6 +87,12 @@ $(document).ready(function () {
 
     // 수정버튼 클릭시, 수정가능요소 활성화
     $(document).on('click', '.editImgButton', activateDayTableInputs);
+    $(document).on('click', '.deleteImgButton', function() {
+        let taskNum = $(this).data('task-num');
+        let dayNum = $(this).data('day-num');
+
+        deleteTask(taskNum, dayNum);
+    });
 
     // 일정표 플레이스 타이틀 클릭
     $(document).on('click', '.click-overlay-edit', function () {
@@ -488,8 +494,8 @@ function dayPlansPrint(dayNumOfButton, planNum) {
                                     <img src="/images/customPlan/edit-circle.png" alt="Button Image" class="editImgButton" data-tasknum="${task.taskNum}">
                                     <img src="/images/customPlan/savebutton.png" alt="Button Image" class="saveImgButton" data-tasknum="${task.taskNum}">
                                 </td>
-                                <td class="day-table-td-deleteImgButton">
-                                    <img src="/images/customPlan/delete-minus2.png" alt="Button Image" class="deleteImgButton">
+                                <td class="day-table-td-deleteImgButton" >
+                                    <img src="/images/customPlan/delete-minus2.png" alt="Button Image" class="deleteImgButton" data-task-num="${task.taskNum}" data-day-num="${task.dateN}" style="cursor:pointer;">
                                 </td>
                             </tr>`;
                     }
@@ -1542,10 +1548,27 @@ function calNextTransDuration(newX, newY, nextX, nextY) {
         nextTransDuration = transportTime > walkTime ? walkTime : transportTime;
         nextTransType = transportTime > walkTime ? '도보' : '대중교통';
         console.log("뒤수단:", nextTransType);
+        console.log("뒤수단:", nextTransType);
         console.log("뒤이동시간:", nextTransDuration);
         return nextTransDuration;
     });
 
 }
+function deleteTask(taskNum, dayNum) {
+    $.ajax({
+        url:'deleteTask',
+        type: 'post',
+        data: {taskNum: taskNum,
+            planNum:planNum,
+            dayNum:dayNum},
+        success : function() {
+            dayPlansPrint(dayNumOfButton, planNum);
 
+        },
+        error: function() {
+
+        }
+
+    })
+}
 

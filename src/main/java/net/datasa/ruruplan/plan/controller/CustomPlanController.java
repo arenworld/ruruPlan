@@ -173,5 +173,10 @@ public class CustomPlanController {
         customPlanService.addNewTask(newPlaceId, preTransDuration, preTransType, planNum, dayNum, lastTaskNum, user.getUsername());
     }
 
+    @ResponseBody
+    @PostMapping("deleteTask")
+    public void deleteTask(@RequestParam("dayNum") Integer dayNum, @RequestParam("planNum") Integer planNum){
+        customPlanService.deleteTask(dayNum, planNum);
+    }
 
 }

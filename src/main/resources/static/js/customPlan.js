@@ -876,7 +876,7 @@ function placeInfoMore() {
         type: 'post',
         data: {placeId: placeId},
         success: function (placeDTO) {
-            let heritageIcon = placeDTO.heritage ? `<img th:src="@{/images/customPlan/heritage.png}" class="info-table-badge" data-badge="heritage">` : '';
+            let heritageIcon = placeDTO.heritage ? `<img src="/images/customPlan/heritage.png" class="info-table-badge" data-badge="heritage">` : '';
             let barrierFreeIcon = placeDTO.barrierFree ? '<img src="/images/customPlan/barrier.png" class="info-table-badge" data-badge="barrier">' : '';
             let petFriendlyIcon = placeDTO.petFriendly ? '<img src="/images/customPlan/pet.png" class="info-table-badge" data-badge="pet">' : '';
             let feeInfo = '';

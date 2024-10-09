@@ -42,13 +42,15 @@ function confirmpw(){
         if(pwConfirm != pw){
             return false; }
         // 닉네임 유효성 검사
-        if (!nickname_regex.test(nickname)) {
+        if (nickname == "" || nickname === null) {
+        }else if (!nickname_regex.test(nickname)) {
             var msg = lang === 'ko' ? '닉네임은 영문,한글,일어,숫자로 2~10 입력해 주세요' : 'ニックネームは英文、ハングル、日本語、数字で2文字以上、10文字以内でご入力ください';
             alert(msg);
             return false;
         }
         //비밀번호 유효성 검사
-        if (!pw_regex.test(pw)) {
+        if (pw == "" || pw === null){
+        }else if (!pw_regex.test(pw)) {
             var msg =lang === 'ko' ? '영문/숫자/특수문자를 1자 이상 포함한 8~15자로 입력해주세요' : '英数字特殊文字を1文字以上含む8文字以上、15文字以内でご入力ください';
             alert(msg);
             return false;

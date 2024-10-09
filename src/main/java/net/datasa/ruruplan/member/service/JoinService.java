@@ -66,7 +66,6 @@ public class JoinService {
         if(member.getAge() != null && member.getAge() != "") {
             entity.setAge(member.getAge());
         }
-
         memberRepository.save(entity);
     }
 }

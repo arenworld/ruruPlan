@@ -7,6 +7,7 @@ import net.datasa.ruruplan.member.domain.dto.MemberDTO;
 import net.datasa.ruruplan.member.domain.entity.MemberEntity;
 import net.datasa.ruruplan.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -52,4 +53,20 @@ public class JoinService {
         memberRepository.save(memberEntity);
     }
 
+    public void update(MemberDTO member) {
+        MemberEntity entity = memberRepository.findById(member.getMemberId())
+                .orElseThrow(() -> new UsernameNotFoundException("user가 존재하지 않음"));
+
+        if(member.getNickname() != null && member.getNickname() != "") {
+            entity.setNickname(member.getNickname());
+        }
+        if(member.getMemberPw() != null && member.getMemberPw() != "") {
+            entity.setMemberPw(bCryptPasswordEncoder.encode(member.getMemberPw()));
+        }
+        if(member.getAge() != null && member.getAge() != "") {
+            entity.setAge(member.getAge());
+        }
+
+        memberRepository.save(entity);
+    }
 }

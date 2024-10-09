@@ -7,6 +7,7 @@ import net.datasa.ruruplan.community.domain.dto.SavePlanDTO;
 import net.datasa.ruruplan.community.service.PlanBoardService;
 import net.datasa.ruruplan.community.service.SavePlanService;
 import net.datasa.ruruplan.member.domain.dto.MemberDTO;
+import net.datasa.ruruplan.member.service.JoinService;
 import net.datasa.ruruplan.myPage.service.MyPageService;
 import net.datasa.ruruplan.plan.domain.dto.PlanDTO;
 import net.datasa.ruruplan.security.AuthenticatedUser;
@@ -29,6 +30,7 @@ public class MyPageController {
     final MyPageService myPageService;  // 서비스 의존성 주입
     final PlanBoardService planBoardService;    // 공유 게시판
     final SavePlanService savePlanService;  //북마크 서비스
+    final JoinService joinService;
 
     @GetMapping("")
     public String myPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
@@ -104,5 +106,30 @@ public class MyPageController {
         model.addAttribute("bookmarks", bookmarks);
 
         return "myPageView/bookmarks";
+    }
+
+
+    /**
+     * 내정보 열람 및 수정
+     * @param user
+     * @param model
+     * @return
+     */
+    @GetMapping("myinfo")
+    public String myinfo(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
+        
+        String userId = user.getId();
+        MemberDTO member = myPageService.getMemberInfo(userId);
+        model.addAttribute("member", member);
+
+        return "myPageView/myinfo";
+    }
+
+    @PostMapping("updateinfo")
+    public String update(@ModelAttribute MemberDTO member) {
+
+       joinService.update(member);
+
+        return "redirect:/myPage";
     }
 }

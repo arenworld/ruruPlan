@@ -36,6 +36,7 @@ public class MyPageProfileImageController {
             @RequestParam("profileImage") MultipartFile file,
             @AuthenticationPrincipal AuthenticatedUser user) {
         log.debug("로그인된 사용자: {}", user.getUsername());
+
         Map<String, Object> response = new HashMap<>();
         if (!file.isEmpty()) {
             try {

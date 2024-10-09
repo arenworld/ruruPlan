@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="" />
+  <!--페이지 틀-->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <!--위치 아이콘-->
+  <link rel="stylesheet" href="/fonts/icomoon/style.css">
+  <!--귀여운 폰트// 그러나 언어 변경 버튼에 영향을 줌-->
+  <!--태그버튼-->
+  <link rel="stylesheet" href="/css/button.css">
+
+  <link rel="stylesheet" href="/css/language.css" />
+
+  <title>MyInfo</title>
+
+  <meta name="_csrf" content="your-csrf-token">
+  <meta name="_csrf_header" content="X-CSRF-TOKEN">
+
+  <!-- 로고 -->
+  <link rel="icon" href="/images/home/logo_favicon_512.png">
+  <link rel="apple-touch-icon" href="/images/home/logo_favicon_512.png">
+
+  <!-- CSS 파일 가져오기 -->
+  <link rel="stylesheet" href="/css/mypage.css" />
+  <link rel="stylesheet" href="/css/home.css" />
+  <link rel="stylesheet" href="/css/language.css" />
+  <link rel="stylesheet" href="/css/rurustyle.css" />
+
+</head>
+
+
+
+<body>
+<div>
+<nav class="site-nav">
+  <div class="site-navigation">
+    <!-- 로고 -->
+    <div class="logo-container">
+      <a class="logo" href="/">
+        <img class="logo_img" src="/images/home/로고_수정.png" />
+        <span class="text-primary" th:text="#{logo}"></span>
+      </a>
+    </div>
+    <!-- 네비바  로그인x 로그인,조인  로그인o 로그아웃,마이페이지-->
+    <ul class="site-menu">
+      <li sec:authorize="isAuthenticated()">
+
+        <a th:href="@{/myPage}" th:text="#{mypage}"></a>
+      </li>
+
+      <li><a th:href="@{/planBoard/list}" th:text="#{plan_board}"></a></li>
+      <li><a th:href="@{/board/list}" th:text="#{board}"></a></li>
+
+      <li sec:authorize="not isAuthenticated()">
+        <a th:href="@{/login/loginForm}" th:text="#{login.bt}"></a>
+        <a id="join" th:href="@{/join/joinForm}" th:text="#{join}"></a>
+      </li>
+
+      <li sec:authorize="isAuthenticated()">
+        <a th:href="@{/member/logout}" th:text="#{logout}"></a>
+      </li>
+
+    </ul>
+
+    <!-- 날씨정보 박스 -->
+    <div class="weather_box">
+      <div id="weather_icon">
+        <!-- 이모티콘자리 -->
+        <img class="weather_icon_set" id="weather" src="/images/home/날씨기본.png" />
+      </div>
+      <!-- 온도 -->
+      <span class="temperature" id="tem"> -°C</span>
+      <!-- 습도 -->
+      <span class="humidity" id="hum"> -%</span>
+    </div>
+
+    <!-- 언어변경파트 -->
+    <div class="lenge_select-toggle">
+      <div class="language-selector">
+        <img src="/images/home/지구본.png" alt="Globe Icon" />
+        <div class="languages">
+              <span
+                      class="span_kor"
+                      th:if="${#locale.language == 'ko'}"
+                      style="font-weight: bold"
+              >KOR</span
+              >
+          <span class="span_kor" th:if="${#locale.language != 'ko'}"
+          >KOR</span
+          >
+          <div class="lang-separator"></div>
+          <span
+                  class="span_jp"
+                  th:if="${#locale.language == 'ja'}"
+                  style="font-weight: bold"
+          >JP</span
+          >
+          <span class="span_jp" th:if="${#locale.language != 'ja'}"
+          >JP</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<!-- 메인 컨테이너 -->
+<main class="main_mypage">
+  <span id="lang" th:text="${#locale.language}" hidden="hidden"></span>
+
+  <!-- 왼쪽 사이드바 -->
+  <aside class="mypage-profile">
+    <div class="userinfo">
+      <div class="profile-img-container">
+        <img th:src="${member.profileImageUrl != null ? member.profileImageUrl : '/images/mypage/기본프사.jpg'}"
+             class="profile-img" alt="Profile Image" />
+
+        <!-- 숨겨진 파일 입력 필드 -->
+        <input type="file" id="imageInput" style="display:none" accept="image/*" />
+
+        <!-- 프로필 수정 버튼 -->
+        <img class="profile-edit-button" th:src="@{/images/mypage/edit-button-pen.png}">
+      </div>
+
+      <div class="profile-name" th:text="${member.nickname}"></div>
+      <div class="profile-email" th:text="${member.email}"></div>
+    </div>
+  </aside>
+
+  <!-- 메인 프로필 정보 -->
+  <div class="info area" style="width: 1200px !important; padding-left: 70px; padding-top: 20px;">
+    <div>
+        <table>
+          <form th:action="@{/myPage/updateinfo}" method="post" onsubmit=" return validateForm();">
+            <tr>
+              <th style="width: 200px;"><span th:text="#{nickname}"></span></th>
+              <th><input type="text" name="nickname" id="nickname" th:placeholder="${member.nickname}"></th>
+            </tr>
+            <tr>
+              <th><span th:text="#{member.id}"></span></th>
+              <th><input type="text" name="memberId" th:value="${member.memberId}" readonly></th>
+            </tr>
+            <tr>
+              <th><span th:text="#{member.pw}"></span></th>
+              <th><input type="password" name="memberPw" id="memberPw" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"></th>
+            </tr>
+            <tr>
+              <th><span th:text="#{pw.confirm}"></span></th>
+              <th><input type="password" id="pwConfirm">
+                <span id="pwmsg"></span>
+              </th>
+            </tr>
+            <tr>
+              <th><span th:text="#{age}"></span></th>
+              <span id="userAge" th:text="${member.age}" hidden="hidden"></span>
+              <th>
+                <select id="age" name="age" class="input=select">
+                  <option value="20세미만" th:text="#{age_under20}"></option>
+                  <option value="20세~24세" th:text="#{age_20_24}"></option>
+                  <option value="25세~29세" th:text="#{age_25_29}"></option>
+                  <option value="30세~34세" th:text="#{age_30_34}"></option>
+                  <option value="35세~39세" th:text="#{age_35_39}"></option>
+                  <option value="40세~44세" th:text="#{age_40_44}"></option>
+                  <option value="45세~49세" th:text="#{age_45_49}"></option>
+                  <option value="50세~54세" th:text="#{age_50_54}"></option>
+                  <option value="55세~59세" th:text="#{age_55_59}"></option>
+                  <option value="60세이상" th:text="#{age_over60}"></option>
+                </select>
+              </th>
+            </tr>
+            <tr>
+              <th><span th:text="#{email}"></span></th>
+              <th><input type="text" th:value="${member.email}" readonly></th>
+            </tr>
+            <tr>
+              <th colspan="2" style="text-align: right">
+                <button type="submit" th:text="#{modalSave}"></button>
+          </form>
+                <button th:text="#{confirm.bt}" id="confirm" onclick="location.href='/myPage'"></button>
+              </th>
+            </tr>
+        </table>
+
+    </div>
+
+  </div>
+</main>
+</div>
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/member/locale.js"></script>
+<script src="/js/mypage.js"></script>
+<script src="/js/member/myInfo.js"></script>
+<script src="/js/weather/nowWeather.js"></script>
+</body>
+</html>

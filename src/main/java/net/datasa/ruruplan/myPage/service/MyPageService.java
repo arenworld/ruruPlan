@@ -1,6 +1,5 @@
 package net.datasa.ruruplan.myPage.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.ruruplan.member.domain.dto.MemberDTO;
 import net.datasa.ruruplan.member.domain.entity.MemberEntity;

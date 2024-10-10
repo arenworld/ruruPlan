@@ -20,7 +20,7 @@
     }
 
     .lenge_select-toggle {
-z-index: 10000;
+      z-index: 10000;
       right: -1100px;
     }
     .page-footer span{
@@ -118,8 +118,8 @@ z-index: 10000;
       <span th:text="#{mypage}"></span>
     </a>
     <a  href="/">
-    <img class="home_button" src="/images/community/집이모지.png" />
-  </a>
+      <img class="home_button" src="/images/community/집이모지.png" />
+    </a>
     <a th:href="@{/myPage/myPlanList}">
       <i class="fas fa-user"></i>
       <span th:text="#{my_plan}"></span>
@@ -137,13 +137,13 @@ z-index: 10000;
   <div class="writeModal" style="display: none">
     <div class="writeForm">
       <div class="writeForm-head">
-        <span class="modal-titel-text">포스트 작성</span>
+        <span class="modal-titel-text"  th:text="#{write}"></span>
         <img class="cancel-button" src="/images/community/엑스.png" />
       </div>
 
       <div class="writeForm-head-row2">
-        <span class="modal-text">내용</span>
-        <div class="count">0/1000자</div>
+        <span class="modal-text"  th:text="#{content}">내용</span>
+        <div class="count">0/1000</div>
       </div>
       <form
               id="uploadForm"
@@ -156,32 +156,33 @@ z-index: 10000;
               <textarea
                       name="contents"
                       class="content-area"
-                      placeholder="내용을 입력하세요."
+                      th:placeholder="#{write_comunity}"
                       required
               ></textarea>
         </div>
-<div class="writeForm-row3">
-        <!-- 파일 입력 필드는 숨김 -->
-        <input
-                type="file"
-                id="imageInput"
-                name="upload"
-                style="display: none"
-        />
-
-        <!-- 이미지 저장 버튼 -->
-        <button class="add_button" type="button" id="uploadButton">
-          <img
-                 src="/images/community/add.png"
-                  id="previewImage"
-                  style="display: block; width: 100%; height: 100%"
+        <div class="writeForm-row3">
+          <!-- 파일 입력 필드는 숨김 -->
+          <input
+                  type="file"
+                  id="imageInput"
+                  name="upload"
+                  style="display: none"
           />
-        </button>
-        <!-- 글 저장 버튼 -->
-        <button type="submit" class="writeForm-button" disabled>
-          저장
-        </button>
-</div>
+
+          <!-- 이미지 저장 버튼 -->
+          <button class="add_button" type="button" id="uploadButton"   >
+            <img
+                    src="/images/community/add.png"
+                    id="previewImage"
+                    style="display: block; width: 100%; height: 100%"
+            />
+          </button>
+          <!-- 글 저장 버튼 -->
+          <button type="submit" class="writeForm-button" disabled th:text="#{write_save}"></button>
+
+
+          </button>
+        </div>
       </form>
 
     </div>

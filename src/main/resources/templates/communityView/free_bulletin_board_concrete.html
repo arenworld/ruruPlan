@@ -15,7 +15,8 @@
   <img src="/images/modal/calender_lefgt.png" class="back_button" onclick="window.location.href='/board/list';" />
 
 
-  <span class="head_ment"      th:text="${post.nickname} + '님의 게시글'"></span>
+  <span class="head_ment" th:text="${post.nickname}  + #{nickname_comunity}"></span>
+
 </div>
 
 <!-- 본문 콘텐츠 -->
@@ -67,8 +68,10 @@
   <div class="comment-section">
     <form th:action="@{/board/replyWrite}" method="post">
       <input type="hidden" name="boardNum" th:value="${post.boardNum}" />
-      <input type="text" name="contents" class="comment-input" placeholder="댓글을 작성해보세요..." required />
-      <button type="submit" class="submit-comment-button">댓글 작성</button>
+      <input type="text" name="contents" class="comment-input" th:placeholder="#{reply_comunity}" required />
+
+      <button type="submit" class="submit-comment-button" th:text="#{comunity_button}"></button>
+
     </form>
   </div>
 </div>

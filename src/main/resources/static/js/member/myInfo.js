@@ -8,16 +8,17 @@ $(document).ready(function() {
     $('#confirm').on('click' ,function(){
         location.href='/';
     });
-
+    // 비밀번호 유효성 검사
     $('#memberPw').keyup(confirmpw);
+    // 비밀번호 대조,확인
+    $('#pwConfirm').keyup(confirmpw);
 
 });
-
+ let lang = $('#lang').val();
 function confirmpw(){
-    let lang = $('#lang').text();
     //비밀번호 일치 확인
-    var pw = $('#memberPw').val();
-    var pwConfirm = $('#pwConfirm').val();
+    let pw = $('#memberPw').val();
+    let pwConfirm = $('#pwConfirm').val();
         if(pwConfirm == pw){
             $('#pwmsg').css('color', 'green');
             $('#pwmsg').html(lang === 'ko' ? "비밀번호 일치" : 'パスワード一致');
@@ -28,7 +29,6 @@ function confirmpw(){
 }
 
     function validateForm(){
-        let lang = $('#lang').text();
 
         //닉네임 정규식 (영문/한글/일본어/숫자 2~10자, 대소문자 구분)
         nickname_regex = /^[A-Za-z가-힣ぁ-ゔァ-ヴ一-龥0-9]{2,10}$/;

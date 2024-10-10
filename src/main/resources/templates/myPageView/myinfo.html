@@ -101,7 +101,7 @@
 
 <!-- 메인 컨테이너 -->
 <main class="main_mypage">
-  <span id="lang" th:text="${#locale.language}" hidden="hidden"></span>
+  <input type="hidden" id="lang" th:value="${#locale.language}">
 
   <!-- 왼쪽 사이드바 -->
   <aside class="mypage-profile">
@@ -125,7 +125,7 @@
   <!-- 회원 정보 수정 -->
   <div class="info area" style="width: max-content; margin-left: 10%;">
     <div style="margin-top: 25%;">
-        <table>
+        <table style="width: 500px;">
           <form th:action="@{/myPage/updateinfo}" method="post" onsubmit=" return validateForm();">
             <tr>
               <th style="width: 200px;"><span th:text="#{nickname}"></span></th>

@@ -8,7 +8,7 @@
   <!-- 파비콘 -->
   <link rel="icon" href="/images/home/logo_favicon_512.png">
   <link rel="apple-touch-icon" href="/images/home/logo_favicon_512.png">
-
+  <link rel="stylesheet" href="/css/language.css" />
   <style>
     /* 한국어일 때 폰트 */
     html[lang="ko"] {
@@ -18,11 +18,21 @@
     html[lang="ja"] {
       font-family: 'korur', sans-serif;
     }
+
+    .lenge_select-toggle {
+z-index: 10000;
+      right: -1100px;
+    }
+    .page-footer span{
+      font-size: 14px !important;
+      color: black;
+    }
   </style>
 
 
 </head>
 <body>
+
 <div class="frame">
   <div class="page-header">
     <!-- 로고 -->
@@ -82,7 +92,7 @@
               </button>
             </form>
             <a
-                    th:href="@{/board/read/{boardNum}(boardNum=${post.boardNum})#{comments}}"
+                    href="#"
                     class="comment-button"
             >
               <span class="icon-small">💬</span>
@@ -99,24 +109,24 @@
   <!-- 페이지 푸터 (고정 내비게이션 바) -->
   <div class="page-footer">
 
-    <a href="#" >
+    <a th:href="@{/myPage/bookmarks}" >
       <i class="fas fa-users"></i>
-      <span th:text="#{save_plan}">북마크한 글</span>
+      <span th:text="#{save_plan}"></span>
     </a>
     <a th:href="@{/myPage}">
       <i class="fas fa-map-signs"></i>
-      <span th:text="#{mypage}">마이페이지</span>
+      <span th:text="#{mypage}"></span>
     </a>
     <a  href="/">
     <img class="home_button" src="/images/community/집이모지.png" />
   </a>
-    <a href="#">
+    <a th:href="@{/myPage/myPlanList}">
       <i class="fas fa-user"></i>
-      <span th:text="#{my_plan}">내 여행</span>
+      <span th:text="#{my_plan}"></span>
     </a>
     <a class="write-link">
       <i class="fas fa-paper-plane"></i>
-      <span th:text="#{write}">글쓰기</span>
+      <span th:text="#{write}"></span>
     </a>
   </div>
 
@@ -177,7 +187,8 @@
     </div>
   </div>
 </div>
-
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/member/locale.js"></script>
 <script src="/js/free_board/list.js"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 const profileEditButton = document.querySelector(".profile-edit-button");
 const imageInput = document.getElementById("imageInput");
 const profileImg = document.querySelector(".profile-img");
+lang = $('#lang').val();
 
 // 이미지 업로드 버튼 클릭 시 파일 선택 창 열기
 profileEditButton.addEventListener("click", function () {
@@ -38,14 +39,14 @@ imageInput.addEventListener("change", function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert("프로필 이미지가 성공적으로 업데이트되었습니다.");
+                    alert(lang === 'ko' ? '프로필 이미지가 성공적으로 업데이트 되었습니다.' : 'プロフィール画像が正常に更新されました。');
                 } else {
-                    alert("이미지 업로드에 실패했습니다.");
+                    alert(lang === 'ko' ? "이미지 업로드에 실패했습니다." : '画像のアップロードに失敗しました。');
                 }
             })
             .catch(error => {
                 console.error("에러 발생:", error);
-                alert("서버에 오류가 발생했습니다.");
+                alert(lang === 'ko' ? "서버에 오류가 발생했습니다." : 'サーバーにエラーが発生しました。');
             });
 
     }

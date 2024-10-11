@@ -59,7 +59,7 @@ $(document).ready(function () {
     planNum = $('#planNum').val();
     lang = $('#lang').val();
     let boardNum = $('#boardNum').val();
-    console.log(boardNum);
+    //console.log(boardNum);
 
     $('.task-place-info-list-box').scroll(function () {
         let scrollTop = $(this).scrollTop();
@@ -122,7 +122,7 @@ $(document).ready(function () {
 
                 calNextTransDuration(newX, newY, nextX, nextY)
                     .then(() => {
-                        console.log('Next duration calculated, updating task place...');
+                        //console.log('Next duration calculated, updating task place...');
                         updateFirstTaskPlace(newPlaceId);
                     })
                     .catch((error) => {
@@ -136,7 +136,7 @@ $(document).ready(function () {
                 let preY = targetTr.prev().data('map-y');
                 calPreTransDuration(preX, preY, newX, newY)
                     .then(() => {
-                        console.log('Next duration calculated, updating task place...');
+                        //console.log('Next duration calculated, updating task place...');
                         updateLastTaskPlace(newPlaceId);
                     })
                     .catch((error) => {
@@ -153,11 +153,11 @@ $(document).ready(function () {
 
                 calPreTransDuration(preX, preY, newX, newY)
                     .then(() => {
-                        console.log('Pre duration calculated, moving to next duration...');
+                        //console.log('Pre duration calculated, moving to next duration...');
                         return calNextTransDuration(newX, newY, nextX, nextY);
                     })
                     .then(() => {
-                        console.log('Next duration calculated, updating task place...');
+                        //console.log('Next duration calculated, updating task place...');
                         updateTaskPlace(newPlaceId);
                     })
                     .catch((error) => {
@@ -171,7 +171,7 @@ $(document).ready(function () {
             let newX = $(this).data('map-x');
             let newY = $(this).data('map-y');
 
-            console.log(clickCountAddNewTask);
+            //console.log(clickCountAddNewTask);
 
             // 마지막 일정의 장소정보 가져오기 --> 이동시간 계산용
             let currentLastTask = targetTable.find('tr:last-child .day-table-place-title');
@@ -181,7 +181,7 @@ $(document).ready(function () {
 
             calPreTransDuration(lastMapX, lastMapY, newX, newY)
                 .then(() => {
-                    console.log('Next duration calculated, updating task place...');
+                    //console.log('Next duration calculated, updating task place...');
                     addNewTask(newPlaceId, lastTaskNum);
                 })
                 .catch((error) => {
@@ -211,7 +211,7 @@ $(document).ready(function () {
 
                 calNextTransDuration(newX, newY, nextX, nextY)
                     .then(() => {
-                        console.log('Next duration calculated, updating task place...');
+                        //console.log('Next duration calculated, updating task place...');
                         updateFirstTaskPlace(newPlaceId);
                     })
                     .catch((error) => {
@@ -225,7 +225,7 @@ $(document).ready(function () {
                 let preY = targetTr.prev().data('map-y');
                 calPreTransDuration(preX, preY, newX, newY)
                     .then(() => {
-                        console.log('Next duration calculated, updating task place...');
+                        //console.log('Next duration calculated, updating task place...');
                         updateLastTaskPlace(newPlaceId);
                     })
                     .catch((error) => {
@@ -242,11 +242,11 @@ $(document).ready(function () {
 
                 updatetaskplace(preX, preY, newX, newY)
                     .then(() => {
-                        console.log('Pre duration calculated, moving to next duration...');
+                        //console.log('Pre duration calculated, moving to next duration...');
                         return calNextTransDuration(newX, newY, nextX, nextY);
                     })
                     .then(() => {
-                        console.log('Next duration calculated, updating task place...');
+                        //console.log('Next duration calculated, updating task place...');
                         updateTaskPlace(newPlaceId);
                     })
                     .catch((error) => {
@@ -276,7 +276,7 @@ $(document).ready(function () {
     $(document).on('click', '.info-section-more', placeInfoMore);
     $(document).on('click', '.info-table-return-button', function () {
         $('.info-more-table-box').css('display', 'none');
-        console.log(clickCountThemeButton);
+        //console.log(clickCountThemeButton);
         if (clickCountThemeButton === 0) {
             $('.task-place-info-list-box').css('display', 'block');
         }
@@ -299,7 +299,7 @@ $(document).ready(function () {
     days.forEach(function (day) {
         //const dayNum = day.replace('day', ''); // 숫자부분만 남긴다
         $('#plan-' + day + '-button').click(function () {
-            console.log('데이버튼 클릭');
+            //console.log('데이버튼 클릭');
 
             days.forEach(function (otherDay) {
                 $('#plan-' + otherDay + '-button').css('background-color', '#f0f0f0'); // Original color, adjust as needed
@@ -441,7 +441,7 @@ function dayPlansPrint(dayNumOfButton, planNum) {
             }
         },
         error: function (e) {
-            console.log(JSON.stringify(e));
+            //console.log(JSON.stringify(e));
         }
     });
 
@@ -534,7 +534,7 @@ function updateTaskPlace(newPlaceId) {
             clickCountEditTaskPlace--;
         },
         error: function (e) {
-            console.log(JSON.stringify(e));
+            //console.log(JSON.stringify(e));
         }
     })
 
@@ -567,7 +567,7 @@ function updateFirstTaskPlace(newPlaceId) {
             clickCountEditTaskPlace--;
         },
         error: function (e) {
-            console.log(JSON.stringify(e));
+            //console.log(JSON.stringify(e));
         }
     })
 
@@ -603,7 +603,7 @@ function updateLastTaskPlace(newPlaceId) {
             clickCountEditTaskPlace--;
         },
         error: function (e) {
-            console.log(JSON.stringify(e));
+            //console.log(JSON.stringify(e));
         }
     })
 
@@ -674,7 +674,7 @@ function updateDurationCost() {
             $('.saveImgButton').css('display', 'none');
         },
         error: function () {
-            console.log('소요시간 업데이트 실패');
+            //console.log('소요시간 업데이트 실패');
         }
     });
 }
@@ -747,7 +747,7 @@ function planMarkers(dayNumOfButton) {
             // 줌레벨에 따른 테마마커 모양 변화
             naver.maps.Event.addListener(map, 'zoom_changed', function () {
                 let currentZoom = map.getZoom();
-                console.log('줌레벨');
+                //console.log('줌레벨');
                 // Conditional logic based on zoom level
                 $.each(themeAllMarkers, function (index, themeMarker) {
                     if (currentZoom > 14) {
@@ -907,7 +907,7 @@ function selectTaskList(input) {
     $('[class^="task-list"]').removeClass('selected');
     tr.addClass('selected');
 
-    console.log(clickedPlaceId);
+    //console.log(clickedPlaceId);
     // (2) place-info-list 배경색상 설정
     $('[class^="place-info-section"]').removeClass('selected');
     $('.place-info-section' + clickedPlaceId).addClass('selected');
@@ -1083,7 +1083,7 @@ function updatePlanInfoList(visiblePlanMarkerKeyList) {
 function updateThemeInfoList(visibleThemeMarkerKeyList) {
     const infoList = document.querySelector('.theme-place-info-list-box');
 
-    // console.log(visibleThemeMarkerKeyList);
+    // //console.log(visibleThemeMarkerKeyList);
     // Clear existing list
     while (infoList.firstChild) {
         infoList.removeChild(infoList.firstChild);
@@ -1219,7 +1219,7 @@ function clearThemeMarkers() {
 // 배지 mouseover 효과, 상세설명 출력
 function badgeExplain() {
     let badge = $(this).data('badge');
-    console.log(badge);
+    //console.log(badge);
     $('#' + badge + 'Badge-explain').css({
         display: 'block'
     })
@@ -1302,12 +1302,12 @@ function calPreTransDuration(preX, preY, newX, newY) {
         searchPubTransPathAJAX(preX, preY, newX, newY),
         Tmap(preX, preY, newX, newY),
     ]).then(([transportTime, walkTime]) => {
-        console.log("pre 대중교통:", transportTime);
-        console.log("Pre 도보:", walkTime);
+        //console.log("pre 대중교통:", transportTime);
+        //console.log("Pre 도보:", walkTime);
         preTransDuration = transportTime > walkTime ? walkTime : transportTime;
         preTransType = transportTime > walkTime ? '도보' : '대중교통';
-        console.log("앞수단:", preTransType);
-        console.log("앞이동시간:", preTransDuration);
+        //console.log("앞수단:", preTransType);
+        //console.log("앞이동시간:", preTransDuration);
         return preTransDuration; // Return preTransDuration
     }).catch(error => {
         console.error("Error in updatetaskplace:", error);
@@ -1321,12 +1321,12 @@ function calNextTransDuration(newX, newY, nextX, nextY) {
         searchPubTransPathAJAX(newX, newY, nextX, nextY),
         Tmap(newX, newY, nextX, nextY)
     ]).then(([transportTime, walkTime]) => {
-        console.log("next 대중교통:", transportTime);
-        console.log("next 도보:", walkTime);
+        //console.log("next 대중교통:", transportTime);
+        //console.log("next 도보:", walkTime);
         nextTransDuration = transportTime > walkTime ? walkTime : transportTime;
         nextTransType = transportTime > walkTime ? '도보' : '대중교통';
-        console.log("뒤수단:", nextTransType);
-        console.log("뒤이동시간:", nextTransDuration);
+        //console.log("뒤수단:", nextTransType);
+        //console.log("뒤이동시간:", nextTransDuration);
         return nextTransDuration;
     });
 

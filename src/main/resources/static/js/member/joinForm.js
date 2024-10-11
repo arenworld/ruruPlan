@@ -84,7 +84,7 @@ function idConfirm() {
     }
 
     /*아이디 중복확인*/
-    console.log("return " + idDuplicated());
+    //console.log("return " + idDuplicated());
     return idDuplicated();
 }
 
@@ -102,18 +102,18 @@ function idDuplicated() {
                     $('#finalId').hide();
                     $('#idmsg').css('color', 'red');
                     $('#idmsg').html(lang === 'ko' ? "이미 사용중인 ID입니다" : '既に使用中のIDです');
-                    console.log("에이젝스 flase");
+                    //console.log("에이젝스 flase");
                     resolve(false);  // 중복된 ID이면 false 반환
                 } else {
                     $('#finalId').show();
                     $('#idmsg').html("");
-                    console.log("에이젝스 true");
+                    //console.log("에이젝스 true");
                     resolve(true);  // 사용 가능한 ID이면 true 반환
                 }
             },
             error: function () {
                 alert('IdDuplicate error');
-                console.log("에이젝스 error");
+                //console.log("에이젝스 error");
                 resolve(false);  // 에러 발생 시 false 반환
             }
         });
@@ -189,7 +189,7 @@ function validateEmail() {
         return Promise.resolve(false);
     }
     // 중복 검사
-    console.log("return " + emailDuplicate());
+    //console.log("return " + emailDuplicate());
     return emailDuplicate();
 }
 

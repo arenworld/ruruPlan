@@ -1,5 +1,5 @@
 $(document).ready(async function() {
-    console.log("Document is ready");
+    //console.log("Document is ready");
 
     // 국제화
     lang = $('#lang').val();
@@ -436,7 +436,7 @@ $(document).ready(async function() {
             var headers = {};
             headers["appKey"] = "7ejrjQSxsM8Vp5U8WbLArOuHpOwQNnJ31hqE3Pt7"; // 실제 API 키로 대체하세요.
 
-            console.log("도보메서드에 전달된 좌표 값:", startX, startY, endX, endY);
+            //console.log("도보메서드에 전달된 좌표 값:", startX, startY, endX, endY);
 
             $.ajax({
                 method: "POST",
@@ -455,7 +455,7 @@ $(document).ready(async function() {
                 success: function (response) {
                     var resultData = response.features;
                     var tTime = ((resultData[0].properties.totalTime) / 60).toFixed(0);
-                    console.log("도보 시간: " + tTime);
+                    //console.log("도보 시간: " + tTime);
                     resolve(tTime);
                 },
                 error: function(xhr, status, error) {
@@ -473,7 +473,7 @@ $(document).ready(async function() {
             let ex = endX;
             let ey = endY;
 
-            console.log("대중교통 메서드에 전달된 좌표 값:", sx, sy, ex, ey);
+            //console.log("대중교통 메서드에 전달된 좌표 값:", sx, sy, ex, ey);
 
             var xhr = new XMLHttpRequest();
             var url = "https://api.odsay.com/v1/api/searchPubTransPathT?SX=" + sx + "&SY=" + sy +
@@ -512,7 +512,7 @@ $(document).ready(async function() {
                                 };
                             })
                         };
-                        console.log("대중교통 시간: " + routeInfo.totalTime);
+                        //console.log("대중교통 시간: " + routeInfo.totalTime);
                         resolve(routeInfo);
                     } else {
                         console.error("대중교통 경로 요청 실패:", xhr.status);

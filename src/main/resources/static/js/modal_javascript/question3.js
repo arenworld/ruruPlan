@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!aloneActive) {
       trip_type.value = "혼자"; // 여행 유형 설정
-      console.log(trip_type.value);
+      //console.log(trip_type.value);
       alone.style.setProperty("border", "5px solid skyblue", "important");
       next_button3.style.visibility = "visible"; // 다음 버튼 표시
 
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!coupleActive) {
       trip_type.value = "커플"; // 여행 유형 설정
-      console.log(trip_type.value);
+      //console.log(trip_type.value);
       couple.style.setProperty("border", "5px solid skyblue", "important");
       next_button3.style.visibility = "visible"; // 다음 버튼 표시
 
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!kidsActive) {
       trip_type.value = "아이"; // 여행 유형 설정
-      console.log(trip_type.value);
+      //console.log(trip_type.value);
       kids.style.setProperty("border", "5px solid skyblue", "important");
       next_button3.style.visibility = "visible"; // 다음 버튼 표시
 
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!parentsActive) {
       trip_type.value = "부모님"; // 여행 유형 설정
-      console.log(trip_type.value);
+      //console.log(trip_type.value);
       parents.style.setProperty("border", "5px solid skyblue", "important");
       next_button3.style.visibility = "visible"; // 다음 버튼 표시
 
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
     resetButtons(); // 다른 버튼 상태 초기화
     if (!friendActive) {
       trip_type.value = "친구"; // 여행 유형 설정
-     console.log(trip_type.value);
+     //console.log(trip_type.value);
       friend.style.setProperty("border", "5px solid skyblue", "important");
       next_button3.style.visibility = "visible"; // 다음 버튼 표시
 

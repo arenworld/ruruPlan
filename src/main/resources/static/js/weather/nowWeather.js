@@ -93,11 +93,11 @@ function nowWeather() {  // Text API 호출 함수
             icon.src = iconSrc;
 
             // 현재 시간대 날씨 데이터 콘솔에 불러오기
-            console.log(data.response.body.items.item[tmp].fcstTime);   //현재 시간대 (1시간 단위)
-            console.log(data.response.body.items.item[tmp].fcstValue);  //현재 온도
-            console.log(data.response.body.items.item[sky].fcstValue);  //현재 하늘: [맑음 0 ～ 5][구름많음	6 ～ 8][흐림	9 ～ 10]
-            console.log(data.response.body.items.item[pty].fcstValue);  //현재 강수형태: 없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4)
-            console.log(data.response.body.items.item[reh].fcstValue);  //현재 습도
+            //console.log(data.response.body.items.item[tmp].fcstTime);   //현재 시간대 (1시간 단위)
+            //console.log(data.response.body.items.item[tmp].fcstValue);  //현재 온도
+            //console.log(data.response.body.items.item[sky].fcstValue);  //현재 하늘: [맑음 0 ～ 5][구름많음	6 ～ 8][흐림	9 ～ 10]
+            //console.log(data.response.body.items.item[pty].fcstValue);  //현재 강수형태: 없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4)
+            //console.log(data.response.body.items.item[reh].fcstValue);  //현재 습도
         }
     );
 }

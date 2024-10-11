@@ -8,7 +8,7 @@ $(document).ready(function(){
 
         axios.post('/member/login', userInfo)
             .then(response => {
-                console.log(response);
+                //console.log(response);
                 if($('#remember_id').prop("checked")){  // 쿠키에 ID 저장
                     setCookie("rememberId", $("#memberId").val(), 10) // 10일간 ID 저장
                 } else { // 체크 해제 쿠키에서 값 삭제

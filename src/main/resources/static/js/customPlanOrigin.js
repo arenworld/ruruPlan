@@ -211,7 +211,7 @@ function selectMarker(markerKey) {
     $('.task-list').removeClass('selected');
 
     $('.task-list' + markerKey).closest('tr').addClass('selected');
-    console.log(markerKey);
+    //console.log(markerKey);
     // 마커 목록 순회
     planAllMarkers.forEach(marker => {
         if (marker.getTitle() === markerKey) {
@@ -244,7 +244,7 @@ function themeMarkers() {
         clickCountThemeButton--;
     }
 
-    console.log(clickCountThemeButton);
+    //console.log(clickCountThemeButton);
 
     $.ajax({
         url: '/custom/themeMarkers',
@@ -257,7 +257,7 @@ function themeMarkers() {
             if(clickCountThemeButton === 0) {
                 clickCountThemeButton++;
             }
-            console.log(clickCountThemeButton);
+            //console.log(clickCountThemeButton);
 
             let themeLocations = planAndThemeLocations.themeLocations;
             let planLocations = planAndThemeLocations.planLocations;

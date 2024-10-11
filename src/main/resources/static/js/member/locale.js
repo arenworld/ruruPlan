@@ -30,7 +30,7 @@ function changelang(lang) { // 선택된 언어 값 (ko 또는 ja)
         error: function (e) {
             /*                location.reload();*/
             console.error("언어변경 과정에 문제 있음");
-            console.log(JSON.stringify(e));
+            //console.log(JSON.stringify(e));
         }
     });
 }

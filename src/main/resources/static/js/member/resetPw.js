@@ -20,7 +20,7 @@ $(document).ready(function(){
     $('#submit').on('click', function(){
         if(!validatePw()) {
             alert("유효하지 않은 비밀번호입니다.");
-            console.log(validatePw());
+            //console.log(validatePw());
             return false;
         }
         if (!pwConfirm()) {

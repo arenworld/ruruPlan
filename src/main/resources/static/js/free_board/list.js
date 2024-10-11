@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // 모달 열기
     modalButton.addEventListener("click", function (event) {
         event.preventDefault();
-        console.log('모달 열기 동작 실행됨');
+        //console.log('모달 열기 동작 실행됨');
         modal.style.display = "block";
         modal_overlay.style.display = "block";
         footer.style.visibility = "hidden";

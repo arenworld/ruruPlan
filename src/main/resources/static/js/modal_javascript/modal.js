@@ -91,23 +91,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // 로그 확인
-    console.log("arrival:", startTimeValue);
-    console.log("depart:", endTimeValue);
+    //console.log("arrival:", startTimeValue);
+    //console.log("depart:", endTimeValue);
 
     // 전송할 값들을 확인하기 위해 출력
-    console.log("first_date:", first_date);
-    console.log("last_date:", last_date);
-    console.log("nights:", document.getElementById("nightsValue")?.value);
-    console.log("days:", document.getElementById("daysValue")?.value);
-    console.log("arrival:", startTimeValue);
-    console.log("depart:", endTimeValue);
-    console.log("trip_type:", document.getElementById("trip_type")?.value);
-    console.log("children:", document.getElementById("children")?.value);
-    console.log("adult:", document.getElementById("adult")?.value);
-    console.log("theme1:", document.getElementById("theme_1")?.textContent);
-    console.log("theme2:", document.getElementById("theme_2")?.textContent);
-    console.log("theme3:", document.getElementById("theme_3")?.textContent);
-    console.log("density:", document.getElementById("density")?.value);
+    //console.log("first_date:", first_date);
+    //console.log("last_date:", last_date);
+    //console.log("nights:", document.getElementById("nightsValue")?.value);
+    //console.log("days:", document.getElementById("daysValue")?.value);
+    //console.log("arrival:", startTimeValue);
+    //console.log("depart:", endTimeValue);
+    //console.log("trip_type:", document.getElementById("trip_type")?.value);
+    //console.log("children:", document.getElementById("children")?.value);
+    //console.log("adult:", document.getElementById("adult")?.value);
+    //console.log("theme1:", document.getElementById("theme_1")?.textContent);
+    //console.log("theme2:", document.getElementById("theme_2")?.textContent);
+    //console.log("theme3:", document.getElementById("theme_3")?.textContent);
+    //console.log("density:", document.getElementById("density")?.value);
 
     // density 값을 true 또는 false로 변환
     const densityValue = document.getElementById("density")?.value === "1" ? true : false;
@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
       density: densityValue
     };
 
-    console.log("전송할 데이터:", GptCmdDTO);
+    //console.log("전송할 데이터:", GptCmdDTO);
 
     // POST 요청으로 GptCmdDTO 전송
     fetch("/gptView/saveGptCmd", {
@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
       body: JSON.stringify(GptCmdDTO),
     })
         .then((response) => {
-          console.log("Response status:", response.status); // 응답 상태 코드 확인
+          //console.log("Response status:", response.status); // 응답 상태 코드 확인
 
           if (!response.ok) {
             return response.text().then((text) => {
@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
           return response.json();
         })
         .then((data) => {
-          console.log("서버 응답:", data);
+          //console.log("서버 응답:", data);
           modal5.style.display = "none"; // 모달 닫기
           alert(lang === 'ko' ? '제출이 완료되었습니다!' : '提出が完了致しました！');
           window.location.href = "/gptView/loading";

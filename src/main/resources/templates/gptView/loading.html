@@ -107,7 +107,7 @@
 
             lang = $('#lang').val();
             const cmdNum = $("#cmdNum").val().trim(); // 모델에서 넘긴 cmdNum을 가져옴
-            console.log("전달된 cmdNum:", cmdNum);
+            //console.log("전달된 cmdNum:", cmdNum);
 
             // cmdNum을 서버로 전송하고, gptApi 실행 결과를 가져옴
             $.ajax({
@@ -115,7 +115,7 @@
                 type: "POST",
                 data: { cmdNum: cmdNum }, // cmdNum 전달
                 success: function (response) {
-                    console.log("받은 값:", response);
+                    //console.log("받은 값:", response);
 
                     // 서버 응답 처리 후 페이지 전환
                     // 원하는 값이 준비되면 페이지 이동

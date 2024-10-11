@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
           const days = nights + 1;
           document.getElementById("nightsValue").value = nights;
           document.getElementById("daysValue").value = days;
-          console.log("박수:", nights, "일수:", days);
+          //console.log("박수:", nights, "일수:", days);
 
           // 선택된 날짜 정보 표시
           const startDate = calendarCells[startDay].textContent;
@@ -203,10 +203,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // 모달이 열릴 때 days 값을 다시 가져오는 코드
   document.getElementById("myModal6").addEventListener("shown.bs.modal", function () {
     const days = document.getElementById("daysValue").value;
-    console.log("모달에서 days 값:", days);
+    //console.log("모달에서 days 값:", days);
 
     if (!days) {
-      console.log("days 값이 아직 설정되지 않았습니다.");
+      //console.log("days 값이 아직 설정되지 않았습니다.");
     }
   });
 });

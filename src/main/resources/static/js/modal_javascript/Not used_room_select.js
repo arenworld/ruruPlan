@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const daysValueField = document.getElementById("daysValue");
     initialDaysValue = parseInt(daysValueField.value) || 0; // 한 번만 설정
     remainingDays = initialDaysValue; // remainingDays만 변경 가능
-    console.log("초기화 - initialDaysValue:", initialDaysValue);
+    //console.log("초기화 - initialDaysValue:", initialDaysValue);
     updateRemainingDaysDisplay();
   }
 
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
     remainingDays = initialDaysValue; // 남은 일수 초기화
     updateRemainingDaysDisplay(); // 화면에 반영
     hideAllNightsInput();
-    console.log("이동O 버튼 클릭 후 remainingDays 값:", remainingDays);
+    //console.log("이동O 버튼 클릭 후 remainingDays 값:", remainingDays);
   };
 
   // 이동X 버튼을 누르면
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
     remainingDays = initialDaysValue; // 남은 일수 초기화
     hideAllNightsInput();
     updateRemainingDaysDisplay(); // 화면에 반영
-    console.log("이동X 버튼 클릭 후 remainingDays 값:", remainingDays);
+    //console.log("이동X 버튼 클릭 후 remainingDays 값:", remainingDays);
   };
 
   // 호화롭게
@@ -225,8 +225,8 @@ document.addEventListener("DOMContentLoaded", function () {
     updateRemainingDaysDisplay();
 
     // 콘솔에 초기화된 값을 확인하기 위한 출력
-    console.log("일자 리셋 - remainingDays:", remainingDays);
-    console.log("일자 리셋 - initialDaysValue:", initialDaysValue);
+    //console.log("일자 리셋 - remainingDays:", remainingDays);
+    //console.log("일자 리셋 - initialDaysValue:", initialDaysValue);
   }
 
   // 숙소 버튼 클릭 공통 함수
@@ -254,7 +254,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       remainingDays = initialDaysValue - totalNights; // remainingDays 갱신
       updateRemainingDaysDisplay(); // 남은 일수를 화면에 반영
-      console.log("남은 일수 (remainingDays):", remainingDays);
+      //console.log("남은 일수 (remainingDays):", remainingDays);
       coment_night.innerHTML = `숙소타입과 몇 밤 묵을지 알려주세요 (남은 일수는 ${remainingDays}일 입니다)`;
 
       // 남은 일수가 0일 때만 submit 버튼을 보이도록 함

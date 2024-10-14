@@ -41,3 +41,4 @@ out/
 /src/test/semi_custom_query/
 /query_back/
 
+/srt/test/.env/

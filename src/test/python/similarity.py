@@ -3,7 +3,7 @@ import mysql.connector
 from rapidfuzz import fuzz      # 문자열 유사도를 비교하는 라이브러리(두 문자열 간의 유사도 비교할 때 사용)
 import io   # 입출력 제어 모듈, 여기서는 기본 출력 스트림을 UTF-8로 설정하기 위해 사용
 import re   # 정규 표현식 사용하기위해 문자열 처리하는 모듈. 여기서는 특수문자와 공백 제거 위해 사용
-
+ 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # Java에서 넘어온 인자 받기
